@@ -1,0 +1,173 @@
+<div class="dialog-header">
+    <h2 mat-dialog-title>Int/2025/000011</h2>
+    <button mat-button mat-dialog-close><i class="fa fa-times"></i></button>
+</div>
+
+<mat-dialog-content>
+    <div class="row">
+        <div class="col-md-5">
+
+            <div class="tabs-wrapper">
+                <button mat-icon-button class="scroll-btn left" (click)="scrollLeft()" *ngIf="checkScroll()">
+                    <i class="fa fa-chevron-left"></i>
+                </button>
+
+                <div #tabsContainer class="nav nav-tabs responsive-tabs">
+                    <div *ngFor="let tab of tabs; let i = index" [ngClass]="{'active': activeTabIndex === i}"
+                        (click)="setActiveTab(i)" class="nav-link">
+                        {{ tab }}
+                    </div>
+                </div>
+
+                <button mat-icon-button class="scroll-btn right" (click)="scrollRight()" *ngIf="checkScroll()">
+                    <i class="fa fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Tab Contents -->
+            <div class="tab-content">
+                <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 0}">
+                    <div class="p-3">
+                        <div class="grid-2">
+                            <strong>{{ data.message }}</strong>
+                            <span>{{ data.message }}</span>
+                            <strong>{{ data.message }}</strong>
+                            <span>{{ data.message }}</span>
+                        </div>
+                        <hr />
+                        <div class="grid-2">
+                            <strong>{{ data.message }}</strong>
+                            <span>{{ data.message }}</span>
+                            <strong>{{ data.message }}</strong>
+                            <span>{{ data.message }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 1}">
+                    <div class="p-3">
+                        <form class="form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Text</label>
+                                        <input class="form-control" type="text" value="text" [disabled]="true" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Privacy</label>
+                                        <select class="form-control" [disabled]="true">
+                                            <option value="1">Normal</option>
+                                            <option value="2">Confidential</option>
+                                            <option value="3">High confidential</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Priority</label>
+                                        <select class="form-control" [disabled]="true">
+                                            <option value="1">Normal</option>
+                                            <option value="2">Medium</option>
+                                            <option value="3">Urgent</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Due date</label>
+                                        <input class="form-control date-picker" formControlName="fromDate"
+                                            placeholder="yyyy-mm-dd" name="dp1" [disabled]="true" ngbDatepicker
+                                            #d1="ngbDatepicker" (click)="d1.toggle()" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Body</label>
+                                        <textarea class="form-control" maxlength="2000" rows="5"
+                                            [disabled]="true">{{data.message}}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+                <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 2}">
+                    <div class="p-3"></div>
+                </div>
+
+                <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 3}">
+                    <div class="position-relative static-pagination">
+                        <table class="table light-text" datatable [dtOptions]="dtOptions">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Transfer date</th>
+                                    <th>Reference nb</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of Items">
+                                    <td>
+                                        <p class="text-primary bold">{{ item.subject }}</p>
+                                    </td>
+                                    <td>{{ item.date }}</td>
+                                    <td>{{ item.ref }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 4}">
+                    <div class="p-3"></div>
+                </div>
+                <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 5}">
+                    <div class="p-3"></div>
+                </div>
+                <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 6}">
+                    <div class="p-3"></div>
+                </div>
+                <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 7}">
+                    <div class="p-3"></div>
+                </div>
+                
+                <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 8}">
+                    <div class="p-3">
+                        <ul class="timeline">
+                            <li>
+                                <div class="timeline-header">
+                                    <span class="m-0 text-primary">Title 1</span>
+                                    <span class="bold text-secondary">2002</span>
+                                </div>
+                                <p class="timeline-content">Lorem ipsum, dolor sit amet c</p>
+                            </li>
+                            <li>
+                                <div class="timeline-header">
+                                    <span class="m-0 text-primary">Title 1</span>
+                                    <span class="bold text-secondary">2002</span>
+                                </div>
+                                <p class="timeline-content">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+                            </li>
+                            <li>
+                                <div class="timeline-header">
+                                    <span class="m-0 text-primary">Title 1</span>
+                                    <span class="bold text-secondary">2002</span>
+                                </div>
+                                <p class="timeline-content">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quas itaque hic
+                                    quibusdam fugiat est numquam harum, accusamus suscipit consequatur laboriosam!</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <p>Viewer here</p>
+        </div>
+    </div>
+</mat-dialog-content>
