@@ -1,53 +1,56 @@
-<h1 class="page-title">Dashboard</h1>
-<div class="charts">
-    <div class="row">
+<div class="body-content">
+    <h1 class="page-title">Dashboard</h1>
+    <div class="charts">
+        <div class="row">
 
-        <div class="col-md-6">
-            <div class="card">
-                <app-chart-system-count-per-category-and-status [fromDate]="fromDate" [toDate]="toDate"
-                    [categories]="categories"></app-chart-system-count-per-category-and-status>
+            <div class="col-md-6">
+                <div class="card">
+                    <app-chart-system-count-per-category-and-status [fromDate]="fromDate" [toDate]="toDate"
+                        [categories]="categories"></app-chart-system-count-per-category-and-status>
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-6">
-            <div class="card">
-                <app-chart-system-statistics-per-department [fromDate]="fromDate" [toDate]="toDate"
-                    [categories]="categories"></app-chart-system-statistics-per-department>
+            <div class="col-md-6">
+                <div class="card">
+                    <app-chart-system-statistics-per-department [fromDate]="fromDate" [toDate]="toDate"
+                        [categories]="categories"></app-chart-system-statistics-per-department>
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-6">
-            <div class="card">
-                <app-chart-system-documents-inProgress-overdue-and-onTime-per-category [fromDate]="fromDate"
-                    [toDate]="toDate"
-                    [categories]="categories"></app-chart-system-documents-inProgress-overdue-and-onTime-per-category>
+            <div class="col-md-6">
+                <div class="card">
+                    <app-chart-system-documents-inProgress-overdue-and-onTime-per-category [fromDate]="fromDate"
+                        [toDate]="toDate"
+                        [categories]="categories"></app-chart-system-documents-inProgress-overdue-and-onTime-per-category>
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-6">
-            <div class="card">
-                <app-chart-system-documents-completed-overdue-and-onTime-per-category [fromDate]="fromDate"
-                    [toDate]="toDate"
-                    [categories]="categories"></app-chart-system-documents-completed-overdue-and-onTime-per-category>
+            <div class="col-md-6">
+                <div class="card">
+                    <app-chart-system-documents-completed-overdue-and-onTime-per-category [fromDate]="fromDate"
+                        [toDate]="toDate"
+                        [categories]="categories"></app-chart-system-documents-completed-overdue-and-onTime-per-category>
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-6">
-            <div class="card">
-                <app-chart-system-transfers-inProgressOverdue-and-onTime-per-category [fromDate]="fromDate"
-                    [toDate]="toDate"
-                    [categories]="categories"></app-chart-system-transfers-inProgressOverdue-and-onTime-per-category>
+            <div class="col-md-6">
+                <div class="card">
+                    <app-chart-system-transfers-inProgressOverdue-and-onTime-per-category [fromDate]="fromDate"
+                        [toDate]="toDate"
+                        [categories]="categories"></app-chart-system-transfers-inProgressOverdue-and-onTime-per-category>
+                </div>
             </div>
-        </div>
 
 
-        <div class="col-md-6">
-            <div class="card">
-                <app-chart-system-transfers-completed-overdue-and-onTime-per-category [fromDate]="fromDate"
-                    [toDate]="toDate"
-                    [categories]="categories"></app-chart-system-transfers-completed-overdue-and-onTime-per-category>
+            <div class="col-md-6">
+                <div class="card">
+                    <app-chart-system-transfers-completed-overdue-and-onTime-per-category [fromDate]="fromDate"
+                        [toDate]="toDate"
+                        [categories]="categories"></app-chart-system-transfers-completed-overdue-and-onTime-per-category>
+                </div>
             </div>
-        </div>
 
+        </div>
     </div>
+
 </div>

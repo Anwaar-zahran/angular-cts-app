@@ -1632,3 +1632,76 @@ label.form-label.required:after {
 	color: var(--secondary-color) !important;
 	border-color: transparent;
 }
+
+.classInfoDiv {
+	padding: 5px 10px;
+	position: absolute;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	max-width: 250px;
+	z-index: -1;
+	margin-top: 0px;
+	background-color: #fff;
+	left: 80px;
+}
+
+.pull-right {
+	float: right
+}
+
+.pull-right.btn-warning {
+	background: transparent !important;
+}
+
+.pull-right i.fa.fa-filter {
+	color: var(--green-color);
+}
+
+.spanDate {
+	color: var(--secondary-color);
+	margin-bottom: 1rem;
+	font-size: 13px;
+	display: block;
+}
+
+.charts .panel-heading .row {
+	align-items: center;
+}
+
+.modal-content {
+	border-radius: 12px;
+	padding: 0;
+	background: #fff;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	transition: all 0.3s ease;
+}
+
+.modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem;
+	border-bottom: 1px solid #ededed;
+}
+
+.modal-footer {
+	display: flex;
+	justify-content: center;
+	grid-area: 0.5rem;
+	border: 0;
+}
+
+.modal-title {
+	color: var(--text-black);
+	font-size: 16px;
+}
+
+.modal-body form>.btn-primary {
+	margin: auto;
+}
+
+.modal-header .close {
+	border: 0;
+	background: none;
+	font-size: 20px;
+}

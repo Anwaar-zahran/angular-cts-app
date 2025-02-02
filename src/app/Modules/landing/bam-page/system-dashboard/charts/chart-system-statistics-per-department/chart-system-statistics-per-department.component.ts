@@ -90,6 +90,7 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
           title: {
             text: 'System Statistics per Department'
           },
+          colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
           xAxis: {
             categories: uniqueStructures as string[],
             title: {

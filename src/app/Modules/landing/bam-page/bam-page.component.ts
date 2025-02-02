@@ -24,19 +24,19 @@ export class BamPageComponent {
       link: '/bam/system-dashboard',
     },
     {
-      backgroundColor: '#FEEAF3',
+      backgroundColor: '#DEF5FF',
       imgSrc: 'assets/images/icons/BAM.png',
       title: 'Average Duration for Correspondence Completion',
       link: '/bam/kpis/kpi-average-duration-for-correspondence-completion',
     },
     {
-      backgroundColor: '#FEEAF3',
+      backgroundColor: '#DEF5FF',
       imgSrc: 'assets/images/icons/BAM.png',
       title: 'Average Duration for Correspondence Delay',
       link: '/bam/kpis/kpi-average-duration-for-correspondence-delay',
     },
     {
-      backgroundColor: '#FEEAF3',
+      backgroundColor: '#D2FAF1',
       imgSrc: 'assets/images/icons/BAM.png',
       title: 'Average duration for transfer completion',
       link: '/bam/kpis/kpi-average-duration-for-transfer-completion',

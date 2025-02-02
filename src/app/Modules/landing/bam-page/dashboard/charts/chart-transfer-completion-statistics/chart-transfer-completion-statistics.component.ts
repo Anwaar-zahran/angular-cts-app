@@ -51,6 +51,7 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
           title: {
             text: '',
           },
+          colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
           exporting: {
             enabled: true,
             buttons: {

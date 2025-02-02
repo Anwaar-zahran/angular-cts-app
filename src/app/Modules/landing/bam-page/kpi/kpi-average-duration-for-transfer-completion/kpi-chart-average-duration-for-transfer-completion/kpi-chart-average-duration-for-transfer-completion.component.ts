@@ -54,6 +54,7 @@ export class KpiChartAverageDurationForTransferCompletionComponent implements On
           title: {
             text: ''
           },
+          colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
           subtitle: {
             text: `Total Average: ${res.totalAverage.toFixed(2)} day(s)`,
           },
@@ -99,8 +100,7 @@ export class KpiChartAverageDurationForTransferCompletionComponent implements On
           series: [{
             name: 'All categories',
             type: 'line',
-            data: dataPoints,
-            color: '#8A2BE2'
+            data: dataPoints
           }]
         };
       });

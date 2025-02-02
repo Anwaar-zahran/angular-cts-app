@@ -77,6 +77,7 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
       title: {
         text: ''
       },
+      colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
       xAxis: {
         categories: categories,
         title: {
@@ -106,13 +107,13 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
           name: 'Overdue',
           type: 'column',
           data: overdueData,
-          color: '#D32F2F' // Red
+          color: '#8D0034'
         },
         {
           name: 'On-Time',
           type: 'column',
           data: onTimeData,
-          color: '#388E3C' // Green
+          color: '#00695E'
         }
       ]
     };
