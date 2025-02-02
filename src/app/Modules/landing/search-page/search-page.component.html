@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="body-content">
 
   <!--title-->
   <div class="d-flex justify-content-between mb-3">
@@ -10,89 +10,68 @@
     <div class="col-sm-6 col-md-4 col-lg-3">
       <div class="form-group">
         <label for="sendingEntity" class="form-label">Sending entity</label>
-        <select class="form-select select2" name="sendingEntity" id="ddlSendEntity" [(ngModel)]="searchModel.documentSender">
-          <option *ngFor="let sen of entities" [value]="sen.id">
-            {{ sen.name }}
-          </option>
-        </select>
+        <ng-select name="sendingEntity" id="ddlSendEntity" [(ngModel)]="searchModel.documentSender" [items]="entities"
+          bindLabel="name" bindValue="id" placeholder="Select entity" class="form-control">
+        </ng-select>
+
       </div>
     </div>
     <div class="col-sm-6 col-md-4 col-lg-3">
       <div class="form-group">
         <label for="recEntity" class="form-label">Receiving entity</label>
-        <select class="form-select select2" name="recEntity" id="ddlRecEntity" [(ngModel)]="searchModel.documentReceiver">
-          <option *ngFor="let rec of entities" [value]="rec.id">
-            {{ rec.name }}
-          </option>
-        </select>
+        <ng-select name="recEntity" id="ddlRecEntity" [(ngModel)]="searchModel.documentReceiver" [items]="entities"
+          bindLabel="name" bindValue="id" placeholder="Select entity" class="form-control">
+        </ng-select>
       </div>
     </div>
     <div class="col-sm-6 col-md-4 col-lg-3">
       <div class="form-group">
         <label for="ddlFromUsers" class="form-label">Transfer, from user</label>
-        <select id="ddlFromUsers" name="fromUser" class="form-select select2" [(ngModel)]="searchModel.fromUser">
-          <option *ngFor="let user of searchUsers" [value]="user.id">
-            {{ user.fullName }}
-          </option>
-        </select>
+        <ng-select id="ddlFromUsers" name="fromUser" [(ngModel)]="searchModel.fromUser" [items]="searchUsers"
+          bindLabel="fullName" bindValue="id" placeholder="Select user" class="form-control">
+        </ng-select>
       </div>
     </div>
     <div class="col-sm-6 col-md-4 col-lg-3">
       <div class="form-group">
         <label for="ddlToUsers" class="form-label">Transfer, to user</label>
-        <select id="ddlToUsers" name="toUsers" class="form-select select2" [(ngModel)]="searchModel.toUser">
-          <option *ngFor="let user of searchUsers" [value]="user.id">
-            {{ user.fullName }}
-          </option>
-        </select>
+        <ng-select id="ddlToUsers" name="toUsers" [(ngModel)]="searchModel.toUser" [items]="searchUsers"
+          bindLabel="fullName" bindValue="id" placeholder="Select user" class="form-control">
+        </ng-select>
       </div>
     </div>
     <div class="col-sm-6 col-md-4 col-lg-3">
       <div class="form-group">
         <label for="ddlTransEntity" class="form-label">Transfer, from structure</label>
-        <select id="ddlTransEntity" name="transFrom" class="form-select select2" [(ngModel)]="searchModel.fromStructure">
-          <option *ngFor="let rec of entities" [value]="rec.id">
-            {{ rec.name }}
-          </option>
-        </select>
+        <ng-select id="ddlTransEntity" name="transFrom" [(ngModel)]="searchModel.fromStructure" [items]="entities"
+          bindLabel="name" bindValue="id" placeholder="Select entity" class="form-control">
+        </ng-select>
       </div>
     </div>
     <div class="col-sm-6 col-md-4 col-lg-3">
       <div class="form-group">
         <label for="ddlTransFromEntity" class="form-label">Transfer, to structure</label>
-        <select id="ddlTransFromEntity" name="transTo" class="form-select select2" [(ngModel)]="searchModel.toStructure">
-          <option *ngFor="let rec of entities" [value]="rec.id">
-            {{ rec.name }}
-          </option>
-        </select>
+        <ng-select id="ddlTransFromEntity" name="transTo" [(ngModel)]="searchModel.toStructure" [items]="entities"
+          bindLabel="name" bindValue="id" placeholder="Select entity" class="form-control">
+        </ng-select>
       </div>
     </div>
     <div class="col-sm-6 col-md-4 col-lg-3">
       <!--date-->
       <div class="form-group">
         <label for="datepicker" class="form-label">Transfer, from date</label>
-        <input class="form-control date-picker"
-               placeholder="yyyy-mm-dd"
-               name="dp1"
-               [(ngModel)]="searchModel.fromTransferDate"
-               ngbDatepicker
-               #d1="ngbDatepicker"
-               #regDate="ngbDatepicker"
-               (click)="d1.toggle()" />
+        <input class="form-control date-picker" matInput [matDatepicker]="picker" placeholder="mm-dd-yyyy"
+          [(ngModel)]="searchModel.fromTransferDate" name="dp1" (click)="picker.open()" />
+        <mat-datepicker #picker></mat-datepicker>
       </div>
     </div>
     <div class="col-sm-6 col-md-4 col-lg-3">
       <!--date-->
       <div class="form-group">
         <label for="datepicker" class="form-label">Transfer, to date</label>
-        <input class="form-control date-picker"
-               placeholder="yyyy-mm-dd"
-               name="dp2"
-               [(ngModel)]="searchModel.toTransferDate"
-               ngbDatepicker
-               #d2="ngbDatepicker"
-               #regDate="ngbDatepicker"
-               (click)="d2.toggle()" />
+        <input class="form-control date-picker" matInput [matDatepicker]="picker1" placeholder="mm-dd-yyyy"
+        [(ngModel)]="searchModel.toTransferDate" name="dp2" (click)="picker1.open()" />
+        <mat-datepicker #picker1></mat-datepicker>
       </div>
     </div>
     <div class="col-sm-6 col-md-4 col-lg-3">
@@ -105,25 +84,18 @@
     <div class="col-sm-6 col-md-4 col-lg-3">
       <!--date-->
       <div class="form-group">
-        <label for="datepicker" class="form-label">Document Date</label>
-        <input class="form-control date-picker"
-               placeholder="yyyy-mm-dd"
-               name="dp3"
-               [(ngModel)]="searchModel.DocumentDate"
-               #d3="ngbDatepicker"
-               ngbDatepicker
-               #regDate="ngbDatepicker"
-               (click)="d3.toggle()" />
+        <label for="datepicker" class="form-label">Document Date</label> 
+          <input class="form-control date-picker" matInput [matDatepicker]="picker3" placeholder="mm-dd-yyyy"
+          [(ngModel)]="searchModel.DocumentDate" name="dp3" (click)="picker3.open()" />
+        <mat-datepicker #picker3></mat-datepicker>
       </div>
     </div>
     <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="delegationUsers.length > 1">
       <div class="form-group">
         <label for="select2Example" class="form-label">Search in inbox of</label>
-        <select class="form-select select2" [(ngModel)]="searchModel.delegationId">
-          <option *ngFor="let user of delegationUsers" [value]="user.id">
-            {{ user.fromUser }}
-          </option>
-        </select>
+        <ng-select [(ngModel)]="searchModel.delegationId" [items]="delegationUsers" bindLabel="fromUser" bindValue="id"
+          class="form-control">
+        </ng-select>
       </div>
     </div>
   </div>
@@ -133,9 +105,10 @@
     <button class="btn btn-secondary btn-lg" (click)="clearForm()">Clear</button>
     <button class="btn btn-primary btn-lg" (click)="onSearch()"><i class="fa fa-search"></i> Search</button>
   </div>
-
+  <hr *ngIf="response" />
   <p *ngIf="response&& response.recordsTotal">Total records: {{ response.recordsTotal }}</p>
 
+  <div class="position-relative">
   <div class="shadow table-container overflow-x-auto">
     <table class="table" *ngIf="response && response.data.length > 0" datatable [dtOptions]="dtOptions">
       <thead>
@@ -183,10 +156,10 @@
       </tbody>
     </table>
     <!-- Message for No Data Found -->
-    <div *ngIf="response && response.data.length === 0" class="text-center mt-3">
+    <div *ngIf="response && response.data.length === 0" class="text-center noData mt-3">
       <p>No data found</p>
     </div>
     <app-toaster></app-toaster>
   </div>
-
+</div>
 </div>

@@ -12,6 +12,7 @@ mat-dialog-content {
 
 .dialog-header h2 {
     padding: 0;
+    font-size: 14px;
 }
 
 .dialog-header h2:before {
@@ -121,12 +122,12 @@ mat-dialog-content .tab-content strong {
     border: 1px solid #ededed;
     border-radius: 10px;
 }
- 
-.timeline li .timeline-header { 
+
+.timeline li .timeline-header {
     display: flex;
     justify-content: space-between;
-	text-align: center;
-	position: relative;
+    text-align: center;
+    position: relative;
     background: #F9F9F9;
     align-items: center;
     padding: 0.5rem 1rem;
@@ -155,6 +156,47 @@ mat-dialog-content .tab-content strong {
     margin: 0;
     font-size: 13px;
 }
+
+.mat-tree-node {
+    gap: 0.25rem;
+    font-size: 13px;
+    align-items: center;
+    padding-left: calc(1.5rem * var(--level));
+    color: #AAA;
+    min-height: 42px;
+}
+
+.mat-tree-node a {
+    color: #00031F;
+    flex: 1;
+}
+
+.mat-tree-node span {
+    line-height: normal;
+    margin-top: 0.25rem;
+}
+
+.mat-tree-node i.far {
+    font-size: 15px;
+}
+
+.mat-tree-node button[mattreenodetoggle] {
+    background: transparent;
+    border: 0;
+    color: #AAA;
+}
+
+.mat-tree-node button[mattreenodetoggle] .fa-chevron-down,
+.mat-tree-node a:hover,
+.mat-tree-node:has(.selected) a {
+    color: #0095DA;
+}
+
+.mat-tree-node:has(.selected) {
+    background: #ededed;
+    border-left: 3px solid #0095DA;
+}
+
 @media (min-width: 40rem) {
     .timeline {
         grid-template-columns: 1fr 0.25rem 1fr;
