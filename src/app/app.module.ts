@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';  // Required for Material Datepicker
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 
 // Imports
@@ -50,6 +52,7 @@ export function tokenGetter() {
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    
 
     JwtModule.forRoot({
       config: {
@@ -60,7 +63,9 @@ export function tokenGetter() {
     }),
     BrowserAnimationsModule,
     MatDatepickerModule,
-    MatNativeDateModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule
   ],
   providers: [
     {

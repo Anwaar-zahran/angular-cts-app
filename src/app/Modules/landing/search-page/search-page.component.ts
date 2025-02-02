@@ -15,6 +15,8 @@ import { SearchResponse } from '../../../models/searchresponse.model';
 import { AttachmentsApiResponce } from '../../../models/attachments.model';
 import { MatDialog } from '@angular/material/dialog';
 import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-dialog.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-search-page',

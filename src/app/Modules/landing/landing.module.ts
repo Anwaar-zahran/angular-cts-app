@@ -27,6 +27,11 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CompleteCorrespondencesComponent } from './reports-page/complete-correspondences/complete-correspondences.component';
 
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+
 @NgModule({
   declarations: [
     DelegationPageComponent,
@@ -57,7 +62,12 @@ import { CompleteCorrespondencesComponent } from './reports-page/complete-corres
     ToasterComponent,
     ReactiveFormsModule,
     HighchartsChartModule,
-    MatDialogModule
+    MatDialogModule,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule,
   ],
 })
 export class LandingModule { }

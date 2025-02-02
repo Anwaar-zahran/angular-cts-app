@@ -13,6 +13,8 @@ import { Privacy } from '../../../models/privacy.model';
 import { Category } from '../../../models/category.model';
 import { Priority } from '../../../models/priority.model';
 import { User } from '../../../models/user.model';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-delegation-page',
