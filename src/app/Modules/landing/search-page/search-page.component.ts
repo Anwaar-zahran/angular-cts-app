@@ -7,8 +7,6 @@ import { SearchPageService } from '../../../services/search-page.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { User } from '../../../models/user.model';
 import { Entity } from '../../../models/searchEntity.model';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormsModule } from '@angular/forms';
 import { SearchFilter } from '../../../models/searchFilter.model';
 import { DelegationToUsers } from '../../../models/delegationTo.model';
 import { ActivityLogResponse } from '../../../models/activity.model';
@@ -50,6 +48,7 @@ export class SearchPageComponent {
   activityLogs: ActivityLogResponse[] = [];
   attributes: DocAttributesApiResponse | null = null;
   attachments: AttachmentsApiResponce[] | null = [];
+  visualTracking: any[] = [];
 
   loading: boolean = true; // Loading state
   constructor(
@@ -84,7 +83,7 @@ export class SearchPageComponent {
   }
 
   getEntites(): void {
-    this.lookupservice.getEntities(this.accessToken!).subscribe(
+    this.lookupservice.getEntities().subscribe(
       (response) => {
         this.entities = response || [];
         this.entities.unshift({ id: 0, name: 'Select Entity' });
@@ -127,7 +126,7 @@ export class SearchPageComponent {
   }
 
   getCategories(): void {
-    this.lookupservice.getCategories(this.accessToken!, undefined).subscribe(
+    this.lookupservice.getCategories(undefined).subscribe(
       (response) => {
         this.categories = response || [];
 
@@ -139,7 +138,7 @@ export class SearchPageComponent {
   }
 
   getStatuses(): void {
-    this.lookupservice.getStatus(this.accessToken!).subscribe(
+    this.lookupservice.getStatus().subscribe(
       (response) => {
         this.statuses = response || [];
 
@@ -255,7 +254,7 @@ export class SearchPageComponent {
       },
         (error: any) => {
           console.error('Error getting search result:', error);
-          this.toaster.showToaster(error ?.message || 'Something went wrong');
+          this.toaster.showToaster(error?.message || 'Something went wrong');
         });
     });
 
@@ -277,130 +276,19 @@ export class SearchPageComponent {
     this.ResetForm();
   }
 
-  getAttributes(docID: string): Promise<DocAttributesApiResponse> {
-    return new Promise((resolve, reject) => {
-      this.searchService.getDocAttributes(this.accessToken!, docID).subscribe(
-        (response: any) => {
-          this.attributes = response || [];
-          resolve(response);
-        },
-        (error: any) => {
-          console.error(error);
-          reject(error);
-        }
-      );
-    });
-  }
 
-  getNotes(docID: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.searchService.getNotes(this.accessToken!, docID).subscribe(
-        (response) => {
-          this.notes = response || [];
-          resolve(response);
-        },
-        (error: any) => {
-          console.error(error);
-          reject(error);
-        }
-      );
-    });
-  }
-
-  getActivityLogs(docID: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.searchService.getActivityLog(this.accessToken!, docID).subscribe(
-        (response) => {
-          this.activityLogs = response || [];
-          resolve(response);
-        },
-        (error: any) => {
-          console.error(error);
-          reject(error);
-        }
-      );
-    });
-  }
-
-  getLinkedDocuments(docID: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.searchService.getLinkedCorrespondence(this.accessToken!, docID).subscribe(
-        (response) => {
-          this.linkedDocs = response || [];
-          resolve(response);
-        },
-        (error: any) => {
-          console.error(error);
-          reject(error);
-        }
-      );
-    });
-  }
-
-  getNonArchAttachments(docID: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.searchService.getNonArchivedAttachment(this.accessToken!, docID).subscribe(
-        (response) => {
-          this.linkedDocs = response || [];
-          resolve(response);
-        },
-        (error: any) => {
-          console.error(error);
-          reject(error);
-        }
-      );
-    });
-  }
-
-  getHistory(docID: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.searchService.getTransHistory(this.accessToken!, docID).subscribe(
-        (response: any) => {
-          this.transHistory = response || [];
-          resolve(response);
-        },
-        (error: any) => {
-          console.error(error);
-          reject(error);
-        }
-      );
-    });
-  }
-
-  getAttachments(docID: string): Promise<AttachmentsApiResponce> {
-    return new Promise((resolve, reject) => {
-      this.searchService.getAttachments(this.accessToken!, docID).subscribe(
-        (response: any) => {
-          this.attachments = response || [];
-          resolve(response);
-        },
-        (error: any) => {
-          console.error(error);
-          reject(error);
-        }
-      );
-    });
-  }
 
   async showDetails(row: any) {
-
-    const [attributes, nonArchAttachments, linkedDocs, activityLogs, notes, transHistory, attachments] = await Promise.all([
-      this.getAttributes(row.id),
-      this.getNonArchAttachments(row.id),
-      this.getLinkedDocuments(row.id),
-      this.getActivityLogs(row.id),
-      this.getNotes(row.id),
-      this.getHistory(row.id),
-      this.getAttachments(row.id)
-    ]);
-
+    debugger;
     this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
       width: '90%',
       height: '90%',
       data: {
-        rowData: row, notesData: notes, linkedDoc: linkedDocs, archAttach: nonArchAttachments,
-        logs: activityLogs, history: transHistory, mailAttachments: attachments
+        id: row.id,
+        documentId: row.documentId,
+        referenceNumber: row.ref,
+        row: row
       }
     });
 

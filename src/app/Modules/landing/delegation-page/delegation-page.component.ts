@@ -141,7 +141,7 @@ export class DelegationPageComponent implements OnInit {
 
         if (this.contacts.length > 0) {
           this.delegationForm.patchValue({
-            userId: this.contacts[0] ?.id,
+            userId: this.contacts[0]?.id,
           });
         }
       },
@@ -152,14 +152,14 @@ export class DelegationPageComponent implements OnInit {
   }
 
   getCategories(): void {
-    this.lookupservice.getCategories(this.accessToken!, undefined).subscribe(
+    this.lookupservice.getCategories(undefined).subscribe(
       (response) => {
         this.categories = response || [];
         this.categories.unshift({ id: 0, text: 'Select Category' });
 
         if (this.categories.length > 0) {
           this.delegationForm.patchValue({
-            categoryId: [this.categories[0] ?.id],
+            categoryId: [this.categories[0]?.id],
           });
         }
       },
@@ -177,7 +177,7 @@ export class DelegationPageComponent implements OnInit {
 
         if (this.privacy.length > 0) {
           this.delegationForm.patchValue({
-            privacyId: this.privacy[0] ?.id ,
+            privacyId: this.privacy[0]?.id,
           });
         }
       },
@@ -253,11 +253,11 @@ export class DelegationPageComponent implements OnInit {
             this.isEdit = false;
             this.clear();
             this.getListData();
-            this.toaster.showToaster(response.message??"Item updated successfully");
+            this.toaster.showToaster(response.message ?? "Item updated successfully");
           },
           (error: any) => {
             console.error('Error updating:', error);
-            this.toaster.showToaster(error ?.message || 'Something went wrong');
+            this.toaster.showToaster(error?.message || 'Something went wrong');
           }
         );
       } else {
@@ -270,7 +270,7 @@ export class DelegationPageComponent implements OnInit {
           },
           (error: any) => {
             console.error('Error adding:', error);
-            this.toaster.showToaster(error ?.message || 'Something went wrong');
+            this.toaster.showToaster(error?.message || 'Something went wrong');
           }
         );
       }
@@ -295,7 +295,7 @@ export class DelegationPageComponent implements OnInit {
             },
             (error: any) => {
               console.error('Error deleting item:', error);
-              this.toaster.showToaster(error ?.message || 'Something went wrong');
+              this.toaster.showToaster(error?.message || 'Something went wrong');
             }
           );
         }
@@ -311,9 +311,9 @@ export class DelegationPageComponent implements OnInit {
 
   resetDropDowns() {
     this.delegationForm.patchValue({
-      userId: this.contacts.length > 0 ? this.contacts[0] ?.id : null, 
-      categoryId: this.categories.length > 0 ? [0] : [], 
-      privacyId: this.privacy.length > 0 ? this.privacy[0] ?.id : null,
+      userId: this.contacts.length > 0 ? this.contacts[0]?.id : null,
+      categoryId: this.categories.length > 0 ? [0] : [],
+      privacyId: this.privacy.length > 0 ? this.privacy[0]?.id : null,
     });
   }
 

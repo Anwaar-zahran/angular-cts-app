@@ -18,6 +18,7 @@ export class LookupsService {
   private listImportance = 'https://cts-qatar.d-intalio.com/Importance/ListImportances';
   private listStatus = 'https://cts-qatar.d-intalio.com/Status/ListStatuses';
   private listPriorities = 'https://cts-qatar.d-intalio.com/Priority/ListPriorities';
+  private listYears = 'https://cts-qatar.d-intalio.com/Dashboard/GetAvailableYears';
 
   constructor(private http: HttpClient) { }
 
@@ -72,19 +73,15 @@ export class LookupsService {
       );
   }
 
-  getCategories(accessToken: string, delegationId: string | undefined): Observable<any> {
 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json'
-    });
 
+  getCategories(delegationId: string | undefined): Observable<{ id: number, text: string }[]> {
     let params = new HttpParams();
     if (delegationId !== undefined) {
       params = params.set('delegationId', delegationId);
     }
 
-    return this.http.get(this.listCategories, { headers, params })
+    return this.http.get<{ id: number, text: string }[]>(this.listCategories, { params })
       .pipe(
         catchError((error) => {
           console.error('Error while fetching categories data', error.message);
@@ -93,16 +90,14 @@ export class LookupsService {
       );
   }
 
-  getEntities(accessToken: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${accessToken}`
-    });
+  getEntities(): Observable<any> {
+
 
     const formData = new FormData();
     formData.append('attributes[]', JSON.stringify("NameAr"));
     formData.append('attributes[]', JSON.stringify("NameFr"));
 
-    return this.http.post(this.listEntities, formData, { headers })
+    return this.http.post(this.listEntities, formData)
       .pipe(
         catchError((error) => {
           console.error('Error while entities data', error.message);
@@ -155,22 +150,21 @@ export class LookupsService {
     return this.http.get(this.listImportance, { headers })
       .pipe(
         catchError((error) => {
-        console.error('Error while fetching Importance data', error.message);
+          console.error('Error while fetching Importance data', error.message);
           throw error;
         })
       );
   }
 
-  getStatus(accessToken: string): Observable<any> {
+  getStatus(): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json'
     });
 
     return this.http.get(this.listStatus, { headers })
       .pipe(
         catchError((error) => {
-        console.error('Error while fetching Status data', error.message);
+          console.error('Error while fetching Status data', error.message);
           throw error;
         })
       );
@@ -186,6 +180,16 @@ export class LookupsService {
       .pipe(
         catchError((error) => {
           console.error('Error while fetching priorities data', error.message);
+          throw error;
+        })
+      );
+  }
+
+  getYears(): Observable<any> {
+    return this.http.get(this.listYears)
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching years data', error.message);
           throw error;
         })
       );

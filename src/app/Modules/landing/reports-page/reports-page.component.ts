@@ -28,6 +28,13 @@ export class ReportsPageComponent {
       imgSrc: 'assets/images/icons/calendar.png',
       title: 'In Progress Correspondences',
       link: '/reports/inprogress-correspondences',
+    },
+
+    {
+      backgroundColor: '#FEEAF3',
+      imgSrc: 'assets/images/icons/calendar.png',
+      title: 'Completed Correspondences',
+      link: '/reports/completed-correspondences',
     }
 
   ];

@@ -19,13 +19,14 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { CompletedTransfersComponent } from './reports-page/completed-transfers/completed-transfers.component';
 import { InprogressTransfersComponent } from './reports-page/inprogress-transfers/inprogress-transfers.component';
 import { InProgressCorrespondencesComponent } from './reports-page/in-progress-correspondences/in-progress-correspondences.component';
-import { SharedModule } from '../shared/shared.module';
 import { ToasterComponent } from '../shared/toaster/toaster.component';
 import { ConfirmationmodalComponent } from '../shared/confirmationmodal/confirmationmodal.component'
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { HighchartsChartModule } from 'highcharts-angular'; 
+import { HighchartsChartModule } from 'highcharts-angular';
 import { MatDialogModule } from '@angular/material/dialog';
+import { CompleteCorrespondencesComponent } from './reports-page/complete-correspondences/complete-correspondences.component';
+
 @NgModule({
   declarations: [
     DelegationPageComponent,
@@ -39,6 +40,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     InprogressTransfersComponent,
     CompletedTransfersComponent,
     InProgressCorrespondencesComponent,
+    CompleteCorrespondencesComponent,
     ConfirmationmodalComponent
   ],
   imports: [

@@ -11,15 +11,18 @@ import { delay } from 'rxjs/operators';
 })
 export class LoginPageComponent {
   username = '';
-  password='';
+  password = '';
   errorMsg = '';
   showPassword = false;
 
-  constructor(private authService: AuthService, private route:Router) { }
+  constructor(private authService: AuthService, private route: Router) { }
 
+  ngOnInit() {
+    this.authService.logout();
+  }
   onLogin(event: Event) {
     event.preventDefault();
-    
+
     if (!this.username || !this.password) {
       this.errorMsg = "Username or password cannot be empty";
       return;
@@ -27,19 +30,19 @@ export class LoginPageComponent {
     this.authService.login(this.username, this.password).pipe(delay(500)).subscribe(
       (response) => {
         this.authService.storeToken(response);
-        
+
         this.errorMsg = "";
         this.route.navigate(["/landing"]);
       },
       (error) => {
-     
+
         this.errorMsg = "Username or password is incorrect";
       });
 
 
   }
 
-  
+
   togglePassword() {
     this.showPassword = !this.showPassword;
   }

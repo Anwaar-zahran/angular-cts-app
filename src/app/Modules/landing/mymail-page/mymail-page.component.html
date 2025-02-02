@@ -1,1 +1,44 @@
-<p>mymail-page works!</p>
+<div class="container-fluid">
+    <h1 class="page-title">My Mail - Inbox</h1>
+
+    <!-- No Data Message -->
+    <div *ngIf="!loading && newItems.length === 0" class="alert alert-warning" role="alert">
+        No data available in the table.
+    </div>
+
+    <!-- Table -->
+    <table class="table table-text light-text" datatable [dtOptions]="dtOptions"
+        *ngIf="!loading && newItems.length > 0">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Transfer date</th>
+                <th>Reference nb</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of newItems">
+                <td>
+                    <p (click)="showMailDetails(item)" class="text-primary bold">{{ item.subject }}</p>
+                    <p (click)="showMailDetails(item)" class="text-secondary">{{ item.details }}</p>
+                </td>
+                <td>{{ item.date }}</td>
+                <td>{{ item.ref }}</td>
+                <td>
+                    <button class="btn btn-primary" (click)="showMailDetails(item)">Visual tracking</button>
+                </td>
+                <td>
+                    <span>
+                        <img alt=""
+                            [src]="item.isRead ? 'assets/images/icons/green-email.svg' : 'assets/images/icons/red-email.svg'" />
+                    </span>
+                    <span *ngIf="item.isOverDue">
+                        <img alt="" src="assets/images/icons/clock.svg" />
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

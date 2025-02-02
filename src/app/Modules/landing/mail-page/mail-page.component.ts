@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-dialog.component';
 interface ApiResponseItem {
   id: number;
+  documentId: number;
+  ref: string;
   categoryId: number;
   referenceNumber: string;
   transferDate: string;
@@ -15,7 +17,8 @@ interface ApiResponseItem {
   fromUser: string;
   subject: string;
   isRead: boolean;
-  isOverDue:boolean;
+  isOverDue: boolean;
+  row: any;
   // Add other properties as needed
 }
 @Component({
@@ -24,19 +27,19 @@ interface ApiResponseItem {
   styleUrl: './mail-page.component.scss'
 })
 
-export class MailPageComponent implements OnInit{
+export class MailPageComponent implements OnInit {
   accessToken: string | null;
   structureId: any; // Declare at class level
   //
   dtOptions: DataTables.Settings = {};
-  newItems: any[] = []; 
-  sentItems:any[]=[];
-  completedItems:any[]=[];
+  newItems: any[] = [];
+  sentItems: any[] = [];
+  completedItems: any[] = [];
 
   loading: boolean = true; // Loading state
 
-  constructor(private http: HttpClient,private router:Router, private dialog: MatDialog) {
-    this.accessToken  = localStorage.getItem('access_token');
+  constructor(private http: HttpClient, private router: Router, private dialog: MatDialog) {
+    this.accessToken = localStorage.getItem('access_token');
   }
 
   ngOnInit() {
@@ -52,7 +55,7 @@ export class MailPageComponent implements OnInit{
     // }
     this.fetchData(); // Call the fetchData method
   }
- 
+
   initDtOptions() {
     this.dtOptions = {
       pageLength: 10,
@@ -72,7 +75,7 @@ export class MailPageComponent implements OnInit{
           next: "<i class='text-secondary fa fa-angle-double-right'></i>",
           last: "<i class='text-secondary fa fa-angle-right'></i>",
         },
-       // info: "Showing page _PAGE_ of _TOTAL_",
+        // info: "Showing page _PAGE_ of _TOTAL_",
       },
       dom: "tp",
       //dom: "tpif",  // Add 'i' to show info
@@ -115,7 +118,7 @@ export class MailPageComponent implements OnInit{
   fetchData() {
     if (!this.accessToken) {
       console.error('Access token not found');
-      
+
       this.router.navigate(['/login']);
       return;
     }
@@ -125,79 +128,94 @@ export class MailPageComponent implements OnInit{
     const parsedPayload = JSON.parse(decodedPayload);
     this.structureId = parsedPayload.StructureId; // Adjust based on your token's payload
     const headers = new HttpHeaders({
-     // 'Authorization': 'Bearer YOUR_ACCESS_TOKEN', // Replace with your actual token
+      // 'Authorization': 'Bearer YOUR_ACCESS_TOKEN', // Replace with your actual token
       'Authorization': `Bearer ${this.accessToken}`,
     });
 
-  
+
     const formData = new FormData();
     formData.append('length', '1000');
     formData.append('structureId', this.structureId);
     // formData.append('draw', '1');
     // formData.append('NodeId', '34');
-  
-   
+
+
     const callApi = (url: string) => {
       return this.http.post<any>(url, formData, { headers }).toPromise();
     };
-  // Fetch all data concurrently
-  Promise.all([
-    callApi('https://cts-qatar.d-intalio.com/Transfer/ListSent'),
-    callApi('https://cts-qatar.d-intalio.com/Transfer/ListCompleted'),
-    callApi('https://cts-qatar.d-intalio.com/Transfer/ListInbox')
-  ])
-  .then(([sentResponse, completedResponse, inboxResponse]) => {
-    debugger
-      console.log('Sent Response:', sentResponse);
-      console.log('Completed Response:', completedResponse);
-      console.log('Inbox Response:', inboxResponse);
-    // Map the API data to respective items
-    this.sentItems = sentResponse.data.map((item: ApiResponseItem) => ({
-      subject: item.subject,
-      details: `Transferred from: ${item.fromUser}`,
-      date: item.transferDate,
-      ref: item.referenceNumber,
-      isRead: item.isRead,
-      isOverDue:item.isOverDue,
-    })) ||[];
-    this.completedItems = completedResponse.data.map((item: ApiResponseItem) => ({
-      subject: item.subject,
-      details: `Transferred from: ${item.fromUser}`,
-      date: item.transferDate,
-      ref: item.referenceNumber,
-      isRead: item.isRead,
-      isOverDue:item.isOverDue,
-    })) ||[];
-    this.newItems = inboxResponse.data.map((item: ApiResponseItem) => ({
-      subject: item.subject,
-      details: `Transferred from: ${item.fromUser}`,
-      date: item.transferDate,
-      ref: item.referenceNumber,
-      isRead: item.isRead,
-      isOverDue:item.isOverDue,
-    })) ||[];
-    console.log('newItems:', this.newItems);
-    console.log('Completed:', this.completedItems);
-    console.log('sentItems:', this.sentItems);
-    // Return a value (could be an object or array, or simply `null`)
-   // return [sentResponse, completedResponse, inboxResponse];
-  })
-  .catch(error => {
-    console.error('Error fetching data:', error);
-  }) .finally(() => {
-    this.loading = false; // Set loading to false after data fetch
-  });;
+    // Fetch all data concurrently
+    Promise.all([
+      callApi('https://cts-qatar.d-intalio.com/Transfer/ListSent'),
+      callApi('https://cts-qatar.d-intalio.com/Transfer/ListCompleted'),
+      callApi('https://cts-qatar.d-intalio.com/Transfer/ListInbox')
+    ])
+      .then(([sentResponse, completedResponse, inboxResponse]) => {
+        debugger
+        console.log('Sent Response:', sentResponse);
+        console.log('Completed Response:', completedResponse);
+        console.log('Inbox Response:', inboxResponse);
+        // Map the API data to respective items
+        this.sentItems = sentResponse.data.map((item: ApiResponseItem) => ({
+          subject: item.subject,
+          details: `Transferred from: ${item.fromUser}`,
+          date: item.transferDate,
+          ref: item.referenceNumber,
+          isRead: item.isRead,
+          isOverDue: item.isOverDue,
+          id: item.id,
+          documentId: item.documentId,
+          row: item
+        })) || [];
+        this.completedItems = completedResponse.data.map((item: ApiResponseItem) => ({
+          subject: item.subject,
+          details: `Transferred from: ${item.fromUser}`,
+          date: item.transferDate,
+          ref: item.referenceNumber,
+          isRead: item.isRead,
+          isOverDue: item.isOverDue,
+          id: item.id,
+          documentId: item.documentId,
+          row: item
+        })) || [];
+        this.newItems = inboxResponse.data.map((item: ApiResponseItem) => ({
+          subject: item.subject,
+          details: `Transferred from: ${item.fromUser}`,
+          date: item.transferDate,
+          ref: item.referenceNumber,
+          isRead: item.isRead,
+          isOverDue: item.isOverDue,
+          id: item.id,
+          documentId: item.documentId,
+          row: item
+        })) || [];
+        console.log('newItems:', this.newItems);
+        console.log('Completed:', this.completedItems);
+        console.log('sentItems:', this.sentItems);
+        // Return a value (could be an object or array, or simply `null`)
+        // return [sentResponse, completedResponse, inboxResponse];
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      }).finally(() => {
+        this.loading = false; // Set loading to false after data fetch
+      });;
 
   }
   active = 1;
- 
 
-  showMailDetails() {
+
+  showMailDetails(item: ApiResponseItem) {
+    debugger;
     this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
       width: '90%',
       height: '90%',
-      data: { message: 'Hello from parent component!' }
+      data: {
+        id: item.id,
+        documentId: item.documentId,
+        referenceNumber: item.ref,
+        row: item.row
+      }
     });
   }
 }

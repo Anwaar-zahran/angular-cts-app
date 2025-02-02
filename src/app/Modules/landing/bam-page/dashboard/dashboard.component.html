@@ -1,40 +1,94 @@
 <h1 class="page-title">Dashboard</h1>
-<div class="charts">
+<div class="charts" v-if="categories && categories.length > 0">
     <div class="row">
+        <div class="filter-icon" (click)="toggleModal()">
+            <i class="fas fa-filter"></i>
+        </div>
+
         <div class="col-md-6">
             <div class="card">
-                <span class="card-title">Average duration for correspondence completion</span>
-                <highcharts-chart id="donutChart"></highcharts-chart>
+                <app-chart-transfer-completion-statistics [fromDate]="fromDate" [toDate]="toDate">
+                </app-chart-transfer-completion-statistics>
             </div>
         </div>
+
+
         <div class="col-md-6">
             <div class="card">
-                <span class="card-title">Average duration for correspondence completion</span>
-                <highcharts-chart id="lineChartContainer"></highcharts-chart>
+                <app-chart-percentage-of-correspondences-completed-and-inprogress [fromDate]="fromDate"
+                    [toDate]="toDate" [categories]="categories">
+                </app-chart-percentage-of-correspondences-completed-and-inprogress>
             </div>
         </div>
+
         <div class="col-md-6">
             <div class="card">
-                <span class="card-title">Count per status grouped by category</span>
-                <highcharts-chart id="pieChartContainer"></highcharts-chart>
+                <app-chart-documents-inProgressOverdue-and-onTime [fromDate]="fromDate" [toDate]="toDate"
+                    [categories]="categories">
+                </app-chart-documents-inProgressOverdue-and-onTime>
             </div>
         </div>
+
         <div class="col-md-6">
             <div class="card">
-                <span class="card-title">Count per status grouped by category</span>
-                <highcharts-chart id="pieChartContainer2"></highcharts-chart>
+                <app-chart-documents-completed-overdue-and-onTime-perCategory [fromDate]="fromDate" [toDate]="toDate"
+                    [categories]="categories">
+                </app-chart-documents-completed-overdue-and-onTime-perCategory>
             </div>
         </div>
+
         <div class="col-md-6">
             <div class="card">
-                <span class="card-title">Count per status grouped by category</span>
-                <highcharts-chart id="columnChartContainer"></highcharts-chart>
+                <app-chart-transfers-inProgressOverdue-and-onTime [fromDate]="fromDate" [toDate]="toDate"
+                    [categories]="categories">
+                </app-chart-transfers-inProgressOverdue-and-onTime>
             </div>
         </div>
+
+
         <div class="col-md-6">
             <div class="card">
-                <span class="card-title">Count per status grouped by category</span>
-                <highcharts-chart id="stackedColumnChart"></highcharts-chart>
+                <app-chart-transfers-completed-overdue-and-onTime-per-category [fromDate]="fromDate" [toDate]="toDate"
+                    [categories]="categories">
+                </app-chart-transfers-completed-overdue-and-onTime-per-category>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-6">
+            <div class="card">
+                <app-chart-count-per-category-and-status [fromDate]="fromDate" [toDate]="toDate"
+                    [categories]="categories">
+                </app-chart-count-per-category-and-status>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isModalOpen" class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Date Range</h5>
+                <button type="button" class="close" (click)="toggleModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form (ngSubmit)="applyFilter()">
+                    <div class="form-group">
+                        <label for="fromDate">From Date</label>
+                        <input type="date" id="fromDate" [(ngModel)]="tempFromDate" name="tempFromDate"
+                            class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="toDate">To Date</label>
+                        <input type="date" id="toDate" [(ngModel)]="tempToDate" name="tempToDate" class="form-control"
+                            required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Apply</button>
+                </form>
             </div>
         </div>
     </div>

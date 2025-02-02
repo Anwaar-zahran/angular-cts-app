@@ -14,12 +14,7 @@ export class LandingPageComponent {
       title: 'My Mail',
       link: 'MyMail',
     },
-    {
-      backgroundColor: '#D2FAF1',
-      imgSrc: 'assets/images/icons/guidelines.png',
-      title: 'Mail for Guidelines',
-      link: 'Guidelines',
-    },
+
     {
       backgroundColor: '#FEEAF3',
       imgSrc: 'assets/images/icons/signature.png',

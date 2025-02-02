@@ -1,10 +1,10 @@
 <div class="dialog-header">
-  <h2 mat-dialog-title>{{ data.rowData.referenceNumber }}</h2>
+  <h2 mat-dialog-title>{{ data.referenceNumber }}</h2>
   <button mat-button mat-dialog-close><i class="fa fa-times"></i></button>
 </div>
 
 <mat-dialog-content>
-  <div class="row">
+  <div class="row" style="height: 100%;">
     <div class="col-md-5">
       <div class="tabs-wrapper">
         <button mat-icon-button class="scroll-btn left" (click)="scrollLeft()" *ngIf="checkScroll()">
@@ -13,7 +13,7 @@
 
         <div #tabsContainer class="nav nav-tabs responsive-tabs">
           <div *ngFor="let tab of tabs; let i = index" [ngClass]="{'active': activeTabIndex === i}"
-               (click)="setActiveTab(i)" class="nav-link">
+            (click)="setActiveTab(i)" class="nav-link">
             {{ tab }}
           </div>
         </div>
@@ -25,25 +25,7 @@
 
       <!-- Tab Contents -->
       <div class="tab-content">
-        <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 10}">
-          <!--<div class="p-3">
-              <div class="grid-2">
-                  <strong>{{ data.rowData.id }}</strong>
-                  <span>{{ data.rowData.id }}</span>
-                  <strong>{{ data.rowData.id }}</strong>
-                  <span>{{ data.rowData.id }}</span>
-              </div>
-              <hr />
-              <div class="grid-2">
-                  <strong>{{ data.rowData.id }}</strong>
-                  <span>{{ data.rowData.id }}</span>
-                  <strong>{{ data.rowData.id }}</strong>
-                  <span>{{ data.rowData.id }}</span>
-              </div>
-          </div>-->
-        </div>
-
-        <!--Attributes-->
+        <!-- Attributes Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 0}">
           <div class="p-3">
             <form class="form">
@@ -51,133 +33,56 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label class="form-label">Sending entity</label>
-                    <input class="form-control" type="text" [value]="data.rowData.sendingEntity" [disabled]="true" />
+                    <input class="form-control" type="text" [value]="data.row?.sendingEntity" [disabled]="true" />
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label class="form-label">Receiving entity</label>
-                    <input class="form-control" type="text" [value]="data.rowData.receivingEntity" [disabled]="true" />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="form-label">Carbon copy</label>
-                    <input class="form-control" type="text" value="text" [disabled]="true" />
+                    <input class="form-control" type="text" [value]="data.row?.receivingEntity" [disabled]="true" />
                   </div>
                 </div>
                 <div class="col-sm-12">
                   <div class="form-group">
                     <label class="form-label">Subject</label>
-                    <textarea class="form-control" maxlength="2000" rows="5" [disabled]="true">{{data.rowData.subject||''}}</textarea>
+                    <textarea class="form-control" maxlength="2000" rows="5"
+                      [disabled]="true">{{data.row?.subject || ''}}</textarea>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="form-label">Privacy</label>
-                    <input class="form-control" type="text" [value]="data.rowData.privacyText" [disabled]="true" />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="form-label">Priority</label>
-                    <input class="form-control" type="text" [value]="data.rowData.priorityText" [disabled]="true" />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="form-label">Due date</label>
-                    <input class="form-control date-picker" [value]="data.rowData.dueDate" placeholder="yyyy-mm-dd" name="dp2" [disabled]="true" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()" />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="form-label">Created date</label>
-                    <input class="form-control date-picker" [value]="data.rowData.createdDate" placeholder="yyyy-mm-dd" name="dp1" [disabled]="true" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle()" />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="form-label">Created By</label>
-                    <input class="form-control" type="text" [value]="data.rowData.createdByUser" [disabled]="true" />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="form-label">Importance</label>
-                    <input class="form-control" type="text" [value]="data.rowData.importanceText" [disabled]="true" />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="form-label">Classification</label>
-                    <select class="form-control" [disabled]="true">
-                      <option value="1">Normal</option>
-                      <option value="2">Medium</option>
-                      <option value="3">Urgent</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="form-label">Document Type</label>
-                    <select class="form-control" [disabled]="true">
-                      <option value="1">Normal</option>
-                      <option value="2">Medium</option>
-                      <option value="3">Urgent</option>
-                    </select>
-                  </div>
-                </div>
-                <!--<div class="col-sm-12">
-                  <div class="form-group">
-                    <label class="form-label">Body</label>
-                    <textarea class="form-control" maxlength="2000" rows="5" [disabled]="true">{{data.rowData.body}}</textarea>
-                  </div>
-                </div>-->
-                <!--<div class="col-sm-12">
-                  <div class="form-group">
-                    <label class="form-label">Body</label>
-                     <input class="form-control" type="text" [value]="data.rowData.tags" [disabled]="true" />
-                  </div>
-                </div>-->
+                <!-- Add more fields as needed -->
               </div>
             </form>
           </div>
         </div>
 
-        <!-- Attachment Tab-->
+        <!-- Attachments Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 1}">
           <div class="p-3">
-            <div class="p-3">
-              <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-                <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodeToggle
-                               class="mat-tree-node" [ngStyle]="{'--level': treeControl.getLevel(node)}">
-                  <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
-                    <i class="fa" [ngClass]="treeControl.isExpanded(node) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
-                  </button>
-                  <i class="far fa-folder"></i>
-                  <!--folder name-->
+            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+              <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodeToggle class="mat-tree-node"
+                [ngStyle]="{'--level': treeControl.getLevel(node)}">
+                <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+                  <i class="fa" [ngClass]="treeControl.isExpanded(node) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+                </button>
+                <i class="far fa-folder"></i>
+                <span>{{node.name}}</span>
+              </mat-tree-node>
+              <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle class="mat-tree-node"
+                [ngStyle]="{'--level': treeControl.getLevel(node)}">
+                <a href="#" class="mx-2 align-items-center" [ngClass]="{'selected': selectedNode === node}"
+                  (click)="selectNode(node, $event)">
+                  <i class="far fa-file"></i>
                   <span>{{node.name}}</span>
-                </mat-tree-node>
-                <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle class="mat-tree-node"
-                               [ngStyle]="{'--level': treeControl.getLevel(node)}">
-                  <!--file link-->
-                  <a href="#" class="mx-2 align-items-center"
-                     [ngClass]="{'selected': selectedNode === node}"
-                     (click)="selectNode(node, $event)">
-                    <i class="far fa-file"></i>
-                    <span>{{node.name}}</span>
-                  </a>
-                </mat-tree-node>
-              </mat-tree>
-            </div>
+                </a>
+              </mat-tree-node>
+            </mat-tree>
           </div>
         </div>
 
-        <!-- Notes Tab-->
+        <!-- Notes Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 2}">
           <div class="position-relative static-pagination">
-            <table class="table" datatable [dtOptions]="dtOptions" *ngIf="data?.notesData?.data.length">
+            <table class="table" datatable [dtOptions]="dtOptions" *ngIf="notes?.length">
               <thead>
                 <tr>
                   <th>Notes</th>
@@ -186,7 +91,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of data.notesData.data">
+                <tr *ngFor="let item of notes">
                   <td>
                     <p [innerHTML]="item.notes"></p>
                   </td>
@@ -195,18 +100,17 @@
                 </tr>
               </tbody>
             </table>
-            <!-- Message for No Data Found -->
-            <div *ngIf="data?.notesData?.data.length === 0" class="text-center mt-3">
+            <div *ngIf="!notes?.length" class="text-center mt-3">
               <p>No data found</p>
             </div>
           </div>
         </div>
 
-        <!-- Linked Correspondence Tab-->
+        <!-- Linked Documents Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 3}">
           <div class="p-3">
             <div class="position-relative static-pagination">
-              <table class="table" datatable [dtOptions]="dtOptions" *ngIf="data?.linkedDoc?.data.length">
+              <table class="table" datatable [dtOptions]="dtOptions" *ngIf="linkedDocs?.length">
                 <thead>
                   <tr>
                     <th>Category</th>
@@ -216,27 +120,26 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of data.linkedDoc.data">
-                    <td>{{ item.category||'' }}</td>
+                  <tr *ngFor="let item of linkedDocs">
+                    <td>{{ item.category || '' }}</td>
                     <td>{{ item.linkedDocumentReferenceNumber }}</td>
                     <td>{{ item.linkedBy }}</td>
                     <td>{{ item.createdDate }}</td>
                   </tr>
                 </tbody>
               </table>
-              <!-- Message for No Data Found -->
-              <div *ngIf="data?.linkedDoc?.data.length === 0" class="text-center mt-3">
+              <div *ngIf="!linkedDocs?.length" class="text-center mt-3">
                 <p>No data found</p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Non-archived Attachments-->
+        <!-- Non-archived Attachments Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 4}">
           <div class="p-3">
             <div class="position-relative static-pagination">
-              <table class="table" datatable [dtOptions]="dtOptions" *ngIf="data?.archAttach?.data.length">
+              <table class="table" datatable [dtOptions]="dtOptions" *ngIf="nonArchAttachments?.length">
                 <thead>
                   <tr>
                     <th>Type</th>
@@ -246,59 +149,33 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of data.archAttach.data">
-                    <td>{{ item.type ||'' }}</td>
+                  <tr *ngFor="let item of nonArchAttachments">
+                    <td>{{ item.type || '' }}</td>
                     <td>{{ item.quantity }}</td>
                     <td>{{ item.description || '' }}</td>
                     <td>{{ item.createdBy }}</td>
                   </tr>
                 </tbody>
               </table>
-              <!-- Message for No Data Found -->
-              <div *ngIf="data?.archAttach?.data.length === 0" class="text-center mt-3">
+              <div *ngIf="!nonArchAttachments?.length" class="text-center mt-3">
                 <p>No data found</p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Visual Tracking-->
+        <!-- Visual Tracking Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 5}">
           <div class="p-3">
-            <ul class="timeline">
-              <li>
-                <div class="timeline-header">
-                  <span class="m-0 text-primary">Title 1</span>
-                  <span class="bold text-secondary">2002</span>
-                </div>
-                <p class="timeline-content">Lorem ipsum, dolor sit amet c</p>
-              </li>
-              <li>
-                <div class="timeline-header">
-                  <span class="m-0 text-primary">Title 1</span>
-                  <span class="bold text-secondary">2002</span>
-                </div>
-                <p class="timeline-content">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
-              </li>
-              <li>
-                <div class="timeline-header">
-                  <span class="m-0 text-primary">Title 1</span>
-                  <span class="bold text-secondary">2002</span>
-                </div>
-                <p class="timeline-content">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quas itaque hic
-                  quibusdam fugiat est numquam harum, accusamus suscipit consequatur laboriosam!
-                </p>
-              </li>
-            </ul>
+            <div #chartContainer style="width: 100%; height: 500px;"></div>
           </div>
         </div>
 
-        <!-- TransHistory-->
+        <!-- Transaction History Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 6}">
           <div class="p-3">
             <div class="position-relative static-pagination">
-              <table class="table" datatable [dtOptions]="dtOptions" *ngIf="data?.history?.data?.length">
+              <table class="table" datatable [dtOptions]="dtOptions" *ngIf="transHistory?.length">
                 <thead>
                   <tr>
                     <th>From User</th>
@@ -310,29 +187,28 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of data.history.data">
-                    <td>{{ item.fromUser ||''}}</td>
-                    <td>{{ item.toUser||'' }}</td>
-                    <td>{{ item.transferDate||''}}</td>
+                  <tr *ngFor="let item of transHistory">
+                    <td>{{ item.fromUser || '' }}</td>
+                    <td>{{ item.toUser || '' }}</td>
+                    <td>{{ item.transferDate || '' }}</td>
                     <td>{{ item.transferTime }}</td>
-                    <td>{{ item.dueDate||'' }}</td>
-                    <td>{{ item.closedDate||'' }}</td>
+                    <td>{{ item.dueDate || '' }}</td>
+                    <td>{{ item.closedDate || '' }}</td>
                   </tr>
                 </tbody>
               </table>
-              <!-- Message for No Data Found -->
-              <div *ngIf="data?.history?.data.length === 0" class="text-center mt-3">
+              <div *ngIf="!transHistory?.length" class="text-center mt-3">
                 <p>No data found</p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Activity Logs-->
+        <!-- Activity Logs Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 7}">
           <div class="p-3">
             <div class="position-relative static-pagination">
-              <table class="table" datatable [dtOptions]="dtOptions" *ngIf="data?.logs?.length">
+              <table class="table" datatable [dtOptions]="dtOptions" *ngIf="activityLogs?.length">
                 <thead>
                   <tr>
                     <th>User</th>
@@ -342,27 +218,28 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of data.logs">
+                  <tr *ngFor="let item of activityLogs">
                     <td>{{ item.user }}</td>
                     <td>{{ item.action }}</td>
-                    <td>{{ item.createdDate}}</td>
+                    <td>{{ item.createdDate }}</td>
                     <td>{{ item.note }}</td>
                   </tr>
                 </tbody>
               </table>
-              <!-- Message for No Data Found -->
-              <div *ngIf="data?.logs?.length === 0" class="text-center mt-3">
+              <div *ngIf="!activityLogs?.length" class="text-center mt-3">
                 <p>No data found</p>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
-    <div class="col-md-7">
-      <p>Viewer here</p>
+    <div class="col-md-7" style="height: calc(90vh - 100px);">
+      <div *ngIf="selectedDocumentId && documentViewerUrl" style="height: 100%;">
+        <iframe id="component_1738404262045_viewerFrame" style="width: 100%; height: 100%; border: 0px; padding: 0px;"
+          [src]="documentViewerUrl"></iframe>
+      </div>
     </div>
   </div>
 </mat-dialog-content>
