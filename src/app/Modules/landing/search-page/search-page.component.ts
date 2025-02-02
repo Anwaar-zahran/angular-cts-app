@@ -291,7 +291,8 @@ export class SearchPageComponent {
         id: row.id,
         documentId: row.documentId,
         referenceNumber: row.ref,
-        row: row
+        row: row,
+        fromSearch:true
       }
     });
 

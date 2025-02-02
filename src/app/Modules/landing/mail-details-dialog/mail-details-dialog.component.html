@@ -82,7 +82,7 @@
         <!-- Notes Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 2}">
           <div class="position-relative static-pagination">
-            <table class="table" datatable [dtOptions]="dtOptions" *ngIf="notes?.length">
+            <table class="table" datatable [dtOptions]="dtOptions" *ngIf="notes && notes?.length >0">
               <thead>
                 <tr>
                   <th>Notes</th>

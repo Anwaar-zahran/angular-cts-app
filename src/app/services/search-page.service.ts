@@ -16,6 +16,7 @@ export class SearchPageService {
   private nonArchiveURL = 'https://cts-qatar.d-intalio.com/NonArchivedAttachments/List'
   private transHistoryURL = 'https://cts-qatar.d-intalio.com/Transfer/ListTransferHistory'
   private activityLogURL = 'https://cts-qatar.d-intalio.com/ActivityLog/ListByDocumentId'
+  private activityLogByIdURL = 'https://cts-qatar.d-intalio.com/ActivityLog/LisActivityLogGridtByDocumentId'
   private attachmentsURL = 'https://cts-qatar.d-intalio.com/Attachment/List'
   private visualTrackingURL = 'https://cts-qatar.d-intalio.com/Document/GetTrackingData'
 
@@ -89,6 +90,36 @@ export class SearchPageService {
       );
   }
 
+  getActivityLogByDocId(accessToken: string, id: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      // 'Content-Type': 'application/json', 
+    });
+
+    const draw = 1;
+    const start = 0;
+    const length = 15;
+
+    const body = new URLSearchParams();
+    body.set('draw', draw.toString());
+    body.set('start', start.toString());
+    body.set('length', length.toString());
+    body.set('DocumentId', id.toString());
+    body.set('DelegationId', '');
+    body.set('ActivityLogActionId', start.toString());
+
+
+
+
+    return this.httpClient.post(this.activityLogByIdURL, body.toString(), { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while searching data', error.message);
+          throw error;
+        })
+      );
+  }
   getNonArchivedAttachment(accessToken: string, id: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
