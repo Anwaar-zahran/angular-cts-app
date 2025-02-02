@@ -6,11 +6,10 @@ import { FormsModule } from '@angular/forms';
 import { KpiService } from '../../../../../../services/kpi.service';
 
 @Component({
-  selector: 'app-kpi-chart-average-duration-for-transfer-delay',
-  templateUrl: './kpi-chart-average-duration-for-transfer-delay.component.html',
-  styleUrls: ['./kpi-chart-average-duration-for-transfer-delay.component.css'],
-  standalone: true,
-  imports: [CommonModule, HighchartsChartModule, FormsModule],
+    selector: 'app-kpi-chart-average-duration-for-transfer-delay',
+    templateUrl: './kpi-chart-average-duration-for-transfer-delay.component.html',
+    styleUrls: ['./kpi-chart-average-duration-for-transfer-delay.component.css'],
+    imports: [CommonModule, HighchartsChartModule, FormsModule]
 })
 export class KpiChartAverageDurationForTransferDelayComponent implements OnInit {
   @Input() year!: number;

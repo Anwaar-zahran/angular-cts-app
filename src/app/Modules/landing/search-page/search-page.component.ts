@@ -19,9 +19,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
-  selector: 'app-search-page',
-  templateUrl: './search-page.component.html',
-  styleUrl: './search-page.component.scss'
+    selector: 'app-search-page',
+    templateUrl: './search-page.component.html',
+    styleUrl: './search-page.component.scss',
+    standalone: false
 })
 export class SearchPageComponent {
   regmodel: NgbDateStruct | undefined;

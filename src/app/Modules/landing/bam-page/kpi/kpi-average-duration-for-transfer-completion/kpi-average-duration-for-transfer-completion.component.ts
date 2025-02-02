@@ -9,15 +9,14 @@ import { KpiTableAverageDurationForTransferCompletionComponent } from './kpi-tab
 import { KpiService } from '../../../../../services/kpi.service';
 
 @Component({
-  selector: 'app-kpi-average-duration-for-transfer-completion',
-  templateUrl: './kpi-average-duration-for-transfer-completion.component.html',
-  styleUrls: ['./kpi-average-duration-for-transfer-completion.component.css'],
-  standalone: true,
-  imports: [
-    CommonModule, FormsModule, NgbModalModule,
-    KpiChartAverageDurationForTransferCompletionComponent,
-    KpiTableAverageDurationForTransferCompletionComponent
-  ],
+    selector: 'app-kpi-average-duration-for-transfer-completion',
+    templateUrl: './kpi-average-duration-for-transfer-completion.component.html',
+    styleUrls: ['./kpi-average-duration-for-transfer-completion.component.css'],
+    imports: [
+        CommonModule, FormsModule, NgbModalModule,
+        KpiChartAverageDurationForTransferCompletionComponent,
+        KpiTableAverageDurationForTransferCompletionComponent
+    ]
 })
 export class KpiAverageDurationForTransferCompletionComponent implements OnInit {
 

@@ -15,21 +15,20 @@ import { LookupsService } from '../../../../services/lookups.service';
 
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ChartTransferCompletionStatisticsComponent,
-    ChartPercentageOfCorrespondencesCompletedAndInprogressComponent,
-    ChartDocumentsInProgressOverdueAndOnTimeComponent,
-    ChartTransfersInProgressOverdueAndOnTimeComponent,
-    ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent,
-    ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent,
-    ChartCountPerCategoryAndStatusComponent
-  ],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+    selector: 'app-dashboard',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ChartTransferCompletionStatisticsComponent,
+        ChartPercentageOfCorrespondencesCompletedAndInprogressComponent,
+        ChartDocumentsInProgressOverdueAndOnTimeComponent,
+        ChartTransfersInProgressOverdueAndOnTimeComponent,
+        ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent,
+        ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent,
+        ChartCountPerCategoryAndStatusComponent
+    ],
+    templateUrl: './dashboard.component.html',
+    styleUrl: './dashboard.component.scss'
 })
 
 export class DashboardComponent implements OnInit {

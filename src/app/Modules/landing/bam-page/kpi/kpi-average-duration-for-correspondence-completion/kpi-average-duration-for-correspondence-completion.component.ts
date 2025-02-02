@@ -9,15 +9,14 @@ import { LookupsService } from '../../../../../services/lookups.service';
 
 
 @Component({
-  selector: 'app-kpi-average-duration-for-correspondence-completion',
-  templateUrl: './kpi-average-duration-for-correspondence-completion.component.html',
-  styleUrls: ['./kpi-average-duration-for-correspondence-completion.component.css'],
-  standalone: true,
-  imports: [
-    CommonModule, FormsModule, NgbModalModule,
-    ChartAverageDurationForCorrespondenceCompletionComponent,
-    TableStructureAverageDurationForCorrespondenceCompletionComponent
-  ],
+    selector: 'app-kpi-average-duration-for-correspondence-completion',
+    templateUrl: './kpi-average-duration-for-correspondence-completion.component.html',
+    styleUrls: ['./kpi-average-duration-for-correspondence-completion.component.css'],
+    imports: [
+        CommonModule, FormsModule, NgbModalModule,
+        ChartAverageDurationForCorrespondenceCompletionComponent,
+        TableStructureAverageDurationForCorrespondenceCompletionComponent
+    ]
 })
 export class KpiAverageDurationForCorrespondenceCompletionComponent implements OnInit {
   year!: number;

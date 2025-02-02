@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-reports-page',
-  templateUrl: './reports-page.component.html',
-  styleUrl: './reports-page.component.scss'
+    selector: 'app-reports-page',
+    templateUrl: './reports-page.component.html',
+    styleUrl: './reports-page.component.scss',
+    standalone: false
 })
 export class ReportsPageComponent {
   constructor(private router: Router) { }

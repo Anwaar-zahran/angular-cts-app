@@ -7,11 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
 
 @Component({
-  selector: 'app-chart-transfers-inProgressOverdue-and-onTime',
-  templateUrl: './chart-transfers-inProgressOverdue-and-onTime.component.html',
-  styleUrls: ['./chart-transfers-inProgressOverdue-and-onTime.component.css'],
-  standalone: true,
-  imports: [CommonModule, HighchartsChartModule, FormsModule],
+    selector: 'app-chart-transfers-inProgressOverdue-and-onTime',
+    templateUrl: './chart-transfers-inProgressOverdue-and-onTime.component.html',
+    styleUrls: ['./chart-transfers-inProgressOverdue-and-onTime.component.css'],
+    imports: [CommonModule, HighchartsChartModule, FormsModule]
 })
 export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit, OnChanges {
 

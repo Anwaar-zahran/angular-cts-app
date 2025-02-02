@@ -7,11 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
 
 @Component({
-  selector: 'app-chart-system-transfers-completed-overdue-and-onTime-per-category',
-  templateUrl: './chart-system-transfers-completed-overdue-and-onTime-per-category.component.html',
-  styleUrls: ['./chart-system-transfers-completed-overdue-and-onTime-per-category.component.css'],
-  standalone: true,
-  imports: [CommonModule, HighchartsChartModule, FormsModule],
+    selector: 'app-chart-system-transfers-completed-overdue-and-onTime-per-category',
+    templateUrl: './chart-system-transfers-completed-overdue-and-onTime-per-category.component.html',
+    styleUrls: ['./chart-system-transfers-completed-overdue-and-onTime-per-category.component.css'],
+    imports: [CommonModule, HighchartsChartModule, FormsModule]
 })
 export class ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent implements OnInit {
   Highcharts: typeof Highcharts = Highcharts;

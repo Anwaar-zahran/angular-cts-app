@@ -8,16 +8,15 @@ import { DataTablesModule } from 'angular-datatables';
 import { DataTableDirective } from 'angular-datatables';
 
 @Component({
-  selector: 'app-table-structure-average-duration-for-correspondence-completion',
-  templateUrl: './table-structure-average-duration-for-correspondence-completion.component.html',
-  styleUrls: ['./table-structure-average-duration-for-correspondence-completion.component.css'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    DataTablesModule,
-    NgbModule,
-    FormsModule
-  ]
+    selector: 'app-table-structure-average-duration-for-correspondence-completion',
+    templateUrl: './table-structure-average-duration-for-correspondence-completion.component.html',
+    styleUrls: ['./table-structure-average-duration-for-correspondence-completion.component.css'],
+    imports: [
+        CommonModule,
+        DataTablesModule,
+        NgbModule,
+        FormsModule
+    ]
 })
 export class TableStructureAverageDurationForCorrespondenceCompletionComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })

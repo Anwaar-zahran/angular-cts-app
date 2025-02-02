@@ -20,9 +20,10 @@ interface ApiResponseItem {
 }
 
 @Component({
-  selector: 'app-mymail-page',
-  templateUrl: './mymail-page.component.html',
-  styleUrls: ['./mymail-page.component.scss']
+    selector: 'app-mymail-page',
+    templateUrl: './mymail-page.component.html',
+    styleUrls: ['./mymail-page.component.scss'],
+    standalone: false
 })
 export class MymailPageComponent implements OnInit {
   accessToken: string | null;

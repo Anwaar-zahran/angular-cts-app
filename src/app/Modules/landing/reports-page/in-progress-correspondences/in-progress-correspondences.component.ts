@@ -14,9 +14,10 @@ import { ReportsService } from '../../../../services/reports.service';
 import { StructuresService } from '../../../../services/structures.service';
 import { UsersService } from '../../../../services/users.service';
 @Component({
-  selector: 'app-in-progress-correspondences',
-  templateUrl: './in-progress-correspondences.component.html',
-  styleUrls: ['./in-progress-correspondences.component.css']
+    selector: 'app-in-progress-correspondences',
+    templateUrl: './in-progress-correspondences.component.html',
+    styleUrls: ['./in-progress-correspondences.component.css'],
+    standalone: false
 })
 export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
 

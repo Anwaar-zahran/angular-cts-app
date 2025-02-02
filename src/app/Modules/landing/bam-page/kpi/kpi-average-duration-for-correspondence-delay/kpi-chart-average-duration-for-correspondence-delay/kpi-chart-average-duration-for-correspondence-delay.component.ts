@@ -7,11 +7,10 @@ import { KpiService } from '../../../../../../services/kpi.service';
 
 
 @Component({
-  selector: 'app-kpi-chart-average-duration-for-correspondence-delay',
-  templateUrl: './kpi-chart-average-duration-for-correspondence-delay.component.html',
-  styleUrls: ['./kpi-chart-average-duration-for-correspondence-delay.component.css'],
-  standalone: true,
-  imports: [CommonModule, HighchartsChartModule, FormsModule],
+    selector: 'app-kpi-chart-average-duration-for-correspondence-delay',
+    templateUrl: './kpi-chart-average-duration-for-correspondence-delay.component.html',
+    styleUrls: ['./kpi-chart-average-duration-for-correspondence-delay.component.css'],
+    imports: [CommonModule, HighchartsChartModule, FormsModule]
 })
 export class KpiChartAverageDurationForCorrespondenceDelayComponent implements OnInit {
 

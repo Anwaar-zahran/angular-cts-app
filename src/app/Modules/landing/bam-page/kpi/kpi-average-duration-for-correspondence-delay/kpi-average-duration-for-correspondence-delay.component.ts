@@ -8,15 +8,14 @@ import { KpiChartAverageDurationForCorrespondenceDelayComponent } from './kpi-ch
 import { KpiTableAverageDurationForCorrespondenceDelayComponent } from './kpi-table-average-duration-for-correspondence-delay/kpi-table-average-duration-for-correspondence-delay.component';
 
 @Component({
-  selector: 'app-kpi-average-duration-for-correspondence-delay',
-  templateUrl: './kpi-average-duration-for-correspondence-delay.component.html',
-  styleUrls: ['./kpi-average-duration-for-correspondence-delay.component.css'],
-  standalone: true,
-  imports: [
-    CommonModule, FormsModule, NgbModalModule,
-    KpiChartAverageDurationForCorrespondenceDelayComponent,
-    KpiTableAverageDurationForCorrespondenceDelayComponent
-  ],
+    selector: 'app-kpi-average-duration-for-correspondence-delay',
+    templateUrl: './kpi-average-duration-for-correspondence-delay.component.html',
+    styleUrls: ['./kpi-average-duration-for-correspondence-delay.component.css'],
+    imports: [
+        CommonModule, FormsModule, NgbModalModule,
+        KpiChartAverageDurationForCorrespondenceDelayComponent,
+        KpiTableAverageDurationForCorrespondenceDelayComponent
+    ]
 })
 export class KpiAverageDurationForCorrespondenceDelayComponent implements OnInit {
 

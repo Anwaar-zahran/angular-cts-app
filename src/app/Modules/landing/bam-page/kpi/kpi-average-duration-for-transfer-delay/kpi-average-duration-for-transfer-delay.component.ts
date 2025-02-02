@@ -8,15 +8,14 @@ import { KpiTableAverageDurationForTransferDelayComponent } from './kpi-table-av
 import { KpiChartAverageDurationForTransferDelayComponent } from './kpi-chart-average-duration-for-transfer-delay/kpi-chart-average-duration-for-transfer-delay.component';
 
 @Component({
-  selector: 'app-kpi-average-duration-for-transfer-delay',
-  templateUrl: './kpi-average-duration-for-transfer-delay.component.html',
-  styleUrls: ['./kpi-average-duration-for-transfer-delay.component.css'],
-  standalone: true,
-  imports: [
-    CommonModule, FormsModule, NgbModalModule,
-    KpiChartAverageDurationForTransferDelayComponent,
-    KpiTableAverageDurationForTransferDelayComponent
-  ],
+    selector: 'app-kpi-average-duration-for-transfer-delay',
+    templateUrl: './kpi-average-duration-for-transfer-delay.component.html',
+    styleUrls: ['./kpi-average-duration-for-transfer-delay.component.css'],
+    imports: [
+        CommonModule, FormsModule, NgbModalModule,
+        KpiChartAverageDurationForTransferDelayComponent,
+        KpiTableAverageDurationForTransferDelayComponent
+    ]
 })
 export class KpiAverageDurationForTransferDelayComponent implements OnInit {
   year!: number;

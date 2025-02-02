@@ -9,13 +9,12 @@ import { DataTableDirective } from 'angular-datatables';
 
 
 @Component({
-  selector: 'app-kpi-table-average-duration-for-transfer-completion',
-  templateUrl: './kpi-table-average-duration-for-transfer-completion.component.html',
-  styleUrls: ['./kpi-table-average-duration-for-transfer-completion.component.css'],
-  standalone: true,
-  imports: [
-    CommonModule, FormsModule, NgbModule, DataTablesModule
-  ],
+    selector: 'app-kpi-table-average-duration-for-transfer-completion',
+    templateUrl: './kpi-table-average-duration-for-transfer-completion.component.html',
+    styleUrls: ['./kpi-table-average-duration-for-transfer-completion.component.css'],
+    imports: [
+        CommonModule, FormsModule, NgbModule, DataTablesModule
+    ]
 })
 export class KpiTableAverageDurationForTransferCompletionComponent implements OnInit {
 

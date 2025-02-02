@@ -8,11 +8,10 @@ import { LookupsService } from '../../../../../../services/lookups.service';
 
 
 @Component({
-  selector: 'app-chart-system-documents-inProgress-overdue-and-onTime-per-category',
-  templateUrl: './chart-system-documents-inProgress-overdue-and-onTime-per-category.component.html',
-  styleUrls: ['./chart-system-documents-inProgress-overdue-and-onTime-per-category.component.css'],
-  standalone: true,
-  imports: [CommonModule, HighchartsChartModule, FormsModule],
+    selector: 'app-chart-system-documents-inProgress-overdue-and-onTime-per-category',
+    templateUrl: './chart-system-documents-inProgress-overdue-and-onTime-per-category.component.html',
+    styleUrls: ['./chart-system-documents-inProgress-overdue-and-onTime-per-category.component.css'],
+    imports: [CommonModule, HighchartsChartModule, FormsModule]
 })
 export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent implements OnInit {
 

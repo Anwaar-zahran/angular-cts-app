@@ -12,9 +12,10 @@ import { StructuresService } from '../../../../services/structures.service';
 import { UsersService } from '../../../../services/users.service';
 
 @Component({
-  selector: 'app-completed-transfers',
-  templateUrl: './completed-transfers.component.html',
-  styleUrls: ['./completed-transfers.component.css']
+    selector: 'app-completed-transfers',
+    templateUrl: './completed-transfers.component.html',
+    styleUrls: ['./completed-transfers.component.css'],
+    standalone: false
 })
 export class CompletedTransfersComponent implements OnInit {
 

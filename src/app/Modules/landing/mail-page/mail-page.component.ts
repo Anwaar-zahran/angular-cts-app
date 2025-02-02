@@ -22,9 +22,10 @@ interface ApiResponseItem {
   // Add other properties as needed
 }
 @Component({
-  selector: 'app-mail-page',
-  templateUrl: './mail-page.component.html',
-  styleUrl: './mail-page.component.scss'
+    selector: 'app-mail-page',
+    templateUrl: './mail-page.component.html',
+    styleUrl: './mail-page.component.scss',
+    standalone: false
 })
 
 export class MailPageComponent implements OnInit {

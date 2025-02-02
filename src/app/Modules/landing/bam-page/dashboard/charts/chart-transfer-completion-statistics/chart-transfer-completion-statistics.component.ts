@@ -7,11 +7,10 @@ import { FormsModule } from '@angular/forms';
 
 
 @Component({
-  selector: 'app-chart-transfer-completion-statistics',
-  templateUrl: './chart-transfer-completion-statistics.component.html',
-  styleUrls: ['./chart-transfer-completion-statistics.component.css'],
-  standalone: true,
-  imports: [CommonModule, HighchartsChartModule, FormsModule],
+    selector: 'app-chart-transfer-completion-statistics',
+    templateUrl: './chart-transfer-completion-statistics.component.html',
+    styleUrls: ['./chart-transfer-completion-statistics.component.css'],
+    imports: [CommonModule, HighchartsChartModule, FormsModule]
 })
 export class ChartTransferCompletionStatisticsComponent implements OnInit, OnChanges {
   Highcharts: typeof Highcharts = Highcharts;

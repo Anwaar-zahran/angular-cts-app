@@ -7,11 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
 
 @Component({
-  selector: 'app-chart-documents-completed-overdue-and-onTime-perCategory',
-  templateUrl: './chart-documents-completed-overdue-and-onTime-perCategory.component.html',
-  styleUrls: ['./chart-documents-completed-overdue-and-onTime-perCategory.component.css'],
-  standalone: true,
-  imports: [CommonModule, HighchartsChartModule, FormsModule],
+    selector: 'app-chart-documents-completed-overdue-and-onTime-perCategory',
+    templateUrl: './chart-documents-completed-overdue-and-onTime-perCategory.component.html',
+    styleUrls: ['./chart-documents-completed-overdue-and-onTime-perCategory.component.css'],
+    imports: [CommonModule, HighchartsChartModule, FormsModule]
 })
 export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent implements OnInit, OnChanges {
 

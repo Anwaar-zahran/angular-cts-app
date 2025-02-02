@@ -7,11 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
 
 @Component({
-  selector: 'app-chart-system-statistics-per-department',
-  templateUrl: './chart-system-statistics-per-department.component.html',
-  styleUrls: ['./chart-system-statistics-per-department.component.css'],
-  standalone: true,
-  imports: [CommonModule, HighchartsChartModule, FormsModule],
+    selector: 'app-chart-system-statistics-per-department',
+    templateUrl: './chart-system-statistics-per-department.component.html',
+    styleUrls: ['./chart-system-statistics-per-department.component.css'],
+    imports: [CommonModule, HighchartsChartModule, FormsModule]
 })
 export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnChanges {
 

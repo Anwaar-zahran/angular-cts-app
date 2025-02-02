@@ -7,11 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
 
 @Component({
-  selector: 'app-chart-count-per-category-and-status',
-  templateUrl: './chart-count-per-category-and-status.component.html',
-  styleUrls: ['./chart-count-per-category-and-status.component.css'],
-  standalone: true,
-  imports: [CommonModule, HighchartsChartModule, FormsModule],
+    selector: 'app-chart-count-per-category-and-status',
+    templateUrl: './chart-count-per-category-and-status.component.html',
+    styleUrls: ['./chart-count-per-category-and-status.component.css'],
+    imports: [CommonModule, HighchartsChartModule, FormsModule]
 })
 export class ChartCountPerCategoryAndStatusComponent implements OnInit {
   @Input() categories: { id: number, text: string }[] = [];

@@ -7,11 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
 
 @Component({
-  selector: 'app-chart-system-count-per-category-and-status',
-  templateUrl: './chart-system-count-per-category-and-status.component.html',
-  styleUrls: ['./chart-system-count-per-category-and-status.component.css'],
-  standalone: true,
-  imports: [CommonModule, HighchartsChartModule, FormsModule],
+    selector: 'app-chart-system-count-per-category-and-status',
+    templateUrl: './chart-system-count-per-category-and-status.component.html',
+    styleUrls: ['./chart-system-count-per-category-and-status.component.css'],
+    imports: [CommonModule, HighchartsChartModule, FormsModule]
 })
 export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
 

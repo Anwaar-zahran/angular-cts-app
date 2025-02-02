@@ -7,11 +7,10 @@ import { FormsModule } from '@angular/forms';
 
 
 @Component({
-  selector: 'app-chart-percentage-of-correspondences-completed-and-inprogress',
-  templateUrl: './chart-percentage-of-correspondences-completed-and-inprogress.component.html',
-  styleUrls: ['./chart-percentage-of-correspondences-completed-and-inprogress.component.css'],
-  standalone: true,
-  imports: [CommonModule, HighchartsChartModule, FormsModule],
+    selector: 'app-chart-percentage-of-correspondences-completed-and-inprogress',
+    templateUrl: './chart-percentage-of-correspondences-completed-and-inprogress.component.html',
+    styleUrls: ['./chart-percentage-of-correspondences-completed-and-inprogress.component.css'],
+    imports: [CommonModule, HighchartsChartModule, FormsModule]
 })
 export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent implements OnInit, OnChanges {
 

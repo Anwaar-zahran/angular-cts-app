@@ -7,16 +7,15 @@ import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'app-kpi-table-average-duration-for-transfer-delay',
-  templateUrl: './kpi-table-average-duration-for-transfer-delay.component.html',
-  styleUrls: ['./kpi-table-average-duration-for-transfer-delay.component.css'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    DataTablesModule,
-    NgbModule,
-    FormsModule
-  ]
+    selector: 'app-kpi-table-average-duration-for-transfer-delay',
+    templateUrl: './kpi-table-average-duration-for-transfer-delay.component.html',
+    styleUrls: ['./kpi-table-average-duration-for-transfer-delay.component.css'],
+    imports: [
+        CommonModule,
+        DataTablesModule,
+        NgbModule,
+        FormsModule
+    ]
 })
 export class KpiTableAverageDurationForTransferDelayComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })

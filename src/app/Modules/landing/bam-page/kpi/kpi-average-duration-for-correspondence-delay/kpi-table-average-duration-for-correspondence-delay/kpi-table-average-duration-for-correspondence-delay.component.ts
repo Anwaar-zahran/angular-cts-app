@@ -8,16 +8,15 @@ import { DataTablesModule } from 'angular-datatables';
 import { DataTableDirective } from 'angular-datatables';
 
 @Component({
-  selector: 'app-kpi-table-average-duration-for-correspondence-delay',
-  templateUrl: './kpi-table-average-duration-for-correspondence-delay.component.html',
-  styleUrls: ['./kpi-table-average-duration-for-correspondence-delay.component.css'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    DataTablesModule,
-    NgbModule,
-    FormsModule
-  ]
+    selector: 'app-kpi-table-average-duration-for-correspondence-delay',
+    templateUrl: './kpi-table-average-duration-for-correspondence-delay.component.html',
+    styleUrls: ['./kpi-table-average-duration-for-correspondence-delay.component.css'],
+    imports: [
+        CommonModule,
+        DataTablesModule,
+        NgbModule,
+        FormsModule
+    ]
 })
 export class KpiTableAverageDurationForCorrespondenceDelayComponent implements OnInit {
 

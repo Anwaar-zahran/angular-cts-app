@@ -6,11 +6,10 @@ import { FormsModule } from '@angular/forms';
 import { KpiService } from '../../../../../../services/kpi.service';
 
 @Component({
-  selector: 'app-chart-average-duration-for-correspondence-completion',
-  templateUrl: './chart-average-duration-for-correspondence-completion.component.html',
-  styleUrls: ['./chart-average-duration-for-correspondence-completion.component.css'],
-  standalone: true,
-  imports: [CommonModule, HighchartsChartModule, FormsModule],
+    selector: 'app-chart-average-duration-for-correspondence-completion',
+    templateUrl: './chart-average-duration-for-correspondence-completion.component.html',
+    styleUrls: ['./chart-average-duration-for-correspondence-completion.component.css'],
+    imports: [CommonModule, HighchartsChartModule, FormsModule]
 })
 export class ChartAverageDurationForCorrespondenceCompletionComponent implements OnInit {
   @Input() year!: number;

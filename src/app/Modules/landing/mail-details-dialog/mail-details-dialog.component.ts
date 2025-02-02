@@ -33,17 +33,16 @@ interface FlatTreeNode {
 }
 
 @Component({
-  selector: 'app-mail-details-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    NgbDatepickerModule,
-    DataTablesModule,
-    MatTreeModule
-  ],
-  templateUrl: './mail-details-dialog.component.html',
-  styleUrls: ['./mail-details-dialog.component.scss']
+    selector: 'app-mail-details-dialog',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        NgbDatepickerModule,
+        DataTablesModule,
+        MatTreeModule
+    ],
+    templateUrl: './mail-details-dialog.component.html',
+    styleUrls: ['./mail-details-dialog.component.scss']
 })
 export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnDestroy {
 

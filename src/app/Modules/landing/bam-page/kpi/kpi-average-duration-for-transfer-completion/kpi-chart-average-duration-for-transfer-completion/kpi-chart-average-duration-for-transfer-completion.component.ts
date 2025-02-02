@@ -6,13 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { KpiService } from '../../../../../../services/kpi.service';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 @Component({
-  selector: 'app-kpi-chart-average-duration-for-transfer-completion',
-  templateUrl: './kpi-chart-average-duration-for-transfer-completion.component.html',
-  styleUrls: ['./kpi-chart-average-duration-for-transfer-completion.component.css'],
-  standalone: true,
-  imports: [
-    CommonModule, FormsModule, NgbModalModule, HighchartsChartModule
-  ],
+    selector: 'app-kpi-chart-average-duration-for-transfer-completion',
+    templateUrl: './kpi-chart-average-duration-for-transfer-completion.component.html',
+    styleUrls: ['./kpi-chart-average-duration-for-transfer-completion.component.css'],
+    imports: [
+        CommonModule, FormsModule, NgbModalModule, HighchartsChartModule
+    ]
 })
 export class KpiChartAverageDurationForTransferCompletionComponent implements OnInit {
 

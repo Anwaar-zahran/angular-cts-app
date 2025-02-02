@@ -17,9 +17,10 @@ import { InprogressCorrespondence } from '../../../../models/inprogress-correspo
 import { Priority } from '../../../../models/priority.model';
 
 @Component({
-  selector: 'app-complete-correspondences',
-  templateUrl: './complete-correspondences.component.html',
-  styleUrls: ['./complete-correspondences.component.css']
+    selector: 'app-complete-correspondences',
+    templateUrl: './complete-correspondences.component.html',
+    styleUrls: ['./complete-correspondences.component.css'],
+    standalone: false
 })
 export class CompleteCorrespondencesComponent implements OnInit {
 

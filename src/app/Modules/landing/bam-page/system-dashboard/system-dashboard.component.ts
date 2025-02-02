@@ -10,19 +10,17 @@ import { ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent } fr
 import { ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent } from './charts/chart-system-transfers-completed-overdue-and-onTime-per-category/chart-system-transfers-completed-overdue-and-onTime-per-category.component';
 
 @Component({
-  selector: 'app-system-dashboard',
-  standalone: true,
-  imports:
-    [
-      ChartSystemCountPerCategoryAndStatusComponent,
-      ChartSystemStatisticsPerDepartmentComponent,
-      ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent,
-      ChartSystemDocumentsCompletedOverdueAndOnTimePerCategoryComponent,
-      ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent,
-      ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent
+    selector: 'app-system-dashboard',
+    imports: [
+        ChartSystemCountPerCategoryAndStatusComponent,
+        ChartSystemStatisticsPerDepartmentComponent,
+        ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent,
+        ChartSystemDocumentsCompletedOverdueAndOnTimePerCategoryComponent,
+        ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent,
+        ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent
     ],
-  templateUrl: './system-dashboard.component.html',
-  styleUrl: './system-dashboard.component.scss'
+    templateUrl: './system-dashboard.component.html',
+    styleUrl: './system-dashboard.component.scss'
 })
 export class SystemDashboardComponent {
   Highcharts: typeof Highcharts = Highcharts;
