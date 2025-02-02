@@ -125,10 +125,12 @@ export class MymailPageComponent implements OnInit {
       width: '90%',
       height: '90%',
       data: {
-        id: item.id,
+        id: item.row.documentId,
         documentId: item.documentId,
         referenceNumber: item.ref,
-        row: item.row
+        row: item.row,
+        fromSearch: false
+
       }
     });
   }

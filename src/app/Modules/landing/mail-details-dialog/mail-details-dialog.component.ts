@@ -1,4 +1,4 @@
-﻿import { Component, Inject, ViewChild, ElementRef, AfterViewChecked, ChangeDetectorRef, Renderer2, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, ViewChild, ElementRef, AfterViewChecked, ChangeDetectorRef, Renderer2, OnInit, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
@@ -95,7 +95,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   users: any[] = [];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { row: any, id: string, referenceNumber: string },
+    @Inject(MAT_DIALOG_DATA) public data: { row: any, id: string, referenceNumber: string, fromSearch:boolean },
     private authService: AuthService,
     private router: Router,
     private sanitizer: DomSanitizer,
@@ -261,6 +261,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   async fetchDetails(docID: string): Promise<void> {
     try {
+      debugger;
       const [
         attributes,
         nonArchAttachments,
@@ -274,7 +275,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.getAttributes(docID),
         this.getNonArchAttachments(docID),
         this.getLinkedDocuments(docID),
-        this.getActivityLogs(docID),
+          this.data.fromSearch ? this.getActivityLogs(docID) : this.getActivityLogsByDocId(docID),
         this.getNotes(docID),
         this.getHistory(docID),
         this.getAttachments(docID),
@@ -282,11 +283,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       ]);
 
       this.attributes = attributes;
-      this.nonArchAttachments = nonArchAttachments;
-      this.linkedDocs = linkedDocs;
-      this.activityLogs = activityLogs;
-      this.notes = notes;
-      this.transHistory = transHistory;
+      this.nonArchAttachments = nonArchAttachments.data;
+      this.linkedDocs = linkedDocs.data;
+      this.activityLogs = this.data.fromSearch ? activityLogs : activityLogs.data;
+       
+      this.notes = notes.data;
+      this.transHistory = transHistory.data;
       this.attachments = attachments;
       this.visualTracking = visualTracking;
 
@@ -319,10 +321,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   getNotes(docID: string): Promise<any> {
+     
     return new Promise((resolve, reject) => {
       this.searchService.getNotes(this.accessToken!, docID).subscribe(
         (response) => {
-          this.notes = response || [];
+          this.notes = response.data || [];
           resolve(response);
         },
         (error: any) => {
@@ -348,11 +351,26 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     });
   }
 
+  getActivityLogsByDocId(docID: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.searchService.getActivityLogByDocId(this.accessToken!, docID).subscribe(
+        (response) => {
+          debugger;
+          this.activityLogs = response.data || [];
+          resolve(response);
+        },
+        (error: any) => {
+          console.error(error);
+          reject(error);
+        }
+      );
+    });
+  }
   getLinkedDocuments(docID: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.searchService.getLinkedCorrespondence(this.accessToken!, docID).subscribe(
         (response) => {
-          this.linkedDocs = response || [];
+          this.linkedDocs = response.data || [];
           resolve(response);
         },
         (error: any) => {
@@ -367,7 +385,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getNonArchivedAttachment(this.accessToken!, docID).subscribe(
         (response) => {
-          this.nonArchAttachments = response || [];
+          this.nonArchAttachments = response.data || [];
           resolve(response);
         },
         (error: any) => {
@@ -382,7 +400,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getTransHistory(this.accessToken!, docID).subscribe(
         (response: any) => {
-          this.transHistory = response || [];
+          this.transHistory = response.data || [];
           resolve(response);
         },
         (error: any) => {
