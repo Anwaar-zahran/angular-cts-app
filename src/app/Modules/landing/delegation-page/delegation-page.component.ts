@@ -17,10 +17,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
-    selector: 'app-delegation-page',
-    templateUrl: './delegation-page.component.html',
-    styleUrls: ['./delegation-page.component.scss'],
-    standalone: false
+  selector: 'app-delegation-page',
+  templateUrl: './delegation-page.component.html',
+  styleUrls: ['./delegation-page.component.scss'],
+  standalone:false
 })
 export class DelegationPageComponent implements OnInit {
   fromModal: NgbDateStruct | undefined;
@@ -144,7 +144,7 @@ export class DelegationPageComponent implements OnInit {
 
         if (this.contacts.length > 0) {
           this.delegationForm.patchValue({
-            userId: this.contacts[0]?.id,
+            userId: this.contacts[0] ?.id,
           });
         }
       },
@@ -158,13 +158,13 @@ export class DelegationPageComponent implements OnInit {
     this.lookupservice.getCategories(undefined).subscribe(
       (response) => {
         this.categories = response || [];
-        this.categories.unshift({ id: 0, text: 'Select Category' });
+        //this.categories.unshift({ id: 0, text: 'Select Category' });
 
-        if (this.categories.length > 0) {
+        /*if (this.categories.length > 0) {
           this.delegationForm.patchValue({
-            categoryId: [this.categories[0]?.id],
+            categoryId: [this.categories[0] ?.id],
           });
-        }
+        }*/
       },
       (error: any) => {
         console.error(error);
@@ -180,7 +180,7 @@ export class DelegationPageComponent implements OnInit {
 
         if (this.privacy.length > 0) {
           this.delegationForm.patchValue({
-            privacyId: this.privacy[0]?.id,
+            privacyId: this.privacy[0] ?.id,
           });
         }
       },
@@ -192,13 +192,10 @@ export class DelegationPageComponent implements OnInit {
 
   formatDate(date: Date | undefined): string {
     if (!date) return '';
-
-    debugger;
-    const day = date.getDate().toString().padStart(2, '0');  // Get day of the month
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');  // getMonth() returns 0-11, so add 1
-    const year = date.getFullYear().toString();  // Get the full year
-
-    return `${year}/${month}/${day}`;  // Return formatted date
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString();
+    return `${day}/${month}/${year}`;
   }
 
   onEdit(item: Delegation): void {
@@ -212,10 +209,8 @@ export class DelegationPageComponent implements OnInit {
           userId: this.selectedUserId,
           privacyId: item.privacyId,
           categoryId: item.categoryIds,
-        //  fromDate: this.convertToNgbDateStruct(item.fromDate),
-          fromDate: item.fromDate,
-          //toDate: this.convertToNgbDateStruct(item.toDate),
-          toDate: item.toDate,
+          fromDate: this.convertToNgbDateStruct(item.fromDate),
+          toDate: this.convertToNgbDateStruct(item.toDate),
           allowSign: item.allowSign,
           showOldCorrespondence: item.showOldCorrespondecne,
         });
@@ -265,7 +260,7 @@ export class DelegationPageComponent implements OnInit {
           },
           (error: any) => {
             console.error('Error updating:', error);
-            this.toaster.showToaster(error?.message || 'Something went wrong');
+            this.toaster.showToaster(error ?.message || 'Something went wrong');
           }
         );
       } else {
@@ -278,7 +273,7 @@ export class DelegationPageComponent implements OnInit {
           },
           (error: any) => {
             console.error('Error adding:', error);
-            this.toaster.showToaster(error?.message || 'Something went wrong');
+            this.toaster.showToaster(error ?.message || 'Something went wrong');
           }
         );
       }
@@ -303,7 +298,7 @@ export class DelegationPageComponent implements OnInit {
             },
             (error: any) => {
               console.error('Error deleting item:', error);
-              this.toaster.showToaster(error?.message || 'Something went wrong');
+              this.toaster.showToaster(error ?.message || 'Something went wrong');
             }
           );
         }
@@ -311,17 +306,17 @@ export class DelegationPageComponent implements OnInit {
     }
   }
 
-  convertToNgbDateStruct(dateStr: string): NgbDateStruct | undefined {
-    if (!dateStr) return undefined;
-    const [day, month, year] = dateStr.split('/');
-    return { year: +year, month: +month, day: +day };
+  convertToNgbDateStruct(dateStr: string): Date | null {
+    if (!dateStr) return null;
+    const [day, month, year] = dateStr.split('/').map(Number);
+    return new Date(year, month - 1, day);
   }
 
   resetDropDowns() {
     this.delegationForm.patchValue({
-      userId: this.contacts.length > 0 ? this.contacts[0]?.id : null,
-      categoryId: this.categories.length > 0 ? [0] : [],
-      privacyId: this.privacy.length > 0 ? this.privacy[0]?.id : null,
+      userId: this.contacts.length > 0 ? this.contacts[0] ?.id : null,
+      categoryId: this.categories.length > 0 ? [] : [],
+      privacyId: this.privacy.length > 0 ? this.privacy[0] ?.id : null,
     });
   }
 
