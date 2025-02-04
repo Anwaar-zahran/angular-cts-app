@@ -42,32 +42,24 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="form-label">From Date</label>
-                    <div class="input-group">
-                        <input class="form-control" placeholder="dd/mm/yyyy" name="dp1" [(ngModel)]="fromDate"
-                            ngbDatepicker #d1="ngbDatepicker">
-                        <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
-                            <i class="fas fa-calendar"></i>
-                        </button>
-                    </div>
+                    <input class="form-control date-picker" matInput [matDatepicker]="picker1" placeholder="mm-dd-yyyy"
+                    [(ngModel)]="fromDate" name="dp1" (click)="picker1.open()" />
+                    <mat-datepicker #picker1></mat-datepicker>
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="form-label">To Date</label>
-                    <div class="input-group">
-                        <input class="form-control" placeholder="dd/mm/yyyy" name="dp2" [(ngModel)]="toDate"
-                            ngbDatepicker #d2="ngbDatepicker">
-                        <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
-                            <i class="fas fa-calendar"></i>
-                        </button>
-                    </div>
+                    <input class="form-control date-picker" matInput [matDatepicker]="picker2" placeholder="mm-dd-yyyy"
+                    [(ngModel)]="toDate" name="dp2" (click)="picker2.open()" />
+                    <mat-datepicker #picker2></mat-datepicker>
                 </div>
             </div>
 
             <!-- Checkbox -->
             <div class="col-md-3">
-                <div class="form-check mt-4 pt-2">
+                <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="isOverdue" name="isOverdue"
                         [(ngModel)]="isOverdue">
                     <label class="form-check-label" for="isOverdue">

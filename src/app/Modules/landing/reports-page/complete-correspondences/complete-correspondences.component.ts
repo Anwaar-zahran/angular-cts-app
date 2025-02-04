@@ -34,8 +34,8 @@ export class CompleteCorrespondencesComponent implements OnInit {
   structures: Structure[] = [];
   structureError: string = '';
 
-  fromDate: NgbDateStruct | undefined;
-  toDate: NgbDateStruct | undefined;
+  fromDate: Date | undefined;
+  toDate: Date | undefined;
 
   selectedUsers: number[] = [];
   users: User[] = [];
@@ -221,13 +221,13 @@ export class CompleteCorrespondencesComponent implements OnInit {
     });
   }
 
-  formatDate(date: NgbDateStruct | undefined): string {
+  formatDate(date: Date | undefined): string {
     if (!date) return '';
-    const month = date.month.toString().padStart(2, '0');
-    const day = date.day.toString().padStart(2, '0');
-    const year = date.year.toString();
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString();
     return `${day}/${month}/${year}`;
-  }
+}
 
   joinStructureAndUser(structure: string, user: string): string {
     if (!structure && !user) return '';

@@ -31,9 +31,9 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
   structures: Structure[] = [];
   structureError: string = '';
 
-  fromDate: any = null; // or set to a specific date like { year: 2023, month: 1, day: 1 }
+  fromDate: Date | undefined; // or set to a specific date like { year: 2023, month: 1, day: 1 }
   //fromDate: NgbDateStruct | undefined;
-  toDate: NgbDateStruct | undefined;
+  toDate: Date | undefined;
 
   selectedUsers: number[] = [];
   users: User[] = [];
@@ -219,13 +219,13 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
     });
   }
 
-  formatDate(date: NgbDateStruct | undefined): string {
+  formatDate(date: Date | undefined): string {
     if (!date) return '';
-    const month = date.month.toString().padStart(2, '0');
-    const day = date.day.toString().padStart(2, '0');
-    const year = date.year.toString();
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString();
     return `${day}/${month}/${year}`;
-  }
+}
 
   joinStructureAndUser(structure: string, user: string): string {
     if (!structure && !user) return '';
