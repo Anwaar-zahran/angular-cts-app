@@ -251,7 +251,26 @@ export class ReportsService {
 
         return this.http.post<ApiResponse<InprogressCorrespondence[]>>(
             `${this.baseUrl}/Report/ListCompletedCorrespondences`,
-            formData
-        );
+          formData
+        ).pipe(
+          switchMap((response: ApiResponse<InprogressCorrespondence[]>) => {
+            const transfers = (response as ApiResponse<InprogressCorrespondence[]>).data;
+            // Fetch categories
+            return this.CategoriesService.ListCategories().pipe(
+              map((categories: Category[]) => {
+                const categoryMap = categories.reduce((map, category) => {
+                  map[category.id] = category.text;
+                  return map;
+                }, {} as { [key: number]: string });
+                const transformedTransfers = transfers.map(transfer => ({
+                  ...transfer,
+                  categoryName: categoryMap[transfer.categoryId] || 'Unknown'
+                }));
+
+                return { ...response, data: transformedTransfers };
+              })
+            );
+          })
+        );       
     }
 }

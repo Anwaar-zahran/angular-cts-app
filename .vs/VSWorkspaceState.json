@@ -5,7 +5,6 @@
     "\\src\\app",
     "\\src\\app\\Modules",
     "\\src\\app\\Modules\\landing",
-    "\\src\\app\\Modules\\landing\\delegation-page",
     "\\src\\app\\Modules\\landing\\mail-details-dialog",
     "\\src\\app\\Modules\\landing\\mail-page",
     "\\src\\app\\Modules\\landing\\search-page"

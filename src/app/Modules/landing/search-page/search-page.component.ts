@@ -292,7 +292,7 @@ export class SearchPageComponent {
         documentId: row.documentId,
         referenceNumber: row.ref,
         row: row,
-        fromSearch:true
+        fromSearch:false
       }
     });
 
