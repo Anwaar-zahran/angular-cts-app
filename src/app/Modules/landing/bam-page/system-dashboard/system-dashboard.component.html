@@ -1,41 +1,56 @@
-<h1 class="page-title">Dashboard</h1>
-<div class="charts">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <span class="card-title">Average duration for correspondence completion</span>
-                <highcharts-chart id="donutChart"></highcharts-chart>
+<div class="body-content">
+    <h1 class="page-title">Dashboard</h1>
+    <div class="charts">
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="card">
+                    <app-chart-system-count-per-category-and-status [fromDate]="fromDate" [toDate]="toDate"
+                        [categories]="categories"></app-chart-system-count-per-category-and-status>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <span class="card-title">Average duration for correspondence completion</span>
-                <highcharts-chart id="lineChartContainer"></highcharts-chart>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <app-chart-system-statistics-per-department [fromDate]="fromDate" [toDate]="toDate"
+                        [categories]="categories"></app-chart-system-statistics-per-department>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <span class="card-title">Count per status grouped by category</span>
-                <highcharts-chart id="pieChartContainer"></highcharts-chart>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <app-chart-system-documents-inProgress-overdue-and-onTime-per-category [fromDate]="fromDate"
+                        [toDate]="toDate"
+                        [categories]="categories"></app-chart-system-documents-inProgress-overdue-and-onTime-per-category>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <span class="card-title">Count per status grouped by category</span>
-                <highcharts-chart id="pieChartContainer2"></highcharts-chart>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <app-chart-system-documents-completed-overdue-and-onTime-per-category [fromDate]="fromDate"
+                        [toDate]="toDate"
+                        [categories]="categories"></app-chart-system-documents-completed-overdue-and-onTime-per-category>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <span class="card-title">Count per status grouped by category</span>
-                <highcharts-chart id="columnChartContainer"></highcharts-chart>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <app-chart-system-transfers-inProgressOverdue-and-onTime-per-category [fromDate]="fromDate"
+                        [toDate]="toDate"
+                        [categories]="categories"></app-chart-system-transfers-inProgressOverdue-and-onTime-per-category>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <span class="card-title">Count per status grouped by category</span>
-                <highcharts-chart id="stackedColumnChart"></highcharts-chart>
+
+
+            <div class="col-md-6">
+                <div class="card">
+                    <app-chart-system-transfers-completed-overdue-and-onTime-per-category [fromDate]="fromDate"
+                        [toDate]="toDate"
+                        [categories]="categories"></app-chart-system-transfers-completed-overdue-and-onTime-per-category>
+                </div>
             </div>
+
         </div>
     </div>
+
 </div>

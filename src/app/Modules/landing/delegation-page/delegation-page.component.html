@@ -1,100 +1,95 @@
-<div class="container-fluid">
+<div class="body-content">
   <!-- Title -->
   <div class="d-flex justify-content-between">
     <h1 class="page-title">Delegations</h1>
   </div>
   <!-- Form -->
   <form [formGroup]="delegationForm">
-    <div class="d-flex align-items-end delegation">
+    <div class="row">
       <!-- Full Name -->
-      <div class="flex-1">
+      <div class="col-md-3">
         <div class="form-group">
-          <label for="ddlUsers" class="form-label">Full Name*</label>
-          <select id="ddlUsers" formControlName="userId" class="form-select select2" *ngIf="contacts.length">
-            <option *ngFor="let contact of contacts" [value]="contact.id">
-              {{ contact.fullName }}
-            </option>
-          </select>
-          <div *ngIf="delegationForm.controls['userId'].invalid && delegationForm.controls['userId'].touched" class="text-danger">
+          <label for="ddlUsers" class="form-label required">Full Name</label>
+          <ng-select id="ddlUsers" formControlName="userId" *ngIf="contacts.length" [items]="contacts"
+            bindLabel="fullName" bindValue="id" placeholder="Select name" class="form-control">
+          </ng-select>
+          <div *ngIf="delegationForm.controls['userId'].invalid && delegationForm.controls['userId'].touched"
+            class="error-msg">
             Full Name is required
           </div>
         </div>
       </div>
       <!-- Date Pickers -->
-      <div class="flex-1">
+      <div class="col-md-3">
         <div class="form-group">
-          <label for="datepicker1" class="form-label">From*</label>
-          <input class="form-control date-picker"
-                 formControlName="fromDate"
-                 placeholder="yyyy-mm-dd"
-                 name="dp1"
-                 ngbDatepicker
-                 #d1="ngbDatepicker"
-                 (click)="d1.toggle()" />
-          <div *ngIf="delegationForm.controls['fromDate'].invalid && delegationForm.controls['fromDate'].touched" class="text-danger">
+          <label for="datepicker1" class="form-label required">From</label>
+            <input class="form-control date-picker" matInput [matDatepicker]="picker" placeholder="dd-mm-yyyy"
+            formControlName="fromDate" name="dp1" (click)="picker.open()" />
+          <mat-datepicker #picker></mat-datepicker>
+          <div *ngIf="delegationForm.controls['fromDate'].invalid && delegationForm.controls['fromDate'].touched"
+            class="error-msg">
             From date is required
           </div>
         </div>
       </div>
-      <div class="flex-1">
+      <div class="col-md-3">
         <div class="form-group">
-          <label for="datepicker2" class="form-label">To*</label>
-          <input class="form-control date-picker"
-                 formControlName="toDate"
-                 placeholder="yyyy-mm-dd"
-                 name="dp2"
-                 ngbDatepicker
-                 #d2="ngbDatepicker"
-                 (click)="d2.toggle()" />
-          <div *ngIf="delegationForm.controls['toDate'].invalid && delegationForm.controls['toDate'].touched" class="text-danger">
+          <label for="datepicker2" class="form-label required">To</label>
+            <input class="form-control date-picker" matInput [matDatepicker]="picker1" placeholder="mm-dd-yyyy"
+            formControlName="toDate" name="dp2" (click)="picker1.open()" />
+          <mat-datepicker #picker1></mat-datepicker>
+          <div *ngIf="delegationForm.controls['toDate'].invalid && delegationForm.controls['toDate'].touched"
+            class="error-msg">
             To date is required
           </div>
         </div>
         <!--</div>-->
       </div>
       <!-- Privacy -->
-      <div class="flex-1">
+      <div class="col-md-3">
         <div class="form-group">
-          <label for="ddlPrivacy" class="form-label">Privacy*</label>
-          <select id="ddlPrivacy" formControlName="privacyId" class="form-select select2">
-            <option *ngFor="let item of privacy || []" [value]="item.id">
-              {{ item.text }}
-            </option>
-          </select>
-          <div *ngIf="delegationForm.controls['privacyId'].invalid && delegationForm.controls['privacyId'].touched" class="text-danger">
+          <label for="ddlPrivacy" class="form-label required">Privacy</label>
+          <ng-select id="ddlPrivacy" formControlName="privacyId" [items]="privacy || []" bindLabel="text" bindValue="id"
+            placeholder="Select" class="form-control">
+          </ng-select>
+          <div *ngIf="delegationForm.controls['privacyId'].invalid && delegationForm.controls['privacyId'].touched"
+            class="error-msg">
             Privacy is required
           </div>
         </div>
       </div>
-      <!-- Checkboxes -->
-      <div class="mb-2">
-        <div class="form-group form-check">
-          <input class="form-check-input" type="checkbox" formControlName="showOldCorrespondence" />
-          <label class="form-check-label" for="oldDocuments">Show old documents</label>
-        </div>
-      </div>
-      <div class="mb-2">
-        <div class="form-group form-check">
-          <input class="form-check-input" type="checkbox" formControlName="allowSign" />
-          <label class="form-check-label" for="canSign">Can sign</label>
-        </div>
-      </div>
-    </div>
-    <div>
       <!-- Categories -->
-      <div class="flex-1">
+      <div class="col-md-6">
         <div class="form-group">
-          <label for="ddlCategories" class="form-label">Category*</label>
-          <select id="ddlCategories" formControlName="categoryId" class="form-select select2" multiple>
-            <option *ngFor="let cat of categories || []" [value]="cat.id">
-              {{ cat.text }}
-            </option>
-          </select>
-          <div *ngIf="delegationForm.controls['categoryId'].invalid && delegationForm.controls['categoryId'].touched" class="text-danger">
+          <label for="ddlCategories" class="form-label required">Category</label>
+          <ng-select id="ddlCategories" formControlName="categoryId" multiple [items]="categories || []"
+            bindLabel="text" bindValue="id" placeholder="Select" class="form-control">
+          </ng-select>
+          <div *ngIf="delegationForm.controls['categoryId'].invalid && delegationForm.controls['categoryId'].touched"
+            class="error-msg">
             Category is required
           </div>
         </div>
       </div>
+      <!-- Checkboxes -->
+      <div class="col-md-4">
+        <div class="d-flex gap-3 mt-4">
+          <div class="mt-2">
+            <div class="form-group form-check">
+              <input class="form-check-input" type="checkbox" formControlName="showOldCorrespondence" />
+              <label class="form-check-label" for="oldDocuments">Show old documents</label>
+            </div>
+          </div>
+          <div class="mt-2">
+            <div class="form-group form-check">
+              <input class="form-check-input" type="checkbox" formControlName="allowSign" />
+              <label class="form-check-label" for="canSign">Can sign</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
     </div>
     <!-- Buttons -->
     <div class="d-flex justify-content-end gap-3 mt-1">
@@ -138,7 +133,7 @@
     </table>
     <app-toaster></app-toaster>
     <!-- Message for No Data Found -->
-    <div *ngIf="data && data.length === 0" class="text-center mt-3">
+    <div *ngIf="data && data.length === 0" class="text-center noData mt-3">
       <p>No data found</p>
     </div>
   </div>

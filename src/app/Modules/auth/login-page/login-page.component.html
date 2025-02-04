@@ -1,4 +1,4 @@
-<div class="container-fluid h-100 p-0">
+<div class="body-content h-100 p-0">
   <div class="row h-100 m-0">
     <div class="col-md-6 p-0">
       <div class="logo-section layer">
@@ -12,7 +12,7 @@
         <!--login form-->
         <form class="px-5" (ngSubmit)="onLogin($event)">
           <h2>Login</h2>
-          <p>Fill out the fields below to login to CTS</p>
+          <p class="text-secondary">Fill out the fields below to login to CTS</p>
           <div class="form-group">
             <input type="text" name="username" placeholder="Username" [(ngModel)]="username" class="form-control">
           </div>

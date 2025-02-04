@@ -15,7 +15,8 @@ import { UsersService } from '../../../../services/users.service';
 @Component({
     selector: 'app-inprogress-transfers',
     templateUrl: './inprogress-transfers.component.html',
-    styleUrls: ['./inprogress-transfers.component.css']
+    styleUrls: ['./inprogress-transfers.component.css'],
+    standalone: false
 })
 export class InprogressTransfersComponent implements OnInit, OnDestroy {
     @ViewChild(DataTableDirective, { static: false })
@@ -28,9 +29,9 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
     structures: Structure[] = [];
     structureError: string = '';
 
-    fromDate: NgbDateStruct | undefined;
+    fromDate: Date | undefined;
     //formatDate?: (date: NgbDateStruct | undefined) => string; // Use '?' to make it optional
-    toDate: NgbDateStruct | undefined;
+    toDate: Date | undefined;
 
     selectedUsers: number[] = [];
     users: User[] = [];
@@ -214,14 +215,14 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
         });
     }
 
-    formatDate(date: NgbDateStruct | undefined): string {
+    formatDate(date: Date | undefined): string {
         if (!date) return '';
-        const month = date.month.toString().padStart(2, '0');
-        const day = date.day.toString().padStart(2, '0');
-        const year = date.year.toString();
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear().toString();
         return `${day}/${month}/${year}`;
     }
-
+    
     joinStructureAndUser(structure: string, user: string): string {
         if (!structure && !user) return '';
         if (!structure) return user;

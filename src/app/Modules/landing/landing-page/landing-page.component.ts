@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-landing-page',
-  templateUrl: './landing-page.component.html',
-  styleUrl: './landing-page.component.scss'
+    selector: 'app-landing-page',
+    templateUrl: './landing-page.component.html',
+    styleUrl: './landing-page.component.scss',
+    standalone: false
 })
 export class LandingPageComponent {
 
@@ -14,12 +15,7 @@ export class LandingPageComponent {
       title: 'My Mail',
       link: 'MyMail',
     },
-    {
-      backgroundColor: '#D2FAF1',
-      imgSrc: 'assets/images/icons/guidelines.png',
-      title: 'Mail for Guidelines',
-      link: 'Guidelines',
-    },
+
     {
       backgroundColor: '#FEEAF3',
       imgSrc: 'assets/images/icons/signature.png',

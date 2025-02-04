@@ -6,6 +6,11 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';  // Required for Material Datepicker
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
 
 // Imports
 import { HeaderComponent } from './Modules/shared/header/header.component';
@@ -47,6 +52,7 @@ export function tokenGetter() {
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    
 
     JwtModule.forRoot({
       config: {
@@ -54,7 +60,12 @@ export function tokenGetter() {
         allowedDomains: ['localhost:8090'], // Define the allowed API domains
         disallowedRoutes: [] // Specify routes that do not require a token
       }
-    })
+    }),
+    BrowserAnimationsModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule
   ],
   providers: [
     {

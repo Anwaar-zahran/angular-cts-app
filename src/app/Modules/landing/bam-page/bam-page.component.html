@@ -1,13 +1,15 @@
-<h1 class="page-title">BAM</h1>
-<div class="cards reports d-flex flex-wrap justify-content-center">
-    <a *ngFor="let card of BAMCards" [routerLink]="card.link" class="card"
-        [ngStyle]="{'background-color': card.backgroundColor}">
-        <div class="icon">
-            <img [src]="card.imgSrc" alt="" />
-        </div>
-        <div class="title">
-            <h2>{{ card.title }}</h2>
-            <i class="fa fa-arrow-right"></i>
-        </div>
-    </a>
+<div class="body-content">
+    <h1 class="page-title">BAM</h1>
+    <div class="cards reports d-flex flex-wrap justify-content-center">
+        <a *ngFor="let card of BAMCards" [routerLink]="card.link" class="card"
+            [ngStyle]="{'background-color': card.backgroundColor}">
+            <div class="icon">
+                <img [src]="card.imgSrc" alt="" />
+            </div>
+            <div class="title">
+                <h2>{{ card.title }}</h2>
+                <i class="fa fa-arrow-right"></i>
+            </div>
+        </a>
+    </div>
 </div>

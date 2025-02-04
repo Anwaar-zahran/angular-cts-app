@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { SearchFilter } from '../../app/models/searchFilter.model';
@@ -16,11 +16,13 @@ export class SearchPageService {
   private nonArchiveURL = 'https://cts-qatar.d-intalio.com/NonArchivedAttachments/List'
   private transHistoryURL = 'https://cts-qatar.d-intalio.com/Transfer/ListTransferHistory'
   private activityLogURL = 'https://cts-qatar.d-intalio.com/ActivityLog/ListByDocumentId'
+  private activityLogByIdURL = 'https://cts-qatar.d-intalio.com/ActivityLog/LisActivityLogGridtByDocumentId'
   private attachmentsURL = 'https://cts-qatar.d-intalio.com/Attachment/List'
+  private visualTrackingURL = 'https://cts-qatar.d-intalio.com/Document/GetTrackingData'
 
   constructor(private httpClient: HttpClient) { }
 
-  searchInbox(accessToken: string, searchModel:SearchFilter): Observable<any> {
+  searchInbox(accessToken: string, searchModel: SearchFilter): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -88,6 +90,36 @@ export class SearchPageService {
       );
   }
 
+  getActivityLogByDocId(accessToken: string, id: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      // 'Content-Type': 'application/json', 
+    });
+
+    const draw = 1;
+    const start = 0;
+    const length = 15;
+
+    const body = new URLSearchParams();
+    body.set('draw', draw.toString());
+    body.set('start', start.toString());
+    body.set('length', length.toString());
+    body.set('DocumentId', id.toString());
+    body.set('DelegationId', '');
+    body.set('ActivityLogActionId', start.toString());
+
+
+
+
+    return this.httpClient.post(this.activityLogByIdURL, body.toString(), { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while searching data', error.message);
+          throw error;
+        })
+      );
+  }
   getNonArchivedAttachment(accessToken: string, id: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
@@ -165,8 +197,8 @@ export class SearchPageService {
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json'
     });
-    
-    const params = new URLSearchParams();    
+
+    const params = new URLSearchParams();
     params.set('id', id);
 
     const urlWithParams = `${this.getDocDetails}?${params.toString()}`;
@@ -203,15 +235,29 @@ export class SearchPageService {
   getAttachments(accessToken: string, id: string): Observable<AttachmentsApiResponce[]> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json', 
+      'Content-Type': 'application/json',
     });
 
-    const params = new HttpParams().set('documentId', id); 
+    const params = new HttpParams().set('documentId', id);
 
-    return this.httpClient.get<AttachmentsApiResponce[]>(this.attachmentsURL , { headers, params })
+    return this.httpClient.get<AttachmentsApiResponce[]>(this.attachmentsURL, { headers, params })
       .pipe(
         catchError((error) => {
           console.error('Error while fetching attachments:', error.message);
+          return [];
+        })
+      );
+  }
+
+  getVisualTracking(documentId: string): Observable<any> {
+
+
+    const params = new HttpParams().set('id', documentId);
+
+    return this.httpClient.get(this.visualTrackingURL, { params })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching visual tracking:', error.message);
           return [];
         })
       );

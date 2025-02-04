@@ -1,3 +1,4 @@
+<div class="body-content">
 <div class="d-flex justify-content-between">
     <h1 class="page-title">Mail for Signature</h1>
 
@@ -13,12 +14,15 @@
     </div>
 </div>
 
-<button mat-button (click)="showMailDetails()">just for testing remove this btn</button>
+
 <!-- Tabs -->
 <div class="nav nav-tabs mt-3" role="tablist">
-    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-new" type="button" role="tab" aria-selected="true"><i class="fa fa-plus-circle"></i>New</button>
-    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-sent" type="button" role="tab" aria-selected="false"><i class="fa fa-paper-plane"></i>Sent</button>
-    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-completed" type="button" role="tab" aria-selected="false"><i class="fa fa-check-circle"></i>Completed</button>
+    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-new" type="button" role="tab"
+        aria-selected="true"><i class="fa fa-plus-circle"></i>New</button>
+    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-sent" type="button" role="tab"
+        aria-selected="false"><i class="fa fa-paper-plane"></i>Sent</button>
+    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-completed" type="button" role="tab"
+        aria-selected="false"><i class="fa fa-check-circle"></i>Completed</button>
 </div>
 
 <!-- Tab Contents -->
@@ -29,7 +33,8 @@
             No data available in the table.
         </div>
 
-        <table class="table table-text light-text" datatable [dtOptions]="dtOptions" *ngIf="!loading && newItems.length > 0">
+        <table class="table table-text light-text" datatable [dtOptions]="dtOptions"
+            *ngIf="!loading && newItems.length > 0">
             <thead>
                 <tr>
                     <th>Subject</th>
@@ -42,19 +47,18 @@
             <tbody>
                 <tr *ngFor="let item of newItems">
                     <td>
-                        <p (click)="showMailDetails()" class="text-primary bold">{{ item.subject }}</p>
-                        <p (click)="showMailDetails()" class="text-secondary">{{ item.details }}</p>
+                        <p (click)="showMailDetails(item)" class="text-primary bold">{{ item.subject }}</p>
+                        <p (click)="showMailDetails(item)" class="text-secondary">{{ item.details }}</p>
                     </td>
                     <td>{{ item.date }}</td>
                     <td>{{ item.ref }}</td>
                     <td>
-                        <button class="btn btn-primary">Visual tracking</button>
+                        <button class="btn btn-primary" (click)="showMailDetails(item)">Visual tracking</button>
                     </td>
                     <td>
                         <span>
-                            <img 
-                                 alt="" 
-                                 [src]="item.isRead ? 'assets/images/icons/green-email.svg' : 'assets/images/icons/red-email.svg'" />
+                            <img alt=""
+                                [src]="item.isRead ? 'assets/images/icons/green-email.svg' : 'assets/images/icons/red-email.svg'" />
                         </span>
                         <span *ngIf="item.isOverDue">
                             <img alt="" src="assets/images/icons/clock.svg" />
@@ -82,19 +86,18 @@
             <tbody>
                 <tr *ngFor="let item of sentItems">
                     <td>
-                        <p class="text-primary bold">{{ item.subject }}</p>
-                        <p class="text-secondary">{{ item.details }}</p>
+                        <p (click)="showMailDetails(item)" class="text-primary bold">{{ item.subject }}</p>
+                        <p (click)="showMailDetails(item)" class="text-secondary">{{ item.details }}</p>
                     </td>
                     <td>{{ item.date }}</td>
                     <td>{{ item.ref }}</td>
                     <td>
-                        <button class="btn btn-primary">Visual tracking</button>
+                        <button class="btn btn-primary" (click)="showMailDetails(item)">Visual tracking</button>
                     </td>
                     <td>
                         <span>
-                            <img 
-                                 alt="" 
-                                 [src]="item.isRead ? 'assets/images/icons/green-email.svg' : 'assets/images/icons/red-email.svg'" />
+                            <img alt=""
+                                [src]="item.isRead ? 'assets/images/icons/green-email.svg' : 'assets/images/icons/red-email.svg'" />
                         </span>
                         <span *ngIf="item.isOverDue">
                             <img alt="" src="assets/images/icons/clock.svg" />
@@ -122,19 +125,18 @@
             <tbody>
                 <tr *ngFor="let item of completedItems">
                     <td>
-                        <p class="text-primary bold">{{ item.subject }}</p>
-                        <p class="text-secondary">{{ item.details }}</p>
+                        <p (click)="showMailDetails(item)" class="text-primary bold">{{ item.subject }}</p>
+                        <p (click)="showMailDetails(item)" class="text-secondary">{{ item.details }}</p>
                     </td>
                     <td>{{ item.date }}</td>
                     <td>{{ item.ref }}</td>
                     <td>
-                        <button class="btn btn-primary">Visual tracking</button>
+                        <button class="btn btn-primary" (click)="showMailDetails(item)">Visual tracking</button>
                     </td>
                     <td>
                         <span>
-                            <img 
-                                 alt="" 
-                                 [src]="item.isRead ? 'assets/images/icons/green-email.svg' : 'assets/images/icons/red-email.svg'" />
+                            <img alt=""
+                                [src]="item.isRead ? 'assets/images/icons/green-email.svg' : 'assets/images/icons/red-email.svg'" />
                         </span>
                         <span *ngIf="item.isOverDue">
                             <img alt="" src="assets/images/icons/clock.svg" />
@@ -144,4 +146,5 @@
             </tbody>
         </table>
     </div>
+</div>
 </div>

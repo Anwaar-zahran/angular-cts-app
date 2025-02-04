@@ -14,6 +14,11 @@ import { InProgressCorrespondencesComponent } from './reports-page/in-progress-c
 import { DashboardComponent } from './bam-page/dashboard/dashboard.component';
 import { SystemDashboardComponent } from './bam-page/system-dashboard/system-dashboard.component';
 import { MasterLayoutComponent } from '../shared/master-layout/master-layout.component';
+import { CompleteCorrespondencesComponent } from './reports-page/complete-correspondences/complete-correspondences.component';
+import { KpiAverageDurationForCorrespondenceCompletionComponent } from './bam-page/kpi/kpi-average-duration-for-correspondence-completion/kpi-average-duration-for-correspondence-completion.component';
+import { KpiAverageDurationForCorrespondenceDelayComponent } from './bam-page/kpi/kpi-average-duration-for-correspondence-delay/kpi-average-duration-for-correspondence-delay.component';
+import { KpiAverageDurationForTransferCompletionComponent } from './bam-page/kpi/kpi-average-duration-for-transfer-completion/kpi-average-duration-for-transfer-completion.component';
+import { KpiAverageDurationForTransferDelayComponent } from './bam-page/kpi/kpi-average-duration-for-transfer-delay/kpi-average-duration-for-transfer-delay.component';
 
 const routes: Routes = [
   {
@@ -49,6 +54,10 @@ const routes: Routes = [
         component: InProgressCorrespondencesComponent,
       },
       {
+        path: 'reports/completed-correspondences',
+        component: CompleteCorrespondencesComponent,
+      },
+      {
         path: 'search',
         component: SearchPageComponent,
       },
@@ -71,6 +80,22 @@ const routes: Routes = [
       {
         path: 'bam/system-dashboard',
         component: SystemDashboardComponent,
+      },
+      {
+        path: 'bam/kpis/kpi-average-duration-for-correspondence-completion',
+        component: KpiAverageDurationForCorrespondenceCompletionComponent,
+      },
+      {
+        path: 'bam/kpis/kpi-average-duration-for-correspondence-delay',
+        component: KpiAverageDurationForCorrespondenceDelayComponent,
+      },
+      {
+        path: 'bam/kpis/kpi-average-duration-for-transfer-completion',
+        component: KpiAverageDurationForTransferCompletionComponent,
+      },
+      {
+        path: 'bam/kpis/kpi-average-duration-for-transfer-delay',
+        component: KpiAverageDurationForTransferDelayComponent,
       }
     ]
   }

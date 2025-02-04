@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-bam-page',
-  templateUrl: './bam-page.component.html',
-  styleUrl: './bam-page.component.scss'
+    selector: 'app-bam-page',
+    templateUrl: './bam-page.component.html',
+    styleUrl: './bam-page.component.scss',
+    standalone: false
 })
 export class BamPageComponent {
   constructor(private router: Router) { }
@@ -21,6 +22,30 @@ export class BamPageComponent {
       imgSrc: 'assets/images/icons/BAM.png',
       title: 'System Dashboard',
       link: '/bam/system-dashboard',
+    },
+    {
+      backgroundColor: '#DEF5FF',
+      imgSrc: 'assets/images/icons/BAM.png',
+      title: 'Average Duration for Correspondence Completion',
+      link: '/bam/kpis/kpi-average-duration-for-correspondence-completion',
+    },
+    {
+      backgroundColor: '#DEF5FF',
+      imgSrc: 'assets/images/icons/BAM.png',
+      title: 'Average Duration for Correspondence Delay',
+      link: '/bam/kpis/kpi-average-duration-for-correspondence-delay',
+    },
+    {
+      backgroundColor: '#D2FAF1',
+      imgSrc: 'assets/images/icons/BAM.png',
+      title: 'Average duration for transfer completion',
+      link: '/bam/kpis/kpi-average-duration-for-transfer-completion',
+    },
+    {
+      backgroundColor: '#FEEAF3',
+      imgSrc: 'assets/images/icons/BAM.png',
+      title: 'Average duration for transfer delay',
+      link: '/bam/kpis/kpi-average-duration-for-transfer-delay',
     }
 
   ];
