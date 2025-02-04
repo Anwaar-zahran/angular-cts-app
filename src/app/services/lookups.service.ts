@@ -14,11 +14,13 @@ export class LookupsService {
   private listCategories = 'https://cts-qatar.d-intalio.com/Category/ListCategories';
   private listEntities = 'https://iam-qatar.d-intalio.com/api/SearchStructuresWithSearchAttributes';
   private listSearchUsers = 'https://iam-qatar.d-intalio.com/api/SearchUsers';
+  private listStructuredUsers = 'https://cts-qatar.d-intalio.com/User/GetUsersStructuresFromCTS';
   private listDelegateToUsers = 'https://cts-qatar.d-intalio.com/CTS/Delegation/ListDelegationToUser';
   private listImportance = 'https://cts-qatar.d-intalio.com/Importance/ListImportances';
   private listStatus = 'https://cts-qatar.d-intalio.com/Status/ListStatuses';
   private listPriorities = 'https://cts-qatar.d-intalio.com/Priority/ListPriorities';
   private listYears = 'https://cts-qatar.d-intalio.com/Dashboard/GetAvailableYears';
+  private listPurposes = 'https://cts-qatar.d-intalio.com/CTS/Purpose/ListUserPurposes';
 
   constructor(private http: HttpClient) { }
 
@@ -73,6 +75,42 @@ export class LookupsService {
       );
   }
 
+  getPurposes(accessToken: string): Observable<any> {
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.get(this.listPurposes, { headers })
+      .pipe(
+        catchError((error) => {
+        console.error('Error while fetching Purposes data', error.message);
+          throw error;
+        })
+      );
+  }
+
+  getStructuredUsers(accessToken: string): Observable<any> {
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`
+    });
+
+    const formData = new FormData();
+    formData.append('structureType', JSON.stringify(1));
+    formData.append('searchText', '');
+    formData.append('delegationId', '');
+    formData.append('fromSendingandReceiving', 'false');
+
+
+    return this.http.post(this.listStructuredUsers, formData, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching structured users data', error.message);
+          throw error;
+        })
+      );
+  }
 
 
   getCategories(delegationId: string | undefined): Observable<{ id: number, text: string }[]> {
@@ -194,5 +232,6 @@ export class LookupsService {
         })
       );
   }
+
 
 }

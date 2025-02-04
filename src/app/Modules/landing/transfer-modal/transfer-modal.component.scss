@@ -1,0 +1,19 @@
+ng-select {
+  color: black !important; /* Adjust text color */
+}
+
+ng-select .ng-dropdown-panel {
+  background-color: #fff !important; /* Ensure dropdown background is white */
+}
+
+ng-select .ng-option {
+  color: black !important; /* Ensure the items inside dropdown are visible */
+}
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+  box-sizing: border-box;
+  cursor: pointer;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

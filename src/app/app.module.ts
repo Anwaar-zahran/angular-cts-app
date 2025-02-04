@@ -24,6 +24,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTablesModule } from 'angular-datatables';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { ReactiveFormsModule } from '@angular/forms';
+//import { AddressBookComponent } from './Modules/landing/address-book/address-book.component';
 
 declare var $: any;
 if (typeof $ !== 'undefined') {
@@ -40,6 +41,7 @@ export function tokenGetter() {
     HeaderComponent,
     FooterComponent,
     MasterLayoutComponent,
+  //  AddressBookComponent
   ],
   imports: [
     AppRoutingModule,

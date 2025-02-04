@@ -30,7 +30,7 @@
     "@ngx-translate/http-loader": "^8.0.0",
     "@popperjs/core": "^2.11.8",
     "angular-chart.js": "^1.1.0",
-    "angular-datatables": "^16.0.0",
+    "angular-datatables": "^16.0.1",
     "animate.css": "^4.1.1",
     "aos": "^2.3.4",
     "bootstrap": "^5.3.3",

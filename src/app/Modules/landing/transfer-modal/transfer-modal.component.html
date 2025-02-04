@@ -1,0 +1,147 @@
+<!--Transfer modal-->
+
+<div class="modal-dialog modal-xl">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="col-md-3 col-xs-2">
+        <h3 ref="modalTransferTitle" class="modal-title">Transfer</h3>
+        <!--The header title Transfer takes third the width of the header in defult device sizes(md) like Laptops-->
+      </div>
+      <div class="col-md-9 col-xs-10">
+        <button mat-button mat-dialog-close class="btn btn-transparent"><i class="fa fa-times"></i></button>
+        <div class="pull-right pr-lg pointer" ref="setPurposeToAll" title="Set purpose for all">
+          <i class="fa fa-chevron-circle-down pl-sm fa-2x" aria-hidden="true"></i>
+        </div>
+        <!--<div ref="purposeContainer" class="pull-right" style="width: 20% !important; padding-left:8px ">
+    <select ref="selectPurpose" class="form-control select2-hidden-accessible" tabindex="-1" aria-hidden="true"><option value="1">For Approval</option><option value="2">Not Approved</option><option value="3">For Action</option><option value="4">For Info</option><option value="5">Need Feedback</option><option value="6">Archive</option><option value="7">For Review</option><option value="8">For Signature</option><option value="9">For Guideline</option><option value="10">CCed</option><option value="11">For Comments</option></select><span class="select2 select2-container select2-container--bootstrap" dir="ltr" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-yos4-container"><span class="select2-selection__rendered" id="select2-yos4-container" title="For Approval"><span class="select2-selection__placeholder">Purpose</span></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+  </div>-->
+        <button type="button" class="btn btn-info pull-right" ref="multipleTransfer" (click)="showAddress()">
+          <em class="fa fa-address-book-o mr-lg"></em>Address book
+        </button>
+        <div style="display:none">
+          <app-address-book (selectedUsersChange)="onUsersSelected($event)"></app-address-book>
+
+        </div>
+
+
+
+        <!--<button type="button" class="btn btn-info pull-right" ref="multipleTransfer">
+  <em class="fa fa-eye mr-sm" aria-hidden="true"></em>Show favorite Contacts    </button>-->
+        <!--<div style="width: 25%;" class="pull-right">
+    <h4 style=" align-items: center; gap: 1rem;">
+      <label for="chkShowFavoriteTransfers">
+        Show favorite Contacts
+      </label>
+      <input id="chkShowFavoriteTransfers" tabindex="56" type="checkbox" value="true" style="width: 1em; height: 1em; margin-left: 0.3em;">
+    </h4>
+  </div>-->
+
+
+      </div>
+    </div>
+    <div class="modal-body">
+      <form ref="formTransferPost" method="post" data-parsley-validate="" novalidate="">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="glyphicon-container-color overflow-auto">
+
+
+              <table class="table table-striped table-bordered" style="width: 100%">
+                <tbody>
+                  <tr class="col-lg-12">
+                    <th class="width-300px">To<span class="text-danger">*</span></th>
+                    <th class="width-200px">Purpose<span class="text-danger">*</span></th>
+                    <th class="width-200px">Priority<span class="text-danger">*</span></th>
+                    <th class="width-200px">Due date</th>
+                    <th class="width-300px">Instruction<span id="component_1738664606076_InstructionTextDanger_2" class="text-danger" hidden="">*</span></th>
+                    <th class="width-50px">Private</th>
+                    <th class="width-50px">CCed</th>
+                    <th class="width-50px">Follow Up</th>
+                    <th class="width-50px"></th>
+                    <!--<th class="width-50px"></th>-->
+                  </tr>
+                  <tr class="col-lg-12">
+                    <td id="component_1738664606076_transferToContainer_2" class="col-sm-6 col-md-4 col-lg-3">
+                      <div class="form-group">
+                        <!--<label for="ddlToUsers" class="form-label">Transfer, to user</label>-->
+                        <ng-select id="ddlToUsers" name="toUsers" [items]="users" [(ngModel)]="selectedUsers"
+                                   bindLabel="name" bindValue="id" class="form-control">
+                          <ng-template ng-label-tmp let-item="item">
+                            {{ item.name }}
+                          </ng-template>
+                        </ng-select>
+                      </div>
+                      <!--<div id="component_1738664606076_cmbTransferToError"></div>-->
+                    </td>
+                    <td id="component_1738664606076_transferPurposeContainer_2" class="col-sm-6 col-md-4 col-lg-3">
+                      <div class="form-group">
+                        <!--<label for="ddlToUsers" class="form-label">Transfer, to user</label>-->
+                        <ng-select id="ddlPurposes" name="dllPurposes" [items]="purposes"
+                                   bindLabel="name" bindValue="id" class="form-control">
+                          <ng-template ng-label-tmp let-item="item">
+                            {{ item.name }}
+                          </ng-template>
+                        </ng-select>
+                      </div>
+                      <!--<div id="component_1738664606076_cmbTransferToError"></div>-->
+                    </td>
+
+                    <td id="component_1738664606076_transferPriorityContainer_2" class="col-sm-6 col-md-4 col-lg-3">
+                      <div class="form-group">
+                        <!--<label for="ddlToUsers" class="form-label">Transfer, to user</label>-->
+                        <ng-select id="ddlToPriority" name="dllPriority" [items]="priorities"
+                                   bindLabel="text" bindValue="id" class="form-control">
+                          <ng-template ng-label-tmp let-item="item">
+                            {{ item.text }}
+                          </ng-template>
+                        </ng-select>
+                      </div>
+                      <!--<div id="component_1738664606076_cmbTransferToError"></div>-->
+                    </td>
+                    <td class="col-sm-6 col-md-4 col-lg-3">
+                      <div class="input-group date staticFlatPickrDate">
+                        <input class="form-control date-picker" matInput [matDatepicker]="picker3" placeholder="mm-dd-yyyy"
+                               name="dp3" (click)="picker3.open()" />
+                        <mat-datepicker #picker3></mat-datepicker>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="input-group">
+                        <input id="txtTransferInstruction" name="txtTransferInstruction" [(ngModel)]="txtInstruction" rows="5" class="form-control" type="text" />
+                        <!--<span id="component_1738664606076_transferInstruction_img" class="input-group-addon triggerInstruction" clickattr="showHideInstruction(2)" style="cursor: pointer; padding: revert-layer;" title="Instruction">
+                          <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                        </span>-->
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <input id="component_1738664606076_checkInstructionPrivate_2" type="checkbox">
+                    </td>
+                    <td id="component_1738664606076_transferCcedContainer_2" class="text-center">
+                      <input id="component_1738664606076_TransferCced_2" class="checkbox inputChange" type="checkbox" name="Cced">
+                    </td>
+                    <td id="component_1738664606076_transferFollowUpContainer_2" class="text-center">
+                      <input id="component_1738664606076_TransferFollowUp_2" class="checkbox inputChange" type="checkbox" name="FollowUp">
+                    </td>
+                    <td class="text-center">
+                      <a id="component_1738664606076_btnDeleteParam_2" class="btn btn-danger delete-row hidden" title="Delete" clickattr="removeRow(this)" hidden=""><span class="fa fa-trash fa-fw"></span></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="required"><span class="text-danger">*</span> Required fields</div>
+    </div>
+    <div class="modal-footer">
+      <div style="text-align: left; display: none;" id="maintainTransferSection" name="maintainTransferSection" class="col-md-4">
+        <input style="margin-inline: 6px;" id="chkMaintainTransfer" tabindex="54" type="checkbox" name="MaintainTransfer" value="true">
+        <label style="margin-top: 8px;">Maintain Transfer</label>
+      </div>
+      <button tabindex="53" ref="btnTransfer" type="button" (click)="Transfer()" class="btn btn-primary" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving...">Transfer</button>
+      <!--<button tabindex="53" ref="btnProceed" type="button" class="btn btn-primary" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving...">Proceed</button>-->
+      <button tabindex="55" ref="btnCloseTransfer" type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+    </div>
+  </div>
+</div>

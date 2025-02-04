@@ -14,6 +14,8 @@ import { Router } from '@angular/router';
 import { AttachmentsApiResponce } from '../../../models/attachments.model';
 import { DocAttributesApiResponse } from '../../../models/searchDocAttributes.model';
 
+import { MatDialog } from '@angular/material/dialog';
+import { TransferModalComponent } from '../transfer-modal/transfer-modal.component';
 
 // Import OrgChart from @balkangraph/orgchart.js
 import OrgChart from '@balkangraph/orgchart.js';
@@ -60,6 +62,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     'Transfers history',
     'Activity log'
   ];
+
   isScrollable: boolean = false;
   activeTabIndex: number = 0;
   selectedNode: any = null;
@@ -102,7 +105,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     private cdr: ChangeDetectorRef,
     private renderer: Renderer2,
     private searchService: SearchPageService,
-    private lookupsService: LookupsService
+    private lookupsService: LookupsService, private dialog: MatDialog
   ) {
     // Initialize Angular Material tree for attachments
     this.treeFlattener = new MatTreeFlattener(
@@ -175,6 +178,19 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       ordering: false
     };
   }
+
+  showModalTransfer() {
+    const dialogRef = this.dialog.open(TransferModalComponent, {
+      width: '90%',
+      maxWidth: '1200px',
+      data: { /* pass any required data here */ }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Transfer modal closed', result);
+    });
+  }
+
 
   // Recursively transform attachments into a tree structure
   private transformAttachmentsToTree(mailAttachments: any[]): TreeNode[] {
@@ -366,6 +382,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       );
     });
   }
+
   getLinkedDocuments(docID: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.searchService.getLinkedCorrespondence(this.accessToken!, docID).subscribe(
@@ -586,6 +603,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     }
   }
 
+  
   ngOnDestroy() {
     if (this.orgChart) {
       try {
