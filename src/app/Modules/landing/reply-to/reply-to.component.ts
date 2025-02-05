@@ -4,19 +4,23 @@ import { LookupsService } from '../../../services/lookups.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { FormsModule, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { DataTablesModule } from 'angular-datatables';
-
-
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { FormsModule, FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms'; // Add this import
 
 @Component({
   selector: 'app-reply-to',
-  imports: [],
+  imports: [
+    CommonModule, MatDialogModule, NgSelectModule,
+    MatDatepickerModule,
+    MatInputModule, ReactiveFormsModule,
+    MatNativeDateModule, FormsModule],
   templateUrl: './reply-to.component.html',
   styleUrl: './reply-to.component.scss'
 })
@@ -27,11 +31,32 @@ export class ReplyToComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private router: Router,
+    private router: Router, private fb: FormBuilder,
     private lookupsService: LookupsService,
     private authService: AuthService,
     private dialogRef: MatDialogRef<ReplyToComponent>
   ) { }
+
+  ngOnInit(): void {
+    this.accessToken = this.authService.getToken();
+    if (!this.accessToken) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.setupForm();
+    this.loadLookupData();
+
+  }
+
+
+  setupForm(): void {
+    this.replyForm = this.fb.group({
+      purpose: [null, Validators.required],
+      dueDate: [null],
+      txtArea: [null],
+      
+    });
+  }
 
   loadLookupData(): void {
   
@@ -45,6 +70,10 @@ export class ReplyToComponent {
         console.error('Error loading priorities:', error);
       }
     );
+  }
+
+  onSave(): void {
+    if (this.replyForm.valid) { }
   }
 
 

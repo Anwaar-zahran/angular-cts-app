@@ -16,6 +16,7 @@ import { DocAttributesApiResponse } from '../../../models/searchDocAttributes.mo
 
 import { MatDialog } from '@angular/material/dialog';
 import { TransferModalComponent } from '../transfer-modal/transfer-modal.component';
+import { ReplyToComponent } from '../reply-to/reply-to.component';
 
 // Import OrgChart from @balkangraph/orgchart.js
 import OrgChart from '@balkangraph/orgchart.js';
@@ -181,6 +182,19 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   showModalTransfer() {
     const dialogRef = this.dialog.open(TransferModalComponent, {
+      disableClose: true,
+      width: '90%',
+      height: '90%',
+      data: { /* pass any required data here */ }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Transfer modal closed', result);
+    });
+  }
+
+  showModalReply() {
+    const dialogRef = this.dialog.open(ReplyToComponent, {
       disableClose: true,
       width: '90%',
       height: '90%',
