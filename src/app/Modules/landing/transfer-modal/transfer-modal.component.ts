@@ -37,6 +37,7 @@ export class TransferModalComponent implements OnInit {
   selectedUsers: any[] = [];
   showAddressBook: boolean = false;
   selectedUserId: any;
+  maxUsers = 50;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,
     private router: Router, private lookupsService: LookupsService, private dialog: MatDialog,
@@ -125,6 +126,10 @@ export class TransferModalComponent implements OnInit {
 
   onClose(): void {
     this.dialogRef.close();
+  }
+
+  removeRow(index: number) {
+    this.selectedUsers.splice(index, 1);
   }
 
   Transfer(): void {

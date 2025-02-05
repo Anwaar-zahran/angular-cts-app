@@ -45,20 +45,9 @@
 
               <table class="table table-striped table-bordered" style="width: 100%">
                 <tbody>
-                  <tr class="col-lg-12">
-                    <th class="width-300px">To<span class="text-danger">*</span></th>
-                    <th class="width-200px">Purpose<span class="text-danger">*</span></th>
-                    <th class="width-200px">Priority<span class="text-danger">*</span></th>
-                    <th class="width-200px">Due date</th>
-                    <th class="width-300px">Instruction<span id="component_1738664606076_InstructionTextDanger_2" class="text-danger" hidden="">*</span></th>
-                    <th class="width-50px">Private</th>
-                    <th class="width-50px">CCed</th>
-                    <th class="width-50px">Follow Up</th>
-                    <th class="width-50px"></th>
-                    <!--<th class="width-50px"></th>-->
-                  </tr>
+
                   <tr class="col-lg-12" *ngFor="let row of selectedUsers">
-                    <td  class="col-sm-6 col-md-4 col-lg-3">
+                    <td class="col-sm-6 col-md-4 col-lg-3">
                       <div class="form-group">
                         <!--<label for="ddlToUsers" class="form-label">Transfer, to user</label>-->
                         <ng-select id="ddlToUsers" name="toUsers" [items]="users" [(ngModel)]="row.id"
@@ -70,7 +59,7 @@
                       </div>
                       <!--<div id="component_1738664606076_cmbTransferToError"></div>-->
                     </td>
-                    <td  class="col-sm-6 col-md-4 col-lg-3">
+                    <td class="col-sm-6 col-md-4 col-lg-3">
                       <div class="form-group">
                         <!--<label for="ddlToUsers" class="form-label">Transfer, to user</label>-->
                         <ng-select id="ddlPurposes" name="dllPurposes" [items]="purposes"
@@ -106,17 +95,83 @@
                       <div class="input-group">
                         <input id="txtTransferInstruction" name="txtTransferInstruction" [(ngModel)]="txtInstruction" rows="5" class="form-control" type="text" />
                         <!--<span id="component_1738664606076_transferInstruction_img" class="input-group-addon triggerInstruction" clickattr="showHideInstruction(2)" style="cursor: pointer; padding: revert-layer;" title="Instruction">
-                          <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
-                        </span>-->
+          <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+        </span>-->
                       </div>
                     </td>
                     <td class="text-center">
                       <input id="chbxPrivate" type="checkbox">
                     </td>
-                    <td  class="text-center">
+                    <td class="text-center">
                       <input id="chbxCCed" class="checkbox inputChange" type="checkbox" name="Cced">
                     </td>
-                    <td  class="text-center">
+                    <td class="text-center">
+                      <input id="chbxFollowUp" class="checkbox inputChange" type="checkbox" name="FollowUp">
+                    </td>
+                    <td class="text-center">
+                      <a id="component_1738664606076_btnDeleteParam_2" class="btn btn-danger delete-row hidden" title="Delete" clickattr="removeRow(this)" hidden=""><span class="fa fa-trash fa-fw"></span></a>
+                    </td>
+                  </tr>
+                  <tr class="col-lg-12" *ngIf="selectedUsers.length < maxUsers">
+                    <td class="col-sm-6 col-md-4 col-lg-3">
+                      <div class="form-group">
+                        <!--<label for="ddlToUsers" class="form-label">Transfer, to user</label>-->
+                        <ng-select id="ddlToUsers" name="toUsers" [items]="users"
+                                   bindLabel="name" bindValue="id" class="form-control">
+                          <ng-template ng-label-tmp let-item="item">
+                            {{ item.name }}
+                          </ng-template>
+                        </ng-select>
+                      </div>
+                      <!--<div id="component_1738664606076_cmbTransferToError"></div>-->
+                    </td>
+                    <td class="col-sm-6 col-md-4 col-lg-3">
+                      <div class="form-group">
+                        <!--<label for="ddlToUsers" class="form-label">Transfer, to user</label>-->
+                        <ng-select id="ddlPurposes" name="dllPurposes" [items]="purposes"
+                                   bindLabel="name" bindValue="id" class="form-control">
+                          <ng-template ng-label-tmp let-item="item">
+                            {{ item.name }}
+                          </ng-template>
+                        </ng-select>
+                      </div>
+                      <!--<div id="component_1738664606076_cmbTransferToError"></div>-->
+                    </td>
+
+                    <td class="col-sm-6 col-md-4 col-lg-3">
+                      <div class="form-group">
+                        <!--<label for="ddlToUsers" class="form-label">Transfer, to user</label>-->
+                        <ng-select id="ddlToPriority" name="dllPriority" [items]="priorities"
+                                   bindLabel="text" bindValue="id" class="form-control">
+                          <ng-template ng-label-tmp let-item="item">
+                            {{ item.text }}
+                          </ng-template>
+                        </ng-select>
+                      </div>
+                      <!--<div id="component_1738664606076_cmbTransferToError"></div>-->
+                    </td>
+                    <td class="col-sm-6 col-md-4 col-lg-3">
+                      <div class="input-group date staticFlatPickrDate">
+                        <input class="form-control date-picker" matInput [matDatepicker]="picker3" placeholder="mm-dd-yyyy"
+                               name="dp3" (click)="picker3.open()" />
+                        <mat-datepicker #picker3></mat-datepicker>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="input-group">
+                        <input id="txtTransferInstruction" name="txtTransferInstruction" [(ngModel)]="txtInstruction" rows="5" class="form-control" type="text" />
+                        <!--<span id="component_1738664606076_transferInstruction_img" class="input-group-addon triggerInstruction" clickattr="showHideInstruction(2)" style="cursor: pointer; padding: revert-layer;" title="Instruction">
+          <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+        </span>-->
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <input id="chbxPrivate" type="checkbox">
+                    </td>
+                    <td class="text-center">
+                      <input id="chbxCCed" class="checkbox inputChange" type="checkbox" name="Cced">
+                    </td>
+                    <td class="text-center">
                       <input id="chbxFollowUp" class="checkbox inputChange" type="checkbox" name="FollowUp">
                     </td>
                     <td class="text-center">
