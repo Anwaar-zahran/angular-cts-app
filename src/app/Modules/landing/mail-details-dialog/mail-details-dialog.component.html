@@ -1,9 +1,7 @@
 <div class="dialog-header">
   <h2 mat-dialog-title>{{ data.referenceNumber }}</h2>
-  <div class="modal-header modal-header p-sm pr-lg">
-    <div id="component_1738663510234_ActionsPanel" class="btn-group">
-      <button id="component_1738663510480_btnMyTransfer" type="button" class="btn btn-vip-toolbar" (click)="showModalTransfer()">
-      <i class="fa fa-reply mr-sm"></i>Transfer</button>
+  <div class="d-flex align-items-center justify-content-end gap-3 flex-1">
+      <button type="button" class="btn btn-secondary" (click)="showModalTransfer()"><i class="fa fa-reply"></i>Transfer</button>
       <!--<button id="component_1738663510480_btnReplyToUser" type="button" class="btn btn-vip-toolbar ">
       <i class="fa fa-reply mr-sm"></i>Reply</button>
       <button id="component_1738663510480_btnComplete" type="button" transferaction="Transfer.Complete" class="btn btn-vip-toolbar ">
@@ -15,7 +13,6 @@
           Reply by<i class="fa fa-caret-down ml-sm"></i>
         </button>-->
        
-      </div>
     </div>
 
    
