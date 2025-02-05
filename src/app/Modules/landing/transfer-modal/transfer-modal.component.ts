@@ -1,4 +1,4 @@
-import { Component, Inject, CUSTOM_ELEMENTS_SCHEMA, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, CUSTOM_ELEMENTS_SCHEMA, OnInit, OnDestroy, QueryList, ViewChildren } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { LookupsService } from '../../../services/lookups.service';
 import { Router } from '@angular/router';
@@ -9,9 +9,28 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { AddressBookComponent } from '../address-book/address-book.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MailsService } from '../../../services/mail.service';
+import { ChangeDetectorRef } from '@angular/core';
+
+
+interface User {
+  id: number;
+  name: string;
+}
+
+interface TransferRow {
+  selectedUserId: number;
+  purposeId: number;
+  priorityId: number;
+  dueDate: string;
+  instruction: string;
+  isPrivate: boolean;
+  isCCed: boolean;
+  isFollowUp: boolean;
+}
 
 @Component({
   selector: 'app-transfer-modal',
@@ -39,9 +58,18 @@ export class TransferModalComponent implements OnInit {
   selectedUserId: any;
   maxUsers = 50;
 
+  @ViewChildren('rowForm') rowForms: QueryList<NgForm> | null = null;
+
+  selectedPurposeId: any;
+  selectedDueDate: any;
+  selectedPriorityId: any;
+  isCCed: any;
+  isPrivate: any;
+  isFollowUp: any;
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,
-    private router: Router, private lookupsService: LookupsService, private dialog: MatDialog,
-    private dialogRef: MatDialogRef<TransferModalComponent>) { }
+    private router: Router, private lookupsService: LookupsService, private dialog: MatDialog, private cdr: ChangeDetectorRef,
+    private dialogRef: MatDialogRef<TransferModalComponent>, private mailService: MailsService) { }
 
   ngOnInit(): void {
     //    console.log('Dialog opened with ID:', this.data.id, 'and Reference Number:', this.data.referenceNumber);
@@ -106,11 +134,15 @@ export class TransferModalComponent implements OnInit {
       data: { /* pass any required data here */ }
     });
 
-    dialog.afterClosed().subscribe(result => {
+    dialog.afterClosed().subscribe((result: User[]) => {
       if (result) {
         console.log('Address Book result:', result);
-        this.selectedUsers = result;
-        this.selectedUserId = this.selectedUsers[0]?.id;
+
+        this.selectedUsers = result.map((user: User) => ({
+          ...user,
+          selectedUserId: user.id
+        }));
+        this.cdr.detectChanges();
       } else {
         console.log('Address Book dialog was closed without submitting');
       }
@@ -132,7 +164,42 @@ export class TransferModalComponent implements OnInit {
     this.selectedUsers.splice(index, 1);
   }
 
+
+  collectRowData(): TransferRow[] {
+    const rowsData: TransferRow[] = [];
+
+    const firstRow: TransferRow = {
+      selectedUserId: this.selectedUserId,
+      purposeId: this.selectedPurposeId,
+      priorityId: this.selectedPriorityId,
+      dueDate: this.selectedDueDate,
+      instruction: this.txtInstruction,
+      isPrivate: this.isPrivate,
+      isCCed: this.isCCed,
+      isFollowUp: this.isFollowUp,
+    };
+    rowsData.push(firstRow);
+
+    // Collect data from dynamically added rows
+    this.selectedUsers.forEach((row) => {
+      rowsData.push(row);
+    });
+
+    return rowsData;
+  }
+
+
   Transfer(): void {
 
+    const model: any = [];
+    const rowData = this.collectRowData();
+    this.mailService.transferMail(this.accessToken!, model).subscribe(
+      (result) => {
+        //
+      },
+      (error) => {
+        console.error('Error sending mail:', error);
+      }
+    );
   }
 }
