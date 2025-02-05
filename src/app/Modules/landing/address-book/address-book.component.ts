@@ -74,7 +74,7 @@ export class AddressBookComponent implements OnInit {
     this.lookupservice.getStructuredUsers(this.authService.getToken()!).subscribe(
       (data) => {
         this.addressUsers = data || [];
-        this.addressUsers.forEach(user => user.selected = false); // Initialize `selected` field
+        this.addressUsers.forEach(user => user.selected = false); 
       },
       (error) => {
         console.error('Error loading users:', error);
@@ -88,9 +88,9 @@ export class AddressBookComponent implements OnInit {
 
     // Update the selectedUsers array
     if (isChecked) {
-      this.selectedUsers = [...this.addressUsers]; // Select all users
+      this.selectedUsers = [...this.addressUsers]; 
     } else {
-      this.selectedUsers = []; // Deselect all users
+      this.selectedUsers = []; 
     }
 
     // Emit the updated array of selected users
@@ -103,9 +103,9 @@ export class AddressBookComponent implements OnInit {
 
   onUserSelectionChange(selectedUser: any, isChecked: boolean): void {
     if (isChecked) {
-      this.selectedUsers.push(selectedUser); // Add user to selectedUsers
+      this.selectedUsers.push(selectedUser); 
     } else {
-      this.selectedUsers = this.selectedUsers.filter(user => user !== selectedUser); // Remove user from selectedUsers
+      this.selectedUsers = this.selectedUsers.filter(user => user !== selectedUser); 
     }
 
     // Emit the updated array of selected users
@@ -116,7 +116,7 @@ export class AddressBookComponent implements OnInit {
  
     this.selectedUsersChange.emit(this.selectedUsers);
     console.log('Selected Users:', this.selectedUsers);
-    this.onClose(); // Close the modal
+    this.onClose(); 
   }
 
   onClose(): void {
