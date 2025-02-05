@@ -9,9 +9,9 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
-import { FormsModule } from '@angular/forms';  
+import { FormsModule } from '@angular/forms';
 import { AddressBookComponent } from '../address-book/address-book.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-transfer-modal',
@@ -19,7 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
     CommonModule, MatDialogModule, NgSelectModule,
     MatDatepickerModule,
     MatInputModule,
-    MatNativeDateModule, FormsModule, AddressBookComponent ],
+    MatNativeDateModule, FormsModule],
   templateUrl: './transfer-modal.component.html',
   styleUrl: './transfer-modal.component.scss'
 })
@@ -35,9 +35,12 @@ export class TransferModalComponent implements OnInit {
   tomodel: NgbDateStruct | undefined;
   txtInstruction: any;
   selectedUsers: any[] = [];
+  showAddressBook: boolean = false;
+
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,
-    private router: Router, private lookupsService: LookupsService, private dialog: MatDialog) { }
+    private router: Router, private lookupsService: LookupsService, private dialog: MatDialog,
+    private dialogRef: MatDialogRef<TransferModalComponent>) { }
 
   ngOnInit(): void {
     //    console.log('Dialog opened with ID:', this.data.id, 'and Reference Number:', this.data.referenceNumber);
@@ -53,7 +56,7 @@ export class TransferModalComponent implements OnInit {
   loadLookupData(): void {
     this.lookupsService.getStructuredUsers(this.accessToken!).subscribe(
       (users) => {
-        this.users = users||[];
+        this.users = users || [];
       },
       (error) => {
         console.error('Error loading users:', error);
@@ -62,7 +65,7 @@ export class TransferModalComponent implements OnInit {
 
     this.lookupsService.getPriorities(this.accessToken!).subscribe(
       (reponse) => {
-        this.priorities = reponse||[];
+        this.priorities = reponse || [];
       },
       (error) => {
         console.error('Error loading priorities:', error);
@@ -94,22 +97,33 @@ export class TransferModalComponent implements OnInit {
   }
 
   showAddress() {
-    const dialog =   this.dialog.open(AddressBookComponent, {
-      width: '90%',
-      maxWidth: '1200px',
-        data: { /* pass any required data here */ }
-  });
+
+    this.showAddressBook = !this.showAddressBook;
+      const dialog =this.dialog.open(AddressBookComponent, {
+        width: '90%',
+        maxWidth: '1200px',
+          data: { /* pass any required data here */ }
+    });
 
     dialog.afterClosed().subscribe(result => {
-    console.log('Address modal closed', result);
+      if (result) {
+        console.log('Address Book result:', result);
+        
+      } else {
+        console.log('Address Book dialog was closed without submitting');
+      }
     });
   }
 
-  onUsersSelected(selectedUsers: any[]): void {
+  //onUsersSelected(selectedUsers: any[]): void {
 
-    console.log('selected users from AddressBookComponent:', selectedUsers);
-    this.selectedUsers = selectedUsers;
-    // You can now handle the selected users here
+  //  console.log('selected users from AddressBookComponent:', selectedUsers);
+  //  this.selectedUsers = selectedUsers;
+  //  // You can now handle the selected users here
+  //}
+
+  onClose(): void {
+    this.dialogRef.close();
   }
 
   Transfer(): void {

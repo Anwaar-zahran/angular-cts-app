@@ -37,10 +37,10 @@ export class AddressBookComponent implements OnInit {
     private router: Router,
     private lookupservice: LookupsService,
     private authService: AuthService,
-    public dialogRef: MatDialogRef<AddressBookComponent>
+    private dialogRef: MatDialogRef<AddressBookComponent>
   ) { }
 
-  @Output() selectedUsersChange = new EventEmitter<any[]>();
+  //@Output() selectedUsersChange = new EventEmitter<any[]>();
 
   ngOnInit(): void {
     this.initDtOptions();
@@ -94,7 +94,7 @@ export class AddressBookComponent implements OnInit {
     }
 
     // Emit the updated array of selected users
-    this.selectedUsersChange.emit(this.selectedUsers);
+    //this.selectedUsersChange.emit(this.selectedUsers);
   }
 
   isAllSelected(): boolean {
@@ -109,13 +109,15 @@ export class AddressBookComponent implements OnInit {
     }
 
     // Emit the updated array of selected users
-    this.selectedUsersChange.emit(this.selectedUsers);
+    //this.selectedUsersChange.emit(this.selectedUsers);
   }
 
   onSubmit(): void {
  
-    this.selectedUsersChange.emit(this.selectedUsers);
+    //this.selectedUsersChange.emit(this.selectedUsers);
     console.log('Selected Users:', this.selectedUsers);
+    this.dialogRef.close(this.selectedUsers); 
+
     this.onClose(); 
   }
 
