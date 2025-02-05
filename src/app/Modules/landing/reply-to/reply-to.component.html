@@ -1,0 +1,59 @@
+<div class="modal-header">
+  <h2 id="modalSendToReceivingEntityTitle" class="modal-title">Reply</h2>
+  <button type="button" class="btn btn-transparent" (click)="onClose()"><i class="fa fa-times"></i></button>
+</div>
+<mat-dialog-content>
+  <form [formGroup]="replyForm">
+    <input id="hdSendDeligationId" type="hidden" value="">
+    <div class="row">
+      <div class="col-sm-6 col-xs-12" id="customAttributeSenderContainer">
+        <div class="form-group">
+          <label class="control-label">To user</label>
+          <input class="form-control" [value]="to" disabled />
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6" id="sendPurposeContainer">
+        <div class="form-group">
+          <label for="ddlPrivacy" class="form-label required">Purpose</label>
+          <ng-select id="ddlPurpose" formControlName="purpose" [items]="purposes || []" bindLabel="text" bindValue="id"
+                     placeholder="Select" class="form-control">
+          </ng-select>
+          <div *ngIf="replyForm.controls['purpose'].invalid && replyForm.controls['purpose'].touched"
+               class="error-msg">
+            Purpose is required
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="datepicker1" class="form-label required">Due Date</label>
+          <input class="form-control date-picker" matInput [matDatepicker]="picker" placeholder="dd-mm-yyyy"
+                 formControlName="dueDate" name="dp1" (click)="picker.open()" />
+          <mat-datepicker #picker></mat-datepicker>
+
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label class="control-label">Instruction</label>
+          <textarea class="form-control" tabindex="52" rows="5" formControlName="txtArea" id="txtAreaInstruction">
+</textarea>
+        </div>
+      </div>
+    </div>
+  </form>
+  <small class="required"><span class="text-danger">*</span> Required fields</small>
+</mat-dialog-content>
+<!--<app-toaster></app-toaster>-->
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="onSubmit()">
+    <i class="fa fa-save"></i> Send
+  </button>
+ 
+  <button type="button" class="btn btn-secondary" (click)="onClose()">Close</button>
+</div>

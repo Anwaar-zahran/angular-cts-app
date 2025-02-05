@@ -1,0 +1,12 @@
+table tbody td:has(.form-control) {
+  padding: 0.5rem !important;
+}
+
+.table-bordered thead tr ,.table-bordered th {
+  border: 0;
+  padding-top: 0 !important;
+}
+
+mat-dialog-content {
+  max-height: unset;
+}

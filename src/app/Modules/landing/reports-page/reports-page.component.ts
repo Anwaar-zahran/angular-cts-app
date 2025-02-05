@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-reports-page',
-  templateUrl: './reports-page.component.html',
-  styleUrl: './reports-page.component.scss'
+    selector: 'app-reports-page',
+    templateUrl: './reports-page.component.html',
+    styleUrl: './reports-page.component.scss',
+    standalone: false
 })
 export class ReportsPageComponent {
   constructor(private router: Router) { }
@@ -28,6 +29,13 @@ export class ReportsPageComponent {
       imgSrc: 'assets/images/icons/calendar.png',
       title: 'In Progress Correspondences',
       link: '/reports/inprogress-correspondences',
+    },
+
+    {
+      backgroundColor: '#FEEAF3',
+      imgSrc: 'assets/images/icons/calendar.png',
+      title: 'Completed Correspondences',
+      link: '/reports/completed-correspondences',
     }
 
   ];

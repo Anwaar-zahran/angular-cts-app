@@ -6,6 +6,11 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';  // Required for Material Datepicker
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
 
 // Imports
 import { HeaderComponent } from './Modules/shared/header/header.component';
@@ -19,6 +24,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTablesModule } from 'angular-datatables';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { ReactiveFormsModule } from '@angular/forms';
+//import { AddressBookComponent } from './Modules/landing/address-book/address-book.component';
 
 declare var $: any;
 if (typeof $ !== 'undefined') {
@@ -35,6 +41,7 @@ export function tokenGetter() {
     HeaderComponent,
     FooterComponent,
     MasterLayoutComponent,
+  //  AddressBookComponent
   ],
   imports: [
     AppRoutingModule,
@@ -47,6 +54,7 @@ export function tokenGetter() {
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    
 
     JwtModule.forRoot({
       config: {
@@ -54,7 +62,12 @@ export function tokenGetter() {
         allowedDomains: ['localhost:8090'], // Define the allowed API domains
         disallowedRoutes: [] // Specify routes that do not require a token
       }
-    })
+    }),
+    BrowserAnimationsModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule
   ],
   providers: [
     {

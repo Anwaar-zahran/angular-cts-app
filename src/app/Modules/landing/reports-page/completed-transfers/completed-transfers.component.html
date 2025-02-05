@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="body-content">
   <!-- Title Section -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="page-title">Completed transfers</h1>
@@ -8,12 +8,12 @@
   <form class="search-form" (ngSubmit)="search()" #searchForm="ngForm">
     <div class="row">
       <!-- Structures Select -->
-      <div class="col-md-6 mb-3">
+      <div class="col-md-3">
         <div class="form-group">
           <label class="form-label">Structure</label>
           <ng-select [items]="structures" [multiple]="true" [closeOnSelect]="false" [searchable]="true" bindLabel="name"
             bindValue="id" [(ngModel)]="selectedStructures" [ngModelOptions]="{standalone: true}"
-            [loading]="isLoadingStructures" (search)="onStructureSearch($event)" class="select2-control">
+            [loading]="isLoadingStructures" (search)="onStructureSearch($event)" class="form-control">
             <ng-template ng-option-tmp let-item="item">
               <i class="fas fa-building me-2"></i>
               {{item.name}}
@@ -23,12 +23,12 @@
       </div>
 
       <!-- Users Select -->
-      <div class="col-md-6 mb-3">
+      <div class="col-md-3">
         <div class="form-group">
           <label class="form-label">User</label>
           <ng-select [items]="users" [multiple]="true" [closeOnSelect]="false" [searchable]="true" bindLabel="fullName"
             bindValue="id" [(ngModel)]="selectedUsers" [ngModelOptions]="{standalone: true}" [loading]="isLoadingUsers"
-            (search)="onUserSearch($event)" class="select2-control">
+            (search)="onUserSearch($event)" class="form-control">
             <ng-template ng-option-tmp let-item="item">
               <i class="fas fa-user me-2"></i>
               {{getUserDisplayName(item)}}
@@ -36,33 +36,22 @@
           </ng-select>
         </div>
       </div>
-    </div>
-
-    <div class="row">
       <!-- Date Controls -->
       <div class="col-md-3">
         <div class="form-group">
           <label class="form-label">From Date</label>
-          <div class="input-group">
-            <input class="form-control" placeholder="dd/mm/yyyy" name="dp1" [(ngModel)]="fromDate" ngbDatepicker
-              #d1="ngbDatepicker">
-            <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
-              <i class="fas fa-calendar"></i>
-            </button>
-          </div>
+          <input class="form-control date-picker" matInput [matDatepicker]="picker1" placeholder="mm-dd-yyyy"
+          [(ngModel)]="fromDate" name="dp1" (click)="picker1.open()" />
+          <mat-datepicker #picker1></mat-datepicker>
         </div>
       </div>
 
       <div class="col-md-3">
         <div class="form-group">
           <label class="form-label">To Date</label>
-          <div class="input-group">
-            <input class="form-control" placeholder="dd/mm/yyyy" name="dp2" [(ngModel)]="toDate" ngbDatepicker
-              #d2="ngbDatepicker">
-            <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
-              <i class="fas fa-calendar"></i>
-            </button>
-          </div>
+          <input class="form-control date-picker" matInput [matDatepicker]="picker2" placeholder="mm-dd-yyyy"
+          [(ngModel)]="toDate" name="dp2" (click)="picker2.open()" />
+          <mat-datepicker #picker2></mat-datepicker>
         </div>
       </div>
 
@@ -75,19 +64,12 @@
           </label>
         </div>
       </div>
-
-      <!-- Action Buttons -->
-      <div class="col-md-3">
-        <div class="action-buttons">
-          <button type="button" class="btn btn-light me-2" (click)="clear()">
-            <i class="fas fa-times me-1"></i> Clear
-          </button>
-          <button type="submit" class="btn btn-primary">
-            <i class="fas fa-search me-1"></i> Search
-          </button>
-        </div>
-      </div>
     </div>
+      <!-- Action Buttons -->
+      <div class="d-flex justify-content-end gap-3 mt-2">
+        <button class="btn btn-secondary btn-lg" (click)="clear()">Clear</button>
+        <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-search"></i> Search</button>
+      </div>
   </form>
 
   <hr />
@@ -118,22 +100,21 @@
 
     <!-- Only show pagination if there's data -->
     <div class="d-flex justify-content-between align-items-center" *ngIf="reports && reports.length > 0">
-      <div>
+      <!--<div>
         Showing {{startIndex}} to {{endIndex}} of {{totalItems}} entries
-      </div>
-      <nav>
-        <ul class="pagination">
-          <li class="page-item" [class.disabled]="currentPage === 1">
-            <a class="page-link" (click)="previousPage()">Previous</a>
-          </li>
-          <li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage">
-            <a class="page-link" (click)="goToPage(page)">{{page}}</a>
-          </li>
-          <li class="page-item" [class.disabled]="currentPage === totalPages">
-            <a class="page-link" (click)="nextPage()">Next</a>
-          </li>
-        </ul>
-      </nav>
+      </div>-->
+      <div class="dataTables_paginate paging_full_numbers">
+        <a class="paginate_button first" [class.disabled]="currentPage === 1" (click)="goToPage(1)"><i class='text-secondary fa fa-angle-left'></i></a>
+
+        <a class="paginate_button previous" [class.disabled]="currentPage === 1" (click)="previousPage()"><i class='text-secondary fa fa-angle-double-left'></i></a>
+
+        <a class="paginate_button" *ngFor="let page of pages" [class.active]="page === currentPage" (click)="goToPage(page)">{{page}}</a>
+
+        <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()"><i class='text-secondary fa fa-angle-double-right'></i></a>
+
+        <a class="paginate_button last" [class.disabled]="currentPage === totalPages" (click)="goToPage(totalPages)"><i class='text-secondary fa fa-angle-right'></i></a>
+
+    </div>
     </div>
   </div>
 </div>

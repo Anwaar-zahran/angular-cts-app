@@ -4,11 +4,10 @@ import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common'; // Import CommonModule for directives like ngIf, ngFor
 
 @Component({
-  selector: 'app-toaster',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './toaster.component.html',
-  styleUrl: './toaster.component.scss'
+    selector: 'app-toaster',
+    imports: [CommonModule],
+    templateUrl: './toaster.component.html',
+    styleUrl: './toaster.component.scss'
 })
 export class ToasterComponent {
   message: string = '';

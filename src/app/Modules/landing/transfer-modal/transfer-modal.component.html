@@ -1,0 +1,217 @@
+<div class="modal-header">
+  <h3 ref="modalTransferTitle" class="modal-title">Transfer</h3>
+  <div class="d-flex justify-content-end align-items-center flex-1 gap-3">
+    <!--<div ref="purposeContainer" class="pull-right" style="width: 20% !important; padding-left:8px ">
+      <select ref="selectPurpose" class="form-control select2-hidden-accessible" tabindex="-1" aria-hidden="true"><option value="1">For Approval</option><option value="2">Not Approved</option><option value="3">For Action</option><option value="4">For Info</option><option value="5">Need Feedback</option><option value="6">Archive</option><option value="7">For Review</option><option value="8">For Signature</option><option value="9">For Guideline</option><option value="10">CCed</option><option value="11">For Comments</option></select><span class="select2 select2-container select2-container--bootstrap" dir="ltr" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-yos4-container"><span class="select2-selection__rendered" id="select2-yos4-container" title="For Approval"><span class="select2-selection__placeholder">Purpose</span></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+    </div>-->
+    <button type="button" class="btn btn-secondary" (click)="showAddress()">Address book</button>
+    <div title="Set purpose for all">
+      <i class="fa fa-chevron-circle-down pl-sm fa-2x" aria-hidden="true"></i>
+    </div>
+    <!--<button type="button" class="btn btn-info pull-right" ref="multipleTransfer">
+    <em class="fa fa-eye mr-sm" aria-hidden="true"></em>Show favorite Contacts    </button>-->
+    <!--<div style="width: 25%;" class="pull-right">
+      <h4 style=" align-items: center; gap: 1rem;">
+        <label for="chkShowFavoriteTransfers">
+          Show favorite Contacts
+        </label>
+        <input id="chkShowFavoriteTransfers" tabindex="56" type="checkbox" value="true" style="width: 1em; height: 1em; margin-left: 0.3em;">
+      </h4>
+    </div>-->
+  </div>
+  <button mat-button mat-dialog-close class="btn btn-transparent"><i class="fa fa-times"></i></button>
+</div>
+<mat-dialog-content>
+  <form ref="formTransferPost" method="post" data-parsley-validate="" novalidate="">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th width="15%">To<span class="text-danger">*</span></th>
+          <th width="15%">Purpose<span class="text-danger">*</span></th>
+          <th width="15%">Priority<span class="text-danger">*</span></th>
+          <th width="15%">Due date</th>
+          <th width="18%">Instruction<span class="text-danger">*</span></th>
+          <th>Private</th>
+          <th>CCed</th>
+          <th>Follow Up</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="col-lg-12">
+          <td>
+            <ng-select id="ddlToUsers" name="toUsers" [items]="users" [(ngModel)]="selectedUserId" bindLabel="name"
+                       bindValue="id" class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+            </ng-select>
+          </td>
+          <td>
+            <ng-select id="ddlPurposes" name="dllPurposes" [items]="purposes" [(ngModel)]="selectedPurposeId" bindLabel="name"
+                       bindValue="id" class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+            </ng-select>
+          </td>
+          <td>
+            <ng-select id="ddlToPriority" name="dllPriority" [items]="priorities" [(ngModel)]="selectedPriorityId" bindLabel="text"
+                       bindValue="id" class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.text }}
+              </ng-template>
+            </ng-select>
+          </td>
+          <td>
+            <input class="form-control date-picker" matInput [matDatepicker]="picker3" [(ngModel)]="selectedDueDate"
+                   placeholder="mm-dd-yyyy" name="dp3" (click)="picker3.open()" />
+            <mat-datepicker #picker3></mat-datepicker>
+          </td>
+          <td>
+            <input id="txtTransferInstruction" name="txtTransferInstruction" [(ngModel)]="txtInstruction" rows="5"
+                   class="form-control" type="text" />
+          </td>
+          <td>
+            <div class="form-check justify-content-center">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="isPrivate" id="chbxPrivate">
+            </div>
+          </td>
+          <td>
+            <div class="form-check justify-content-center">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="isCCed" id="chbxCCed" name="Cced">
+            </div>
+          </td>
+          <td>
+            <div class="form-check justify-content-center">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="isFollowUp" id="chbxFollowUp" name="FollowUp">
+            </div>
+          </td>
+          <td>
+            <a id="component_1738664606076_btnDeleteParam_2" class="btn btn-danger delete-row hidden" title="Delete"
+               clickattr="removeRow(this)" hidden=""><span class="fa fa-trash fa-fw"></span></a>
+          </td>
+        </tr>
+
+        <!-- Dynamically added rows -->
+        <tr class="col-lg-12" *ngFor="let row of selectedUsers; let i = index">
+          <td>
+            <ng-select id="ddlToUsers" name="toUsers" [items]="users" [(ngModel)]="row.selectedUserId" bindLabel="name"
+                       bindValue="id" class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+            </ng-select>
+          </td>
+          <td>
+            <ng-select id="ddlPurposes" name="dllPurposes" [items]="purposes" [(ngModel)]="row.purposeId" bindLabel="name"
+                       bindValue="id" class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+            </ng-select>
+          </td>
+          <td>
+            <ng-select id="ddlToPriority" name="dllPriority" [items]="priorities" [(ngModel)]="row.priorityId" bindLabel="text"
+                       bindValue="id" class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.text }}
+              </ng-template>
+            </ng-select>
+          </td>
+          <td>
+            <input class="form-control date-picker" matInput [matDatepicker]="picker3" [(ngModel)]="row.dueDate"
+                   placeholder="mm-dd-yyyy" name="dp3" (click)="picker3.open()" />
+            <mat-datepicker #picker3></mat-datepicker>
+          </td>
+          <td>
+            <input id="txtTransferInstruction" name="txtTransferInstruction" [(ngModel)]="row.instruction" rows="5"
+                   class="form-control" type="text" />
+          </td>
+          <td>
+            <div class="form-check justify-content-center">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isPrivate" id="chbxPrivate">
+            </div>
+          </td>
+          <td>
+            <div class="form-check justify-content-center">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isCCed" id="chbxCCed" name="Cced">
+            </div>
+          </td>
+          <td>
+            <div class="form-check justify-content-center">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isFollowUp" id="chbxFollowUp" name="FollowUp">
+            </div>
+          </td>
+          <td>
+            <a id="component_1738664606076_btnDeleteParam_2" class="btn btn-danger delete-row hidden" title="Delete"
+               clickattr="removeRow(this)" hidden=""><span class="fa fa-trash fa-fw"></span></a>
+          </td>
+        </tr>
+        <tr class="col-lg-12" *ngFor="let row of selectedUsers">
+          <td>
+            <ng-select id="ddlToUsers" name="toUsers" [items]="users" [(ngModel)]="row.selectedUserId" bindLabel="name"
+                       bindValue="id" class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+            </ng-select>
+          </td>
+          <td>
+            <ng-select id="ddlPurposes" name="dllPurposes" [items]="purposes" bindLabel="name" bindValue="id"
+                       class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+            </ng-select>
+          </td>
+          <td>
+            <ng-select id="ddlToPriority" name="dllPriority" [items]="priorities" bindLabel="text" bindValue="id"
+                       class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.text }}
+              </ng-template>
+            </ng-select>
+          </td>
+          <td>
+            <input class="form-control date-picker" matInput [matDatepicker]="picker3" placeholder="mm-dd-yyyy"
+                   name="dp3" (click)="picker3.open()" />
+            <mat-datepicker #picker3></mat-datepicker>
+          </td>
+          <td>
+            <input id="txtTransferInstruction" name="txtTransferInstruction" [(ngModel)]="txtInstruction" rows="5"
+                   class="form-control" type="text" />
+          </td>
+          <td>
+            <div class="form-check justify-content-center">
+              <input class="form-check-input" type="checkbox" id="chbxPrivate">
+            </div>
+          </td>
+          <td>
+            <div class="form-check justify-content-center">
+              <input class="form-check-input" type="checkbox" id="chbxCCed" name="Cced">
+            </div>
+          </td>
+          <td>
+            <div class="form-check justify-content-center">
+              <input class="form-check-input" type="checkbox" id="chbxFollowUp" name="FollowUp">
+            </div>
+          </td>
+          <td>
+            <a id="component_1738664606076_btnDeleteParam_2" class="btn btn-danger delete-row hidden" title="Delete"
+               clickattr="removeRow(this)" hidden=""><span class="fa fa-trash fa-fw"></span></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</mat-dialog-content>
+<div class="modal-footer">
+  <button type="button" data-dismiss="modal" (click)="onClose()" class="btn btn-secondary">Close</button>
+  <button type="button" (click)="Transfer()" class="btn btn-primary"
+    data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving...">Transfer</button>
+</div>
+<!--<div *ngIf="showAddressBook">
+  <app-address-book (selectedUsersChange)="onUsersSelected($event)"></app-address-book>
+
+</div>-->

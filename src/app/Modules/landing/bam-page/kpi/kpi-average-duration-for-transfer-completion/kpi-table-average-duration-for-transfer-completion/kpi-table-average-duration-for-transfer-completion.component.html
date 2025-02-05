@@ -1,0 +1,76 @@
+<div class="panel panel-default borderTop-1">
+  <!-- Title Section -->
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-sm-10 pull-left">
+        Average per structure
+      </div>
+
+    </div>
+    <span id="spanTransferAverageCompletionTime" class="spanDate">
+      <span style="color: #444">(Year {{year}})</span>
+    </span>
+  </div>
+
+  <div class="panel-body">
+    <!-- Table -->
+    <div class="table-container overflow-x-auto">
+      <table id="grdAveragePerStructureItems" class="table dataTable no-footer" role="grid">
+        <thead>
+          <tr role="row">
+            <th class="min-max-width-50-250">Structure</th>
+            <th class="min-max-width-50-250">Average (Days)</th>
+            <th class="min-max-width-50-250">Compare to total average</th>
+            <!--
+          <th class="min-max-width-50-250">Yearly graph</th>
+          -->
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of data" role="row">
+            <td class="min-max-width-50-250" title="{{item.structureName}}">
+              <span style="color:var(--secondary-color);text-decoration: underline;cursor: pointer;" class="drawuserstructure"
+                (click)="drawStructureUserTable('AverageDurationForCorrespondenceCompletion', item.average.toFixed(2), year, item.userId, item.structureId)">
+                {{item.structureName}}
+              </span>
+            </td>
+            <td class="min-max-width-50-250" title="{{item.average.toFixed(2)}}">{{item.average.toFixed(2)}}</td>
+            <td class="min-max-width-50-250" title="{{(item.average - totalAverage).toFixed(2)}}">
+              {{(item.average - totalAverage).toFixed(2)}}
+            </td>
+            <!--
+          <td class="min-max-width-50-250">
+            <span
+              (click)="openStructureChart('AverageDurationForCorrespondenceCompletion', item.average.toFixed(2), year, item.userId, item.structureId)"
+              class="yearlygraph pointer">
+              <em class="fa fa-line-chart"></em>
+            </span>
+          </td>
+          -->
+          </tr>
+        </tbody>
+      </table>
+
+
+      <!-- Only show pagination if there's data -->
+      <div class="d-flex justify-content-center align-items-center mt-3" *ngIf="data && data.length > 0">
+        <!--<div>
+          Showing {{startIndex}} to {{endIndex}} of {{totalItems}} entries
+        </div>-->
+        <div class="dataTables_paginate paging_full_numbers">
+          <a class="paginate_button first" [class.disabled]="currentPage === 1" (click)="goToPage(1)"><i class='text-secondary fa fa-angle-left'></i></a>
+
+          <a class="paginate_button previous" [class.disabled]="currentPage === 1" (click)="previousPage()"><i class='text-secondary fa fa-angle-double-left'></i></a>
+
+          <a class="paginate_button" *ngFor="let page of pages" [class.active]="page === currentPage" (click)="goToPage(page)">{{page}}</a>
+
+          <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()"><i class='text-secondary fa fa-angle-double-right'></i></a>
+
+          <a class="paginate_button last" [class.disabled]="currentPage === totalPages" (click)="goToPage(totalPages)"><i class='text-secondary fa fa-angle-right'></i></a>
+
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
