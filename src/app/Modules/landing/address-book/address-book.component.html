@@ -10,8 +10,10 @@
       <table class="table" *ngIf="addressUsers && addressUsers.length > 0" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead>
           <tr>
-            <th>
-              <input type="checkbox" (change)="toggleSelectAll($event)" [checked]="isAllSelected()" />
+            <th width="100px">
+              <div class="form-check justify-content-center">
+                <input class="form-check-input" type="checkbox" (change)="toggleSelectAll($event)" [checked]="isAllSelected()" >
+              </div>
             </th>
             <th>Code</th>
             <th>Name</th>
@@ -19,8 +21,10 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of addressUsers">
-            <td>
-              <input type="checkbox" (change)="onUserSelectionChange(row, $any($event.target).checked)" [checked]="row.selected" />
+            <td width="100px">
+              <div class="form-check justify-content-center">
+                <input class="form-check-input" type="checkbox"  (change)="onUserSelectionChange(row, $any($event.target).checked)" [checked]="row.selected" >
+              </div>
             </td>
             <td>{{ row.code }}</td>
             <td>{{ row.name }}</td>

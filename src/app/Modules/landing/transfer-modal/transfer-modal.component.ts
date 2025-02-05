@@ -101,7 +101,7 @@ export class TransferModalComponent implements OnInit {
 
     //this.showAddressBook = !this.showAddressBook;
     const dialog = this.dialog.open(AddressBookComponent, {
-      width: '90%',
+      width: '80%',
 
       data: { /* pass any required data here */ }
     });
