@@ -196,9 +196,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   showModalReply() {
     const dialogRef = this.dialog.open(ReplyToComponent, {
       disableClose: true,
-      width: '90%',
-      height: '90%',
-      data: { /* pass any required data here */ }
+      width: '50%',
+      data: { data:this.data.row }
     });
 
     dialogRef.afterClosed().subscribe(result => {

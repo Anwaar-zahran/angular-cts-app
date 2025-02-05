@@ -11,7 +11,9 @@
           <div class="col-sm-6 col-xs-12" id="customAttributeSenderContainer">
             <div class="form-group">
               <label class="control-label">To user:</label>
-              <label class="control-label ml-1-25em">Administrator Admin</label>
+              <label class="control-label ml-1-25em">
+                {{data.data.toUser}}
+              </label>
             </div>
           </div>
         </div>
@@ -19,10 +21,10 @@
           <div class="col-md-6" id="sendPurposeContainer">
             <div class="form-group">
               <label for="ddlPrivacy" class="form-label required">Purpose</label>
-              <ng-select id="ddlPurpose" formControlName="purposeId" [items]="purposes || []" bindLabel="text" bindValue="id"
+              <ng-select id="ddlPurpose" formControlName="purpose" [items]="purposes || []" bindLabel="text" bindValue="id"
                          placeholder="Select" class="form-control">
               </ng-select>
-              <div *ngIf="replyForm.controls['purposeId'].invalid && replyForm.controls['purposeId'].touched"
+              <div *ngIf="replyForm.controls['purpose'].invalid && replyForm.controls['purpose'].touched"
                    class="error-msg">
                 Purpose is required
               </div>
