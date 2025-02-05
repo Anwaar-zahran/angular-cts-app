@@ -1,7 +1,7 @@
 <div class="body-content">
     <div class="d-flex justify-content-between">
         <h1 class="page-title">Mail for GuideLines</h1>
-    
+
         <!-- Sort Dropdown -->
         <div class="dropdown">
             <button class="btn btn-link" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -13,8 +13,8 @@
             </ul>
         </div>
     </div>
-    
-    
+
+
     <!-- Tabs -->
     <div class="nav nav-tabs mt-3" role="tablist">
         <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-new" type="button" role="tab"
@@ -24,7 +24,7 @@
         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-completed" type="button" role="tab"
             aria-selected="false"><i class="fa fa-check-circle"></i>Completed</button>
     </div>
-    
+
     <!-- Tab Contents -->
     <div class="tab-content">
         <div class="tab-pane fade show active" id="nav-new" role="tabpanel" aria-labelledby="new-tab">
@@ -32,7 +32,7 @@
             <div *ngIf="!loading && newItems.length === 0" class="alert alert-warning" role="alert">
                 No data available in the table.
             </div>
-    
+
             <table class="table table-text light-text" datatable [dtOptions]="dtOptions"
                 *ngIf="!loading && newItems.length > 0">
                 <thead>
@@ -53,7 +53,7 @@
                         <td>{{ item.date }}</td>
                         <td>{{ item.ref }}</td>
                         <td>
-                            <button class="btn btn-primary" (click)="showMailDetails(item)">Visual tracking</button>
+                            <button class="btn btn-primary" (click)="showVisualTracking(item)">Visual tracking</button>
                         </td>
                         <td>
                             <span>
@@ -68,7 +68,7 @@
                 </tbody>
             </table>
         </div>
-    
+
         <div class="tab-pane fade" id="nav-sent" role="tabpanel" aria-labelledby="sent-tab">
             <div *ngIf="!loading && sentItems.length === 0" class="alert alert-warning" role="alert">
                 No data available in the table.
@@ -92,7 +92,7 @@
                         <td>{{ item.date }}</td>
                         <td>{{ item.ref }}</td>
                         <td>
-                            <button class="btn btn-primary" (click)="showMailDetails(item)">Visual tracking</button>
+                            <button class="btn btn-primary" (click)="showVisualTracking(item)">Visual tracking</button>
                         </td>
                         <td>
                             <span>
@@ -107,12 +107,13 @@
                 </tbody>
             </table>
         </div>
-    
+
         <div class="tab-pane fade" id="nav-completed" role="tabpanel" aria-labelledby="completed-tab">
             <div *ngIf="!loading && completedItems.length === 0" class="alert alert-warning" role="alert">
                 No data available in the table.
             </div>
-            <table class="table light-text" datatable [dtOptions]="dtOptions" *ngIf="!loading && completedItems.length > 0">
+            <table class="table light-text" datatable [dtOptions]="dtOptions"
+                *ngIf="!loading && completedItems.length > 0">
                 <thead>
                     <tr>
                         <th>Subject</th>
@@ -131,7 +132,7 @@
                         <td>{{ item.date }}</td>
                         <td>{{ item.ref }}</td>
                         <td>
-                            <button class="btn btn-primary" (click)="showMailDetails(item)">Visual tracking</button>
+                            <button class="btn btn-primary" (click)="showVisualTracking(item)">Visual tracking</button>
                         </td>
                         <td>
                             <span>
@@ -147,4 +148,4 @@
             </table>
         </div>
     </div>
-    </div>
+</div>
