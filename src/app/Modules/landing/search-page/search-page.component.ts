@@ -17,10 +17,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-dialog.component';
 
 @Component({
-    selector: 'app-search-page',
-    templateUrl: './search-page.component.html',
-    styleUrl: './search-page.component.scss',
-    standalone: false
+  selector: 'app-search-page',
+  templateUrl: './search-page.component.html',
+  styleUrl: './search-page.component.scss',
+  standalone: false
 })
 export class SearchPageComponent {
   regmodel: NgbDateStruct | undefined;
@@ -280,7 +280,6 @@ export class SearchPageComponent {
 
 
   async showDetails(row: any) {
-    debugger;
     this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
       width: '90%',
@@ -290,7 +289,7 @@ export class SearchPageComponent {
         documentId: row.documentId,
         referenceNumber: row.ref,
         row: row,
-        fromSearch:false
+        fromSearch: false
       }
     });
 

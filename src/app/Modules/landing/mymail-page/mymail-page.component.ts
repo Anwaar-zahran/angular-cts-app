@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-dialog.component';
+import { VisualTrackingComponent } from '../../shared/visual-tracking/visual-tracking.component';
+
 interface ApiResponseItem {
   id: number;
   documentId: number;
@@ -19,10 +21,10 @@ interface ApiResponseItem {
 }
 
 @Component({
-    selector: 'app-mymail-page',
-    templateUrl: './mymail-page.component.html',
-    styleUrls: ['./mymail-page.component.scss'],
-    standalone: false
+  selector: 'app-mymail-page',
+  templateUrl: './mymail-page.component.html',
+  styleUrls: ['./mymail-page.component.scss'],
+  standalone: false
 })
 export class MymailPageComponent implements OnInit {
   accessToken: string | null;
@@ -210,6 +212,17 @@ export class MymailPageComponent implements OnInit {
         referenceNumber: item.ref,
         row: item.row,
         fromSearch: false
+      }
+    });
+  }
+
+  showVisualTracking(item: ApiResponseItem) {
+    this.dialog.open(VisualTrackingComponent, {
+      width: '90%',
+      height: '90%',
+      data: {
+        documentId: item.documentId,
+        referenceNumber: item.ref
       }
     });
   }

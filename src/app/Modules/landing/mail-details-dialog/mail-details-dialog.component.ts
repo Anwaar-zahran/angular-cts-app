@@ -23,29 +23,31 @@ import OrgChart from '@balkangraph/orgchart.js';
 import { LookupsService } from '../../../services/lookups.service';
 
 interface TreeNode {
-  id: number;
+  id: string | number;
   name: string;
   children?: TreeNode[];
+  expanded?: boolean;
 }
 
 interface FlatTreeNode {
-  id: number;
+  id: string | number;
   expandable: boolean;
   name: string;
   level: number;
+  expanded?: boolean;
 }
 
 @Component({
-    selector: 'app-mail-details-dialog',
-    imports: [
-        CommonModule,
-        MatDialogModule,
-        NgbDatepickerModule,
-        DataTablesModule,
-        MatTreeModule
-    ],
-    templateUrl: './mail-details-dialog.component.html',
-    styleUrls: ['./mail-details-dialog.component.scss']
+  selector: 'app-mail-details-dialog',
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    NgbDatepickerModule,
+    DataTablesModule,
+    MatTreeModule
+  ],
+  templateUrl: './mail-details-dialog.component.html',
+  styleUrls: ['./mail-details-dialog.component.scss']
 })
 export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnDestroy {
 
@@ -99,7 +101,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   users: any[] = [];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { row: any, id: string, referenceNumber: string, fromSearch:boolean },
+    @Inject(MAT_DIALOG_DATA) public data: { row: any, id: string, referenceNumber: string, fromSearch: boolean },
     private authService: AuthService,
     private router: Router,
     private sanitizer: DomSanitizer,
@@ -123,6 +125,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
     this.dataSource.data = this.TREE_DATA;
+    console.log("TREE_DATA:", this.TREE_DATA);
+    console.log("dataSource:", this.dataSource);
   }
 
   ngOnInit(): void {
@@ -136,6 +140,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     this.loadLookupData();
     this.fetchDetails(this.data.id);
     console.log("rowwww", this.data.row);
+
+
   }
 
   loadLookupData(): void {
@@ -198,7 +204,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     const dialogRef = this.dialog.open(ReplyToComponent, {
       disableClose: true,
       width: '50%',
-      data: { data:this.data.row }
+      data: { data: this.data.row }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -206,16 +212,25 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     });
   }
 
-
-  // Recursively transform attachments into a tree structure
-  private transformAttachmentsToTree(mailAttachments: any[]): TreeNode[] {
-    return mailAttachments.map(attachment => this.createTreeNode(attachment));
+  // Add this new method to expand all nodes
+  expandAllNodes(): void {
+    if (this.treeControl) {
+      this.treeControl.expandAll();
+    }
   }
 
+  // Update the transformAttachmentsToTree method
+  private transformAttachmentsToTree(mailAttachments: any[]): TreeNode[] {
+    const nodes = mailAttachments.map(attachment => this.createTreeNode(attachment));
+    return nodes;
+  }
+
+  // Update the createTreeNode method to set expanded by default
   private createTreeNode(attachment: any): TreeNode {
     const node: TreeNode = {
       id: attachment.id,
-      name: attachment.name || attachment.text || 'Unnamed Attachment'
+      name: attachment.name || attachment.text || 'Unnamed Attachment',
+      expanded: true
     };
 
     if ((attachment.children && attachment.children.length > 0) ||
@@ -226,12 +241,13 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return node;
   }
 
-  // Transformer for the Angular Material tree
+  // Update the transformer to include expanded state
   private _transformer = (node: TreeNode, level: number): FlatTreeNode => ({
     id: node.id,
     expandable: !!node.children && node.children.length > 0,
     name: node.name,
-    level: level
+    level: level,
+    expanded: true
   });
 
   hasChild = (_: number, node: FlatTreeNode) => node.expandable;
@@ -292,7 +308,6 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   async fetchDetails(docID: string): Promise<void> {
     try {
-      debugger;
       const [
         attributes,
         nonArchAttachments,
@@ -306,7 +321,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.getAttributes(docID),
         this.getNonArchAttachments(docID),
         this.getLinkedDocuments(docID),
-          this.data.fromSearch ? this.getActivityLogs(docID) : this.getActivityLogsByDocId(docID),
+        this.data.fromSearch ? this.getActivityLogs(docID) : this.getActivityLogsByDocId(docID),
         this.getNotes(docID),
         this.getHistory(docID),
         this.getAttachments(docID),
@@ -317,7 +332,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.nonArchAttachments = nonArchAttachments.data;
       this.linkedDocs = linkedDocs.data;
       this.activityLogs = this.data.fromSearch ? activityLogs : activityLogs.data;
-       
+
       this.notes = notes.data;
       this.transHistory = transHistory.data;
       this.attachments = attachments;
@@ -352,7 +367,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   getNotes(docID: string): Promise<any> {
-     
+
     return new Promise((resolve, reject) => {
       this.searchService.getNotes(this.accessToken!, docID).subscribe(
         (response) => {
@@ -450,6 +465,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           this.attachments = response || [];
           this.TREE_DATA = this.transformAttachmentsToTree(this.attachments);
           this.dataSource.data = this.TREE_DATA;
+          this.tryFetchOriginalDocument();
+          // Expand all tree nodes by default after a short delay
+          setTimeout(() => {
+            this.expandAllNodes();
+          }, 100);
           resolve(response);
         },
         (error: any) => {
@@ -458,6 +478,35 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         }
       );
     });
+  }
+  tryFetchOriginalDocument(): void {
+    debugger;
+
+    // Recursive function to search for folder_originalMail
+    const findOriginalMailFolder = (nodes: any[]): any => {
+      for (const node of nodes) {
+        if (node.id === 'folder_originalMail' && node.name === 'Original document') {
+          return node;
+        }
+        if (node.children && node.children.length > 0) {
+          const found = findOriginalMailFolder(node.children);
+          if (found) return found;
+        }
+      }
+      return null;
+    };
+
+    // Search recursively starting from root
+    const originalMailFolder = findOriginalMailFolder(this.TREE_DATA);
+    debugger
+    if (originalMailFolder?.children?.[0]?.id) {
+      const firstChild = originalMailFolder.children[0];
+      const idParts = firstChild.id.split('_');
+      if (idParts.length > 1) {
+        this.selectedDocumentId = +idParts[1];
+        this.getViewerUrl();
+      }
+    }
   }
 
   getVisualTracking(docID: string): Promise<any> {
@@ -477,6 +526,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   getViewerUrl(): void {
+    debugger
     const baseUrl = 'https://java-qatar.d-intalio.com/VIEWER/file';
     const token = this.authService.getToken();
 
@@ -618,7 +668,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     }
   }
 
-  
+
   ngOnDestroy() {
     if (this.orgChart) {
       try {
