@@ -181,8 +181,9 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   showModalTransfer() {
     const dialogRef = this.dialog.open(TransferModalComponent, {
+      disableClose: true,
       width: '90%',
-      maxWidth: '1200px',
+      height: '90%',
       data: { /* pass any required data here */ }
     });
 

@@ -1,19 +1,12 @@
-ng-select {
-  color: black !important; /* Adjust text color */
+table tbody td:has(.form-control) {
+  padding: 0.5rem !important;
 }
 
-ng-select .ng-dropdown-panel {
-  background-color: #fff !important; /* Ensure dropdown background is white */
+.table-bordered thead tr ,.table-bordered th {
+  border: 0;
+  padding-top: 0 !important;
 }
 
-ng-select .ng-option {
-  color: black !important; /* Ensure the items inside dropdown are visible */
-}
-.ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
-  box-sizing: border-box;
-  cursor: pointer;
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+mat-dialog-content {
+  max-height: unset;
 }
