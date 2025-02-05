@@ -91,6 +91,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   linkedDocs: any;
   activityLogs: any;
   importance: any;
+  privacy: any;
   classification: any;
   notes: any;
   transHistory: any;
@@ -99,7 +100,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   visualTracking: any;
   classId: any;
   ImpoeranceId: any;
-
+  privacyId: any;
+  priorityId: any;
+  priority: any;
+  carbonUsers: any;
+  userId: any;
 
   // OrgChart references
   private orgChart: any = null;
@@ -184,6 +189,33 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     this.lookupsService.getClassfication(this.accessToken!).subscribe(
       (response) => {
         this.classification = response;
+      },
+      (error) => {
+        console.error('Error loading users:', error);
+      }
+    );
+
+    this.lookupsService.getPriorities(this.accessToken!).subscribe(
+      (response) => {
+        this.priority = response;
+      },
+      (error) => {
+        console.error('Error loading users:', error);
+      }
+    );
+    this.lookupsService.getPrivacy(this.accessToken!).subscribe(
+      (response) => {
+        this.privacy = response;
+      },
+      (error) => {
+        console.error('Error loading users:', error);
+      }
+    ); 
+
+    this.lookupsService.getUsers(this.accessToken!).subscribe(
+      (response) => {
+        debugger;
+        this.carbonUsers = response;
       },
       (error) => {
         console.error('Error loading users:', error);
@@ -366,7 +398,13 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.visualTracking = visualTracking;
       this.classId = this.attributes.classificationId ?? '';
       this.ImpoeranceId = this.attributes.importanceId ?? '';
+      this.privacyId = this.attributes.privacyId ?? '';
+      this.priorityId = this.attributes.priorityId ?? '';
 
+      if (this.attributes.carbonCopy ?.length > 0)
+        this.userId = this.attributes.carbonCopy[0].name;
+      else
+        this.userId = '';
 
       // Build attachments tree if available
       if (this.attachments && Array.isArray(this.attachments)) {

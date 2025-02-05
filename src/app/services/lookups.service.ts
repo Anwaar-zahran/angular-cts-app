@@ -22,6 +22,7 @@ export class LookupsService {
   private listYears = 'https://cts-qatar.d-intalio.com/Dashboard/GetAvailableYears';
   private listPurposes = 'https://cts-qatar.d-intalio.com/CTS/Purpose/ListUserPurposes';
   private listClassification = 'https://cts-qatar.d-intalio.com/Classification/List';
+  private listDocumentType = 'https://cts-qatar.d-intalio.com/DocumentType/List';
   //private listImportance = 'https://cts-qatar.d-intalio.com/Importance/List';
 
   constructor(private http: HttpClient) { }
