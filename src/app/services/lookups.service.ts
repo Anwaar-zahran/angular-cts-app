@@ -21,6 +21,8 @@ export class LookupsService {
   private listPriorities = 'https://cts-qatar.d-intalio.com/Priority/ListPriorities';
   private listYears = 'https://cts-qatar.d-intalio.com/Dashboard/GetAvailableYears';
   private listPurposes = 'https://cts-qatar.d-intalio.com/CTS/Purpose/ListUserPurposes';
+  private listClassification = 'https://cts-qatar.d-intalio.com/Classification/List';
+  //private listImportance = 'https://cts-qatar.d-intalio.com/Importance/List';
 
   constructor(private http: HttpClient) { }
 
@@ -189,6 +191,21 @@ export class LookupsService {
       .pipe(
         catchError((error) => {
           console.error('Error while fetching Importance data', error.message);
+          throw error;
+        })
+      );
+  }
+
+  getClassfication(accessToken: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get(this.listClassification, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching classification data', error.message);
           throw error;
         })
       );
