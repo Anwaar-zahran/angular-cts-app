@@ -5,10 +5,11 @@
     "\\src\\app",
     "\\src\\app\\Modules",
     "\\src\\app\\Modules\\landing",
-    "\\src\\app\\Modules\\landing\\mail-details-dialog",
-    "\\src\\app\\Modules\\landing\\mail-page",
-    "\\src\\app\\Modules\\landing\\search-page"
+    "\\src\\app\\Modules\\landing\\mymail-page",
+    "\\src\\assets",
+    "\\src\\assets\\images",
+    "\\src\\assets\\images\\icons"
   ],
-  "SelectedNode": "\\src\\app\\Modules\\landing\\search-page\\search-page.component.ts",
+  "SelectedNode": "\\src\\app\\Modules\\landing\\mymail-page\\mymail-page.component.html",
   "PreviewInSolutionExplorer": false
 }
