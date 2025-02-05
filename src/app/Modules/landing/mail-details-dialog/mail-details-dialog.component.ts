@@ -1,23 +1,22 @@
-import { Component, Inject, ViewChild, ElementRef, AfterViewChecked, ChangeDetectorRef, Renderer2, OnInit, OnDestroy } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTablesModule } from 'angular-datatables';
 
-import { MatTreeModule } from '@angular/material/tree';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { AuthService } from '../../auth/auth.service';
+import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTreeFlatDataSource, MatTreeFlattener, MatTreeModule } from '@angular/material/tree';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { SearchPageService } from '../../../services/search-page.service';
 import { Router } from '@angular/router';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { AttachmentsApiResponce } from '../../../models/attachments.model';
 import { DocAttributesApiResponse } from '../../../models/searchDocAttributes.model';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { MatDialog } from '@angular/material/dialog';
-import { TransferModalComponent } from '../transfer-modal/transfer-modal.component';
+import { SearchPageService } from '../../../services/search-page.service';
+import { AuthService } from '../../auth/auth.service';
 import { ReplyToComponent } from '../reply-to/reply-to.component';
-import { FormGroup, FormBuilder, Validators, FormControl, FormsModule } from '@angular/forms';
+import { TransferModalComponent } from '../transfer-modal/transfer-modal.component';
 
 // Import OrgChart from @balkangraph/orgchart.js
 import OrgChart from '@balkangraph/orgchart.js';
@@ -91,6 +90,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   linkedDocs: any;
   activityLogs: any;
   importance: any;
+  privacy: any;
   classification: any;
   notes: any;
   transHistory: any;
@@ -99,6 +99,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   visualTracking: any;
   classId: any;
   ImpoeranceId: any;
+  privacyId: any;
 
 
   // OrgChart references
@@ -184,6 +185,15 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     this.lookupsService.getClassfication(this.accessToken!).subscribe(
       (response) => {
         this.classification = response;
+      },
+      (error) => {
+        console.error('Error loading users:', error);
+      }
+    );
+
+    this.lookupsService.getPrivacy(this.accessToken!).subscribe(
+      (response) => {
+        this.privacy = response;
       },
       (error) => {
         console.error('Error loading users:', error);
@@ -366,7 +376,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.visualTracking = visualTracking;
       this.classId = this.attributes.classificationId ?? '';
       this.ImpoeranceId = this.attributes.importanceId ?? '';
-
+      this.privacyId = this.attributes.privacyId ?? '';
 
       // Build attachments tree if available
       if (this.attachments && Array.isArray(this.attachments)) {
