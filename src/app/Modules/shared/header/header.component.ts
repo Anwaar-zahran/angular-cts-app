@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../auth/auth.service';
 
 
 @Component({
@@ -17,6 +17,7 @@ export class HeaderComponent implements OnInit {
 
   MainnavItems = [
     { link: 'MyMail', icon: 'assets/images/icons/email.svg', title: 'My Mail' },
+    { link: 'Guidelines', icon: 'assets/images/icons/Union.svg', title: 'Mail for Guideline' },
     { link: 'mail', icon: 'assets/images/icons/signature-with-a-pen.svg', title: 'Mail for Signature' },
     { link: 'reports', icon: 'assets/images/icons/report.svg', title: 'Reports' },
     { link: 'bam', icon: 'assets/images/icons/analytics.svg', title: 'BAM' },

@@ -10,16 +10,12 @@ interface ApiResponseItem {
   categoryId: number;
   referenceNumber: string;
   transferDate: string;
-  // details:string;
-  // date:string;
-  // ref:string;
   status: number;
   fromUser: string;
   subject: string;
   isRead: boolean;
   isOverDue: boolean;
   row: any;
-  // Add other properties as needed
 }
 @Component({
     selector: 'app-mail-page',
@@ -124,12 +120,11 @@ export class MailPageComponent implements OnInit {
       return;
     }
     debugger
-    const payload = this.accessToken.split('.')[1]; // Get the payload (2nd part)
+    const payload = this.accessToken.split('.')[1]; 
     const decodedPayload = this.base64UrlDecode(payload);
     const parsedPayload = JSON.parse(decodedPayload);
-    this.structureId = parsedPayload.StructureId; // Adjust based on your token's payload
+    this.structureId = parsedPayload.StructureId; 
     const headers = new HttpHeaders({
-      // 'Authorization': 'Bearer YOUR_ACCESS_TOKEN', // Replace with your actual token
       'Authorization': `Bearer ${this.accessToken}`,
     });
 
@@ -137,7 +132,7 @@ export class MailPageComponent implements OnInit {
     const formData = new FormData();
     formData.append('length', '1000');
     formData.append('structureId', this.structureId);
-    // formData.append('draw', '1');
+    formData.append('PurposeId', '8');
     // formData.append('NodeId', '34');
 
 
