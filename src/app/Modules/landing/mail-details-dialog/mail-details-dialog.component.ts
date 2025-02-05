@@ -13,10 +13,11 @@ import { SearchPageService } from '../../../services/search-page.service';
 import { Router } from '@angular/router';
 import { AttachmentsApiResponce } from '../../../models/attachments.model';
 import { DocAttributesApiResponse } from '../../../models/searchDocAttributes.model';
-
+import { NgSelectModule } from '@ng-select/ng-select';
 import { MatDialog } from '@angular/material/dialog';
 import { TransferModalComponent } from '../transfer-modal/transfer-modal.component';
 import { ReplyToComponent } from '../reply-to/reply-to.component';
+import { FormGroup, FormBuilder, Validators, FormControl, FormsModule } from '@angular/forms';
 
 // Import OrgChart from @balkangraph/orgchart.js
 import OrgChart from '@balkangraph/orgchart.js';
@@ -42,7 +43,9 @@ interface FlatTreeNode {
         MatDialogModule,
         NgbDatepickerModule,
         DataTablesModule,
-        MatTreeModule
+      MatTreeModule,
+      NgSelectModule,
+      FormsModule
     ],
     templateUrl: './mail-details-dialog.component.html',
     styleUrls: ['./mail-details-dialog.component.scss']
@@ -84,11 +87,16 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   nonArchAttachments: any;
   linkedDocs: any;
   activityLogs: any;
+  importance: any;
+  classification: any;
   notes: any;
   transHistory: any;
   attachments: any;
   // Visual Tracking data (org chart data)
   visualTracking: any;
+  classId: any;
+  ImpoeranceId: any;
+
 
   // OrgChart references
   private orgChart: any = null;
@@ -151,6 +159,24 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     this.lookupsService.getUsers(this.accessToken!).subscribe(
       (users) => {
         this.users = users;
+      },
+      (error) => {
+        console.error('Error loading users:', error);
+      }
+    );
+
+    this.lookupsService.getImportance(this.accessToken!).subscribe(
+      (response) => {
+        this.importance = response;
+      },
+      (error) => {
+        console.error('Error loading users:', error);
+      }
+    );
+
+    this.lookupsService.getClassfication(this.accessToken!).subscribe(
+      (response) => {
+        this.classification = response;
       },
       (error) => {
         console.error('Error loading users:', error);
@@ -322,6 +348,9 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.transHistory = transHistory.data;
       this.attachments = attachments;
       this.visualTracking = visualTracking;
+      this.classId = this.attributes.classificationId ?? '';
+      this.ImpoeranceId = this.attributes.importanceId ?? '';
+
 
       // Build attachments tree if available
       if (this.attachments && Array.isArray(this.attachments)) {
@@ -340,6 +369,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.searchService.getDocAttributes(this.accessToken!, docID).subscribe(
         (response: any) => {
           this.attributes = response || [];
+
           console.log("Attributes:", this.attributes);
           resolve(response);
         },
@@ -501,8 +531,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     this.documentViewerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${baseUrl}?${queryString}`);
     console.log("Viewer URL:", this.documentViewerUrl);
   }
-
-
+  
   initOrgChart(): void {
     debugger
     if (!this.chartContainer || !this.visualTracking || !Array.isArray(this.visualTracking)) {
@@ -617,8 +646,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.chartInitialized = false;
     }
   }
-
-  
+    
   ngOnDestroy() {
     if (this.orgChart) {
       try {
@@ -629,4 +657,5 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       }
     }
   }
+
 }
