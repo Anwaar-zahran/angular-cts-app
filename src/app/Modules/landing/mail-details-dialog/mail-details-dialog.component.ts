@@ -135,6 +135,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     this.initDtOptions();
     this.loadLookupData();
     this.fetchDetails(this.data.id);
+    console.log("rowwww", this.data.row);
   }
 
   loadLookupData(): void {

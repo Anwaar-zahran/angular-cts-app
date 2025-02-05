@@ -38,40 +38,149 @@
         </tr>
       </thead>
       <tbody>
+        <tr class="col-lg-12">
+          <td>
+            <ng-select id="ddlToUsers" name="toUsers" [items]="users" [(ngModel)]="selectedUserId" bindLabel="name"
+                       bindValue="id" class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+            </ng-select>
+          </td>
+          <td>
+            <ng-select id="ddlPurposes" name="dllPurposes" [items]="purposes" [(ngModel)]="selectedPurposeId" bindLabel="name"
+                       bindValue="id" class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+            </ng-select>
+          </td>
+          <td>
+            <ng-select id="ddlToPriority" name="dllPriority" [items]="priorities" [(ngModel)]="selectedPriorityId" bindLabel="text"
+                       bindValue="id" class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.text }}
+              </ng-template>
+            </ng-select>
+          </td>
+          <td>
+            <input class="form-control date-picker" matInput [matDatepicker]="picker3" [(ngModel)]="selectedDueDate"
+                   placeholder="mm-dd-yyyy" name="dp3" (click)="picker3.open()" />
+            <mat-datepicker #picker3></mat-datepicker>
+          </td>
+          <td>
+            <input id="txtTransferInstruction" name="txtTransferInstruction" [(ngModel)]="txtInstruction" rows="5"
+                   class="form-control" type="text" />
+          </td>
+          <td>
+            <div class="form-check justify-content-center">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="isPrivate" id="chbxPrivate">
+            </div>
+          </td>
+          <td>
+            <div class="form-check justify-content-center">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="isCCed" id="chbxCCed" name="Cced">
+            </div>
+          </td>
+          <td>
+            <div class="form-check justify-content-center">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="isFollowUp" id="chbxFollowUp" name="FollowUp">
+            </div>
+          </td>
+          <td>
+            <a id="component_1738664606076_btnDeleteParam_2" class="btn btn-danger delete-row hidden" title="Delete"
+               clickattr="removeRow(this)" hidden=""><span class="fa fa-trash fa-fw"></span></a>
+          </td>
+        </tr>
+
+        <!-- Dynamically added rows -->
+        <tr class="col-lg-12" *ngFor="let row of selectedUsers; let i = index">
+          <td>
+            <ng-select id="ddlToUsers" name="toUsers" [items]="users" [(ngModel)]="row.selectedUserId" bindLabel="name"
+                       bindValue="id" class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+            </ng-select>
+          </td>
+          <td>
+            <ng-select id="ddlPurposes" name="dllPurposes" [items]="purposes" [(ngModel)]="row.purposeId" bindLabel="name"
+                       bindValue="id" class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+            </ng-select>
+          </td>
+          <td>
+            <ng-select id="ddlToPriority" name="dllPriority" [items]="priorities" [(ngModel)]="row.priorityId" bindLabel="text"
+                       bindValue="id" class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.text }}
+              </ng-template>
+            </ng-select>
+          </td>
+          <td>
+            <input class="form-control date-picker" matInput [matDatepicker]="picker3" [(ngModel)]="row.dueDate"
+                   placeholder="mm-dd-yyyy" name="dp3" (click)="picker3.open()" />
+            <mat-datepicker #picker3></mat-datepicker>
+          </td>
+          <td>
+            <input id="txtTransferInstruction" name="txtTransferInstruction" [(ngModel)]="row.instruction" rows="5"
+                   class="form-control" type="text" />
+          </td>
+          <td>
+            <div class="form-check justify-content-center">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isPrivate" id="chbxPrivate">
+            </div>
+          </td>
+          <td>
+            <div class="form-check justify-content-center">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isCCed" id="chbxCCed" name="Cced">
+            </div>
+          </td>
+          <td>
+            <div class="form-check justify-content-center">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isFollowUp" id="chbxFollowUp" name="FollowUp">
+            </div>
+          </td>
+          <td>
+            <a id="component_1738664606076_btnDeleteParam_2" class="btn btn-danger delete-row hidden" title="Delete"
+               clickattr="removeRow(this)" hidden=""><span class="fa fa-trash fa-fw"></span></a>
+          </td>
+        </tr>
         <tr class="col-lg-12" *ngFor="let row of selectedUsers">
           <td>
-              <ng-select id="ddlToUsers" name="toUsers" [items]="users" [(ngModel)]="row.id" bindLabel="name"
-                bindValue="id" class="form-control">
-                <ng-template ng-label-tmp let-item="item">
-                  {{ item.name }}
-                </ng-template>
-              </ng-select>
+            <ng-select id="ddlToUsers" name="toUsers" [items]="users" [(ngModel)]="row.selectedUserId" bindLabel="name"
+                       bindValue="id" class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+            </ng-select>
           </td>
           <td>
-              <ng-select id="ddlPurposes" name="dllPurposes" [items]="purposes" bindLabel="name" bindValue="id"
-                class="form-control">
-                <ng-template ng-label-tmp let-item="item">
-                  {{ item.name }}
-                </ng-template>
-              </ng-select>
-          </td>
-
-          <td>
-              <ng-select id="ddlToPriority" name="dllPriority" [items]="priorities" bindLabel="text" bindValue="id"
-                class="form-control">
-                <ng-template ng-label-tmp let-item="item">
-                  {{ item.text }}
-                </ng-template>
-              </ng-select>
+            <ng-select id="ddlPurposes" name="dllPurposes" [items]="purposes" bindLabel="name" bindValue="id"
+                       class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }}
+              </ng-template>
+            </ng-select>
           </td>
           <td>
-              <input class="form-control date-picker" matInput [matDatepicker]="picker3" placeholder="mm-dd-yyyy"
-                name="dp3" (click)="picker3.open()" />
-              <mat-datepicker #picker3></mat-datepicker>
+            <ng-select id="ddlToPriority" name="dllPriority" [items]="priorities" bindLabel="text" bindValue="id"
+                       class="form-control">
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.text }}
+              </ng-template>
+            </ng-select>
           </td>
           <td>
-              <input id="txtTransferInstruction" name="txtTransferInstruction" [(ngModel)]="txtInstruction" rows="5"
-                class="form-control" type="text" />
+            <input class="form-control date-picker" matInput [matDatepicker]="picker3" placeholder="mm-dd-yyyy"
+                   name="dp3" (click)="picker3.open()" />
+            <mat-datepicker #picker3></mat-datepicker>
+          </td>
+          <td>
+            <input id="txtTransferInstruction" name="txtTransferInstruction" [(ngModel)]="txtInstruction" rows="5"
+                   class="form-control" type="text" />
           </td>
           <td>
             <div class="form-check justify-content-center">
@@ -90,7 +199,7 @@
           </td>
           <td>
             <a id="component_1738664606076_btnDeleteParam_2" class="btn btn-danger delete-row hidden" title="Delete"
-              clickattr="removeRow(this)" hidden=""><span class="fa fa-trash fa-fw"></span></a>
+               clickattr="removeRow(this)" hidden=""><span class="fa fa-trash fa-fw"></span></a>
           </td>
         </tr>
       </tbody>
