@@ -57,11 +57,11 @@
                     <th class="width-50px"></th>
                     <!--<th class="width-50px"></th>-->
                   </tr>
-                  <tr class="col-lg-12">
-                    <td id="component_1738664606076_transferToContainer_2" class="col-sm-6 col-md-4 col-lg-3">
+                  <tr class="col-lg-12" *ngFor="let row of selectedUsers">
+                    <td  class="col-sm-6 col-md-4 col-lg-3">
                       <div class="form-group">
                         <!--<label for="ddlToUsers" class="form-label">Transfer, to user</label>-->
-                        <ng-select id="ddlToUsers" name="toUsers" [items]="users" [(ngModel)]="selectedUserId"
+                        <ng-select id="ddlToUsers" name="toUsers" [items]="users" [(ngModel)]="row.id"
                                    bindLabel="name" bindValue="id" class="form-control">
                           <ng-template ng-label-tmp let-item="item">
                             {{ item.name }}
@@ -70,7 +70,7 @@
                       </div>
                       <!--<div id="component_1738664606076_cmbTransferToError"></div>-->
                     </td>
-                    <td id="component_1738664606076_transferPurposeContainer_2" class="col-sm-6 col-md-4 col-lg-3">
+                    <td  class="col-sm-6 col-md-4 col-lg-3">
                       <div class="form-group">
                         <!--<label for="ddlToUsers" class="form-label">Transfer, to user</label>-->
                         <ng-select id="ddlPurposes" name="dllPurposes" [items]="purposes"
@@ -83,7 +83,7 @@
                       <!--<div id="component_1738664606076_cmbTransferToError"></div>-->
                     </td>
 
-                    <td id="component_1738664606076_transferPriorityContainer_2" class="col-sm-6 col-md-4 col-lg-3">
+                    <td class="col-sm-6 col-md-4 col-lg-3">
                       <div class="form-group">
                         <!--<label for="ddlToUsers" class="form-label">Transfer, to user</label>-->
                         <ng-select id="ddlToPriority" name="dllPriority" [items]="priorities"
@@ -111,13 +111,13 @@
                       </div>
                     </td>
                     <td class="text-center">
-                      <input id="component_1738664606076_checkInstructionPrivate_2" type="checkbox">
+                      <input id="chbxPrivate" type="checkbox">
                     </td>
-                    <td id="component_1738664606076_transferCcedContainer_2" class="text-center">
-                      <input id="component_1738664606076_TransferCced_2" class="checkbox inputChange" type="checkbox" name="Cced">
+                    <td  class="text-center">
+                      <input id="chbxCCed" class="checkbox inputChange" type="checkbox" name="Cced">
                     </td>
-                    <td id="component_1738664606076_transferFollowUpContainer_2" class="text-center">
-                      <input id="component_1738664606076_TransferFollowUp_2" class="checkbox inputChange" type="checkbox" name="FollowUp">
+                    <td  class="text-center">
+                      <input id="chbxFollowUp" class="checkbox inputChange" type="checkbox" name="FollowUp">
                     </td>
                     <td class="text-center">
                       <a id="component_1738664606076_btnDeleteParam_2" class="btn btn-danger delete-row hidden" title="Delete" clickattr="removeRow(this)" hidden=""><span class="fa fa-trash fa-fw"></span></a>
