@@ -118,7 +118,7 @@ export class AddressBookComponent implements OnInit {
     console.log('Selected Users:', this.selectedUsers);
     this.dialogRef.close(this.selectedUsers); 
 
-    this.onClose(); 
+    //this.onClose(); 
   }
 
   onClose(): void {

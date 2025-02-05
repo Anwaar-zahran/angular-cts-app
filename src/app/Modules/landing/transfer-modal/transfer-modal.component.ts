@@ -36,7 +36,7 @@ export class TransferModalComponent implements OnInit {
   txtInstruction: any;
   selectedUsers: any[] = [];
   showAddressBook: boolean = false;
-
+  selectedUserId: any;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,
     private router: Router, private lookupsService: LookupsService, private dialog: MatDialog,
@@ -98,17 +98,18 @@ export class TransferModalComponent implements OnInit {
 
   showAddress() {
 
-    this.showAddressBook = !this.showAddressBook;
-      const dialog =this.dialog.open(AddressBookComponent, {
-        width: '90%',
-        maxWidth: '1200px',
-          data: { /* pass any required data here */ }
+    //this.showAddressBook = !this.showAddressBook;
+    const dialog = this.dialog.open(AddressBookComponent, {
+      width: '90%',
+
+      data: { /* pass any required data here */ }
     });
 
     dialog.afterClosed().subscribe(result => {
       if (result) {
         console.log('Address Book result:', result);
-        
+        this.selectedUsers = result;
+        this.selectedUserId = this.selectedUsers[0]?.id;
       } else {
         console.log('Address Book dialog was closed without submitting');
       }
