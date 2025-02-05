@@ -18,10 +18,10 @@ interface ApiResponseItem {
   row: any;
 }
 @Component({
-    selector: 'app-mail-page',
-    templateUrl: './mail-page.component.html',
-    styleUrl: './mail-page.component.scss',
-    standalone: false
+  selector: 'app-mymail-page',
+  templateUrl: './mymail-page.component.html',
+  styleUrl: './mymail-page.component.scss',
+  standalone: false
 })
 
 export class MailPageComponent implements OnInit {
