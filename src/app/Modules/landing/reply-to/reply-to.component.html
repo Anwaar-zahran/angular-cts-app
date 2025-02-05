@@ -44,9 +44,7 @@
           <div class="col-xs-12">
             <div class="form-group">
               <label class="control-label">Instruction</label>
-              <textarea class="form-control" tabindex="52" rows="5" formControlName="txtArea" id="txtAreaInstruction"
-                        style="visibility: hidden; display: none;">
-</textarea>
+              <input class="form-control" type="text" rows="5" formControlName="txtArea" id="txtAreaInstruction">
             </div>
            </div>
         </div>
@@ -55,8 +53,8 @@
     </div>
     <div class="modal-footer">
       <div class="d-flex justify-content-end gap-3 mt-1">
-        <button type="button" class="btn btn-secondary btn-lg" (click)="onClose()">close</button>
-        <button type="button" class="btn btn-primary btn-lg" (click)="onSave()">
+        <button type="button" class="btn btn-primary btn-lg" (click)="onSubmit()">
+        <button type="button" class="btn btn-secondary btn-lg" (click)="onClose()">Close</button>
           <i class="fa fa-save"></i> Save
         </button>
       </div>

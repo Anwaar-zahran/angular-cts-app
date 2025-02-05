@@ -72,10 +72,26 @@ export class ReplyToComponent {
     );
   }
 
-  onSave(): void {
-    if (this.replyForm.valid) { }
+  onSubmit(): void {
+    if (this.replyForm.valid) {
+      const formValues = this.replyForm.value;
+
+      const itemData = {
+        fromDate: this.formatDate(formValues.dueDate),
+        purposeId: formValues.purpose,
+        instruction: formValues.txtArea 
+      };
+
+    }
   }
 
+  formatDate(date: Date | undefined): string {
+    if (!date) return '';
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString();
+    return `${day}/${month}/${year}`;
+  }
 
   onClose(): void {
     this.dialogRef.close();

@@ -12,6 +12,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
 import { AddressBookComponent } from '../address-book/address-book.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MailsService } from '../../../services/mail.service';
+
 
 @Component({
   selector: 'app-transfer-modal',
@@ -41,7 +43,7 @@ export class TransferModalComponent implements OnInit {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,
     private router: Router, private lookupsService: LookupsService, private dialog: MatDialog,
-    private dialogRef: MatDialogRef<TransferModalComponent>) { }
+    private dialogRef: MatDialogRef<TransferModalComponent>, private mailService: MailsService) { }
 
   ngOnInit(): void {
     //    console.log('Dialog opened with ID:', this.data.id, 'and Reference Number:', this.data.referenceNumber);
@@ -110,7 +112,7 @@ export class TransferModalComponent implements OnInit {
       if (result) {
         console.log('Address Book result:', result);
         this.selectedUsers = result;
-        this.selectedUserId = this.selectedUsers[0]?.id;
+        this.selectedUserId = this.selectedUsers[0] ?.id;
       } else {
         console.log('Address Book dialog was closed without submitting');
       }
@@ -134,5 +136,15 @@ export class TransferModalComponent implements OnInit {
 
   Transfer(): void {
 
+    const model :any= [];
+
+    this.mailService.transferMail(this.accessToken!, model).subscribe(
+      (result) => {
+        //
+      },
+      (error) => {
+        console.error('Error sending mail:', error);
+      }
+    );
   }
 }
