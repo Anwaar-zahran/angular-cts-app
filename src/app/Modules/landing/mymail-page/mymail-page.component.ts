@@ -24,7 +24,7 @@ interface ApiResponseItem {
   standalone: false
 })
 
-export class MailPageComponent implements OnInit {
+export class MymailPageComponent implements OnInit {
   accessToken: string | null;
   structureId: any; // Declare at class level
   //
