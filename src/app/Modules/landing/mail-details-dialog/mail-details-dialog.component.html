@@ -51,7 +51,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="form-label">Sending entity</label>
-                  <input class="form-control" type="text" [value]="attributes.sendingEntity?.text|| ''" [disabled]="true" />
+                  <input class="form-control" type="text" [value]="data.row?.sendingEntity|| ''" [disabled]="true" />
                 </div>
               </div>
               <div class="col-md-6">
@@ -63,7 +63,10 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="form-label">Carbon copy</label>
-                  <input class="form-control" type="text" [value]="attributes.carbonCopy  || ''" [disabled]="true" />
+                  <!--<input class="form-control" type="text" [value]="attributes.carbonCopy  || ''" [disabled]="true" />-->
+              <ng-select id="ddlUsers" [(ngModel)]="userId" name="ddlUsers" [items]="carbonUsers || []" bindLabel="name" bindValue="id"
+                             placeholder="Select" class="form-control" [disabled]="true">
+</ng-select>
                 </div>
               </div>
               <div class="col-sm-12">
@@ -84,14 +87,18 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="form-label">Priority</label>
-                  <input class="form-control" type="text" [value]="data.row?.priority|| ''" [disabled]="true" />
-
+                  <!--<input class="form-control" type="text" [value]="data.row?.priority|| ''" [disabled]="true" />-->
+                  <ng-select id="ddlPriority" [(ngModel)]="priorityId" name="ddlPriority" [items]="priority || []" bindLabel="text" bindValue="id"
+                             placeholder="Select" class="form-control" [disabled]="true">
+                  </ng-select>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="form-label">Due date</label>
-                  <input class="form-control date-picker" [value]="data.row?.dueDate" placeholder="yyyy-mm-dd" name="dp2" [disabled]="true" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()" />
+                  <!-- <input class="form-control date-picker" [value]="data.row?.dueDate" placeholder="yyyy-mm-dd" name="dp2" [disabled]="true" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()" /> 
+                  -->
+                  <input class="form-control date-picker" [value]="attributes.dueDate" placeholder="yyyy-mm-dd" name="dp2" [disabled]="true" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()" />
                 </div>
               </div>
               <div class="col-md-6">
@@ -129,6 +136,13 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group">
+                <label class="form-label">Document Type</label>
+                <input class="form-control" type="text" [value]="attributes.documentType?.text" [disabled]="true" />
+                 
+                                </div>
+                </div>
+              <!--<div class="col-md-6">
+                <div class="form-group">
                   <label class="form-label">Document Type</label>
                   <select class="form-control" [disabled]="true">
                     <option value="1">Normal</option>
@@ -136,20 +150,20 @@
                     <option value="3">Urgent</option>
                   </select>
                 </div>
-              </div>
-              <div class="col-md-6">
+              </div>-->
+              <!--<div class="col-sm-12">
                 <div class="form-group">
                   <label class="form-label">Body</label>
                   <textarea class="form-control" maxlength="2000" rows="5" [disabled]="true">{{attributes.body}}</textarea>
                 </div>
-              </div>
+              </div>-->
               </div>
             </form>
           </div>
         </div>
 
 
-        <!-- Attachments Tab -->
+       <!-- Attachments Tab -->
        <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 1}">
         <div class="p-3">
           <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
@@ -172,7 +186,6 @@
           </mat-tree>
         </div>
       </div>
-
         <!-- Notes Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 2}">
           <div class="position-relative static-pagination">

@@ -100,6 +100,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   classId: any;
   ImpoeranceId: any;
   privacyId: any;
+  priorityId: any;
+  priority: any;
+  carbonUsers: any;
+  userId: any;
+  docTypeId: any;
+  docTypes: any;
 
 
   // OrgChart references
@@ -191,9 +197,36 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       }
     );
 
+    this.lookupsService.getPriorities(this.accessToken!).subscribe(
+      (response) => {
+        this.priority = response;
+      },
+      (error) => {
+        console.error('Error loading users:', error);
+      }
+    );
     this.lookupsService.getPrivacy(this.accessToken!).subscribe(
       (response) => {
         this.privacy = response;
+      },
+      (error) => {
+        console.error('Error loading users:', error);
+      }
+    ); 
+
+    this.lookupsService.getDocumentTypes(this.accessToken!).subscribe(
+      (response) => {
+        this.docTypes = response.data||[];
+      },
+      (error) => {
+        console.error('Error loading structures:', error);
+      }
+    );
+
+    this.lookupsService.getCarbonUsers(this.accessToken!).subscribe(
+      (response) => {
+        debugger;
+        this.carbonUsers = response;
       },
       (error) => {
         console.error('Error loading users:', error);
@@ -377,6 +410,13 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.classId = this.attributes.classificationId ?? '';
       this.ImpoeranceId = this.attributes.importanceId ?? '';
       this.privacyId = this.attributes.privacyId ?? '';
+      this.priorityId = this.attributes.priorityId ?? '';
+      this.docTypeId = this.attributes.documentTypeId ?? '';
+
+      if (this.attributes.carbonCopy ?.length > 0)
+        this.userId = this.attributes.carbonCopy[0];
+      else
+        this.userId = '';
 
       // Build attachments tree if available
       if (this.attachments && Array.isArray(this.attachments)) {

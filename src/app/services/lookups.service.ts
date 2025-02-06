@@ -1,10 +1,9 @@
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Priority } from '../models/priority.model';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { catchError } from 'rxjs/operators';
-import { JsonPipe } from '@angular/common';
 @Injectable({
   providedIn: 'root'
 })
@@ -23,6 +22,7 @@ export class LookupsService {
   private listPurposes = 'https://cts-qatar.d-intalio.com/CTS/Purpose/ListUserPurposes';
   private listClassification = 'https://cts-qatar.d-intalio.com/Classification/List';
   //private listImportance = 'https://cts-qatar.d-intalio.com/Importance/List';
+  private listDocumentType = 'https://cts-qatar.d-intalio.com/DocumentType/List';
 
   constructor(private http: HttpClient) { }
 
@@ -34,6 +34,27 @@ export class LookupsService {
       { id: 3, name: 'High Confidential' }
     ];
     return of(privacyOptions);
+  }
+  getCarbonUsers(accessToken: string): Observable<any> {
+ 
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`
+    });
+ 
+    const formData = new FormData();
+    formData.append('text', '');
+    formData.append('language', 'en');
+    formData.append('attributes[]', 'NameAr');
+    formData.append('attributes[]', 'NameFr');
+ 
+ 
+    return this.http.post(this.listStructuredUsers, formData, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching structured users data', error.message);
+          throw error;
+        })
+      );
   }
 
   getPriorityOptions(): Observable<Priority[]> {
@@ -114,7 +135,24 @@ export class LookupsService {
       );
   }
 
-
+  getDocumentTypes(accessToken: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    });
+    const params = new URLSearchParams();
+    params.set('Name', '');
+ 
+    const url = `${this.listDocumentType}?${params.toString()}`;
+ 
+    return this.http.get(url, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching document type data', error.message);
+          throw error;
+        })
+      );
+  }
   getCategories(delegationId: string | undefined): Observable<{ id: number, text: string }[]> {
     let params = new HttpParams();
     if (delegationId !== undefined) {
