@@ -117,7 +117,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   users: any[] = [];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { row: any, id: string, referenceNumber: string, fromSearch: boolean },
+    @Inject(MAT_DIALOG_DATA) public data: { row: any, id: string, referenceNumber: string, fromSearch: boolean, showActionButtons: boolean },
     private authService: AuthService,
     private router: Router,
     private sanitizer: DomSanitizer,
@@ -611,7 +611,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   getViewerUrl(): void {
     debugger
-    //const baseUrl = 'https://java-qatar.d-intalio.com/VIEWER/file';
+    //const baseUrl = 'https://java-qatar.d-intalio.com/VIEWER/file?isCustomMode=true';
     const baseUrl = `${environment.viewerUrl}`;
     const token = this.authService.getToken();
 

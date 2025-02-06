@@ -79,6 +79,15 @@ export class AuthService {
     return '';
   }
 
+  getDisplayName(): string {
+    const token = localStorage.getItem('access_token');
+    if (token && token.split('.').length === 3) {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      return decodedToken.DisplayName || '';
+    }
+    return '';
+  }
+
   isAuthenticated(): boolean {
     return this.getToken() !== null;
   }

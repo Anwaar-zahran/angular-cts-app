@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { VisualTrackingComponent } from '../../shared/visual-tracking/visual-tracking.component';
 import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-dialog.component';
+import { AuthService } from '../../auth/auth.service';
 interface ApiResponseItem {
   id: number;
   documentId: number;
@@ -37,7 +38,7 @@ export class MailPageComponent implements OnInit {
 
   loading: boolean = true; // Loading state
 
-  constructor(private http: HttpClient, private router: Router, private dialog: MatDialog) {
+  constructor(private http: HttpClient, private router: Router, private dialog: MatDialog,private  authService: AuthService) {
     this.accessToken = localStorage.getItem('access_token');
   }
 
@@ -202,8 +203,10 @@ export class MailPageComponent implements OnInit {
   active = 1;
 
 
-  showMailDetails(item: ApiResponseItem) {
+  showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
     debugger;
+    const currentName = this.authService.getDisplayName();
+    console.log("Name=",currentName);
     const dialogRef = this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
       width: '90%',
@@ -213,7 +216,9 @@ export class MailPageComponent implements OnInit {
         documentId: item.documentId,
         referenceNumber: item.ref,
         row: item.row,
-        fromSearch: false
+        fromSearch: false,
+        showActionButtons: (showActionbtns && (!item.row ?.isLocked || (item.row ?.isLocked && item.row ?.lockedBy == currentName)))
+
       }
     });
  

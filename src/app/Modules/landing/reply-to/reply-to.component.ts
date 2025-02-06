@@ -88,12 +88,11 @@ export class ReplyToComponent {
  
       this.mailService.replyToMail(this.accessToken!, itemData).subscribe(
         (response) => {
-          this.toaster.showToaster("Sent successfully");
+          this.toaster.showToaster(response??"Sent successfully");
           this.onClose();
         },
         (error) => {
-          this.toaster.showToaster("Something went wrong");
-          console.error('Error loading priorities:', error);
+          this.toaster.showToaster(error.error.text??"Something went wrong");
         }
       );
       console.log("data", itemData)
