@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTablesModule } from 'angular-datatables';
 
@@ -124,7 +124,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     private cdr: ChangeDetectorRef,
     private renderer: Renderer2,
     private searchService: SearchPageService,
-    private lookupsService: LookupsService, private dialog: MatDialog
+    private lookupsService: LookupsService, private dialog: MatDialog,
+    private dialogRef: MatDialogRef<MailDetailsDialogComponent>
   ) {
     // Initialize Angular Material tree for attachments
     this.treeFlattener = new MatTreeFlattener(
@@ -276,9 +277,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       width: '50%',
       data: { data: this.data.row }
     });
-
+ 
     dialogRef.afterClosed().subscribe(result => {
       console.log('Transfer modal closed', result);
+      this.dialogRef.close();
+ 
     });
   }
 

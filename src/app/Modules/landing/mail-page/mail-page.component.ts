@@ -2,9 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-dialog.component';
-import { VisualTrackingComponent } from '../../shared/visual-tracking/visual-tracking.component';
 import { environment } from '../../../../environments/environment';
+import { VisualTrackingComponent } from '../../shared/visual-tracking/visual-tracking.component';
+import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-dialog.component';
 interface ApiResponseItem {
   id: number;
   documentId: number;
@@ -204,7 +204,7 @@ export class MailPageComponent implements OnInit {
 
   showMailDetails(item: ApiResponseItem) {
     debugger;
-    this.dialog.open(MailDetailsDialogComponent, {
+    const dialogRef = this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
       width: '90%',
       height: '90%',
@@ -215,6 +215,13 @@ export class MailPageComponent implements OnInit {
         row: item.row,
         fromSearch: false
       }
+    });
+ 
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Mail details closed', result);
+      window.location.reload();
+      //this.fetchData();
+      //this.router.navigate([this.router.url]);
     });
   }
 
