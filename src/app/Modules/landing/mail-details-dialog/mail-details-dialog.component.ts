@@ -11,13 +11,13 @@ import { MatTreeFlatDataSource, MatTreeFlattener, MatTreeModule } from '@angular
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { environment } from '../../../../environments/environment';
 import { AttachmentsApiResponce } from '../../../models/attachments.model';
 import { DocAttributesApiResponse } from '../../../models/searchDocAttributes.model';
 import { SearchPageService } from '../../../services/search-page.service';
 import { AuthService } from '../../auth/auth.service';
 import { ReplyToComponent } from '../reply-to/reply-to.component';
 import { TransferModalComponent } from '../transfer-modal/transfer-modal.component';
-
 // Import OrgChart from @balkangraph/orgchart.js
 import OrgChart from '@balkangraph/orgchart.js';
 import { LookupsService } from '../../../services/lookups.service';
@@ -608,7 +608,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   getViewerUrl(): void {
     debugger
-    const baseUrl = 'https://java-qatar.d-intalio.com/VIEWER/file';
+    //const baseUrl = 'https://java-qatar.d-intalio.com/VIEWER/file';
+    const baseUrl = `${environment.viewerUrl}`;
     const token = this.authService.getToken();
 
     if (!token) {
