@@ -53,8 +53,8 @@
         <tbody>
           <tr *ngFor="let item of newItems">
             <td>
-              <p (click)="showMailDetails(item)" class="text-primary bold">{{ item.subject }}</p>
-              <p (click)="showMailDetails(item)" class="text-secondary">{{ item.details }}</p>
+              <p (click)="showMailDetails(item,true)" class="text-primary bold">{{ item.subject }}</p>
+              <p (click)="showMailDetails(item,true)" class="text-secondary">{{ item.details }}</p>
             </td>
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
@@ -92,8 +92,8 @@
         <tbody>
           <tr *ngFor="let item of sentItems">
             <td>
-              <p (click)="showMailDetails(item)" class="text-primary bold">{{ item.subject }}</p>
-              <p (click)="showMailDetails(item)" class="text-secondary">{{ item.details }}</p>
+              <p (click)="showMailDetails(item,false)" class="text-primary bold">{{ item.subject }}</p>
+              <p (click)="showMailDetails(item,false)" class="text-secondary">{{ item.details }}</p>
             </td>
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
@@ -131,8 +131,8 @@
         <tbody>
           <tr *ngFor="let item of completedItems">
             <td>
-              <p (click)="showMailDetails(item)" class="text-primary bold">{{ item.subject }}</p>
-              <p (click)="showMailDetails(item)" class="text-secondary">{{ item.details }}</p>
+              <p (click)="showMailDetails(item,false)" class="text-primary bold">{{ item.subject }}</p>
+              <p (click)="showMailDetails(item,false)" class="text-secondary">{{ item.details }}</p>
             </td>
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
