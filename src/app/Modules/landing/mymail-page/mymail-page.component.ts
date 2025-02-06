@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-dialog.component';
 import { VisualTrackingComponent } from '../../shared/visual-tracking/visual-tracking.component';
-
+import { environment } from '../../../../environments/environment';
 interface ApiResponseItem {
   id: number;
   documentId: number;
@@ -142,9 +142,9 @@ export class MymailPageComponent implements OnInit {
     };
     // Fetch all data concurrently
     Promise.all([
-      callApi('https://cts-qatar.d-intalio.com/Transfer/ListSent'),
-      callApi('https://cts-qatar.d-intalio.com/Transfer/ListCompleted'),
-      callApi('https://cts-qatar.d-intalio.com/Transfer/ListInbox')
+      callApi(`${environment.apiBaseUrl}/Transfer/ListSent`),
+      callApi(`${environment.apiBaseUrl}/Transfer/ListCompleted`),
+      callApi(`${environment.apiBaseUrl}/Transfer/ListInbox`)
     ])
       .then(([sentResponse, completedResponse, inboxResponse]) => {
         debugger

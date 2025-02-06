@@ -4,21 +4,22 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { SearchFilter } from '../../app/models/searchFilter.model';
 import { AttachmentsApiResponce } from '../models/attachments.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchPageService {
-  private searchApiUrl = 'https://cts-qatar.d-intalio.com/Search/List';
-  private getDocDetails = 'https://cts-qatar.d-intalio.com/Document/GetSearchDocument';
-  private notesURL = 'https://cts-qatar.d-intalio.com/Note/List';
-  private linkedDocURL = 'https://cts-qatar.d-intalio.com/LinkedDocument/List';
-  private nonArchiveURL = 'https://cts-qatar.d-intalio.com/NonArchivedAttachments/List'
-  private transHistoryURL = 'https://cts-qatar.d-intalio.com/Transfer/ListTransferHistory'
-  private activityLogURL = 'https://cts-qatar.d-intalio.com/ActivityLog/ListByDocumentId'
-  private activityLogByIdURL = 'https://cts-qatar.d-intalio.com/ActivityLog/LisActivityLogGridtByDocumentId'
-  private attachmentsURL = 'https://cts-qatar.d-intalio.com/Attachment/List'
-  private visualTrackingURL = 'https://cts-qatar.d-intalio.com/Document/GetTrackingData'
+  private searchApiUrl = `${environment.apiBaseUrl}/Search/List`;
+  private getDocDetails = `${environment.apiBaseUrl}/Document/GetSearchDocument`;
+  private notesURL = `${environment.apiBaseUrl}/Note/List`;
+  private linkedDocURL = `${environment.apiBaseUrl}/LinkedDocument/List`;
+  private nonArchiveURL = `${environment.apiBaseUrl}/NonArchivedAttachments/List`;
+  private transHistoryURL = `${environment.apiBaseUrl}/Transfer/ListTransferHistory`;
+  private activityLogURL = `${environment.apiBaseUrl}/ActivityLog/ListByDocumentId`;
+  private activityLogByIdURL = `${environment.apiBaseUrl}/ActivityLog/LisActivityLogGridtByDocumentId`;
+  private attachmentsURL = `${environment.apiBaseUrl}/Attachment/List`;
+  private visualTrackingURL = `${environment.apiBaseUrl}/Document/GetTrackingData`;
 
   constructor(private httpClient: HttpClient) { }
 

@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class KpiService {
-  private baseUrl = 'https://cts-qatar.d-intalio.com';
+  private baseUrl = environment.apiBaseUrl;
   constructor(private http: HttpClient) { }
 
   GetAverageDurationForCorrespondenceCompletion(year: number): Observable<any> {

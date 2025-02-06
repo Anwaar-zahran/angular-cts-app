@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class DelegationPageService {
-  private apiUrl = 'https://cts-qatar.d-intalio.com/CTS/Delegation/List';
-  //private apiUrl = 'https://cts-qatar.d-intalio.com/Delegation/List'; 
-  private saveDelegation = 'https://cts-qatar.d-intalio.com/CTS/Delegation/Save';
-  private deleteDelegationURL = 'https://cts-qatar.d-intalio.com/CTS/Delegation/Delete';
+  private apiUrl = `${environment.apiBaseUrl}/CTS/Delegation/List`;
+  private saveDelegation = `${environment.apiBaseUrl}/CTS/Delegation/Save`;
+  private deleteDelegationURL = `${environment.apiBaseUrl}/CTS/Delegation/Delete`;
 
   constructor(private httpClient: HttpClient) { }
 

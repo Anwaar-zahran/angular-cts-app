@@ -6,12 +6,12 @@ import { Category } from '../models/category.model';
 import { InprogressCorrespondence } from '../models/inprogress-correspondence.model';
 import { InprogressReport } from '../models/inprogress-report.model';
 import { CategoriesService } from '../services/categories.service';
-
+import { environment } from '../../environments/environment';
 @Injectable({
     providedIn: 'root'
 })
 export class ReportsService {
-    private baseUrl = 'https://cts-qatar.d-intalio.com';
+    private baseUrl = `${environment.apiBaseUrl}`;
 
     constructor(private http: HttpClient, private CategoriesService: CategoriesService) { }
 
@@ -65,23 +65,23 @@ export class ReportsService {
                 debugger
                 // Fetch categories
                 return this.CategoriesService.ListCategories().pipe(
-                    map((categories: Category[]) =>{
+                    map((categories: Category[]) => {
                         const categoryMap = categories.reduce((map, category) => {
-                            map[category.id] = category.text; 
+                            map[category.id] = category.text;
                             return map;
                         }, {} as { [key: number]: string });
-                      debugger
+                        debugger
                         const transformedTransfers = transfers.map(transfer => ({
                             ...transfer,
-                            categoryName: categoryMap[transfer.categoryId] || 'Unknown' 
+                            categoryName: categoryMap[transfer.categoryId] || 'Unknown'
                         }));
-    
-                        return { ...response, data: transformedTransfers }; 
+
+                        return { ...response, data: transformedTransfers };
                     })
                 );
             })
         );
-    
+
     }
 
     listCompletedTransfers(params?: {
@@ -129,17 +129,17 @@ export class ReportsService {
                 const transfers = (response as ApiResponse<InprogressReport[]>).data;
                 // Fetch categories
                 return this.CategoriesService.ListCategories().pipe(
-                    map((categories: Category[]) =>{
+                    map((categories: Category[]) => {
                         const categoryMap = categories.reduce((map, category) => {
-                            map[category.id] = category.text; 
+                            map[category.id] = category.text;
                             return map;
                         }, {} as { [key: number]: string });
                         const transformedTransfers = transfers.map(transfer => ({
                             ...transfer,
-                            categoryName: categoryMap[transfer.categoryId] || 'Unknown' 
+                            categoryName: categoryMap[transfer.categoryId] || 'Unknown'
                         }));
-    
-                        return { ...response, data: transformedTransfers }; 
+
+                        return { ...response, data: transformedTransfers };
                     })
                 );
             })
@@ -187,17 +187,17 @@ export class ReportsService {
                 const transfers = (response as ApiResponse<InprogressCorrespondence[]>).data;
                 // Fetch categories
                 return this.CategoriesService.ListCategories().pipe(
-                    map((categories: Category[]) =>{
+                    map((categories: Category[]) => {
                         const categoryMap = categories.reduce((map, category) => {
-                            map[category.id] = category.text; 
+                            map[category.id] = category.text;
                             return map;
                         }, {} as { [key: number]: string });
                         const transformedTransfers = transfers.map(transfer => ({
                             ...transfer,
                             categoryName: categoryMap[transfer.categoryId] || 'Unknown'
                         }));
-    
-                        return { ...response, data: transformedTransfers }; 
+
+                        return { ...response, data: transformedTransfers };
                     })
                 );
             })
@@ -251,26 +251,26 @@ export class ReportsService {
 
         return this.http.post<ApiResponse<InprogressCorrespondence[]>>(
             `${this.baseUrl}/Report/ListCompletedCorrespondences`,
-          formData
+            formData
         ).pipe(
-          switchMap((response: ApiResponse<InprogressCorrespondence[]>) => {
-            const transfers = (response as ApiResponse<InprogressCorrespondence[]>).data;
-            // Fetch categories
-            return this.CategoriesService.ListCategories().pipe(
-              map((categories: Category[]) => {
-                const categoryMap = categories.reduce((map, category) => {
-                  map[category.id] = category.text;
-                  return map;
-                }, {} as { [key: number]: string });
-                const transformedTransfers = transfers.map(transfer => ({
-                  ...transfer,
-                  categoryName: categoryMap[transfer.categoryId] || 'Unknown'
-                }));
+            switchMap((response: ApiResponse<InprogressCorrespondence[]>) => {
+                const transfers = (response as ApiResponse<InprogressCorrespondence[]>).data;
+                // Fetch categories
+                return this.CategoriesService.ListCategories().pipe(
+                    map((categories: Category[]) => {
+                        const categoryMap = categories.reduce((map, category) => {
+                            map[category.id] = category.text;
+                            return map;
+                        }, {} as { [key: number]: string });
+                        const transformedTransfers = transfers.map(transfer => ({
+                            ...transfer,
+                            categoryName: categoryMap[transfer.categoryId] || 'Unknown'
+                        }));
 
-                return { ...response, data: transformedTransfers };
-              })
-            );
-          })
-        );       
+                        return { ...response, data: transformedTransfers };
+                    })
+                );
+            })
+        );
     }
 }

@@ -6,14 +6,14 @@ import { Router } from '@angular/router';
 //import { JwtHelperService } from '@auth0/angular-jwt';
 //import jwt_decode from 'jwt-decode';
 import { JwtHelperService } from '@auth0/angular-jwt';
-
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   // private iAMURL = "http://localhost:8090/connect/token";   //to be read from config
-  private iAMURL = "http://iam-qatar.d-intalio.com/connect/token";   //to be read from config
+  private iAMURL = `${environment.iAMUrl}/connect/token`;   //to be read from config
   private clientId = "5d2c8fa5-9f58-430c-bcf2-5f4366d425dc";   //to be read from config
   private clientSecret = "d85a0d00-a065-4d8e-b001-f39d69951555";   //to be read from config
   private scope = 'openid IdentityServerApi offline_access';

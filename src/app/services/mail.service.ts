@@ -3,13 +3,13 @@ import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class MailsService {
-  private replyToURL = 'https://cts-qatar.d-intalio.com/Transfer/Reply';
-  private transferURL = 'https://cts-qatar.d-intalio.com/Transfer/Transfer';
+  private replyToURL = `${environment.apiBaseUrl}/Transfer/Reply`;
+  private transferURL = `${environment.apiBaseUrl}/Transfer/Transfer`;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -21,8 +21,8 @@ export class MailsService {
 
     const params = new URLSearchParams();
     params.set('delegationId', '');
-    params.set('maintainTransfer', 'false'); 
-    params.set('withSign', 'false'); 
+    params.set('maintainTransfer', 'false');
+    params.set('withSign', 'false');
     params.set('signatureTemplateId', '');
 
     const url = `${this.transferURL}?${params.toString()}`;
@@ -45,18 +45,18 @@ export class MailsService {
     //Transfer / Reply ? id = 80 & transferId=35 & purposeId=1 & dueDate & instruction & structureId & delegationId & structureReceivers[]=1 &
     //  transferToType=2 & withSign=false & SignatureTemplateId & documentId=80
     const params = new URLSearchParams();
-    params.set('id', JSON.stringify( model.id));
-    params.set('transferId', JSON.stringify( model.transferId));
+    params.set('id', JSON.stringify(model.id));
+    params.set('transferId', JSON.stringify(model.transferId));
     params.set('purposeId', JSON.stringify(model.purposeId));
-    params.set('dueDate', JSON.stringify( model.dueDate));
-    params.set('instruction', JSON.stringify( model.instruction));
+    params.set('dueDate', JSON.stringify(model.dueDate));
+    params.set('instruction', JSON.stringify(model.instruction));
     params.set('structureId', '');
     params.set('delegationId', '');
-    params.set('structureReceivers[]', JSON.stringify( 1));
+    params.set('structureReceivers[]', JSON.stringify(1));
     params.set('transferToType', JSON.stringify(2));
     params.set('withSign', 'false');
     params.set('SignatureTemplateId', '');
-    params.set('documentId', JSON.stringify( model.documentId));
+    params.set('documentId', JSON.stringify(model.documentId));
 
     const url = `${this.replyToURL}?${params.toString()}`;
 

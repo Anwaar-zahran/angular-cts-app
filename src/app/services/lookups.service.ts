@@ -2,27 +2,27 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Priority } from '../models/priority.model';
-
+import { environment } from '../../environments/environment';
 import { catchError } from 'rxjs/operators';
+
 @Injectable({
   providedIn: 'root'
 })
 export class LookupsService {
-  private listUsersUrl = 'https://iam-qatar.d-intalio.com/api/SearchUsersByStructureIds';
-  private listPrivacies = 'https://cts-qatar.d-intalio.com/Privacy/ListPrivacies';
-  private listCategories = 'https://cts-qatar.d-intalio.com/Category/ListCategories';
-  private listEntities = 'https://iam-qatar.d-intalio.com/api/SearchStructuresWithSearchAttributes';
-  private listSearchUsers = 'https://iam-qatar.d-intalio.com/api/SearchUsers';
-  private listStructuredUsers = 'https://cts-qatar.d-intalio.com/User/GetUsersStructuresFromCTS';
-  private listDelegateToUsers = 'https://cts-qatar.d-intalio.com/CTS/Delegation/ListDelegationToUser';
-  private listImportance = 'https://cts-qatar.d-intalio.com/Importance/ListImportances';
-  private listStatus = 'https://cts-qatar.d-intalio.com/Status/ListStatuses';
-  private listPriorities = 'https://cts-qatar.d-intalio.com/Priority/ListPriorities';
-  private listYears = 'https://cts-qatar.d-intalio.com/Dashboard/GetAvailableYears';
-  private listPurposes = 'https://cts-qatar.d-intalio.com/CTS/Purpose/ListUserPurposes';
-  private listClassification = 'https://cts-qatar.d-intalio.com/Classification/List';
-  //private listImportance = 'https://cts-qatar.d-intalio.com/Importance/List';
-  private listDocumentType = 'https://cts-qatar.d-intalio.com/DocumentType/List';
+  private listUsersUrl = `${environment.iAMUrl}/api/SearchUsersByStructureIds`;
+  private listPrivacies = `${environment.apiBaseUrl}/Privacy/ListPrivacies`;
+  private listCategories = `${environment.apiBaseUrl}/Category/ListCategories`;
+  private listEntities = `${environment.iAMUrl}/api/SearchStructuresWithSearchAttributes`;
+  private listSearchUsers = `${environment.iAMUrl}/api/SearchUsers`;
+  private listStructuredUsers = `${environment.apiBaseUrl}/User/GetUsersStructuresFromCTS`;
+  private listDelegateToUsers = `${environment.apiBaseUrl}/CTS/Delegation/ListDelegationToUser`;
+  private listImportance = `${environment.apiBaseUrl}/Importance/ListImportances`;
+  private listStatus = `${environment.apiBaseUrl}/Status/ListStatuses`;
+  private listPriorities = `${environment.apiBaseUrl}/Priority/ListPriorities`;
+  private listYears = `${environment.apiBaseUrl}/Dashboard/GetAvailableYears`;
+  private listPurposes = `${environment.apiBaseUrl}/CTS/Purpose/ListUserPurposes`;
+  private listClassification = `${environment.apiBaseUrl}/Classification/List`;
+  private listDocumentType = `${environment.apiBaseUrl}/DocumentType/List`;
 
   constructor(private http: HttpClient) { }
 
@@ -36,18 +36,18 @@ export class LookupsService {
     return of(privacyOptions);
   }
   getCarbonUsers(accessToken: string): Observable<any> {
- 
+
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`
     });
- 
+
     const formData = new FormData();
     formData.append('text', '');
     formData.append('language', 'en');
     formData.append('attributes[]', 'NameAr');
     formData.append('attributes[]', 'NameFr');
- 
- 
+
+
     return this.http.post(this.listStructuredUsers, formData, { headers })
       .pipe(
         catchError((error) => {
@@ -58,7 +58,7 @@ export class LookupsService {
   }
 
   getPriorityOptions(): Observable<Priority[]> {
-    return this.http.get<Priority[]>('https://cts-qatar.d-intalio.com/Priority/ListPriorities');
+    return this.http.get<Priority[]>(`${environment.apiBaseUrl}/Priority/ListPriorities`);
   }
 
   getUsers(accessToken: string): Observable<any> {
@@ -107,7 +107,7 @@ export class LookupsService {
     return this.http.get(this.listPurposes, { headers })
       .pipe(
         catchError((error) => {
-        console.error('Error while fetching Purposes data', error.message);
+          console.error('Error while fetching Purposes data', error.message);
           throw error;
         })
       );
@@ -142,9 +142,9 @@ export class LookupsService {
     });
     const params = new URLSearchParams();
     params.set('Name', '');
- 
+
     const url = `${this.listDocumentType}?${params.toString()}`;
- 
+
     return this.http.get(url, { headers })
       .pipe(
         catchError((error) => {
