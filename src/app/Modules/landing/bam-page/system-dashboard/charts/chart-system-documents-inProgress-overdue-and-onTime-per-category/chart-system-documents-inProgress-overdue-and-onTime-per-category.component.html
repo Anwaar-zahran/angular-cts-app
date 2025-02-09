@@ -2,24 +2,24 @@
   <div class="panel-heading">
     <div class="row">
       <div class="col-sm-10 pull-left">
-        Due date statistics for in progress correspondences
+        {{ 'BAM.CHARTS.TITLES.IN_PROGRESS_DOCUMENTS_DUE_DATE' | translate }}
         <i class="fa fa-info-circle font-15 classInfoDivIcon"></i>
         <div class="font-13 classInfoDiv" style="opacity: 0;">
-
-          Number of in progress correpondences per category divided into 2 circles. (Only for correspondences with due
-          date)
+          {{ 'BAM.CHARTS.INFO.IN_PROGRESS_DOCUMENTS_DUE_DATE' | translate }}
         </div>
       </div>
       <div class="col-sm-2 pull-right">
         <button id="btnOpenSearchTransferAverageCompletionTimeModal" type="button" tabindex="3" (click)="toggleModal()"
-          class="btn btn-warning pull-right btn-searchIcon" title="Search"><i class="fa fa-filter"></i></button>
+          class="btn btn-warning pull-right btn-searchIcon" [attr.title]="'BAM.COMMON.SEARCH' | translate">
+          <i class="fa fa-filter"></i>
+        </button>
       </div>
     </div>
     <span id="spanTransferAverageCompletionTime" class="spanDate" [attr.todatevalue]="toDate"
-      [attr.fromdatevalue]="fromDate"><span style="color: #444">(</span><span style="color: #444">From</span>
-      {{fromDate}}
-      <span style="color: #444">To
-      </span>{{toDate}}<span style="color: #444"> )</span></span>
+      [attr.fromdatevalue]="fromDate">
+      <span style="color: #444">({{ 'BAM.COMMON.FROM' | translate }} {{fromDate}} {{ 'BAM.COMMON.TO' | translate }}
+        {{toDate}})</span>
+    </span>
   </div>
 
   <div class="panel-body">
@@ -35,23 +35,23 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Select Date Range</h5>
-        <button type="button" class="close" (click)="toggleModal()" aria-label="Close">
+        <h5 class="modal-title">{{ 'BAM.COMMON.SELECT_DATE_RANGE' | translate }}</h5>
+        <button type="button" class="close" (click)="toggleModal()" [attr.aria-label]="'BAM.COMMON.CLOSE' | translate">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <form (ngSubmit)="applyFilter()">
           <div class="form-group">
-            <label for="fromDate">From Date</label>
+            <label for="fromDate">{{ 'BAM.COMMON.FROM_DATE' | translate }}</label>
             <input type="date" id="fromDate" [(ngModel)]="tempFromDate" name="tempFromDate" class="form-control"
               required>
           </div>
           <div class="form-group">
-            <label for="toDate">To Date</label>
+            <label for="toDate">{{ 'BAM.COMMON.TO_DATE' | translate }}</label>
             <input type="date" id="toDate" [(ngModel)]="tempToDate" name="tempToDate" class="form-control" required>
           </div>
-          <button type="submit" class="btn btn-primary">Apply</button>
+          <button type="submit" class="btn btn-primary">{{ 'BAM.COMMON.APPLY' | translate }}</button>
         </form>
       </div>
     </div>

@@ -5,13 +5,14 @@ import { LookupsService } from '../../../services/lookups.service';
 import { SearchPageService } from '../../../services/search-page.service';
 import { AuthService } from '../../auth/auth.service';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-visual-tracking',
   templateUrl: './visual-tracking.component.html',
   styleUrls: ['./visual-tracking.component.css'],
   standalone: true,
-  imports: [CommonModule, MatDialogModule]
+  imports: [CommonModule, MatDialogModule, TranslateModule]
 })
 export class VisualTrackingComponent implements OnInit, OnDestroy {
   @ViewChild('chartContainer', { static: false }) chartContainer!: ElementRef;
@@ -28,6 +29,7 @@ export class VisualTrackingComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private searchService: SearchPageService,
     private lookupsService: LookupsService,
+    private translateService: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data: { documentId: string, referenceNumber: string }
   ) {
     console.log("Data:", this.data);
@@ -154,10 +156,12 @@ export class VisualTrackingComponent implements OnInit, OnDestroy {
           layout: false,
           zoom: true,
           fit: true,
-          expandAll: false
+          expandAll: false,
+          zoomIn: this.translateService.instant('VISUAL_TRACKING.TOOLBAR.ZOOM'),
+          zoomOut: this.translateService.instant('VISUAL_TRACKING.TOOLBAR.ZOOM'),
         },
         nodeMenu: {
-          details: { text: "Details" }
+          details: { text: this.translateService.instant('VISUAL_TRACKING.DETAILS.TITLE') }
         },
         editForm: {
           readOnly: true,
@@ -167,10 +171,10 @@ export class VisualTrackingComponent implements OnInit, OnDestroy {
             pdf: null
           },
           elements: [
-            { type: 'textbox', label: 'Category', binding: 'category', readOnly: true },
-            { type: 'textbox', label: 'Title/Structure', binding: 'title', readOnly: true },
-            { type: 'textbox', label: 'Created By/User', binding: 'createdBy', readOnly: true },
-            { type: 'textbox', label: 'Date', binding: 'date', readOnly: true }
+            { type: 'textbox', label: this.translateService.instant('VISUAL_TRACKING.DETAILS.CATEGORY'), binding: 'category', readOnly: true },
+            { type: 'textbox', label: this.translateService.instant('VISUAL_TRACKING.DETAILS.TITLE_STRUCTURE'), binding: 'title', readOnly: true },
+            { type: 'textbox', label: this.translateService.instant('VISUAL_TRACKING.DETAILS.CREATED_BY_USER'), binding: 'createdBy', readOnly: true },
+            { type: 'textbox', label: this.translateService.instant('VISUAL_TRACKING.DETAILS.DATE'), binding: 'date', readOnly: true }
           ]
         }
       };

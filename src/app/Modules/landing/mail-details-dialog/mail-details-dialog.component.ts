@@ -3,6 +3,7 @@ import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, Inject, OnD
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTablesModule } from 'angular-datatables';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { FormsModule } from '@angular/forms';
@@ -38,18 +39,19 @@ interface FlatTreeNode {
 }
 
 @Component({
-    selector: 'app-mail-details-dialog',
-    imports: [
-        CommonModule,
-        MatDialogModule,
-        NgbDatepickerModule,
-        DataTablesModule,
-      MatTreeModule,
-      NgSelectModule,
-      FormsModule
-    ],
-    templateUrl: './mail-details-dialog.component.html',
-    styleUrls: ['./mail-details-dialog.component.scss']
+  selector: 'app-mail-details-dialog',
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    NgbDatepickerModule,
+    DataTablesModule,
+    MatTreeModule,
+    NgSelectModule,
+    FormsModule,
+    TranslateModule
+  ],
+  templateUrl: './mail-details-dialog.component.html',
+  styleUrls: ['./mail-details-dialog.component.scss']
 
 })
 export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnDestroy {
@@ -59,14 +61,14 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   accessToken: string | null = null;
   tabs = [
-    'Attributes',
-    'Attachments',
-    'Notes',
-    'Linked correspondence',
-    'NonArchivedAttachment',
-    'Visual tracking',
-    'Transfers history',
-    'Activity log'
+    'ATTRIBUTES',
+    'ATTACHMENTS',
+    'NOTES',
+    'LINKED_CORRESPONDENCE',
+    'NON_ARCHIVED_ATTACHMENT',
+    'VISUAL_TRACKING',
+    'TRANSACTION_HISTORY',
+    'ACTIVITY_LOG'
   ];
 
   isScrollable: boolean = false;
@@ -124,8 +126,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     private cdr: ChangeDetectorRef,
     private renderer: Renderer2,
     private searchService: SearchPageService,
-    private lookupsService: LookupsService, private dialog: MatDialog,
-    private dialogRef: MatDialogRef<MailDetailsDialogComponent>
+    private lookupsService: LookupsService,
+    private dialog: MatDialog,
+    private dialogRef: MatDialogRef<MailDetailsDialogComponent>,
+    private translate: TranslateService
   ) {
     // Initialize Angular Material tree for attachments
     this.treeFlattener = new MatTreeFlattener(
@@ -213,11 +217,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       (error) => {
         console.error('Error loading users:', error);
       }
-    ); 
+    );
 
     this.lookupsService.getDocumentTypes(this.accessToken!).subscribe(
       (response) => {
-        this.docTypes = response.data||[];
+        this.docTypes = response.data || [];
       },
       (error) => {
         console.error('Error loading structures:', error);
@@ -277,11 +281,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       width: '50%',
       data: { data: this.data.row }
     });
- 
+
     dialogRef.afterClosed().subscribe(result => {
       console.log('Transfer modal closed', result);
       this.dialogRef.close();
- 
+
     });
   }
 
@@ -416,7 +420,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.priorityId = this.attributes.priorityId ?? '';
       this.docTypeId = this.attributes.documentTypeId ?? '';
 
-      if (this.attributes.carbonCopy ?.length > 0)
+      if (this.attributes.carbonCopy?.length > 0)
         this.userId = this.attributes.carbonCopy[0];
       else
         this.userId = '';
@@ -636,7 +640,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     this.documentViewerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${baseUrl}?${queryString}`);
     console.log("Viewer URL:", this.documentViewerUrl);
   }
-  
+
   initOrgChart(): void {
     debugger
     if (!this.chartContainer || !this.visualTracking || !Array.isArray(this.visualTracking)) {

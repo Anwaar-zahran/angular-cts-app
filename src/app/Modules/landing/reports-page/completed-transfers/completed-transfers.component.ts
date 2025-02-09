@@ -10,12 +10,13 @@ import { User } from '../../../../models/user.model';
 import { ReportsService } from '../../../../services/reports.service';
 import { StructuresService } from '../../../../services/structures.service';
 import { UsersService } from '../../../../services/users.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-completed-transfers',
-    templateUrl: './completed-transfers.component.html',
-    styleUrls: ['./completed-transfers.component.css'],
-    standalone: false
+  selector: 'app-completed-transfers',
+  templateUrl: './completed-transfers.component.html',
+  styleUrls: ['./completed-transfers.component.css'],
+  standalone: false
 })
 export class CompletedTransfersComponent implements OnInit {
 
@@ -66,7 +67,8 @@ export class CompletedTransfersComponent implements OnInit {
     private router: Router,
     private reportsService: ReportsService,
     private usersService: UsersService,
-    private structuresService: StructuresService
+    private structuresService: StructuresService,
+    private translate: TranslateService
   ) {
     // Setup user search debounce
     this.userSearchSubject.pipe(
@@ -104,30 +106,32 @@ export class CompletedTransfersComponent implements OnInit {
   }
 
   initDtOptions() {
-    this.dtOptions = {
-      pageLength: 10,
-      search: false,
-      order: [],
-      pagingType: 'full_numbers',
-      paging: false,
-      searching: false,
-      displayStart: 0,
-      autoWidth: false,
-      language: {
-        emptyTable: "",
-        zeroRecords: "",
-        info: "",
-        infoEmpty: "",
-        paginate: {
-          first: "<i class='text-secondary fa fa-angle-left'></i>",
-          previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-          next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-          last: "<i class='text-secondary fa fa-angle-right'></i>",
-        }
-      },
-      dom: "t",
-      ordering: false
-    };
+    this.translate.get('COMMON').subscribe(translations => {
+      this.dtOptions = {
+        pageLength: 10,
+        search: false,
+        order: [],
+        pagingType: 'full_numbers',
+        paging: false,
+        searching: false,
+        displayStart: 0,
+        autoWidth: false,
+        language: {
+          emptyTable: "",
+          zeroRecords: "",
+          info: "",
+          infoEmpty: "",
+          paginate: {
+            first: "<i class='text-secondary fa fa-angle-left'></i>",
+            previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
+            next: "<i class='text-secondary fa fa-angle-double-right'></i>",
+            last: "<i class='text-secondary fa fa-angle-right'></i>",
+          }
+        },
+        dom: "t",
+        ordering: false
+      };
+    });
   }
 
   loadReports() {
@@ -219,7 +223,7 @@ export class CompletedTransfersComponent implements OnInit {
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear().toString();
     return `${day}/${month}/${year}`;
-}
+  }
 
   joinStructureAndUser(structure: string, user: string): string {
     if (!structure && !user) return '';
@@ -251,8 +255,8 @@ export class CompletedTransfersComponent implements OnInit {
     this.structureError = '';
     this.userError = '';
     this.isOverdue = false;
-    this.fromDate=undefined;
-    this.toDate=undefined;
+    this.fromDate = undefined;
+    this.toDate = undefined;
     // const today = new Date();
     // this.fromDate = {
     //   year: today.getFullYear(),

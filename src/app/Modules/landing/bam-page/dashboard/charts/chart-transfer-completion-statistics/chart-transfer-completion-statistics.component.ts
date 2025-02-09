@@ -4,13 +4,14 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 
 @Component({
-    selector: 'app-chart-transfer-completion-statistics',
-    templateUrl: './chart-transfer-completion-statistics.component.html',
-    styleUrls: ['./chart-transfer-completion-statistics.component.css'],
-    imports: [CommonModule, HighchartsChartModule, FormsModule]
+  selector: 'app-chart-transfer-completion-statistics',
+  templateUrl: './chart-transfer-completion-statistics.component.html',
+  styleUrls: ['./chart-transfer-completion-statistics.component.css'],
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
 })
 export class ChartTransferCompletionStatisticsComponent implements OnInit, OnChanges {
   Highcharts: typeof Highcharts = Highcharts;
@@ -23,7 +24,7 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
 
-  constructor(private chartsService: ChartsService) { }
+  constructor(private chartsService: ChartsService, private translate: TranslateService) { }
 
   ngOnInit() {
     this.loadChartData();
@@ -67,7 +68,10 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
             },
           },
           xAxis: {
-            categories: ['Average Created By User', 'Average Transfers'],
+            categories: [
+              this.translate.instant('BAM.CHARTS.TRANSFER_COMPLETION_STATISTICS.AVERAGE_CREATED_BY_USER'),
+              this.translate.instant('BAM.CHARTS.TRANSFER_COMPLETION_STATISTICS.AVERAGE_TRANSFERS')
+            ],
             crosshair: true,
           },
           yAxis: {
@@ -78,7 +82,7 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
           },
           series: [
             {
-              name: 'Transfers',
+              name: this.translate.instant('BAM.CHARTS.TRANSFER_COMPLETION_STATISTICS.AVERAGE_CREATED_BY_USER'),
               type: 'column',
               data: [averageCreatedByUser || 0, averageTransfers || 0],
             },

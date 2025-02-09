@@ -6,17 +6,19 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartAverageDurationForCorrespondenceCompletionComponent } from './chart-average-duration-for-correspondence-completion/chart-average-duration-for-correspondence-completion.component';
 import { TableStructureAverageDurationForCorrespondenceCompletionComponent } from './table-structure-average-duration-for-correspondence-completion/table-structure-average-duration-for-correspondence-completion.component';
 import { LookupsService } from '../../../../../services/lookups.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
-    selector: 'app-kpi-average-duration-for-correspondence-completion',
-    templateUrl: './kpi-average-duration-for-correspondence-completion.component.html',
-    styleUrls: ['./kpi-average-duration-for-correspondence-completion.component.css'],
-    imports: [
-        CommonModule, FormsModule, NgbModalModule,
-        ChartAverageDurationForCorrespondenceCompletionComponent,
-        TableStructureAverageDurationForCorrespondenceCompletionComponent
-    ]
+  selector: 'app-kpi-average-duration-for-correspondence-completion',
+  templateUrl: './kpi-average-duration-for-correspondence-completion.component.html',
+  styleUrls: ['./kpi-average-duration-for-correspondence-completion.component.css'],
+  imports: [
+    CommonModule, FormsModule, NgbModalModule,
+    TranslateModule,
+    ChartAverageDurationForCorrespondenceCompletionComponent,
+    TableStructureAverageDurationForCorrespondenceCompletionComponent
+  ]
 })
 export class KpiAverageDurationForCorrespondenceCompletionComponent implements OnInit {
   year!: number;

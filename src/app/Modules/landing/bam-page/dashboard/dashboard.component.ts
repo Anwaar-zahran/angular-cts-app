@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { ChartTransferCompletionStatisticsComponent } from './charts/chart-transfer-completion-statistics/chart-transfer-completion-statistics.component';
 import { ChartPercentageOfCorrespondencesCompletedAndInprogressComponent } from './charts/chart-percentage-of-correspondences-completed-and-inprogress/chart-percentage-of-correspondences-completed-and-inprogress.component';
@@ -15,20 +16,21 @@ import { LookupsService } from '../../../../services/lookups.service';
 
 
 @Component({
-    selector: 'app-dashboard',
-    imports: [
-        CommonModule,
-        FormsModule,
-        ChartTransferCompletionStatisticsComponent,
-        ChartPercentageOfCorrespondencesCompletedAndInprogressComponent,
-        ChartDocumentsInProgressOverdueAndOnTimeComponent,
-        ChartTransfersInProgressOverdueAndOnTimeComponent,
-        ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent,
-        ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent,
-        ChartCountPerCategoryAndStatusComponent
-    ],
-    templateUrl: './dashboard.component.html',
-    styleUrl: './dashboard.component.scss'
+  selector: 'app-dashboard',
+  imports: [
+    CommonModule,
+    FormsModule,
+    ChartTransferCompletionStatisticsComponent,
+    ChartPercentageOfCorrespondencesCompletedAndInprogressComponent,
+    ChartDocumentsInProgressOverdueAndOnTimeComponent,
+    ChartTransfersInProgressOverdueAndOnTimeComponent,
+    ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent,
+    ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent,
+    ChartCountPerCategoryAndStatusComponent,
+    TranslateModule
+  ],
+  templateUrl: './dashboard.component.html',
+  styleUrl: './dashboard.component.scss'
 })
 
 export class DashboardComponent implements OnInit {
@@ -42,7 +44,11 @@ export class DashboardComponent implements OnInit {
   tempToDate: string = this.toDate;
   isModalOpen: boolean = false;
 
-  constructor(private lookupsService: LookupsService, private modalService: NgbModal) { }
+  constructor(
+    private lookupsService: LookupsService,
+    private modalService: NgbModal,
+    private translate: TranslateService
+  ) { }
 
   ngOnInit() {
     this.getCategories();

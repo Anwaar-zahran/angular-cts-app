@@ -22,6 +22,8 @@ import { InProgressCorrespondencesComponent } from './reports-page/in-progress-c
 import { ToasterComponent } from '../shared/toaster/toaster.component';
 import { ConfirmationmodalComponent } from '../shared/confirmationmodal/confirmationmodal.component'
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../../shared/shared.module';
+import { MailDetailsDialogComponent } from './mail-details-dialog/mail-details-dialog.component';
 
 import { HighchartsChartModule } from 'highcharts-angular';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -31,6 +33,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -68,6 +71,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
+    SharedModule,
+    TranslateModule
   ],
 })
 export class LandingModule { }

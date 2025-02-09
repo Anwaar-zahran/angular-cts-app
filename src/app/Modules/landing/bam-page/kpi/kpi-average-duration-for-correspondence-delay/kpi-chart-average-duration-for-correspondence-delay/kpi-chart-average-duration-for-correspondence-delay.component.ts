@@ -4,13 +4,13 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { KpiService } from '../../../../../../services/kpi.service';
-
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-kpi-chart-average-duration-for-correspondence-delay',
-    templateUrl: './kpi-chart-average-duration-for-correspondence-delay.component.html',
-    styleUrls: ['./kpi-chart-average-duration-for-correspondence-delay.component.css'],
-    imports: [CommonModule, HighchartsChartModule, FormsModule]
+  selector: 'app-kpi-chart-average-duration-for-correspondence-delay',
+  templateUrl: './kpi-chart-average-duration-for-correspondence-delay.component.html',
+  styleUrls: ['./kpi-chart-average-duration-for-correspondence-delay.component.css'],
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
 })
 export class KpiChartAverageDurationForCorrespondenceDelayComponent implements OnInit {
 
@@ -19,7 +19,10 @@ export class KpiChartAverageDurationForCorrespondenceDelayComponent implements O
   chartOptions: Highcharts.Options | undefined;
   isModalOpen: boolean = false;
 
-  constructor(private kpiService: KpiService) { }
+  constructor(
+    private kpiService: KpiService,
+    private translateService: TranslateService
+  ) { }
 
   ngOnInit() {
     this.loadChartData();
@@ -34,8 +37,18 @@ export class KpiChartAverageDurationForCorrespondenceDelayComponent implements O
       .GetAverageDurationForCorrespondenceDelay(this.year)
       .subscribe((res: any) => {
         const monthLabels = [
-          'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+          this.translateService.instant('BAM.MONTHS.JAN'),
+          this.translateService.instant('BAM.MONTHS.FEB'),
+          this.translateService.instant('BAM.MONTHS.MAR'),
+          this.translateService.instant('BAM.MONTHS.APR'),
+          this.translateService.instant('BAM.MONTHS.MAY'),
+          this.translateService.instant('BAM.MONTHS.JUN'),
+          this.translateService.instant('BAM.MONTHS.JUL'),
+          this.translateService.instant('BAM.MONTHS.AUG'),
+          this.translateService.instant('BAM.MONTHS.SEP'),
+          this.translateService.instant('BAM.MONTHS.OCT'),
+          this.translateService.instant('BAM.MONTHS.NOV'),
+          this.translateService.instant('BAM.MONTHS.DEC')
         ];
 
         const dataPoints = Array(12).fill(0);
@@ -55,7 +68,9 @@ export class KpiChartAverageDurationForCorrespondenceDelayComponent implements O
           },
           colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
           subtitle: {
-            text: `Total Average: ${res.totalAverage.toFixed(2)} day(s)`,
+            text: this.translateService.instant('BAM.KPI.DELAY_DURATION.CHART.TOTAL_AVERAGE', {
+              days: res.totalAverage.toFixed(2)
+            }),
           },
           xAxis: {
             categories: monthLabels,
@@ -65,15 +80,15 @@ export class KpiChartAverageDurationForCorrespondenceDelayComponent implements O
           },
           yAxis: {
             title: {
-              text: 'Average (Days)'
+              text: this.translateService.instant('BAM.KPI.DELAY_DURATION.CHART.AVERAGE_DAYS')
             },
             min: 0
           },
           tooltip: {
-            valueSuffix: ' days',
+            valueSuffix: ' ' + this.translateService.instant('BAM.COMMON.DAYS'),
             shared: true,
             formatter: function () {
-              return `${this.series.name}: <b>${this.y?.toFixed(2)} days</b>`;
+              return `${this.series.name}: <b>${this.y?.toFixed(2)} ${this.series.chart.tooltip.options.valueSuffix}</b>`;
             }
           },
           plotOptions: {
@@ -97,7 +112,7 @@ export class KpiChartAverageDurationForCorrespondenceDelayComponent implements O
             enabled: false
           },
           series: [{
-            name: 'All categories',
+            name: this.translateService.instant('BAM.KPI.DELAY_DURATION.CHART.ALL_CATEGORIES'),
             type: 'line',
             data: dataPoints
           }]

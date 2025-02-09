@@ -1,7 +1,7 @@
 <div class="body-content">
     <!-- Title Section -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="page-title">In Progress transfers</h1>
+        <h1 class="page-title">{{ 'REPORTS.IN_PROGRESS_REPORT' | translate }}</h1>
     </div>
 
     <!-- Search Form -->
@@ -10,7 +10,7 @@
             <!-- Structures Select -->
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="form-label">Structure</label>
+                    <label class="form-label">{{ 'REPORTS.STRUCTURE' | translate }}</label>
                     <ng-select [items]="structures" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
                         bindLabel="name" bindValue="id" [(ngModel)]="selectedStructures"
                         [ngModelOptions]="{standalone: true}" [loading]="isLoadingStructures"
@@ -26,7 +26,7 @@
             <!-- Users Select -->
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="form-label">User</label>
+                    <label class="form-label">{{ 'REPORTS.USER' | translate }}</label>
                     <ng-select [items]="users" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
                         bindLabel="fullName" bindValue="id" [(ngModel)]="selectedUsers"
                         [ngModelOptions]="{standalone: true}" [loading]="isLoadingUsers" (search)="onUserSearch($event)"
@@ -41,18 +41,18 @@
             <!-- Date Controls -->
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="form-label">From Date</label>
+                    <label class="form-label">{{ 'REPORTS.FROM_DATE' | translate }}</label>
                     <input class="form-control date-picker" matInput [matDatepicker]="picker1" placeholder="mm-dd-yyyy"
-                    [(ngModel)]="fromDate" name="dp1" (click)="picker1.open()" />
+                        [(ngModel)]="fromDate" name="dp1" (click)="picker1.open()" />
                     <mat-datepicker #picker1></mat-datepicker>
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="form-label">To Date</label>
+                    <label class="form-label">{{ 'REPORTS.TO_DATE' | translate }}</label>
                     <input class="form-control date-picker" matInput [matDatepicker]="picker2" placeholder="mm-dd-yyyy"
-                    [(ngModel)]="toDate" name="dp2" (click)="picker2.open()" />
+                        [(ngModel)]="toDate" name="dp2" (click)="picker2.open()" />
                     <mat-datepicker #picker2></mat-datepicker>
                 </div>
             </div>
@@ -63,17 +63,18 @@
                     <input class="form-check-input" type="checkbox" id="isOverdue" name="isOverdue"
                         [(ngModel)]="isOverdue">
                     <label class="form-check-label" for="isOverdue">
-                        Show Overdue Only
+                        {{ 'REPORTS.SHOW_OVERDUE' | translate }}
                     </label>
                 </div>
             </div>
 
         </div>
-            <!-- Action Buttons -->
-      <div class="d-flex justify-content-end gap-3 mt-2">
-        <button class="btn btn-secondary btn-lg" (click)="clear()">Clear</button>
-        <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-search"></i> Search</button>
-      </div>
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-end gap-3 mt-2">
+            <button class="btn btn-secondary btn-lg" (click)="clear()">{{ 'COMMON.ACTIONS.CLEAR' | translate }}</button>
+            <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-search"></i> {{ 'COMMON.ACTIONS.SEARCH'
+                | translate }}</button>
+        </div>
     </form>
 
     <hr />
@@ -82,12 +83,12 @@
         <table id="inprogress-report-table" class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
             <thead>
                 <tr>
-                    <th>Category</th>
-                    <th>Reference number</th>
-                    <th>Subject</th>
-                    <th>From (Structure / User)</th>
-                    <th>To (Structure / User)</th>
-                    <th>Transfer date</th>
+                    <th>{{ 'REPORTS.CATEGORY' | translate }}</th>
+                    <th>{{ 'REPORTS.REFERENCE_NUMBER' | translate }}</th>
+                    <th>{{ 'REPORTS.SUBJECT' | translate }}</th>
+                    <th>{{ 'REPORTS.FROM_STRUCTURE_USER' | translate }}</th>
+                    <th>{{ 'REPORTS.TO_STRUCTURE_USER' | translate }}</th>
+                    <th>{{ 'REPORTS.TRANSFER_DATE' | translate }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -107,19 +108,24 @@
             <!--<div>
                 Showing {{startIndex}} to {{endIndex}} of {{totalItems}} entries
             </div>-->
-            
-      <div class="dataTables_paginate paging_full_numbers">
-        <a class="paginate_button first" [class.disabled]="currentPage === 1" (click)="goToPage(1)"><i class='text-secondary fa fa-angle-left'></i></a>
 
-        <a class="paginate_button previous" [class.disabled]="currentPage === 1" (click)="previousPage()"><i class='text-secondary fa fa-angle-double-left'></i></a>
+            <div class="dataTables_paginate paging_full_numbers">
+                <a class="paginate_button first" [class.disabled]="currentPage === 1" (click)="goToPage(1)"><i
+                        class='text-secondary fa fa-angle-left'></i></a>
 
-        <a class="paginate_button" *ngFor="let page of pages" [class.active]="page === currentPage" (click)="goToPage(page)">{{page}}</a>
+                <a class="paginate_button previous" [class.disabled]="currentPage === 1" (click)="previousPage()"><i
+                        class='text-secondary fa fa-angle-double-left'></i></a>
 
-        <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()"><i class='text-secondary fa fa-angle-double-right'></i></a>
+                <a class="paginate_button" *ngFor="let page of pages" [class.active]="page === currentPage"
+                    (click)="goToPage(page)">{{page}}</a>
 
-        <a class="paginate_button last" [class.disabled]="currentPage === totalPages" (click)="goToPage(totalPages)"><i class='text-secondary fa fa-angle-right'></i></a>
+                <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()"><i
+                        class='text-secondary fa fa-angle-double-right'></i></a>
 
-    </div>
+                <a class="paginate_button last" [class.disabled]="currentPage === totalPages"
+                    (click)="goToPage(totalPages)"><i class='text-secondary fa fa-angle-right'></i></a>
+
+            </div>
         </div>
     </div>
 </div>

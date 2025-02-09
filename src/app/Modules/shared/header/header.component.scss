@@ -1,0 +1,38 @@
+.language-switcher {
+  .btn-link {
+    color: #333;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    
+    &:hover {
+      color: #666;
+    }
+  }
+
+  .dropdown-menu {
+    min-width: 120px;
+    
+    .dropdown-item {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      
+      &.active {
+        background-color: #f8f9fa;
+        color: #333;
+      }
+      
+      &:hover {
+        background-color: #e9ecef;
+      }
+    }
+  }
+}
+
+// RTL support
+[dir="rtl"] {
+  .language-switcher {
+    .dropdown-menu {
+      text-align: right;
+    }
+  }
+}

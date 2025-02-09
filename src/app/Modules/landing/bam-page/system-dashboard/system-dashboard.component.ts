@@ -8,19 +8,21 @@ import { ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent } fr
 import { ChartSystemDocumentsCompletedOverdueAndOnTimePerCategoryComponent } from './charts/chart-system-documents-completed-overdue-and-onTime-per-category/chart-system-documents-completed-overdue-and-onTime-per-category.component';
 import { ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent } from './charts/chart-system-transfers-inProgressOverdue-and-onTime-per-category/chart-system-transfers-inProgressOverdue-and-onTime-per-category.component';
 import { ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent } from './charts/chart-system-transfers-completed-overdue-and-onTime-per-category/chart-system-transfers-completed-overdue-and-onTime-per-category.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-system-dashboard',
-    imports: [
-        ChartSystemCountPerCategoryAndStatusComponent,
-        ChartSystemStatisticsPerDepartmentComponent,
-        ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent,
-        ChartSystemDocumentsCompletedOverdueAndOnTimePerCategoryComponent,
-        ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent,
-        ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent
-    ],
-    templateUrl: './system-dashboard.component.html',
-    styleUrl: './system-dashboard.component.scss'
+  selector: 'app-system-dashboard',
+  imports: [
+    ChartSystemCountPerCategoryAndStatusComponent,
+    ChartSystemStatisticsPerDepartmentComponent,
+    ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent,
+    ChartSystemDocumentsCompletedOverdueAndOnTimePerCategoryComponent,
+    ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent,
+    ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent,
+    TranslateModule
+  ],
+  templateUrl: './system-dashboard.component.html',
+  styleUrl: './system-dashboard.component.scss'
 })
 export class SystemDashboardComponent {
   Highcharts: typeof Highcharts = Highcharts;

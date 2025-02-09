@@ -4,18 +4,20 @@ import { FormsModule } from '@angular/forms';
 import { Helpers } from '../../../../shared/helpers';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { LookupsService } from '../../../../../services/lookups.service';
+import { TranslateModule } from '@ngx-translate/core';
 import { KpiTableAverageDurationForTransferDelayComponent } from './kpi-table-average-duration-for-transfer-delay/kpi-table-average-duration-for-transfer-delay.component';
 import { KpiChartAverageDurationForTransferDelayComponent } from './kpi-chart-average-duration-for-transfer-delay/kpi-chart-average-duration-for-transfer-delay.component';
 
 @Component({
-    selector: 'app-kpi-average-duration-for-transfer-delay',
-    templateUrl: './kpi-average-duration-for-transfer-delay.component.html',
-    styleUrls: ['./kpi-average-duration-for-transfer-delay.component.css'],
-    imports: [
-        CommonModule, FormsModule, NgbModalModule,
-        KpiChartAverageDurationForTransferDelayComponent,
-        KpiTableAverageDurationForTransferDelayComponent
-    ]
+  selector: 'app-kpi-average-duration-for-transfer-delay',
+  templateUrl: './kpi-average-duration-for-transfer-delay.component.html',
+  styleUrls: ['./kpi-average-duration-for-transfer-delay.component.css'],
+  imports: [
+    CommonModule, FormsModule, NgbModalModule,
+    TranslateModule,
+    KpiChartAverageDurationForTransferDelayComponent,
+    KpiTableAverageDurationForTransferDelayComponent
+  ]
 })
 export class KpiAverageDurationForTransferDelayComponent implements OnInit {
   year!: number;

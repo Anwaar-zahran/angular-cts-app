@@ -6,6 +6,8 @@ import { environment } from '../../../../environments/environment';
 import { VisualTrackingComponent } from '../../shared/visual-tracking/visual-tracking.component';
 import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-dialog.component';
 import { AuthService } from '../../auth/auth.service';
+import { TranslateService } from '@ngx-translate/core';
+
 interface ApiResponseItem {
   id: number;
   documentId: number;
@@ -20,6 +22,7 @@ interface ApiResponseItem {
   isOverDue: boolean;
   row: any;
 }
+
 @Component({
   selector: 'app-guideline-page',
   templateUrl: './guideline-page.component.html',
@@ -37,14 +40,19 @@ export class GuidelinePageComponent implements OnInit {
 
   loading: boolean = true;
 
-  constructor(private http: HttpClient, private router: Router, private dialog: MatDialog, private authService: AuthService) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private dialog: MatDialog,
+    private authService: AuthService,
+    private translateService: TranslateService
+  ) {
     this.accessToken = localStorage.getItem('access_token');
   }
 
   ngOnInit() {
     this.initDtOptions();
-
-    this.fetchData(); // Call the fetchData method
+    this.fetchData();
   }
 
   initDtOptions() {
@@ -56,9 +64,7 @@ export class GuidelinePageComponent implements OnInit {
       paging: true,
       searching: false,
       displayStart: 0,
-      // search:{search:""},
       autoWidth: false,
-      // ordering: true,
       language: {
         paginate: {
           first: "<i class='text-secondary fa fa-angle-left'></i>",
@@ -66,10 +72,10 @@ export class GuidelinePageComponent implements OnInit {
           next: "<i class='text-secondary fa fa-angle-double-right'></i>",
           last: "<i class='text-secondary fa fa-angle-right'></i>",
         },
-        // info: "Showing page _PAGE_ of _TOTAL_",
+        emptyTable: "",
+        zeroRecords: ""
       },
       dom: "tp",
-      //dom: "tpif",  // Add 'i' to show info
       ordering: false
     };
   }
@@ -83,6 +89,7 @@ export class GuidelinePageComponent implements OnInit {
     }
     return decodeURIComponent(escape(window.atob(str))); // Decode base64
   }
+
   fetchData() {
     if (!this.accessToken) {
       console.error('Access token not found');
@@ -96,10 +103,8 @@ export class GuidelinePageComponent implements OnInit {
     const parsedPayload = JSON.parse(decodedPayload);
     this.structureId = parsedPayload.StructureId;
     const headers = new HttpHeaders({
-
       'Authorization': `Bearer ${this.accessToken}`,
     });
-
 
     const formData = new FormData();
     formData.append('length', '1000');
@@ -123,7 +128,7 @@ export class GuidelinePageComponent implements OnInit {
         // Map the API data to respective items
         this.sentItems = sentResponse.data.map((item: ApiResponseItem) => ({
           subject: item.subject,
-          details: `Transferred from: ${item.fromUser}`,
+          details: this.translateService.instant('GUIDELINES.DETAILS.TRANSFERRED_FROM', { user: item.fromUser }),
           date: item.transferDate,
           ref: item.referenceNumber,
           isRead: item.isRead,
@@ -134,7 +139,7 @@ export class GuidelinePageComponent implements OnInit {
         })) || [];
         this.completedItems = completedResponse.data.map((item: ApiResponseItem) => ({
           subject: item.subject,
-          details: `Transferred from: ${item.fromUser}`,
+          details: this.translateService.instant('GUIDELINES.DETAILS.TRANSFERRED_FROM', { user: item.fromUser }),
           date: item.transferDate,
           ref: item.referenceNumber,
           isRead: item.isRead,
@@ -145,7 +150,7 @@ export class GuidelinePageComponent implements OnInit {
         })) || [];
         this.newItems = inboxResponse.data.map((item: ApiResponseItem) => ({
           subject: item.subject,
-          details: `Transferred from: ${item.fromUser}`,
+          details: this.translateService.instant('GUIDELINES.DETAILS.TRANSFERRED_FROM', { user: item.fromUser }),
           date: item.transferDate,
           ref: item.referenceNumber,
           isRead: item.isRead,
@@ -157,19 +162,17 @@ export class GuidelinePageComponent implements OnInit {
         console.log('newItems:', this.newItems);
         console.log('Completed:', this.completedItems);
         console.log('sentItems:', this.sentItems);
-
       })
       .catch(error => {
         console.error('Error fetching data:', error);
       }).finally(() => {
         this.loading = false;
-      });;
-
+      });
   }
+
   active = 1;
 
-
-  showMailDetails(item: ApiResponseItem, showActionbtns:boolean) {
+  showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
     debugger;
     const currentName = this.authService.getDisplayName();
 
@@ -183,11 +186,10 @@ export class GuidelinePageComponent implements OnInit {
         referenceNumber: item.ref,
         row: item.row,
         fromSearch: false,
-        showActionButtons: (showActionbtns && (!item.row ?.isLocked || (item.row ?.isLocked && item.row ?.lockedBy == currentName)))
-
+        showActionButtons: (showActionbtns && (!item.row?.isLocked || (item.row?.isLocked && item.row?.lockedBy == currentName)))
       }
     });
- 
+
     dialogRef.afterClosed().subscribe(result => {
       console.log('Mail details closed', result);
       window.location.reload();

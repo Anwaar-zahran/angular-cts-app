@@ -1,0 +1,529 @@
+{
+    "COMMON": {
+        "SORT_BY": "ترتيب حسب",
+        "TRANSFER_DATE": "تاريخ التحويل",
+        "REFERENCE_NB": "الرقم المرجعي",
+        "SUBJECT": "الموضوع",
+        "NO_DATA": "لا توجد بيانات متاحة في الجدول",
+        "VISUAL_TRACKING": "التتبع المرئي",
+        "TABS": {
+            "NEW": "جديد",
+            "SENT": "مرسل",
+            "COMPLETED": "مكتمل"
+        },
+        "ACTIONS": {
+            "EDIT": "تعديل",
+            "DELETE": "حذف",
+            "SAVE": "حفظ",
+            "CANCEL": "إلغاء",
+            "CLOSE": "إغلاق",
+            "SUBMIT": "إرسال",
+            "SEARCH": "بحث",
+            "CLEAR": "مسح",
+            "BACK": "رجوع",
+            "TITLE": "الإجراءات",
+            "APPLY": "تطبيق"
+        },
+        "SELECT": "اختر",
+        "LOADING": "جاري التحميل...",
+        "DATE": {
+            "FORMAT": "DD/MM/YYYY",
+            "PLACEHOLDER": "اختر التاريخ"
+        },
+        "FROM": "من",
+        "TO": "إلى",
+        "TABLE_INFO": "عرض _START_ إلى _END_ من _TOTAL_ سجل",
+        "TABLE_EMPTY": "لا توجد سجلات متاحة",
+        "SEARCH": "بحث",
+        "FROM_DATE": "من تاريخ",
+        "TO_DATE": "إلى تاريخ",
+        "APPLY": "تطبيق",
+        "CLOSE": "إغلاق",
+        "SELECT_DATE_RANGE": "اختر نطاق التاريخ"
+    },
+    "LOGIN": {
+        "TITLE": "تسجيل الدخول",
+        "USERNAME": "اسم المستخدم",
+        "PASSWORD": "كلمة المرور",
+        "REMEMBER_ME": "تذكرني",
+        "FORGOT_PASSWORD": "نسيت كلمة المرور؟",
+        "ERRORS": {
+            "REQUIRED_USERNAME": "اسم المستخدم مطلوب",
+            "REQUIRED_PASSWORD": "كلمة المرور مطلوبة",
+            "INVALID_CREDENTIALS": "اسم المستخدم أو كلمة المرور غير صحيحة"
+        }
+    },
+    "GUIDELINE": {
+        "TITLE": "الإرشادات",
+        "TABLE": {
+            "HEADERS": {
+                "SUBJECT": "الموضوع",
+                "TRANSFER_DATE": "تاريخ التحويل",
+                "REFERENCE_NB": "رقم المرجع",
+                "ACTIONS": "الإجراءات",
+                "STATUS": "الحالة"
+            }
+        },
+        "DETAILS": {
+            "TRANSFERRED_FROM": "تم التحويل من: {{user}}"
+        },
+        "TABS": {
+            "NEW": "جديد",
+            "SENT": "مرسل",
+            "COMPLETED": "مكتمل"
+        },
+        "NO_DATA": {
+            "NEW": "لا توجد إرشادات جديدة",
+            "SENT": "لا توجد إرشادات مرسلة",
+            "COMPLETED": "لا توجد إرشادات مكتملة"
+        },
+        "ACTIONS": {
+            "VISUAL_TRACKING": "التتبع المرئي",
+            "VIEW_DETAILS": "عرض التفاصيل"
+        }
+    },
+    "MYMAIL": {
+        "TITLE": "بريدي",
+        "INBOX": "الوارد",
+        "OUTBOX": "الصادر",
+        "DRAFT": "المسودات"
+    },
+    "MAIL_DETAILS": {
+        "REPLY_TO": "الرد على",
+        "SENDING_ENTITY": "الجهة المرسلة",
+        "RECEIVING_ENTITY": "الجهة المستلمة",
+        "SUBJECT": "الموضوع",
+        "REFERENCE": "المرجع",
+        "DATE": "التاريخ",
+        "STATUS": "الحالة",
+        "PRIORITY": "الأولوية",
+        "CLASSIFICATION": "التصنيف",
+        "TABS": {
+            "ATTRIBUTES": "السمات",
+            "ATTACHMENTS": "المرفقات",
+            "NOTES": "الملاحظات",
+            "LINKED_CORRESPONDENCE": "المراسلات المرتبطة",
+            "NON_ARCHIVED_ATTACHMENT": "مرفق غير مؤرشف",
+            "VISUAL_TRACKING": "التتبع المرئي",
+            "TRANSACTION_HISTORY": "سجل المعاملات",
+            "ACTIVITY_LOG": "سجل النشاط"
+        },
+        "BUTTONS": {
+            "REPLY": "رد",
+            "TRANSFER": "تحويل",
+            "COMPLETE": "إكمال",
+            "START_WORKFLOW": "بدء سير العمل"
+        }
+    },
+    "VISUAL_TRACKING": {
+        "TITLE": "التتبع المرئي",
+        "DETAILS": {
+            "TITLE": "التفاصيل",
+            "CATEGORY": "الفئة",
+            "TITLE_STRUCTURE": "العنوان/الهيكل",
+            "CREATED_BY_USER": "تم الإنشاء بواسطة/المستخدم",
+            "DATE": "التاريخ"
+        },
+        "TOOLBAR": {
+            "ZOOM": "تكبير/تصغير",
+            "FIT": "ملائمة"
+        },
+        "REFERENCE": "المرجع",
+        "NO_DATA": "لا تتوفر بيانات التتبع"
+    },
+    "REPLY_DIALOG": {
+        "TITLE": "رد",
+        "TO": "إلى",
+        "CC": "نسخة إلى",
+        "SUBJECT": "الموضوع",
+        "MESSAGE": "الرسالة",
+        "ATTACHMENTS": "المرفقات",
+        "ADD_ATTACHMENT": "إضافة مرفق"
+    },
+    "TRANSFER_DIALOG": {
+        "TITLE": "تحويل",
+        "TO": "إلى",
+        "PURPOSE": "الغرض",
+        "NOTES": "ملاحظات"
+    },
+    "TABLE": {
+        "HEADERS": {
+            "ACTIONS": "الإجراءات",
+            "STATUS": "الحالة",
+            "DATE": "التاريخ",
+            "USER": "المستخدم",
+            "ACTION": "الإجراء",
+            "CREATED_DATE": "تاريخ الإنشاء",
+            "NOTE": "ملاحظة"
+        }
+    },
+    "ERRORS": {
+        "REQUIRED_FIELD": "هذا الحقل مطلوب",
+        "INVALID_FORMAT": "صيغة غير صحيحة",
+        "SERVER_ERROR": "حدث خطأ في الخادم",
+        "NO_PERMISSION": "ليس لديك صلاحية"
+    },
+    "DELEGATION": {
+        "TITLE": "التفويضات",
+        "FULL_NAME": "الاسم الكامل",
+        "SELECT_NAME": "اختر الاسم",
+        "FROM_DATE": "من",
+        "TO_DATE": "إلى",
+        "PRIVACY": "الخصوصية",
+        "CATEGORY": "الفئة",
+        "SHOW_OLD_DOCUMENTS": "عرض المستندات القديمة",
+        "CAN_SIGN": "صلاحية التوقيع",
+        "DELETE_CONFIRMATION": "هل أنت متأكد من حذف هذا التفويض؟",
+        "DELETE_SUCCESS": "تم حذف التفويض بنجاح",
+        "SAVE_SUCCESS": "تم حفظ التفويض بنجاح",
+        "UPDATE_SUCCESS": "تم تحديث التفويض بنجاح",
+        "PLACEHOLDERS": {
+            "SELECT_USER": "اختر المستخدم",
+            "SELECT_PRIVACY": "اختر مستوى الخصوصية",
+            "SELECT_CATEGORY": "اختر الفئة",
+            "SELECT_NAME": "اختر الاسم",
+            "FROM_DATE": "اختر تاريخ البداية",
+            "TO_DATE": "اختر تاريخ النهاية",
+            "SEARCH": "بحث...",
+            "SELECT_MULTIPLE": "اختر واحد أو أكثر"
+        },
+        "TABLE": {
+            "DELEGATE_TO": "مفوض إلى",
+            "FROM_DATE": "من تاريخ",
+            "TO_DATE": "إلى تاريخ",
+            "CREATED_DATE": "تاريخ الإنشاء",
+            "PRIVACY": "الخصوصية",
+            "ACTIONS": "الإجراءات"
+        },
+        "ERRORS": {
+            "REQUIRED_NAME": "الاسم الكامل مطلوب",
+            "REQUIRED_FROM_DATE": "تاريخ البداية مطلوب",
+            "REQUIRED_TO_DATE": "تاريخ النهاية مطلوب",
+            "REQUIRED_PRIVACY": "الخصوصية مطلوبة",
+            "REQUIRED_CATEGORY": "الفئة مطلوبة",
+            "INVALID_DATE_RANGE": "يجب أن يكون تاريخ النهاية بعد تاريخ البداية",
+            "OVERLAPPING_DELEGATION": "يوجد تفويض متداخل لهذا المستخدم"
+        },
+        "BUTTONS": {
+            "ADD_NEW": "إضافة تفويض جديد",
+            "EDIT": "تعديل التفويض",
+            "DELETE": "حذف التفويض"
+        }
+    },
+    "MAIL": {
+        "TITLE": "البريد",
+        "TABS": {
+            "NEW": "جديد",
+            "SENT": "مرسل",
+            "COMPLETED": "مكتمل"
+        },
+        "TABLE": {
+            "SUBJECT": "الموضوع",
+            "TRANSFER_DATE": "تاريخ التحويل",
+            "REFERENCE": "المرجع",
+            "ACTIONS": "الإجراءات",
+            "STATUS": "الحالة"
+        },
+        "MESSAGES": {
+            "NO_DATA": "لا توجد رسائل متاحة",
+            "LOADING": "جاري تحميل الرسائل..."
+        },
+        "STATUS": {
+            "READ": "مقروء",
+            "UNREAD": "غير مقروء",
+            "OVERDUE": "متأخر"
+        }
+    },
+    "REPORTS": {
+        "TITLE": "التقارير",
+        "IN_PROGRESS_REPORT": "تقرير قيد التنفيذ",
+        "COMPLETED_TRANSFERS": "التحويلات المكتملة",
+        "IN_PROGRESS_CORRESPONDENCES": "المراسلات قيد التنفيذ",
+        "COMPLETED_CORRESPONDENCES": "المراسلات المكتملة",
+        "STRUCTURE": "الهيكل",
+        "USER": "المستخدم",
+        "FROM_DATE": "من تاريخ",
+        "TO_DATE": "إلى تاريخ",
+        "SHOW_OVERDUE": "إظهار المتأخرة فقط",
+        "CLEAR": "مسح",
+        "SEARCH": "بحث",
+        "CATEGORY": "الفئة",
+        "REFERENCE_NUMBER": "الرقم المرجعي",
+        "SUBJECT": "الموضوع",
+        "FROM_STRUCTURE_USER": "من (الهيكل / المستخدم)",
+        "TO_STRUCTURE_USER": "إلى (الهيكل / المستخدم)",
+        "TRANSFER_DATE": "تاريخ التحويل",
+        "CREATED_DATE": "تاريخ الإنشاء",
+        "SENDING_ENTITY": "الجهة المرسلة",
+        "RECEIVING_ENTITY": "الجهة المستلمة",
+        "PLACEHOLDERS": {
+            "SELECT_STRUCTURE": "اختر الهيكل",
+            "SELECT_USER": "اختر المستخدم",
+            "SELECT_PRIVACY": "اختر مستوى الخصوصية",
+            "SELECT_PRIORITY": "اختر الأولوية",
+            "SELECT_CATEGORY": "اختر الفئة",
+            "FROM_DATE": "اختر تاريخ البداية",
+            "TO_DATE": "اختر تاريخ النهاية",
+            "SEARCH_STRUCTURE": "البحث في الهياكل...",
+            "SEARCH_USER": "البحث عن المستخدمين..."
+        },
+        "PRIVACY": "الخصوصية",
+        "PRIORITY": "الأولوية",
+        "TABLE": {
+            "INFO": "عرض _START_ إلى _END_ من _TOTAL_ سجل",
+            "EMPTY": "لا توجد سجلات متاحة",
+            "LOADING": "جاري تحميل البيانات..."
+        }
+    },
+    "BAM": {
+        "TITLE": "مؤشرات الأداء",
+        "DASHBOARD": {
+            "TITLE": "لوحة معلومات المستخدم",
+            "CHARTS": {
+                "COUNT_PER_CATEGORY": "العدد حسب الفئة والحالة",
+                "STATISTICS_PER_DEPARTMENT": "الإحصائيات حسب القسم",
+                "DOCUMENTS_IN_PROGRESS": "المستندات قيد التنفيذ (متأخرة وفي الوقت المحدد)",
+                "DOCUMENTS_COMPLETED": "المستندات المكتملة (متأخرة وفي الوقت المحدد)",
+                "TRANSFERS_IN_PROGRESS": "التحويلات قيد التنفيذ (متأخرة وفي الوقت المحدد)",
+                "TRANSFERS_COMPLETED": "التحويلات المكتملة (متأخرة وفي الوقت المحدد)",
+                "STATISTICS_PER_STRUCTURE": {
+                    "TITLE": "الإحصائيات حسب الهيكل",
+                    "INFO": "عدد المراسلات لكل هيكل مجمعة حسب الفئة"
+                },
+                "COUNT_PER_STATUS": {
+                    "TITLE": "العدد حسب الحالة مجمعة حسب الفئة",
+                    "INFO": "عدد المراسلات لكل فئة مجمعة حسب الحالة"
+                },
+                "IN_PROGRESS_DOCUMENTS": {
+                    "TITLE": "إحصائيات تاريخ الاستحقاق للمراسلات قيد التنفيذ",
+                    "INFO": "عدد المراسلات قيد التنفيذ لكل فئة مقسمة إلى دائرتين (فقط للمراسلات ذات تاريخ الاستحقاق)"
+                },
+                "COMPLETED_DOCUMENTS": {
+                    "TITLE": "إحصائيات تاريخ الاستحقاق للمراسلات المكتملة",
+                    "INFO": "عدد المراسلات المكتملة التي أنشأتها لكل فئة مقسمة إلى دائرتين (فقط للمراسلات ذات تاريخ الاستحقاق)"
+                },
+                "LABELS": {
+                    "STRUCTURES": "الهياكل",
+                    "CATEGORIES": "الفئات",
+                    "COUNT": "العدد",
+                    "COUNTS": "عدد",
+                    "TOTAL": "المجموع",
+                    "UNKNOWN_CATEGORY": "فئة غير معروفة",
+                    "STRUCTURE": "هيكل",
+                    "DOCUMENT_COUNT": "عدد المستندات",
+                    "DOCUMENTS": "مستندات",
+                    "OVERDUE": "متأخر",
+                    "ON_TIME": "في الوقت المحدد",
+                    "STATUS": "الحالة",
+                    "CATEGORY": "الفئة",
+                    "TRANSFERS": "تحويلات"
+                },
+                "TRANSFERS": {
+                    "IN_PROGRESS": {
+                        "TITLE": "إحصائيات تاريخ الاستحقاق للتحويلات قيد التنفيذ",
+                        "INFO": "عدد التحويلات قيد التنفيذ لكل فئة مقسمة إلى دائرتين (فقط للتحويلات ذات تاريخ الاستحقاق)"
+                    },
+                    "COMPLETED": {
+                        "TITLE": "إحصائيات تاريخ الاستحقاق للتحويلات المكتملة",
+                        "INFO": "عدد التحويلات المكتملة لكل فئة مقسمة إلى دائرتين (فقط للتحويلات ذات تاريخ الاستحقاق)"
+                    }
+                }
+            }
+        },
+        "SYSTEM_DASHBOARD": "لوحة معلومات النظام",
+        "AVERAGE_DURATION_CORRESPONDENCE_COMPLETION": "متوسط مدة إكمال المراسلات",
+        "AVERAGE_DURATION_CORRESPONDENCE_DELAY": "متوسط مدة تأخير المراسلات",
+        "AVERAGE_DURATION_TRANSFER_COMPLETION": "متوسط مدة إكمال التحويلات",
+        "AVERAGE_DURATION_TRANSFER_DELAY": "متوسط مدة تأخير التحويلات",
+        "CHARTS": {
+            "TRANSFER_COMPLETION": "إحصائيات إكمال التحويلات",
+            "TRANSFER_COMPLETION_INFO": "متوسط إكمال التحويلات للتحويلات المرسلة إليك",
+            "DUE_DATE_COMPLETED": "إحصائيات تاريخ الاستحقاق للمراسلات المكتملة",
+            "DUE_DATE_COMPLETED_INFO": "عدد المراسلات المكتملة التي أنشأتها حسب الفئة مقسمة إلى دائرتين (فقط للمراسلات ذات تاريخ الاستحقاق)",
+            "DUE_DATE_IN_PROGRESS": "إحصائيات تاريخ الاستحقاق للمراسلات قيد التنفيذ",
+            "DUE_DATE_IN_PROGRESS_INFO": "عدد المراسلات قيد التنفيذ التي أنشأتها حسب الفئة مقسمة إلى دائرتين (فقط للمراسلات ذات تاريخ الاستحقاق)",
+            "COMPLETION_VS_PROGRESS": "نسبة المراسلات \"المكتملة\" مقابل \"قيد التنفيذ\"",
+            "COMPLETION_VS_PROGRESS_INFO": "نسبة المراسلات التي أنشأتها أو تم تحويلها إليك",
+            "TRANSFERS_COMPLETED": "إحصائيات تاريخ الاستحقاق للتحويلات المكتملة",
+            "TRANSFERS_COMPLETED_INFO": "عدد التحويلات المكتملة المرسلة إليك مجمعة حسب الفئة مقسمة إلى دائرتين (فقط للتحويلات ذات تاريخ الاستحقاق)",
+            "TRANSFERS_IN_PROGRESS": "إحصائيات تاريخ الاستحقاق للتحويلات قيد التنفيذ",
+            "TRANSFERS_IN_PROGRESS_INFO": "عدد التحويلات قيد التنفيذ المرسلة إليك مجمعة حسب الفئة مقسمة إلى دائرتين (فقط للتحويلات ذات تاريخ الاستحقاق)",
+            "FILTER": {
+                "TITLE": "اختر نطاق التاريخ",
+                "FROM_DATE": "من تاريخ",
+                "TO_DATE": "إلى تاريخ",
+                "APPLY": "تطبيق"
+            },
+            "STATUS": {
+                "COMPLETED": "مكتمل",
+                "IN_PROGRESS": "قيد التنفيذ",
+                "OVERDUE": "متأخر",
+                "ON_TIME": "في الوقت المحدد"
+            },
+            "LABELS": {
+                "PERCENTAGE": "النسبة المئوية",
+                "COUNT": "العدد",
+                "CATEGORY": "الفئة",
+                "STATUS": "الحالة"
+            },
+            "TRANSFER_COMPLETION_STATISTICS": {
+                "AVERAGE_CREATED_BY_USER": "متوسط الإنشاء بواسطة المستخدم",
+                "AVERAGE_TRANSFERS": "متوسط التحويلات"
+            },
+            "TITLES": {
+                "COUNT_PER_STATUS": "العدد حسب الحالة مجمعة حسب الفئة",
+                "COMPLETED_DOCUMENTS_DUE_DATE": "إحصائيات تاريخ الاستحقاق للمراسلات المكتملة",
+                "IN_PROGRESS_DOCUMENTS_DUE_DATE": "إحصائيات تاريخ الاستحقاق للمراسلات قيد التنفيذ"
+            },
+            "INFO": {
+                "COUNT_PER_STATUS": "عدد المراسلات لكل فئة مجمعة حسب الحالة",
+                "COMPLETED_DOCUMENTS_DUE_DATE": "عدد المراسلات المكتملة التي أنشأتها لكل فئة مقسمة إلى دائرتين (فقط للمراسلات ذات تاريخ الاستحقاق)",
+                "IN_PROGRESS_DOCUMENTS_DUE_DATE": "عدد المراسلات قيد التنفيذ لكل فئة مقسمة إلى دائرتين (فقط للمراسلات ذات تاريخ الاستحقاق)"
+            },
+            "TITLES": {
+                "STATISTICS_PER_STRUCTURE": "الإحصائيات حسب الهيكل"
+            },
+            "INFO": {
+                "STATISTICS_PER_STRUCTURE": "عدد المراسلات لكل هيكل مجمعة حسب الفئة"
+            },
+            "LABELS": {
+                "STRUCTURES": "الهياكل",
+                "CATEGORIES": "الفئات",
+                "COUNT": "العدد",
+                "COUNTS": "عدد",
+                "TOTAL": "المجموع",
+                "UNKNOWN_CATEGORY": "فئة غير معروفة",
+                "STRUCTURE": "هيكل",
+                "DOCUMENT_COUNT": "عدد المستندات",
+                "DOCUMENTS": "مستندات",
+                "OVERDUE": "متأخر",
+                "ON_TIME": "في الوقت المحدد",
+                "STATUS": "الحالة",
+                "CATEGORY": "الفئة",
+                "TRANSFERS": "تحويلات"
+            }
+        },
+        "KPI": {
+            "AVERAGE_DURATION": {
+                "TITLE": "متوسط مدة إكمال المراسلات",
+                "SELECT_YEAR": "اختر السنة",
+                "YEAR": "السنة",
+                "AVERAGE_PER_STRUCTURE": "المتوسط حسب الهيكل",
+                "STRUCTURE": "الهيكل",
+                "AVERAGE_DAYS": "المتوسط (أيام)",
+                "COMPARE_TO_TOTAL": "مقارنة بالمتوسط الإجمالي",
+                "YEARLY_GRAPH": "الرسم البياني السنوي",
+                "AVERAGE_PER_YEAR": "المتوسط في السنة",
+                "TOTAL_AVERAGE": "المتوسط الإجمالي: {{days}} يوم",
+                "ALL_CATEGORIES": "جميع الفئات"
+            },
+            "DELAY_DURATION": {
+                "TITLE": "متوسط مدة تأخير المراسلات",
+                "SELECT_YEAR": "اختر السنة",
+                "YEAR": "السنة",
+                "TABLE": {
+                    "STRUCTURE": "الهيكل",
+                    "AVERAGE_DAYS": "المتوسط (أيام)",
+                    "COMPARE_TO_TOTAL": "مقارنة بالمتوسط الإجمالي",
+                    "YEARLY_GRAPH": "الرسم البياني السنوي"
+                },
+                "CHART": {
+                    "AVERAGE_PER_YEAR": "المتوسط في السنة",
+                    "INFO_TEXT": "عدد التحويلات قيد التنفيذ لكل فئة مقسمة إلى دائرتين (فقط للتحويلات ذات تاريخ الاستحقاق)",
+                    "YEAR": "السنة",
+                    "TOTAL_AVERAGE": "المتوسط الإجمالي: {{days}} يوم",
+                    "AVERAGE_DAYS": "المتوسط (أيام)",
+                    "ALL_CATEGORIES": "جميع الفئات"
+                }
+            },
+            "TRANSFER_DURATION": {
+                "TITLE": "متوسط مدة إكمال التحويل",
+                "SELECT_YEAR": "اختر السنة",
+                "YEAR": "السنة",
+                "TABLE": {
+                    "AVERAGE_PER_STRUCTURE": "المتوسط حسب الهيكل",
+                    "STRUCTURE": "الهيكل",
+                    "AVERAGE_DAYS": "المتوسط (أيام)",
+                    "COMPARE_TO_TOTAL": "مقارنة بالمتوسط الإجمالي"
+                },
+                "CHART": {
+                    "AVERAGE_PER_YEAR": "المتوسط في السنة",
+                    "TOTAL_AVERAGE": "المتوسط الإجمالي: {{days}} يوم",
+                    "AVERAGE_DAYS": "المتوسط (أيام)",
+                    "ALL_CATEGORIES": "جميع الفئات"
+                }
+            },
+            "TRANSFER_DELAY": {
+                "TITLE": "متوسط مدة تأخير التحويل",
+                "SELECT_YEAR": "اختر السنة",
+                "YEAR": "السنة",
+                "TABLE": {
+                    "STRUCTURE": "الهيكل",
+                    "AVERAGE_DAYS": "المتوسط (أيام)",
+                    "COMPARE_TO_TOTAL": "مقارنة بالمتوسط الإجمالي",
+                    "YEARLY_GRAPH": "الرسم البياني السنوي"
+                },
+                "CHART": {
+                    "AVERAGE_PER_YEAR": "المتوسط في السنة",
+                    "INFO_TEXT": "عدد التحويلات قيد التنفيذ لكل فئة مقسمة إلى دائرتين (فقط للتحويلات ذات تاريخ الاستحقاق)",
+                    "YEAR": "السنة",
+                    "TOTAL_AVERAGE": "المتوسط الإجمالي: {{days}} يوم",
+                    "AVERAGE_DAYS": "المتوسط (أيام)",
+                    "ALL_CATEGORIES": "جميع الفئات"
+                }
+            }
+        },
+        "MONTHS": {
+            "JAN": "يناير",
+            "FEB": "فبراير",
+            "MAR": "مارس",
+            "APR": "أبريل",
+            "MAY": "مايو",
+            "JUN": "يونيو",
+            "JUL": "يوليو",
+            "AUG": "أغسطس",
+            "SEP": "سبتمبر",
+            "OCT": "أكتوبر",
+            "NOV": "نوفمبر",
+            "DEC": "ديسمبر"
+        },
+        "COMMON": {
+            "APPLY": "تطبيق",
+            "NO_DATA": "لا توجد بيانات متاحة",
+            "NO_MATCHING_RECORDS": "لم يتم العثور على سجلات مطابقة",
+            "SHOWING_ENTRIES": "عرض _START_ إلى _END_ من _TOTAL_ سجل",
+            "SHOWING_ZERO_ENTRIES": "عرض 0 إلى 0 من 0 سجل",
+            "UNKNOWN_STRUCTURE": "هيكل غير معروف",
+            "PAGINATION": {
+                "FIRST": "الأول",
+                "PREVIOUS": "السابق",
+                "NEXT": "التالي",
+                "LAST": "الأخير"
+            },
+            "DAYS": "يوم",
+            "SEARCH": "بحث",
+            "FROM": "من",
+            "TO": "إلى",
+            "FROM_DATE": "من تاريخ",
+            "TO_DATE": "إلى تاريخ",
+            "CLOSE": "إغلاق",
+            "SELECT_DATE_RANGE": "اختر نطاق التاريخ"
+        }
+    },
+    "LANDING": {
+        "CARDS": {
+            "MY_MAIL": "بريدي",
+            "GUIDELINES": "بريد للإرشادات",
+            "SIGNATURE": "بريد للتوقيع",
+            "REPORTS": "التقارير",
+            "BAM": "إدارة الأعمال",
+            "SEARCH": "بحث",
+            "DELEGATE": "تفويض"
+        }
+    },
+    "HEADER": {
+        "USER_NAV": {
+            "LOGOUT": "تسجيل الخروج"
+        }
+    }
+}

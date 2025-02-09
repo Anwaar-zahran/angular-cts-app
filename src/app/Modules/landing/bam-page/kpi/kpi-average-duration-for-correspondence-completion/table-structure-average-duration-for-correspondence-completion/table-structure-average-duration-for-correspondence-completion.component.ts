@@ -6,17 +6,19 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTablesModule } from 'angular-datatables';
 import { DataTableDirective } from 'angular-datatables';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-table-structure-average-duration-for-correspondence-completion',
-    templateUrl: './table-structure-average-duration-for-correspondence-completion.component.html',
-    styleUrls: ['./table-structure-average-duration-for-correspondence-completion.component.css'],
-    imports: [
-        CommonModule,
-        DataTablesModule,
-        NgbModule,
-        FormsModule
-    ]
+  selector: 'app-table-structure-average-duration-for-correspondence-completion',
+  templateUrl: './table-structure-average-duration-for-correspondence-completion.component.html',
+  styleUrls: ['./table-structure-average-duration-for-correspondence-completion.component.css'],
+  imports: [
+    CommonModule,
+    DataTablesModule,
+    NgbModule,
+    FormsModule,
+    TranslateModule
+  ]
 })
 export class TableStructureAverageDurationForCorrespondenceCompletionComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })
@@ -38,7 +40,10 @@ export class TableStructureAverageDurationForCorrespondenceCompletionComponent i
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor(private kpiService: KpiService) { }
+  constructor(
+    private kpiService: KpiService,
+    private translateService: TranslateService
+  ) { }
 
   ngOnInit() {
     this.getTotalAverage();
@@ -59,15 +64,15 @@ export class TableStructureAverageDurationForCorrespondenceCompletionComponent i
       searching: false,
       autoWidth: false,
       language: {
-        emptyTable: "No data available",
-        zeroRecords: "No matching records found",
-        info: "Showing _START_ to _END_ of _TOTAL_ entries",
-        infoEmpty: "Showing 0 to 0 of 0 entries",
+        emptyTable: "",
+        zeroRecords: "",
+        info: "",
+        infoEmpty: "",
         paginate: {
-          first: "<i class='text-secondary fa fa-angle-left'></i>",
-          previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-          next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-          last: "<i class='text-secondary fa fa-angle-right'></i>",
+          first: this.translateService.instant('BAM.COMMON.PAGINATION.FIRST'),
+          previous: this.translateService.instant('BAM.COMMON.PAGINATION.PREVIOUS'),
+          next: this.translateService.instant('BAM.COMMON.PAGINATION.NEXT'),
+          last: this.translateService.instant('BAM.COMMON.PAGINATION.LAST')
         }
       },
       dom: "t",
@@ -82,8 +87,8 @@ export class TableStructureAverageDurationForCorrespondenceCompletionComponent i
         const entity = this.entities.find(e => e.id === item.structureId);
         return {
           ...item,
-          structureName: entity ? entity.name : 'Unknown Structure', // Add structure name from entities
-          structureId: item.structureId // Keep original structureId
+          structureName: entity ? entity.name : this.translateService.instant('BAM.COMMON.UNKNOWN_STRUCTURE'),
+          structureId: item.structureId
         };
       });
       this.totalItems = response.recordsTotal;

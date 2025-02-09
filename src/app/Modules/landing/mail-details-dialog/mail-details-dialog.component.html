@@ -1,28 +1,20 @@
 <div class="dialog-header">
   <h2 mat-dialog-title>{{ data.referenceNumber }}</h2>
   <div class="d-flex align-items-center justify-content-end gap-3 flex-1">
-    <!-- <button type="button" class="btn btn-secondary" (click)="showModalTransfer()"><i class="fa fa-reply"></i>Transfer</button> -->
-    <button type="button" class="btn btn-secondary" *ngIf="data?.showActionButtons" (click)="showModalReply()"><i class="fa fa-reply"></i>Reply To</button>
-    <!--<button id="component_1738663510480_btnReplyToUser" type="button" class="btn btn-vip-toolbar ">
-    <i class="fa fa-reply mr-sm"></i>Reply</button>
-    <button id="component_1738663510480_btnComplete" type="button" transferaction="Transfer.Complete" class="btn btn-vip-toolbar ">
-    <i class="fa fa-check-square mr-sm"></i>Complete</button>
-    <button id="component_1738663510480_btnStartWorkflow" type="button" class="btn btn-vip-toolbar ">
-    <i class="fa fa-tasks mr-sm"></i>Start workflow</button>
-    <div id="component_1738663510480_dropupReplyContainer" class="btn-group dropdown">
-      <button type="button" transferaction="Transfer.ReplyBy" class="btn btn-vip-toolbar dropdown-toggle" data-toggle="dropdown">
-        Reply by<i class="fa fa-caret-down ml-sm"></i>
-      </button>-->
-
+    <button type="button" class="btn btn-secondary" *ngIf="data?.showActionButtons" (click)="showModalReply()">
+      <i class="fa fa-reply"></i>{{ 'MAIL_DETAILS.BUTTONS.REPLY' | translate }}
+    </button>
+    <button type="button" class="btn btn-secondary" *ngIf="data?.showActionButtons" (click)="showModalTransfer()">
+      <i class="fa fa-exchange"></i>{{ 'MAIL_DETAILS.BUTTONS.TRANSFER' | translate }}
+    </button>
   </div>
-
-
-  <!--</div>-->
-  <button mat-button mat-dialog-close class="btn btn-transparent"><i class="fa fa-times"></i></button>
+  <button mat-button mat-dialog-close class="btn btn-transparent">
+    <i class="fa fa-times"></i>
+  </button>
 </div>
 
 <mat-dialog-content>
-  <div class="row" style="height: 100%;">
+  <div class="row">
     <div class="col-md-5">
       <div class="tabs-wrapper">
         <button mat-icon-button class="scroll-btn left" (click)="scrollLeft()" *ngIf="checkScroll()">
@@ -31,8 +23,8 @@
 
         <div #tabsContainer class="nav nav-tabs responsive-tabs">
           <div *ngFor="let tab of tabs; let i = index" [ngClass]="{'active': activeTabIndex === i}"
-               (click)="setActiveTab(i)" class="nav-link">
-            {{ tab }}
+            (click)="setActiveTab(i)" class="nav-link">
+            {{ 'MAIL_DETAILS.TABS.' + tab | translate }}
           </div>
         </div>
 
@@ -41,151 +33,127 @@
         </button>
       </div>
 
-     
       <!-- Attributes Tab -->
       <div class="tab-content">
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 0}">
           <div class="p-3">
             <form class="form">
               <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label">Sending entity</label>
-                  <input class="form-control" type="text" [value]="data.row?.sendingEntity|| ''" [disabled]="true" />
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">{{ 'MAIL_DETAILS.SENDING_ENTITY' | translate }}</label>
+                    <input class="form-control" type="text" [value]="data.row?.sendingEntity|| ''" [disabled]="true" />
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label">Receiving entity</label>
-                  <input class="form-control" type="text" [value]="data.row?.receivingEntity|| ''" [disabled]="true" />
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">{{ 'MAIL_DETAILS.RECEIVING_ENTITY' | translate }}</label>
+                    <input class="form-control" type="text" [value]="data.row?.receivingEntity|| ''"
+                      [disabled]="true" />
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label">Carbon copy</label>
-                  <!--<input class="form-control" type="text" [value]="attributes.carbonCopy  || ''" [disabled]="true" />-->
-              <ng-select id="ddlUsers" [(ngModel)]="userId" name="ddlUsers" [items]="carbonUsers || []" bindLabel="name" bindValue="id"
-                             placeholder="Select" class="form-control" [disabled]="true">
-</ng-select>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Carbon copy</label>
+                    <ng-select id="ddlUsers" [(ngModel)]="userId" name="ddlUsers" [items]="carbonUsers || []"
+                      bindLabel="name" bindValue="id" placeholder="Select" class="form-control" [disabled]="true">
+                    </ng-select>
+                  </div>
                 </div>
-              </div>
-              <div class="col-sm-12">
-                <div class="form-group">
-                  <label class="form-label">Subject</label>
-                  <textarea class="form-control" maxlength="2000" rows="5" [disabled]="true">{{data.row.subject||''}}</textarea>
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <textarea class="form-control" maxlength="2000" rows="5"
+                      [disabled]="true">{{data.row.subject||''}}</textarea>
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label">Privacy</label>
-                  <!--<input class="form-control" type="text" [value]="attributes.privacyText" [disabled]="true" />-->
-                  <ng-select id="ddlPrivacy" [(ngModel)]="privacyId" name="ddlPrivacy" [items]="privacy || []" bindLabel="text" bindValue="id"
-                             placeholder="Select" class="form-control" [disabled]="true">
-                  </ng-select>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Privacy</label>
+                    <ng-select id="ddlPrivacy" [(ngModel)]="privacyId" name="ddlPrivacy" [items]="privacy || []"
+                      bindLabel="text" bindValue="id" placeholder="Select" class="form-control" [disabled]="true">
+                    </ng-select>
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label">Priority</label>
-                  <!--<input class="form-control" type="text" [value]="data.row?.priority|| ''" [disabled]="true" />-->
-                  <ng-select id="ddlPriority" [(ngModel)]="priorityId" name="ddlPriority" [items]="priority || []" bindLabel="text" bindValue="id"
-                             placeholder="Select" class="form-control" [disabled]="true">
-                  </ng-select>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Priority</label>
+                    <ng-select id="ddlPriority" [(ngModel)]="priorityId" name="ddlPriority" [items]="priority || []"
+                      bindLabel="text" bindValue="id" placeholder="Select" class="form-control" [disabled]="true">
+                    </ng-select>
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label">Due date</label>
-                  <!-- <input class="form-control date-picker" [value]="data.row?.dueDate" placeholder="yyyy-mm-dd" name="dp2" [disabled]="true" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()" /> 
-                  -->
-                  <input class="form-control date-picker" [value]="attributes?.dueDate" placeholder="yyyy-mm-dd" name="dp2" [disabled]="true" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()" />
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Due date</label>
+                    <input class="form-control date-picker" [value]="attributes?.dueDate" placeholder="yyyy-mm-dd"
+                      name="dp2" [disabled]="true" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()" />
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label">Created date</label>
-                  <input class="form-control date-picker" [value]="data.row?.createdDate" placeholder="yyyy-mm-dd" name="dp1" [disabled]="true" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle()" />
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Created date</label>
+                    <input class="form-control date-picker" [value]="data.row?.createdDate" placeholder="yyyy-mm-dd"
+                      name="dp1" [disabled]="true" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle()" />
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label">Created By</label>
-                  <input class="form-control" type="text" [value]="data.row?.createdByUser" [disabled]="true" />
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Created By</label>
+                    <input class="form-control" type="text" [value]="data.row?.createdByUser" [disabled]="true" />
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label">Importance</label>
-                  <ng-select id="ddlImp" [(ngModel)]="ImpoeranceId" name="ddlImp" [items]="importance || []" bindLabel="text" bindValue="id"
-                             placeholder="Select" class="form-control" [disabled]="true">
-                  </ng-select>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Importance</label>
+                    <ng-select id="ddlImp" [(ngModel)]="ImpoeranceId" name="ddlImp" [items]="importance || []"
+                      bindLabel="text" bindValue="id" placeholder="Select" class="form-control" [disabled]="true">
+                    </ng-select>
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label">Classification</label>
-                  <!--<select class="form-control" [disabled]="true">
-                    <option value="1">Normal</option>
-                    <option value="2">Medium</option>
-                    <option value="3">Urgent</option>
-                  </select>-->
-                  <ng-select id="ddlClass" [(ngModel)]="classId" name="ddlClass" [items]="classification || []" bindLabel="text" bindValue="id"
-                             placeholder="Select" class="form-control" [disabled]="true">
-                  </ng-select>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Classification</label>
+                    <ng-select id="ddlClass" [(ngModel)]="classId" name="ddlClass" [items]="classification || []"
+                      bindLabel="text" bindValue="id" placeholder="Select" class="form-control" [disabled]="true">
+                    </ng-select>
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                <label class="form-label">Document Type</label>
-                <input class="form-control" type="text" [value]="attributes?.documentType?.text" [disabled]="true" />
-                 
-                                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Document Type</label>
+                    <input class="form-control" type="text" [value]="attributes?.documentType?.text"
+                      [disabled]="true" />
+                  </div>
                 </div>
-              <!--<div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label">Document Type</label>
-                  <select class="form-control" [disabled]="true">
-                    <option value="1">Normal</option>
-                    <option value="2">Medium</option>
-                    <option value="3">Urgent</option>
-                  </select>
-                </div>
-              </div>-->
-              <!--<div class="col-sm-12">
-                <div class="form-group">
-                  <label class="form-label">Body</label>
-                  <textarea class="form-control" maxlength="2000" rows="5" [disabled]="true">{{attributes.body}}</textarea>
-                </div>
-              </div>-->
               </div>
             </form>
           </div>
         </div>
 
-
-       <!-- Attachments Tab -->
-       <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 1}">
-        <div class="p-3">
-          <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-            <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodeToggle class="mat-tree-node"
-              [ngStyle]="{'--level': treeControl.getLevel(node)}">
-              <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
-                <i class="fa" [ngClass]="treeControl.isExpanded(node) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
-              </button>
-              <i class="far fa-folder"></i>
-              <span>{{node.name}}</span>
-            </mat-tree-node>
-            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle class="mat-tree-node"
-              [ngStyle]="{'--level': treeControl.getLevel(node)}">
-              <a href="#" class="mx-2 align-items-center" [ngClass]="{'selected': selectedNode === node}"
-                (click)="selectNode(node, $event)">
-                <i class="far fa-file"></i>
+        <!-- Attachments Tab -->
+        <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 1}">
+          <div class="p-3">
+            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+              <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodeToggle class="mat-tree-node"
+                [ngStyle]="{'--level': treeControl.getLevel(node)}">
+                <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+                  <i class="fa" [ngClass]="treeControl.isExpanded(node) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+                </button>
+                <i class="far fa-folder"></i>
                 <span>{{node.name}}</span>
-              </a>
-            </mat-tree-node>
-          </mat-tree>
+              </mat-tree-node>
+              <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle class="mat-tree-node"
+                [ngStyle]="{'--level': treeControl.getLevel(node)}">
+                <a href="#" class="mx-2 align-items-center" [ngClass]="{'selected': selectedNode === node}"
+                  (click)="selectNode(node, $event)">
+                  <i class="far fa-file"></i>
+                  <span>{{node.name}}</span>
+                </a>
+              </mat-tree-node>
+            </mat-tree>
+          </div>
         </div>
-      </div>
         <!-- Notes Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 2}">
           <div class="position-relative static-pagination">
@@ -345,7 +313,7 @@
     <div class="col-md-7" style="height: calc(90vh - 100px);">
       <div *ngIf="selectedDocumentId && documentViewerUrl" style="height: 100%;">
         <iframe id="component_1738404262045_viewerFrame" style="width: 100%; height: 100%; border: 0px; padding: 0px;"
-                [src]="documentViewerUrl"></iframe>
+          [src]="documentViewerUrl"></iframe>
       </div>
     </div>
   </div>

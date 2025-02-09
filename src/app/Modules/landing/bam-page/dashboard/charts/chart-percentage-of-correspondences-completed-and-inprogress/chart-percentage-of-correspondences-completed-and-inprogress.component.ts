@@ -4,13 +4,14 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 
 @Component({
-    selector: 'app-chart-percentage-of-correspondences-completed-and-inprogress',
-    templateUrl: './chart-percentage-of-correspondences-completed-and-inprogress.component.html',
-    styleUrls: ['./chart-percentage-of-correspondences-completed-and-inprogress.component.css'],
-    imports: [CommonModule, HighchartsChartModule, FormsModule]
+  selector: 'app-chart-percentage-of-correspondences-completed-and-inprogress',
+  templateUrl: './chart-percentage-of-correspondences-completed-and-inprogress.component.html',
+  styleUrls: ['./chart-percentage-of-correspondences-completed-and-inprogress.component.css'],
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
 })
 export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent implements OnInit, OnChanges {
 
@@ -25,7 +26,10 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
 
-  constructor(private chartsService: ChartsService) { }
+  constructor(
+    private chartsService: ChartsService,
+    private translate: TranslateService
+  ) { }
 
   ngOnInit() {
     // Only load chart data when categories are available
@@ -50,46 +54,46 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
         categoryIds: []
       })
       .subscribe((res: { text: string, count: number }[]) => {
-
-
-        this.chartOptions = {
-          chart: {
-            type: 'pie',
-          },
-          title: {
-            text: '',
-          },
-          colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
-          exporting: {
-            enabled: true,
-            buttons: {
-              contextButton: {
-                menuItems: [
-                  'viewFullscreen',
-                  'downloadPNG',
-                  'downloadJPEG',
-                  'downloadPDF',
-                  'downloadSVG'
-                ]
+        this.translate.get(['BAM.CHARTS.COMPLETION_VS_PROGRESS']).subscribe(translations => {
+          this.chartOptions = {
+            chart: {
+              type: 'pie',
+            },
+            title: {
+              text: '',
+            },
+            colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
+            exporting: {
+              enabled: true,
+              buttons: {
+                contextButton: {
+                  menuItems: [
+                    'viewFullscreen',
+                    'downloadPNG',
+                    'downloadJPEG',
+                    'downloadPDF',
+                    'downloadSVG'
+                  ]
+                },
               },
             },
-          },
-          plotOptions: {
-            pie: {
-              allowPointSelect: true,
-              cursor: 'pointer',
-              dataLabels: {
-                enabled: true,
-                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            plotOptions: {
+              pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                  enabled: true,
+                  format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                }
               }
-            }
-          },
-          series: [{
-            name: 'Transfers',
-            type: 'pie',
-            data: res.map(item => [item.text, item.count])
-          }]
-        };
+            },
+            series: [{
+              name: translations['BAM.CHARTS.COMPLETION_VS_PROGRESS'],
+              type: 'pie',
+              data: res.map(item => [this.translate.instant(item.text), item.count])
+            }]
+          };
+        });
       });
   }
 

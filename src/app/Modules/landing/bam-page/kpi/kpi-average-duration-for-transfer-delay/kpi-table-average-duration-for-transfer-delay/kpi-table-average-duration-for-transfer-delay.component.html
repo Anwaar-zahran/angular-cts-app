@@ -1,30 +1,30 @@
-
-  <!-- Table -->
-  <div class="table-container overflow-x-auto">
-    <table id="grdAveragePerStructureItems" class="table dataTable no-footer" role="grid">
-      <thead>
-        <tr role="row">
-          <th class="min-max-width-50-250">Structure</th>
-          <th class="min-max-width-50-250">Average (Days)</th>
-          <th class="min-max-width-50-250">Compare to total average</th>
-          <!--
+<!-- Table -->
+<div class="table-container overflow-x-auto">
+  <table id="grdAveragePerStructureItems" class="table dataTable no-footer" role="grid">
+    <thead>
+      <tr role="row">
+        <th class="min-max-width-50-250">{{ 'BAM.KPI.TRANSFER_DELAY.TABLE.STRUCTURE' | translate }}</th>
+        <th class="min-max-width-50-250">{{ 'BAM.KPI.TRANSFER_DELAY.TABLE.AVERAGE_DAYS' | translate }}</th>
+        <th class="min-max-width-50-250">{{ 'BAM.KPI.TRANSFER_DELAY.TABLE.COMPARE_TO_TOTAL' | translate }}</th>
+        <!--
           <th class="min-max-width-50-250">Yearly graph</th>
           -->
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of data" role="row">
-          <td class="min-max-width-50-250" title="{{item.structureName}}">
-            <span style="color:var(--secondary-color);text-decoration: underline;cursor: pointer;" class="drawuserstructure"
-              (click)="drawStructureUserTable('AverageDurationForCorrespondenceCompletion', item.average, year, item.userId, item.structureId)">
-              {{item.structureName}}
-            </span>
-          </td>
-          <td class="min-max-width-50-250" title="{{item.average}}">{{item.average.toFixed(2)}}</td>
-          <td class="min-max-width-50-250" title="{{item.average - totalAverage}}">
-            {{(item.average - totalAverage).toFixed(2)}}
-          </td>
-          <!--
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of data" role="row">
+        <td class="min-max-width-50-250" title="{{item.structureName}}">
+          <span style="color:var(--secondary-color);text-decoration: underline;cursor: pointer;"
+            class="drawuserstructure"
+            (click)="drawStructureUserTable('AverageDurationForCorrespondenceCompletion', item.average, year, item.userId, item.structureId)">
+            {{item.structureName}}
+          </span>
+        </td>
+        <td class="min-max-width-50-250" title="{{item.average}}">{{item.average.toFixed(2)}}</td>
+        <td class="min-max-width-50-250" title="{{item.average - totalAverage}}">
+          {{(item.average - totalAverage).toFixed(2)}}
+        </td>
+        <!--
           <td class="min-max-width-50-250">
             <span
               (click)="openStructureChart('AverageDurationForCorrespondenceCompletion', item.average, year, item.userId, item.structureId)"
@@ -33,26 +33,39 @@
             </span>
           </td>
           -->
-        </tr>
-      </tbody>
-    </table>
+      </tr>
+    </tbody>
+  </table>
 
-    <!-- Only show pagination if there's data -->
-    <div class="d-flex justify-content-center align-items-center mt-3" *ngIf="data && data.length > 0">
-      <!--<div>
+  <!-- Only show pagination if there's data -->
+  <div class="d-flex justify-content-center align-items-center mt-3" *ngIf="data && data.length > 0">
+    <!--<div>
         Showing {{startIndex}} to {{endIndex}} of {{totalItems}} entries
       </div>-->
-      <div class="dataTables_paginate paging_full_numbers">
-        <a class="paginate_button first" [class.disabled]="currentPage === 1" (click)="goToPage(1)"><i class='text-secondary fa fa-angle-left'></i></a>
+    <div class="dataTables_paginate paging_full_numbers">
+      <a class="paginate_button first" [class.disabled]="currentPage === 1" (click)="goToPage(1)"
+        [attr.aria-label]="'BAM.COMMON.PAGINATION.FIRST' | translate">
+        <i class='text-secondary fa fa-angle-left'></i>
+      </a>
 
-        <a class="paginate_button previous" [class.disabled]="currentPage === 1" (click)="previousPage()"><i class='text-secondary fa fa-angle-double-left'></i></a>
+      <a class="paginate_button previous" [class.disabled]="currentPage === 1" (click)="previousPage()"
+        [attr.aria-label]="'BAM.COMMON.PAGINATION.PREVIOUS' | translate">
+        <i class='text-secondary fa fa-angle-double-left'></i>
+      </a>
 
-        <a class="paginate_button" *ngFor="let page of pages" [class.active]="page === currentPage" (click)="goToPage(page)">{{page}}</a>
+      <a class="paginate_button" *ngFor="let page of pages" [class.active]="page === currentPage"
+        (click)="goToPage(page)">{{page}}</a>
 
-        <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()"><i class='text-secondary fa fa-angle-double-right'></i></a>
+      <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()"
+        [attr.aria-label]="'BAM.COMMON.PAGINATION.NEXT' | translate">
+        <i class='text-secondary fa fa-angle-double-right'></i>
+      </a>
 
-        <a class="paginate_button last" [class.disabled]="currentPage === totalPages" (click)="goToPage(totalPages)"><i class='text-secondary fa fa-angle-right'></i></a>
+      <a class="paginate_button last" [class.disabled]="currentPage === totalPages" (click)="goToPage(totalPages)"
+        [attr.aria-label]="'BAM.COMMON.PAGINATION.LAST' | translate">
+        <i class='text-secondary fa fa-angle-right'></i>
+      </a>
 
-    </div>
     </div>
   </div>
+</div>

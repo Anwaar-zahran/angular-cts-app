@@ -1,52 +1,55 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-bam-page',
-    templateUrl: './bam-page.component.html',
-    styleUrl: './bam-page.component.scss',
-    standalone: false
+  selector: 'app-bam-page',
+  templateUrl: './bam-page.component.html',
+  styleUrl: './bam-page.component.scss',
+  standalone: false
 })
 export class BamPageComponent {
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private translate: TranslateService
+  ) { }
 
   BAMCards = [
     {
       backgroundColor: '#DEF5FF',
       imgSrc: 'assets/images/icons/BAM.png',
-      title: 'Dashboard',
+      title: 'BAM.DASHBOARD.TITLE',
       link: '/bam/dashboard',
     },
     {
       backgroundColor: '#FEEAF3',
       imgSrc: 'assets/images/icons/BAM.png',
-      title: 'System Dashboard',
+      title: 'BAM.SYSTEM_DASHBOARD',
       link: '/bam/system-dashboard',
     },
     {
       backgroundColor: '#DEF5FF',
       imgSrc: 'assets/images/icons/BAM.png',
-      title: 'Average Duration for Correspondence Completion',
+      title: 'BAM.AVERAGE_DURATION_CORRESPONDENCE_COMPLETION',
       link: '/bam/kpis/kpi-average-duration-for-correspondence-completion',
     },
     {
       backgroundColor: '#DEF5FF',
       imgSrc: 'assets/images/icons/BAM.png',
-      title: 'Average Duration for Correspondence Delay',
+      title: 'BAM.AVERAGE_DURATION_CORRESPONDENCE_DELAY',
       link: '/bam/kpis/kpi-average-duration-for-correspondence-delay',
     },
     {
       backgroundColor: '#D2FAF1',
       imgSrc: 'assets/images/icons/BAM.png',
-      title: 'Average duration for transfer completion',
+      title: 'BAM.AVERAGE_DURATION_TRANSFER_COMPLETION',
       link: '/bam/kpis/kpi-average-duration-for-transfer-completion',
     },
     {
       backgroundColor: '#FEEAF3',
       imgSrc: 'assets/images/icons/BAM.png',
-      title: 'Average duration for transfer delay',
+      title: 'BAM.AVERAGE_DURATION_TRANSFER_DELAY',
       link: '/bam/kpis/kpi-average-duration-for-transfer-delay',
     }
-
   ];
 }

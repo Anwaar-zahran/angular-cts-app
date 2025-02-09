@@ -4,18 +4,20 @@ import { FormsModule } from '@angular/forms';
 import { Helpers } from '../../../../shared/helpers';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { LookupsService } from '../../../../../services/lookups.service';
+import { TranslateModule } from '@ngx-translate/core';
 import { KpiChartAverageDurationForCorrespondenceDelayComponent } from './kpi-chart-average-duration-for-correspondence-delay/kpi-chart-average-duration-for-correspondence-delay.component';
 import { KpiTableAverageDurationForCorrespondenceDelayComponent } from './kpi-table-average-duration-for-correspondence-delay/kpi-table-average-duration-for-correspondence-delay.component';
 
 @Component({
-    selector: 'app-kpi-average-duration-for-correspondence-delay',
-    templateUrl: './kpi-average-duration-for-correspondence-delay.component.html',
-    styleUrls: ['./kpi-average-duration-for-correspondence-delay.component.css'],
-    imports: [
-        CommonModule, FormsModule, NgbModalModule,
-        KpiChartAverageDurationForCorrespondenceDelayComponent,
-        KpiTableAverageDurationForCorrespondenceDelayComponent
-    ]
+  selector: 'app-kpi-average-duration-for-correspondence-delay',
+  templateUrl: './kpi-average-duration-for-correspondence-delay.component.html',
+  styleUrls: ['./kpi-average-duration-for-correspondence-delay.component.css'],
+  imports: [
+    CommonModule, FormsModule, NgbModalModule,
+    TranslateModule,
+    KpiChartAverageDurationForCorrespondenceDelayComponent,
+    KpiTableAverageDurationForCorrespondenceDelayComponent
+  ]
 })
 export class KpiAverageDurationForCorrespondenceDelayComponent implements OnInit {
 

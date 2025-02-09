@@ -5,12 +5,13 @@ import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-chart-count-per-category-and-status',
-    templateUrl: './chart-count-per-category-and-status.component.html',
-    styleUrls: ['./chart-count-per-category-and-status.component.css'],
-    imports: [CommonModule, HighchartsChartModule, FormsModule]
+  selector: 'app-chart-count-per-category-and-status',
+  templateUrl: './chart-count-per-category-and-status.component.html',
+  styleUrls: ['./chart-count-per-category-and-status.component.css'],
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
 })
 export class ChartCountPerCategoryAndStatusComponent implements OnInit {
   @Input() categories: { id: number, text: string }[] = [];
@@ -25,7 +26,11 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit {
   isModalOpen: boolean = false;
   statuses: { id: number, text: string }[] = [];
 
-  constructor(private chartsService: ChartsService, private lookupsService: LookupsService) { }
+  constructor(
+    private chartsService: ChartsService,
+    private lookupsService: LookupsService,
+    private translate: TranslateService
+  ) { }
 
   ngOnInit() {
     // Only load chart data when categories are available
@@ -46,6 +51,9 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit {
   }
 
   private loadChartData() {
+    // Store translated text before setting chart options
+    const totalLabel = this.translate.instant('BAM.CHARTS.LABELS.TOTAL');
+
     this.chartsService
       .GetCountPerCategoryAndStatusByUser({
         fromDate: this.fromDate,
@@ -107,10 +115,10 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit {
           },
           tooltip: {
             headerFormat: '<b>{point.x}</b><br/>',
-            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
+            pointFormat: `{series.name}: {point.y}<br/>${totalLabel}: {point.stackTotal}`,
             formatter: function () {
               if (this.y === 0) return false; // Hide tooltip for zero values
-              return `${this.series.name}: ${this.y}<br/>Total: ${this.total}`;
+              return `${this.series.name}: ${this.y}<br/>${totalLabel}: ${this.total}`;
             }
           },
           plotOptions: {

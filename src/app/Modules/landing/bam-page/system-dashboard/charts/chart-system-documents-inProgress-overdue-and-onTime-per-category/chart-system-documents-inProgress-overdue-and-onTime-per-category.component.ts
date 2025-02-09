@@ -5,13 +5,14 @@ import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 
 @Component({
-    selector: 'app-chart-system-documents-inProgress-overdue-and-onTime-per-category',
-    templateUrl: './chart-system-documents-inProgress-overdue-and-onTime-per-category.component.html',
-    styleUrls: ['./chart-system-documents-inProgress-overdue-and-onTime-per-category.component.css'],
-    imports: [CommonModule, HighchartsChartModule, FormsModule]
+  selector: 'app-chart-system-documents-inProgress-overdue-and-onTime-per-category',
+  templateUrl: './chart-system-documents-inProgress-overdue-and-onTime-per-category.component.html',
+  styleUrls: ['./chart-system-documents-inProgress-overdue-and-onTime-per-category.component.css'],
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
 })
 export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent implements OnInit {
 
@@ -26,7 +27,11 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
 
-  constructor(private chartsService: ChartsService, private lookupsService: LookupsService) { }
+  constructor(
+    private chartsService: ChartsService,
+    private lookupsService: LookupsService,
+    private translateService: TranslateService
+  ) { }
 
   ngOnInit() {
     // Only load chart data when categories are available
@@ -81,18 +86,19 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
       xAxis: {
         categories: categories,
         title: {
-          text: 'Categories'
+          text: this.translateService.instant('BAM.CHARTS.LABELS.CATEGORIES')
         }
       },
       yAxis: {
         min: 0,
         title: {
-          text: 'Count'
+          text: this.translateService.instant('BAM.CHARTS.LABELS.COUNT')
         }
       },
       tooltip: {
         shared: true,
-        pointFormat: '<b>{series.name}</b>: {point.y} <br/>'
+        pointFormat: '<b>{series.name}</b>: {point.y} ' +
+          this.translateService.instant('BAM.CHARTS.LABELS.DOCUMENTS') + '<br/>'
       },
       plotOptions: {
         column: {
@@ -104,16 +110,16 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
       },
       series: [
         {
-          name: 'Overdue',
+          name: this.translateService.instant('BAM.CHARTS.LABELS.OVERDUE'),
           type: 'column',
           data: overdueData,
-          color: '#8D0034' // Red
+          color: '#8D0034'
         },
         {
-          name: 'On-Time',
+          name: this.translateService.instant('BAM.CHARTS.LABELS.ON_TIME'),
           type: 'column',
           data: onTimeData,
-          color: '#00695E' // Green
+          color: '#00695E'
         }
       ]
     };

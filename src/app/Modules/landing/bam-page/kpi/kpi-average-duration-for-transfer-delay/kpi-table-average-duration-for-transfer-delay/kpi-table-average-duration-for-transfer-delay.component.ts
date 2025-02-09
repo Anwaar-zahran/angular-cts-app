@@ -5,17 +5,19 @@ import { KpiService } from '../../../../../../services/kpi.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-kpi-table-average-duration-for-transfer-delay',
-    templateUrl: './kpi-table-average-duration-for-transfer-delay.component.html',
-    styleUrls: ['./kpi-table-average-duration-for-transfer-delay.component.css'],
-    imports: [
-        CommonModule,
-        DataTablesModule,
-        NgbModule,
-        FormsModule
-    ]
+  selector: 'app-kpi-table-average-duration-for-transfer-delay',
+  templateUrl: './kpi-table-average-duration-for-transfer-delay.component.html',
+  styleUrls: ['./kpi-table-average-duration-for-transfer-delay.component.css'],
+  imports: [
+    CommonModule,
+    DataTablesModule,
+    NgbModule,
+    FormsModule,
+    TranslateModule
+  ]
 })
 export class KpiTableAverageDurationForTransferDelayComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })
@@ -37,7 +39,10 @@ export class KpiTableAverageDurationForTransferDelayComponent implements OnInit 
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor(private kpiService: KpiService) { }
+  constructor(
+    private kpiService: KpiService,
+    private translateService: TranslateService
+  ) { }
 
   ngOnInit() {
     this.initDtOptions();
@@ -57,16 +62,10 @@ export class KpiTableAverageDurationForTransferDelayComponent implements OnInit 
       searching: false,
       autoWidth: false,
       language: {
-        emptyTable: "No data available",
-        zeroRecords: "No matching records found",
-        info: "Showing _START_ to _END_ of _TOTAL_ entries",
-        infoEmpty: "Showing 0 to 0 of 0 entries",
-        paginate: {
-          first: "<i class='text-secondary fa fa-angle-left'></i>",
-          previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-          next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-          last: "<i class='text-secondary fa fa-angle-right'></i>",
-        }
+        emptyTable: "",
+        zeroRecords: "",
+        info: "",
+        infoEmpty: "",
       },
       dom: "t",
       ordering: false

@@ -6,6 +6,8 @@ import { environment } from '../../../../environments/environment';
 import { VisualTrackingComponent } from '../../shared/visual-tracking/visual-tracking.component';
 import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-dialog.component';
 import { AuthService } from '../../auth/auth.service';
+import { TranslateService } from '@ngx-translate/core';
+
 interface ApiResponseItem {
   id: number;
   documentId: number;
@@ -20,6 +22,7 @@ interface ApiResponseItem {
   isOverDue: boolean;
   row: any;
 }
+
 @Component({
   selector: 'app-mail-page',
   templateUrl: './mail-page.component.html',
@@ -31,81 +34,54 @@ export class MailPageComponent implements OnInit {
   accessToken: string | null;
   structureId: any; // Declare at class level
   //
-  dtOptions: DataTables.Settings = {};
+  dtOptions: any = {};
   newItems: any[] = [];
   sentItems: any[] = [];
   completedItems: any[] = [];
 
   loading: boolean = true; // Loading state
 
-  constructor(private http: HttpClient, private router: Router, private dialog: MatDialog,private  authService: AuthService) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private dialog: MatDialog,
+    private authService: AuthService,
+    private translate: TranslateService
+  ) {
     this.accessToken = localStorage.getItem('access_token');
   }
 
   ngOnInit() {
     this.initDtOptions();
-
-    // try {
-    // // const decodedToken: any = jwtDecode(this.accessToken);
-    // //const payload =this.accessToken.split('.')[1]; // Get the payload (2nd part)
-    //   //this.structureId = decodedToken.structureId; // Adjust the property name as per your token's payload
-    //   console.log('Structure ID:', this.structureId);
-    // } catch (error) {
-    //   console.error('Token decoding failed:', error);
-    // }
-    this.fetchData(); // Call the fetchData method
+    this.loadData();
   }
 
-  initDtOptions() {
-    this.dtOptions = {
-      pageLength: 10,
-      search: false,
-      order: [],
-      pagingType: 'full_numbers',
-      paging: true,
-      searching: false,
-      displayStart: 0,
-      // search:{search:""},
-      autoWidth: false,
-      // ordering: true,
-      language: {
-        paginate: {
-          first: "<i class='text-secondary fa fa-angle-left'></i>",
-          previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-          next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-          last: "<i class='text-secondary fa fa-angle-right'></i>",
+  private initDtOptions() {
+    this.translate.get('COMMON').subscribe(translations => {
+      this.dtOptions = {
+        pageLength: 10,
+        search: false,
+        order: [],
+        pagingType: 'full_numbers',
+        paging: true,
+        searching: false,
+        displayStart: 0,
+        autoWidth: false,
+        language: {
+          paginate: {
+            first: "<i class='text-secondary fa fa-angle-left'></i>",
+            previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
+            next: "<i class='text-secondary fa fa-angle-double-right'></i>",
+            last: "<i class='text-secondary fa fa-angle-right'></i>",
+          },
+          emptyTable: ""
         },
-        // info: "Showing page _PAGE_ of _TOTAL_",
-      },
-      dom: "tp",
-      //dom: "tpif",  // Add 'i' to show info
-      ordering: false
-    };
+        dom: "tp",
+        ordering: false
+      };
+    });
   }
-  initDtOptions1() {
-    this.dtOptions = {
-      pageLength: 10,
-      search: false,
-      order: [],
-      pagingType: 'full_numbers',
-      paging: true,
-      searching: false,
-      displayStart: 0,
-      // search:{search:""},
-      autoWidth: false,
-      // ordering: true,
-      language: {
-        paginate: {
-          first: "<i class='text-secondary fa fa-angle-left'></i>",
-          previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-          next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-          last: "<i class='text-secondary fa fa-angle-right'></i>",
-        },
-      },
-      dom: "tp",
-      ordering: false
-    };
-  }
+
   base64UrlDecode(str: string): string {
     // Replace non-URL safe characters and pad with `=`
     str = str.replace(/-/g, '+').replace(/_/g, '/');
@@ -115,7 +91,8 @@ export class MailPageComponent implements OnInit {
     }
     return decodeURIComponent(escape(window.atob(str))); // Decode base64
   }
-  fetchData() {
+
+  loadData() {
     if (!this.accessToken) {
       console.error('Access token not found');
 
@@ -131,13 +108,11 @@ export class MailPageComponent implements OnInit {
       'Authorization': `Bearer ${this.accessToken}`,
     });
 
-
     const formData = new FormData();
     formData.append('length', '1000');
     formData.append('structureId', this.structureId);
     formData.append('PurposeId', '8');
     // formData.append('NodeId', '34');
-
 
     const callApi = (url: string) => {
       return this.http.post<any>(url, formData, { headers }).toPromise();
@@ -198,15 +173,14 @@ export class MailPageComponent implements OnInit {
       }).finally(() => {
         this.loading = false; // Set loading to false after data fetch
       });;
-
   }
-  active = 1;
 
+  active = 1;
 
   showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
     debugger;
     const currentName = this.authService.getDisplayName();
-    console.log("Name=",currentName);
+    console.log("Name=", currentName);
     const dialogRef = this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
       width: '90%',
@@ -217,11 +191,10 @@ export class MailPageComponent implements OnInit {
         referenceNumber: item.ref,
         row: item.row,
         fromSearch: false,
-        showActionButtons: (showActionbtns && (!item.row ?.isLocked || (item.row ?.isLocked && item.row ?.lockedBy == currentName)))
-
+        showActionButtons: (showActionbtns && (!item.row?.isLocked || (item.row?.isLocked && item.row?.lockedBy == currentName)))
       }
     });
- 
+
     dialogRef.afterClosed().subscribe(result => {
       console.log('Mail details closed', result);
       window.location.reload();

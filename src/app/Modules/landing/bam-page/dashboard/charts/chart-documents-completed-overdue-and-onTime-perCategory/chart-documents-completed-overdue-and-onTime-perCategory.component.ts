@@ -5,12 +5,13 @@ import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-chart-documents-completed-overdue-and-onTime-perCategory',
-    templateUrl: './chart-documents-completed-overdue-and-onTime-perCategory.component.html',
-    styleUrls: ['./chart-documents-completed-overdue-and-onTime-perCategory.component.css'],
-    imports: [CommonModule, HighchartsChartModule, FormsModule]
+  selector: 'app-chart-documents-completed-overdue-and-onTime-perCategory',
+  templateUrl: './chart-documents-completed-overdue-and-onTime-perCategory.component.html',
+  styleUrls: ['./chart-documents-completed-overdue-and-onTime-perCategory.component.css'],
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
 })
 export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent implements OnInit, OnChanges {
 
@@ -26,7 +27,11 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
 
-  constructor(private chartsService: ChartsService, private lookupsService: LookupsService) { }
+  constructor(
+    private chartsService: ChartsService,
+    private lookupsService: LookupsService,
+    private translate: TranslateService
+  ) { }
 
   ngOnInit() {
     // Only load chart data when categories are available
@@ -81,18 +86,18 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
       xAxis: {
         categories: categories,
         title: {
-          text: 'Categories'
+          text: this.translate.instant('BAM.CHARTS.LABELS.CATEGORY')
         }
       },
       yAxis: {
         min: 0,
         title: {
-          text: 'Document Count'
+          text: this.translate.instant('BAM.CHARTS.LABELS.COUNT')
         }
       },
       tooltip: {
         shared: true,
-        pointFormat: '<b>{series.name}</b>: {point.y} documents<br/>'
+        pointFormat: `<b>{series.name}</b>: {point.y} ${this.translate.instant('BAM.CHARTS.LABELS.COUNT')}<br/>`
       },
       plotOptions: {
         column: {

@@ -6,17 +6,19 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTablesModule } from 'angular-datatables';
 import { DataTableDirective } from 'angular-datatables';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-kpi-table-average-duration-for-correspondence-delay',
-    templateUrl: './kpi-table-average-duration-for-correspondence-delay.component.html',
-    styleUrls: ['./kpi-table-average-duration-for-correspondence-delay.component.css'],
-    imports: [
-        CommonModule,
-        DataTablesModule,
-        NgbModule,
-        FormsModule
-    ]
+  selector: 'app-kpi-table-average-duration-for-correspondence-delay',
+  templateUrl: './kpi-table-average-duration-for-correspondence-delay.component.html',
+  styleUrls: ['./kpi-table-average-duration-for-correspondence-delay.component.css'],
+  imports: [
+    CommonModule,
+    DataTablesModule,
+    NgbModule,
+    FormsModule,
+    TranslateModule
+  ]
 })
 export class KpiTableAverageDurationForCorrespondenceDelayComponent implements OnInit {
 
@@ -39,7 +41,10 @@ export class KpiTableAverageDurationForCorrespondenceDelayComponent implements O
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor(private kpiService: KpiService) { }
+  constructor(
+    private kpiService: KpiService,
+    private translateService: TranslateService
+  ) { }
 
   ngOnInit() {
     this.initDtOptions();
@@ -59,16 +64,10 @@ export class KpiTableAverageDurationForCorrespondenceDelayComponent implements O
       searching: false,
       autoWidth: false,
       language: {
-        emptyTable: "No data available",
-        zeroRecords: "No matching records found",
-        info: "Showing _START_ to _END_ of _TOTAL_ entries",
-        infoEmpty: "Showing 0 to 0 of 0 entries",
-        paginate: {
-          first: "<i class='text-secondary fa fa-angle-left'></i>",
-          previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-          next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-          last: "<i class='text-secondary fa fa-angle-right'></i>",
-        }
+        emptyTable: this.translateService.instant('BAM.COMMON.NO_DATA'),
+        zeroRecords: this.translateService.instant('BAM.COMMON.NO_MATCHING_RECORDS'),
+        info: this.translateService.instant('BAM.COMMON.SHOWING_ENTRIES'),
+        infoEmpty: this.translateService.instant('BAM.COMMON.SHOWING_ZERO_ENTRIES')
       },
       dom: "t",
       ordering: false

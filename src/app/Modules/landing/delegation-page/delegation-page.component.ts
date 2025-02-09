@@ -15,12 +15,13 @@ import { Priority } from '../../../models/priority.model';
 import { User } from '../../../models/user.model';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-delegation-page',
   templateUrl: './delegation-page.component.html',
   styleUrls: ['./delegation-page.component.scss'],
-  standalone:false
+  standalone: false
 })
 export class DelegationPageComponent implements OnInit {
   fromModal: NgbDateStruct | undefined;
@@ -54,7 +55,8 @@ export class DelegationPageComponent implements OnInit {
     private lookupservice: LookupsService,
     private authService: AuthService,
     private toaster: ToasterService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -111,6 +113,7 @@ export class DelegationPageComponent implements OnInit {
           next: "<i class='text-secondary fa fa-angle-double-right'></i>",
           last: "<i class='text-secondary fa fa-angle-right'></i>",
         },
+        emptyTable: ""
       },
       dom: 'tp',
       ordering: false,
@@ -123,7 +126,6 @@ export class DelegationPageComponent implements OnInit {
     }
     return null;
   }
-
 
   getListData(): void {
     this.delegationService.getDelegations(this.accessToken!).subscribe(
@@ -140,11 +142,11 @@ export class DelegationPageComponent implements OnInit {
     this.lookupservice.getUsers(this.accessToken!).subscribe(
       (response) => {
         this.contacts = response || [];
-        this.contacts.unshift({ id: 0, fullName: 'Select a user' });
+        this.contacts.unshift({ id: 0, fullName: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_NAME') });
 
         if (this.contacts.length > 0) {
           this.delegationForm.patchValue({
-            userId: this.contacts[0] ?.id,
+            userId: this.contacts[0]?.id,
           });
         }
       },
@@ -158,13 +160,6 @@ export class DelegationPageComponent implements OnInit {
     this.lookupservice.getCategories(undefined).subscribe(
       (response) => {
         this.categories = response || [];
-        //this.categories.unshift({ id: 0, text: 'Select Category' });
-
-        /*if (this.categories.length > 0) {
-          this.delegationForm.patchValue({
-            categoryId: [this.categories[0] ?.id],
-          });
-        }*/
       },
       (error: any) => {
         console.error(error);
@@ -176,11 +171,11 @@ export class DelegationPageComponent implements OnInit {
     this.lookupservice.getPrivacy(this.accessToken!).subscribe(
       (response) => {
         this.privacy = response || [];
-        this.privacy.unshift({ id: 0, text: 'Select Privacy' });
+        this.privacy.unshift({ id: 0, text: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_PRIVACY') });
 
         if (this.privacy.length > 0) {
           this.delegationForm.patchValue({
-            privacyId: this.privacy[0] ?.id,
+            privacyId: this.privacy[0]?.id,
           });
         }
       },
@@ -256,11 +251,15 @@ export class DelegationPageComponent implements OnInit {
             this.isEdit = false;
             this.clear();
             this.getListData();
-            this.toaster.showToaster(response.message ?? "Item updated successfully");
+            this.translate.get('DELEGATION.UPDATE_SUCCESS').subscribe((msg: string) => {
+              this.toaster.showToaster(msg);
+            });
           },
           (error: any) => {
             console.error('Error updating:', error);
-            this.toaster.showToaster(error ?.message || 'Something went wrong');
+            this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
+              this.toaster.showToaster(error?.message || msg);
+            });
           }
         );
       } else {
@@ -269,24 +268,31 @@ export class DelegationPageComponent implements OnInit {
             this.isEdit = false;
             this.clear();
             this.getListData();
-            this.toaster.showToaster(response.message || 'Item added successfully');
+            this.translate.get('DELEGATION.ADD_SUCCESS').subscribe((msg: string) => {
+              this.toaster.showToaster(msg);
+            });
           },
           (error: any) => {
             console.error('Error adding:', error);
-            this.toaster.showToaster(error ?.message || 'Something went wrong');
+            this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
+              this.toaster.showToaster(error?.message || msg);
+            });
           }
         );
       }
-    }
-    else {
-      this.toaster.showToaster("Please fill all required fields");
+    } else {
+      this.translate.get('ERRORS.REQUIRED_FIELDS').subscribe((msg: string) => {
+        this.toaster.showToaster(msg);
+      });
     }
   }
 
   onDelete(row: any): void {
     if (row) {
       const modalRef = this.modalService.open(ConfirmationmodalComponent);
-      modalRef.componentInstance.message = 'Are you sure you want to delete this item?';
+      this.translate.get('DELEGATION.DELETE_CONFIRMATION').subscribe((msg: string) => {
+        modalRef.componentInstance.message = msg;
+      });
 
       modalRef.componentInstance.confirmed.subscribe(() => {
         if (this.accessToken) {
@@ -294,11 +300,15 @@ export class DelegationPageComponent implements OnInit {
             (response) => {
               this.clear();
               this.getListData();
-              this.toaster.showToaster("Item deleted successfully");
+              this.translate.get('DELEGATION.DELETE_SUCCESS').subscribe((msg: string) => {
+                this.toaster.showToaster(msg);
+              });
             },
             (error: any) => {
               console.error('Error deleting item:', error);
-              this.toaster.showToaster(error ?.message || 'Something went wrong');
+              this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
+                this.toaster.showToaster(error?.message || msg);
+              });
             }
           );
         }
@@ -314,9 +324,9 @@ export class DelegationPageComponent implements OnInit {
 
   resetDropDowns() {
     this.delegationForm.patchValue({
-      userId: this.contacts.length > 0 ? this.contacts[0] ?.id : null,
+      userId: this.contacts.length > 0 ? this.contacts[0]?.id : null,
       categoryId: this.categories.length > 0 ? [] : [],
-      privacyId: this.privacy.length > 0 ? this.privacy[0] ?.id : null,
+      privacyId: this.privacy.length > 0 ? this.privacy[0]?.id : null,
     });
   }
 

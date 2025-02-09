@@ -12,31 +12,50 @@
     <!--navigation-->
     <nav class="header-nav" *ngIf="showMenu">
         <ul>
-            <li *ngFor="let item of MainnavItems"  class="nav-item" routerLinkActive="active">
-                <a [routerLink]="item.link" [title]="item.title || null">
-                    <img [src]="item.icon" alt="">
+            <li *ngFor="let item of MainnavItems" class="nav-item" routerLinkActive="active">
+                <a [routerLink]="item.link" [title]="item.title | translate">
+                    <img [src]="item.icon" [alt]="item.title | translate">
                 </a>
             </li>
         </ul>
 
     </nav>
-    <div class="dropdown">
-        <!--user info-->
-        <div class="user" data-bs-toggle="dropdown" aria-expanded="false">
-           <img  alt=""> <!-- [src]="userInfo.image || 'assets/images/any-user.png'" -->
-            <div>
-                <span class="bold">{{userName}}</span><br />
-                <!--<span>{{userInfo.Job}}</span>-->
-            </div>
+    <div class="d-flex align-items-center gap-3">
+        <!-- Language Switcher -->
+        <div class="dropdown language-switcher">
+            <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ getCurrentLangName() }}
+            </button>
+            <ul class="dropdown-menu">
+                <li *ngFor="let lang of languages">
+                    <a class="dropdown-item" href="#" (click)="$event.preventDefault(); switchLanguage(lang.code)"
+                        [class.active]="currentLang === lang.code">
+                        {{ lang.name }}
+                    </a>
+                </li>
+            </ul>
         </div>
-        <!--user menu-->
-        <ul class="dropdown-menu" aria-labelledby="">
-            <li *ngFor="let item of userNav">
-                <a [href]="item.link" [title]="item.title || null" (click)=onLogout($event) class="dropdown-item">
-                    {{item.title}}
-                </a>
-            </li>
-        </ul>
+
+        <!-- User Menu -->
+        <div class="dropdown">
+            <!--user info-->
+            <div class="user" data-bs-toggle="dropdown" aria-expanded="false">
+                <img alt=""> <!-- [src]="userInfo.image || 'assets/images/any-user.png'" -->
+                <div>
+                    <span class="bold">{{userName}}</span><br />
+                    <!--<span>{{userInfo.Job}}</span>-->
+                </div>
+            </div>
+            <!--user menu-->
+            <ul class="dropdown-menu" aria-labelledby="">
+                <li *ngFor="let item of userNav">
+                    <a [href]="item.link" [title]="item.title | translate" (click)="onLogout($event)"
+                        class="dropdown-item">
+                        {{ item.title | translate }}
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </header>
 
@@ -49,9 +68,10 @@
     </div>
     <div class="offcanvas-body p-0">
         <ul>
-            <li *ngFor="let item of MainnavItems"  class="nav-item" routerLinkActive="active">
-                <a [routerLink]="item.link" [title]="item.title || null">
-                    <img [src]="item.icon" alt="">{{item.title}}
+            <li *ngFor="let item of MainnavItems" class="nav-item" routerLinkActive="active">
+                <a [routerLink]="item.link" [title]="item.title | translate">
+                    <img [src]="item.icon" [alt]="item.title | translate">
+                    {{ item.title | translate }}
                 </a>
             </li>
         </ul>

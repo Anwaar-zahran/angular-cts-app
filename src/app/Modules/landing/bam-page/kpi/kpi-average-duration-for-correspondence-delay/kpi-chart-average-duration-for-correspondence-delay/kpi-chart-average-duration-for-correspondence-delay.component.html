@@ -2,17 +2,15 @@
   <div class="panel-heading">
     <div class="row">
       <div class="col-sm-10 pull-left">
-        Average per year
+        {{ 'BAM.KPI.DELAY_DURATION.CHART.AVERAGE_PER_YEAR' | translate }}
         <i class="fa fa-info-circle font-15 classInfoDivIcon"></i>
         <div class="font-13 classInfoDiv" style="opacity: 0;">
-
-          Number of in progress transfers per category divided into 2 circles.(Only for transfers with due date)
+          {{ 'BAM.KPI.DELAY_DURATION.CHART.INFO_TEXT' | translate }}
         </div>
       </div>
-
     </div>
     <span id="spanTransferAverageCompletionTime" class="spanDate">
-      <span style="color: #444">(Year {{year}})</span>
+      <span style="color: #444">({{ 'BAM.KPI.DELAY_DURATION.CHART.YEAR' | translate }} {{year}})</span>
     </span>
   </div>
 

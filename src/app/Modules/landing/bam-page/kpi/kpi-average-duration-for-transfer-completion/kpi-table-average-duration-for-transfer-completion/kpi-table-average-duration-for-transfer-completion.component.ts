@@ -3,18 +3,22 @@ import { KpiService } from '../../../../../../services/kpi.service';
 import { Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTablesModule } from 'angular-datatables';
 import { DataTableDirective } from 'angular-datatables';
-
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-kpi-table-average-duration-for-transfer-completion',
-    templateUrl: './kpi-table-average-duration-for-transfer-completion.component.html',
-    styleUrls: ['./kpi-table-average-duration-for-transfer-completion.component.css'],
-    imports: [
-        CommonModule, FormsModule, NgbModule, DataTablesModule
-    ]
+  selector: 'app-kpi-table-average-duration-for-transfer-completion',
+  templateUrl: './kpi-table-average-duration-for-transfer-completion.component.html',
+  styleUrls: ['./kpi-table-average-duration-for-transfer-completion.component.css'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgbModule,
+    DataTablesModule,
+    TranslateModule
+  ]
 })
 export class KpiTableAverageDurationForTransferCompletionComponent implements OnInit {
 
@@ -37,7 +41,10 @@ export class KpiTableAverageDurationForTransferCompletionComponent implements On
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-  constructor(private kpiService: KpiService) { }
+  constructor(
+    private kpiService: KpiService,
+    private translateService: TranslateService
+  ) { }
 
   ngOnInit() {
     this.getTotalAverage();
@@ -51,7 +58,6 @@ export class KpiTableAverageDurationForTransferCompletionComponent implements On
     }
   }
 
-
   private initDtOptions() {
     this.dtOptions = {
       pageLength: 10,
@@ -60,16 +66,10 @@ export class KpiTableAverageDurationForTransferCompletionComponent implements On
       searching: false,
       autoWidth: false,
       language: {
-        emptyTable: "No data available",
-        zeroRecords: "No matching records found",
-        info: "Showing _START_ to _END_ of _TOTAL_ entries",
-        infoEmpty: "Showing 0 to 0 of 0 entries",
-        paginate: {
-          first: "<i class='text-secondary fa fa-angle-left'></i>",
-          previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-          next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-          last: "<i class='text-secondary fa fa-angle-right'></i>",
-        }
+        emptyTable: "",
+        zeroRecords: "",
+        info: "",
+        infoEmpty: "",
       },
       dom: "t",
       ordering: false

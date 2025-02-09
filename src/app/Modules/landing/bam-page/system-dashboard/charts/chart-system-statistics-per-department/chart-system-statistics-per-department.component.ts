@@ -5,12 +5,13 @@ import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-chart-system-statistics-per-department',
-    templateUrl: './chart-system-statistics-per-department.component.html',
-    styleUrls: ['./chart-system-statistics-per-department.component.css'],
-    imports: [CommonModule, HighchartsChartModule, FormsModule]
+  selector: 'app-chart-system-statistics-per-department',
+  templateUrl: './chart-system-statistics-per-department.component.html',
+  styleUrls: ['./chart-system-statistics-per-department.component.css'],
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
 })
 export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnChanges {
 
@@ -26,7 +27,11 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
   isModalOpen: boolean = false;
   entities: { id: number, name: string }[] = [];
 
-  constructor(private chartsService: ChartsService, private lookupsService: LookupsService) { }
+  constructor(
+    private chartsService: ChartsService,
+    private lookupsService: LookupsService,
+    private translateService: TranslateService
+  ) { }
 
   ngOnInit() {
     this.lookupsService.getEntities().subscribe((res: any) => {
@@ -83,24 +88,26 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
             type: 'bar'
           }));
 
+        const translateService = this.translateService;
+
         this.chartOptions = {
           chart: {
             type: 'bar'
           },
           title: {
-            text: 'System Statistics per Department'
+            text: this.translateService.instant('BAM.CHARTS.TITLES.STATISTICS_PER_STRUCTURE')
           },
           colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
           xAxis: {
             categories: uniqueStructures as string[],
             title: {
-              text: ''
+              text: this.translateService.instant('BAM.CHARTS.LABELS.STRUCTURES')
             }
           },
           yAxis: {
             min: 0,
             title: {
-              text: 'Count',
+              text: this.translateService.instant('BAM.CHARTS.LABELS.COUNT'),
               align: 'high'
             },
             labels: {
@@ -108,12 +115,12 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
             }
           },
           tooltip: {
-            valueSuffix: ' counts',
+            valueSuffix: ' ' + this.translateService.instant('BAM.CHARTS.LABELS.COUNTS'),
             shared: true,
             useHTML: true,
             formatter: function () {
               if (this.y === 0) return false;
-              return `${this.series.name}: ${this.y}<br/>Total: ${this.total}`;
+              return `${this.series.name}: ${this.y}<br/>${translateService.instant('BAM.CHARTS.LABELS.TOTAL')}: ${this.total}`;
             }
           },
           plotOptions: {

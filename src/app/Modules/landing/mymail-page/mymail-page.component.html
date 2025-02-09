@@ -1,15 +1,15 @@
 <div class="body-content">
   <div class="d-flex justify-content-between">
-    <h1 class="page-title">My Mail</h1>
+    <h1 class="page-title">{{ 'MYMAIL.TITLE' | translate }}</h1>
 
     <!-- Sort Dropdown -->
     <div class="dropdown">
       <button class="btn btn-link" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa fa-sort"></i> Sort By
+        <i class="fa fa-sort"></i> {{ 'COMMON.SORT_BY' | translate }}
       </button>
       <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">Transfer date</a></li>
-        <li><a class="dropdown-item" href="#">Reference nb</a></li>
+        <li><a class="dropdown-item" href="#">{{ 'COMMON.TRANSFER_DATE' | translate }}</a></li>
+        <li><a class="dropdown-item" href="#">{{ 'COMMON.REFERENCE_NB' | translate }}</a></li>
       </ul>
     </div>
   </div>
@@ -17,37 +17,34 @@
 
   <!-- Tabs -->
   <div class="nav nav-tabs mt-3" role="tablist">
-    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-new" type="button" role="tab"
-      aria-selected="true">
-      <i class="fa fa-plus-circle"></i>New
+    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-new" type="button" role="tab">
+      <i class="fa fa-plus-circle"></i>{{ 'COMMON.TABS.NEW' | translate }}
     </button>
-    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-sent" type="button" role="tab"
-      aria-selected="false">
-      <i class="fa fa-paper-plane"></i>Sent
+    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-sent" type="button" role="tab">
+      <i class="fa fa-paper-plane"></i>{{ 'COMMON.TABS.SENT' | translate }}
     </button>
-    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-completed" type="button" role="tab"
-      aria-selected="false">
-      <i class="fa fa-check-circle"></i>Completed
+    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-completed" type="button" role="tab">
+      <i class="fa fa-check-circle"></i>{{ 'COMMON.TABS.COMPLETED' | translate }}
     </button>
   </div>
 
   <!-- Tab Contents -->
   <div class="tab-content">
-    <div class="tab-pane fade show active" id="nav-new" role="tabpanel" aria-labelledby="new-tab">
+    <div class="tab-pane fade show active" id="nav-new" role="tabpanel">
       <!-- No Data Message -->
       <div *ngIf="!loading && newItems.length === 0" class="alert alert-warning" role="alert">
-        No data available in the table.
+        {{ 'COMMON.NO_DATA' | translate }}
       </div>
 
       <table class="table table-text light-text" datatable [dtOptions]="dtOptions"
         *ngIf="!loading && newItems.length > 0">
         <thead>
           <tr>
-            <th>Subject</th>
-            <th>Transfer date</th>
-            <th>Reference nb</th>
-            <th></th>
-            <th></th>
+            <th>{{ 'COMMON.SUBJECT' | translate }}</th>
+            <th>{{ 'COMMON.TRANSFER_DATE' | translate }}</th>
+            <th>{{ 'COMMON.REFERENCE_NB' | translate }}</th>
+            <th>{{ 'TABLE.HEADERS.ACTIONS' | translate }}</th>
+            <th>{{ 'TABLE.HEADERS.STATUS' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -59,7 +56,9 @@
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
             <td>
-              <button class="btn btn-primary" (click)="showVisualTracking(item)">Visual tracking</button>
+              <button class="btn btn-primary" (click)="showVisualTracking(item)">
+                {{ 'COMMON.VISUAL_TRACKING' | translate }}
+              </button>
             </td>
             <td>
               <span>
@@ -75,18 +74,18 @@
       </table>
     </div>
 
-    <div class="tab-pane fade" id="nav-sent" role="tabpanel" aria-labelledby="sent-tab">
+    <div class="tab-pane fade" id="nav-sent" role="tabpanel">
       <div *ngIf="!loading && sentItems.length === 0" class="alert alert-warning" role="alert">
-        No data available in the table.
+        {{ 'COMMON.NO_DATA' | translate }}
       </div>
       <table class="table light-text" datatable [dtOptions]="dtOptions" *ngIf="!loading && sentItems.length > 0">
         <thead>
           <tr>
-            <th>Subject</th>
-            <th>Transfer date</th>
-            <th>Reference nb</th>
-            <th></th>
-            <th></th>
+            <th>{{ 'MYMAIL.TABLE.HEADERS.SUBJECT' | translate }}</th>
+            <th>{{ 'MYMAIL.TABLE.HEADERS.TRANSFER_DATE' | translate }}</th>
+            <th>{{ 'MYMAIL.TABLE.HEADERS.REFERENCE_NB' | translate }}</th>
+            <th>{{ 'MYMAIL.TABLE.HEADERS.ACTIONS' | translate }}</th>
+            <th>{{ 'MYMAIL.TABLE.HEADERS.STATUS' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -98,7 +97,9 @@
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
             <td>
-              <button class="btn btn-primary" (click)="showVisualTracking(item)">Visual tracking</button>
+              <button class="btn btn-primary" (click)="showVisualTracking(item)">
+                {{ 'COMMON.VISUAL_TRACKING' | translate }}
+              </button>
             </td>
             <td>
               <span>
@@ -114,18 +115,18 @@
       </table>
     </div>
 
-    <div class="tab-pane fade" id="nav-completed" role="tabpanel" aria-labelledby="completed-tab">
+    <div class="tab-pane fade" id="nav-completed" role="tabpanel">
       <div *ngIf="!loading && completedItems.length === 0" class="alert alert-warning" role="alert">
-        No data available in the table.
+        {{ 'COMMON.NO_DATA' | translate }}
       </div>
       <table class="table light-text" datatable [dtOptions]="dtOptions" *ngIf="!loading && completedItems.length > 0">
         <thead>
           <tr>
-            <th>Subject</th>
-            <th>Transfer date</th>
-            <th>Reference nb</th>
-            <th></th>
-            <th></th>
+            <th>{{ 'MYMAIL.TABLE.HEADERS.SUBJECT' | translate }}</th>
+            <th>{{ 'MYMAIL.TABLE.HEADERS.TRANSFER_DATE' | translate }}</th>
+            <th>{{ 'MYMAIL.TABLE.HEADERS.REFERENCE_NB' | translate }}</th>
+            <th>{{ 'MYMAIL.TABLE.HEADERS.ACTIONS' | translate }}</th>
+            <th>{{ 'MYMAIL.TABLE.HEADERS.STATUS' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -137,7 +138,9 @@
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
             <td>
-              <button class="btn btn-primary" (click)="showVisualTracking(item)">Visual tracking</button>
+              <button class="btn btn-primary" (click)="showVisualTracking(item)">
+                {{ 'COMMON.VISUAL_TRACKING' | translate }}
+              </button>
             </td>
             <td>
               <span>

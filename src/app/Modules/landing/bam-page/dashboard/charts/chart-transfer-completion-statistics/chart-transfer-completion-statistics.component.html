@@ -2,10 +2,10 @@
   <div class="panel-heading">
     <div class="row">
       <div class="col-sm-10 pull-left">
-        Transfer completion statistics
+        {{ 'BAM.CHARTS.TRANSFER_COMPLETION' | translate }}
         <i class="fa fa-info-circle font-15 classInfoDivIcon"></i>
         <div class="font-13 classInfoDiv" style="opacity: 0;">
-          Average transfer completion for transfers sent to you
+          {{ 'BAM.CHARTS.TRANSFER_COMPLETION_INFO' | translate }}
         </div>
       </div>
       <div class="col-sm-2 pull-right">
@@ -14,9 +14,10 @@
       </div>
     </div>
     <span id="spanTransferAverageCompletionTime" class="spanDate" [attr.todatevalue]="toDate"
-      [attr.fromdatevalue]="fromDate"><span style="color: #444">(</span><span style="color: #444">From</span>
+      [attr.fromdatevalue]="fromDate"><span style="color: #444">(</span><span style="color: #444">{{ 'COMMON.FROM' |
+        translate }}</span>
       {{fromDate}}
-      <span style="color: #444">To
+      <span style="color: #444">{{ 'COMMON.TO' | translate }}
       </span>{{toDate}}<span style="color: #444"> )</span></span>
   </div>
 

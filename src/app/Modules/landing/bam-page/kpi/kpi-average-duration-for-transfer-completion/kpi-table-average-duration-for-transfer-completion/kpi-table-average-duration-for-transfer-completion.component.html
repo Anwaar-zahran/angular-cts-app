@@ -3,12 +3,12 @@
   <div class="panel-heading">
     <div class="row">
       <div class="col-sm-10 pull-left">
-        Average per structure
+        {{ 'BAM.KPI.TRANSFER_DURATION.TABLE.AVERAGE_PER_STRUCTURE' | translate }}
       </div>
 
     </div>
     <span id="spanTransferAverageCompletionTime" class="spanDate">
-      <span style="color: #444">(Year {{year}})</span>
+      <span style="color: #444">({{ 'BAM.KPI.TRANSFER_DURATION.YEAR' | translate }} {{year}})</span>
     </span>
   </div>
 
@@ -18,9 +18,9 @@
       <table id="grdAveragePerStructureItems" class="table dataTable no-footer" role="grid">
         <thead>
           <tr role="row">
-            <th class="min-max-width-50-250">Structure</th>
-            <th class="min-max-width-50-250">Average (Days)</th>
-            <th class="min-max-width-50-250">Compare to total average</th>
+            <th class="min-max-width-50-250">{{ 'BAM.KPI.TRANSFER_DURATION.TABLE.STRUCTURE' | translate }}</th>
+            <th class="min-max-width-50-250">{{ 'BAM.KPI.TRANSFER_DURATION.TABLE.AVERAGE_DAYS' | translate }}</th>
+            <th class="min-max-width-50-250">{{ 'BAM.KPI.TRANSFER_DURATION.TABLE.COMPARE_TO_TOTAL' | translate }}</th>
             <!--
           <th class="min-max-width-50-250">Yearly graph</th>
           -->
@@ -30,7 +30,8 @@
         <tbody>
           <tr *ngFor="let item of data" role="row">
             <td class="min-max-width-50-250" title="{{item.structureName}}">
-              <span style="color:var(--secondary-color);text-decoration: underline;cursor: pointer;" class="drawuserstructure"
+              <span style="color:var(--secondary-color);text-decoration: underline;cursor: pointer;"
+                class="drawuserstructure"
                 (click)="drawStructureUserTable('AverageDurationForCorrespondenceCompletion', item.average.toFixed(2), year, item.userId, item.structureId)">
                 {{item.structureName}}
               </span>
@@ -59,17 +60,30 @@
           Showing {{startIndex}} to {{endIndex}} of {{totalItems}} entries
         </div>-->
         <div class="dataTables_paginate paging_full_numbers">
-          <a class="paginate_button first" [class.disabled]="currentPage === 1" (click)="goToPage(1)"><i class='text-secondary fa fa-angle-left'></i></a>
+          <a class="paginate_button first" [class.disabled]="currentPage === 1" (click)="goToPage(1)"
+            [attr.aria-label]="'BAM.COMMON.PAGINATION.FIRST' | translate">
+            <i class='text-secondary fa fa-angle-left'></i>
+          </a>
 
-          <a class="paginate_button previous" [class.disabled]="currentPage === 1" (click)="previousPage()"><i class='text-secondary fa fa-angle-double-left'></i></a>
+          <a class="paginate_button previous" [class.disabled]="currentPage === 1" (click)="previousPage()"
+            [attr.aria-label]="'BAM.COMMON.PAGINATION.PREVIOUS' | translate">
+            <i class='text-secondary fa fa-angle-double-left'></i>
+          </a>
 
-          <a class="paginate_button" *ngFor="let page of pages" [class.active]="page === currentPage" (click)="goToPage(page)">{{page}}</a>
+          <a class="paginate_button" *ngFor="let page of pages" [class.active]="page === currentPage"
+            (click)="goToPage(page)">{{page}}</a>
 
-          <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()"><i class='text-secondary fa fa-angle-double-right'></i></a>
+          <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()"
+            [attr.aria-label]="'BAM.COMMON.PAGINATION.NEXT' | translate">
+            <i class='text-secondary fa fa-angle-double-right'></i>
+          </a>
 
-          <a class="paginate_button last" [class.disabled]="currentPage === totalPages" (click)="goToPage(totalPages)"><i class='text-secondary fa fa-angle-right'></i></a>
+          <a class="paginate_button last" [class.disabled]="currentPage === totalPages" (click)="goToPage(totalPages)"
+            [attr.aria-label]="'BAM.COMMON.PAGINATION.LAST' | translate">
+            <i class='text-secondary fa fa-angle-right'></i>
+          </a>
 
-      </div>
+        </div>
       </div>
     </div>
   </div>

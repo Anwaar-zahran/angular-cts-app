@@ -4,19 +4,21 @@ import { FormsModule } from '@angular/forms';
 import { Helpers } from '../../../../shared/helpers';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { LookupsService } from '../../../../../services/lookups.service';
+import { TranslateModule } from '@ngx-translate/core';
 import { KpiChartAverageDurationForTransferCompletionComponent } from './kpi-chart-average-duration-for-transfer-completion/kpi-chart-average-duration-for-transfer-completion.component';
 import { KpiTableAverageDurationForTransferCompletionComponent } from './kpi-table-average-duration-for-transfer-completion/kpi-table-average-duration-for-transfer-completion.component';
 import { KpiService } from '../../../../../services/kpi.service';
 
 @Component({
-    selector: 'app-kpi-average-duration-for-transfer-completion',
-    templateUrl: './kpi-average-duration-for-transfer-completion.component.html',
-    styleUrls: ['./kpi-average-duration-for-transfer-completion.component.css'],
-    imports: [
-        CommonModule, FormsModule, NgbModalModule,
-        KpiChartAverageDurationForTransferCompletionComponent,
-        KpiTableAverageDurationForTransferCompletionComponent
-    ]
+  selector: 'app-kpi-average-duration-for-transfer-completion',
+  templateUrl: './kpi-average-duration-for-transfer-completion.component.html',
+  styleUrls: ['./kpi-average-duration-for-transfer-completion.component.css'],
+  imports: [
+    CommonModule, FormsModule, NgbModalModule,
+    TranslateModule,
+    KpiChartAverageDurationForTransferCompletionComponent,
+    KpiTableAverageDurationForTransferCompletionComponent
+  ]
 })
 export class KpiAverageDurationForTransferCompletionComponent implements OnInit {
 

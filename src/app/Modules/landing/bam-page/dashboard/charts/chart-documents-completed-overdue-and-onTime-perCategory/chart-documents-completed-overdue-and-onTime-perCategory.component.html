@@ -2,11 +2,10 @@
   <div class="panel-heading">
     <div class="row">
       <div class="col-sm-10 pull-left">
-        Due date statistics for completed correspondences
+        {{ 'BAM.CHARTS.DUE_DATE_COMPLETED' | translate }}
         <i class="fa fa-info-circle font-15 classInfoDivIcon"></i>
         <div class="font-13 classInfoDiv" style="opacity: 0;">
-          Number of completed correspondences created by you per category divided into 2 circles.(Only for
-          correspondences with due date)
+          {{ 'BAM.CHARTS.DUE_DATE_COMPLETED_INFO' | translate }}
         </div>
       </div>
       <div class="col-sm-2 pull-right">
@@ -15,9 +14,10 @@
       </div>
     </div>
     <span id="spanTransferAverageCompletionTime" class="spanDate" [attr.todatevalue]="toDate"
-      [attr.fromdatevalue]="fromDate"><span style="color: #444">(</span><span style="color: #444">From</span>
+      [attr.fromdatevalue]="fromDate"><span style="color: #444">(</span><span style="color: #444">{{ 'COMMON.FROM' |
+        translate }}</span>
       {{fromDate}}
-      <span style="color: #444">To
+      <span style="color: #444">{{ 'COMMON.TO' | translate }}
       </span>{{toDate}}<span style="color: #444"> )</span></span>
   </div>
 
