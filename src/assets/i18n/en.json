@@ -50,7 +50,7 @@
         "CLOSE": "Close",
         "SELECT_DATE_RANGE": "Select Date Range"
     },
-    "GUIDELINE": {
+    "GUIDELINES": {
         "TITLE": "Guidelines",
         "TABLE": {
             "HEADERS": {
@@ -126,11 +126,15 @@
     },
     "LOGIN": {
         "TITLE": "Login",
+        "SYSTEM_TITLE": "Document Management System",
+        "SUBTITLE": "Please enter your credentials to login",
         "USERNAME": "Username",
         "PASSWORD": "Password",
+        "SUBMIT": "Login",
         "REMEMBER_ME": "Remember me",
         "FORGOT_PASSWORD": "Forgot password?",
         "ERRORS": {
+            "REQUIRED_FIELDS": "Username and password are required",
             "REQUIRED_USERNAME": "Username is required",
             "REQUIRED_PASSWORD": "Password is required",
             "INVALID_CREDENTIALS": "Invalid username or password"
@@ -553,6 +557,41 @@
     "HEADER": {
         "USER_NAV": {
             "LOGOUT": "Log out"
+        }
+    },
+    "SEARCH": {
+        "TITLE": "Search",
+        "FORM": {
+            "SENDING_ENTITY": "Sending entity",
+            "RECEIVING_ENTITY": "Receiving entity",
+            "TRANSFER": {
+                "FROM_USER": "Transfer, from user",
+                "TO_USER": "Transfer, to user",
+                "FROM_STRUCTURE": "Transfer, from structure",
+                "TO_STRUCTURE": "Transfer, to structure",
+                "FROM_DATE": "Transfer, from date",
+                "TO_DATE": "Transfer, to date"
+            },
+            "KEYWORDS": "Keywords",
+            "DOCUMENT_DATE": "Document Date",
+            "SEARCH_INBOX": "Search in inbox of",
+            "SELECT_ENTITY": "Select entity",
+            "SELECT_USER": "Select user"
+        },
+        "BUTTONS": {
+            "CLEAR": "Clear",
+            "SEARCH": "Search"
+        },
+        "TABLE": {
+            "TOTAL_RECORDS": "Total records: {{count}}",
+            "HEADERS": {
+                "CATEGORY": "Category",
+                "REFERENCE_NUMBER": "Reference Number",
+                "SUBJECT": "Subject",
+                "CREATED_DATE": "Created Date",
+                "STATUS": "Status",
+                "ACTIONS": "Actions"
+            }
         }
     }
 }

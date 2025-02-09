@@ -2,7 +2,7 @@
     "COMMON": {
         "SORT_BY": "ترتيب حسب",
         "TRANSFER_DATE": "تاريخ التحويل",
-        "REFERENCE_NB": "الرقم المرجعي",
+        "REFERENCE_NB": "رقم المرجع",
         "SUBJECT": "الموضوع",
         "NO_DATA": "لا توجد بيانات متاحة في الجدول",
         "VISUAL_TRACKING": "التتبع المرئي",
@@ -43,17 +43,21 @@
     },
     "LOGIN": {
         "TITLE": "تسجيل الدخول",
+        "SYSTEM_TITLE": "نظام إدارة الوثائق",
+        "SUBTITLE": "الرجاء إدخال بيانات تسجيل الدخول",
         "USERNAME": "اسم المستخدم",
         "PASSWORD": "كلمة المرور",
+        "SUBMIT": "تسجيل الدخول",
         "REMEMBER_ME": "تذكرني",
         "FORGOT_PASSWORD": "نسيت كلمة المرور؟",
         "ERRORS": {
+            "REQUIRED_FIELDS": "اسم المستخدم وكلمة المرور مطلوبان",
             "REQUIRED_USERNAME": "اسم المستخدم مطلوب",
             "REQUIRED_PASSWORD": "كلمة المرور مطلوبة",
             "INVALID_CREDENTIALS": "اسم المستخدم أو كلمة المرور غير صحيحة"
         }
     },
-    "GUIDELINE": {
+    "GUIDELINES": {
         "TITLE": "الإرشادات",
         "TABLE": {
             "HEADERS": {
@@ -524,6 +528,41 @@
     "HEADER": {
         "USER_NAV": {
             "LOGOUT": "تسجيل الخروج"
+        }
+    },
+    "SEARCH": {
+        "TITLE": "بحث",
+        "FORM": {
+            "SENDING_ENTITY": "الجهة المرسلة",
+            "RECEIVING_ENTITY": "الجهة المستلمة",
+            "TRANSFER": {
+                "FROM_USER": "التحويل، من المستخدم",
+                "TO_USER": "التحويل، إلى المستخدم",
+                "FROM_STRUCTURE": "التحويل، من الهيكل",
+                "TO_STRUCTURE": "التحويل، إلى الهيكل",
+                "FROM_DATE": "التحويل، من تاريخ",
+                "TO_DATE": "التحويل، إلى تاريخ"
+            },
+            "KEYWORDS": "الكلمات المفتاحية",
+            "DOCUMENT_DATE": "تاريخ المستند",
+            "SEARCH_INBOX": "البحث في صندوق الوارد لـ",
+            "SELECT_ENTITY": "اختر جهة",
+            "SELECT_USER": "اختر مستخدم"
+        },
+        "BUTTONS": {
+            "CLEAR": "مسح",
+            "SEARCH": "بحث"
+        },
+        "TABLE": {
+            "TOTAL_RECORDS": "إجمالي السجلات: {{count}}",
+            "HEADERS": {
+                "CATEGORY": "الفئة",
+                "REFERENCE_NUMBER": "رقم المرجع",
+                "SUBJECT": "الموضوع",
+                "CREATED_DATE": "تاريخ الإنشاء",
+                "STATUS": "الحالة",
+                "ACTIONS": "الإجراءات"
+            }
         }
     }
 }
