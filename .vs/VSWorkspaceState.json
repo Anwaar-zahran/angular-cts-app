@@ -1,7 +1,16 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\Modules",
+    "\\src\\app\\Modules\\auth",
+    "\\src\\assets",
+    "\\src\\assets\\datatables.net",
+    "\\src\\assets\\datatables.net-dt",
+    "\\src\\assets\\datatables.net-dt\\js",
+    "\\src\\assets\\datatables.net\\js"
   ],
-  "SelectedNode": "\\old",
+  "SelectedNode": "\\package-lock.json",
   "PreviewInSolutionExplorer": false
 }
