@@ -30,6 +30,10 @@ mat-dialog-close {
     position: relative;
     width: 100%;
     overflow: hidden;
+
+    &:lang(ar) {
+        flex-direction: row-reverse;
+    }
 }
 
 .responsive-tabs {
@@ -164,6 +168,11 @@ mat-dialog-content .tab-content strong {
     padding-left: calc(1.5rem * var(--level));
     color: #AAA;
     min-height: 42px;
+
+    &:lang(ar) {
+        padding-left: 0;
+        padding-right: calc(1.5rem * var(--level));
+    }
 }
 
 .mat-tree-node a {
@@ -184,6 +193,10 @@ mat-dialog-content .tab-content strong {
     background: transparent;
     border: 0;
     color: #AAA;
+
+    i:lang(ar) {
+        transform: scaleX(-1);
+    }
 }
 
 .mat-tree-node button[mattreenodetoggle] .fa-chevron-down,
