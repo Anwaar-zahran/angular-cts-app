@@ -1,8 +1,9 @@
 .language-switcher {
   .btn-link {
-    color: #333;
+    color: var(--text-black);
     text-decoration: none;
     padding: 0.5rem 1rem;
+    align-items: center;
     
     &:hover {
       color: #666;

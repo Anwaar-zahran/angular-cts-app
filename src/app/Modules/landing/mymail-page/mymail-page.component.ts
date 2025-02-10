@@ -58,17 +58,27 @@ export class MymailPageComponent implements OnInit {
   private initDtOptions() {
     this.translate.get('COMMON.DATATABLE').subscribe(translations => {
       this.dtOptions = {
+        pageLength: 10,
+        search: false,
+        order: [],
+        pagingType: 'full_numbers',
+        paging: true,
+        searching: false,
+        displayStart: 0,
+        autoWidth: false,
         language: {
-          emptyTable: "",
           search: "",
           info: "",
           paginate: {
-            first: translations.FIRST,
-            last: translations.LAST,
-            next: translations.NEXT,
-            previous: translations.PREVIOUS
-          }
-        }
+            first: "<i class='text-secondary fa fa-angle-left'></i>",
+            previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
+            next: "<i class='text-secondary fa fa-angle-double-right'></i>",
+            last: "<i class='text-secondary fa fa-angle-right'></i>",
+          },
+          emptyTable: ""
+        },
+        dom: "tp",
+        ordering: false
       };
     });
   }
