@@ -67,6 +67,10 @@ html {
 	background: transparent linear-gradient(126deg, #013B82 0%, #0095DA 100%) 0% 0% no-repeat padding-box;
 	padding: 10px;
 	overflow: hidden;
+
+	&:lang(ar) {
+		background: transparent linear-gradient(-126deg, #013B82 0%, #0095DA 100%) 100% 0% no-repeat padding-box;
+	}
 }
 
 body {
@@ -299,6 +303,10 @@ h2 {
 	border-radius: 20px 0 0 20px;
 	height: 100%;
 	background-color: $background-color_4;
+
+	&:lang(ar) {
+		border-radius: 0 20px 20px 0;
+	}
 }
 
 .logo-section.layer {
@@ -344,12 +352,26 @@ h2 {
 		padding-left: 2.5rem;
 	}
 
+	.form-control[name="username"]:lang(ar),
+	.form-control[name="password"]:lang(ar) {
+		padding-left: 0;
+		padding-right: 2.5rem;
+		background-position: calc(100% - 1rem);
+	}
+
 	.toggle-password {
 		color: $color_4 !important;
 		position: absolute;
-		right: 0.5rem;
+		right: 0;
 		top: 50%;
 		transform: translateY(-50%);
+		padding: 0 1rem;
+		background-color: #FFF;
+
+		&:lang(ar) {
+			right: auto;
+			left: 0;
+		}
 	}
 
 	.btn.btn-primary {
@@ -446,23 +468,35 @@ h2 {
 
 .offcanvas {
 	max-width: 70% !important;
-}
 
-.offcanvas-body {
-	.nav-item {
-		a {
-			padding: 1rem 1.75rem;
-			align-items: center;
-			color: $color_5;
-			gap: 1rem;
-			border-bottom: 1px solid #ededed;
-			border-left: 5px solid transparent;
+	.offcanvas-header {
+		.btn-close:lang(ar) {
+			margin-left: 0;
+			margin-right: auto;
 		}
+	}
 
-		img {
-			width: 25px;
-			object-fit: scale-down;
-			height: 25px;
+	.offcanvas-body {
+		.nav-item {
+			a {
+				padding: 1rem 1.75rem;
+				align-items: center;
+				color: $color_5;
+				gap: 1rem;
+				border-bottom: 1px solid #ededed;
+				border-left: 5px solid transparent;
+
+				&:lang(ar) {
+					border-right: 5px solid transparent;
+					border-left: none;
+				}
+			}
+
+			img {
+				width: 25px;
+				object-fit: scale-down;
+				height: 25px;
+			}
 		}
 	}
 }
@@ -470,6 +504,10 @@ h2 {
 .nav-item.active {
 	a {
 		border-left-color: $border-left-color_1;
+
+		&:lang(ar) {
+			border-right-color: $border-left-color_1;
+		}
 	}
 }
 
@@ -505,6 +543,11 @@ h2 {
 			.fa-arrow-right {
 				filter: brightness(0) saturate(100%) invert(41%) sepia(59%) saturate(4195%) hue-rotate(175deg) brightness(100%) contrast(101%);
 				margin-right: -.5rem;
+
+				&:lang(ar) {
+					margin-right: 0;
+					margin-left: -.5rem;
+				}
 			}
 		}
 	}
@@ -531,6 +574,10 @@ h2 {
 		background: #fff;
 		box-shadow: 0px 13px 36px #69696929;
 		font-size: 18px;
+	}
+
+	.fa-arrow-right:lang(ar) {
+		transform: scaleX(-1);
 	}
 }
 
@@ -567,6 +614,7 @@ h2 {
 				font-size: 13px;
 				color: $color_1;
 				padding: 1rem !important;
+				text-align: start;
 			}
 		}
 	}
@@ -648,6 +696,11 @@ div.dt-container {
 		border: 0;
 		text-align: center;
 		color: $color_4;
+
+		:lang(ar) {
+			margin-left: 0;
+			margin-right: 10px;
+		}
 	}
 }
 
@@ -715,6 +768,14 @@ textarea.form-control {
 	align-items: center;
 	gap: 0.25rem;
 
+	&:lang(ar) {
+		padding-left: 0;
+		padding-right: 1.5em;
+		.form-check-input {
+			margin-left: 0;
+			margin-right: -1.5em;
+		}
+	}
 	label {
 		margin-top: 3px;
 	}
@@ -800,6 +861,10 @@ textarea.form-control {
 	background-position-x: calc(100% - 1rem);
 	background-position-y: center;
 	background-size: 20px;
+
+	&:lang(ar) {
+		background-position-x: 1rem;
+	}
 }
 
 .bootstrap-datetimepicker-widget.dropdown-menu {
@@ -995,13 +1060,23 @@ span.glyphicon.glyphicon-chevron-up {
 		--r: 12px;
 		border-inline: var(--r) solid #0000;
 		border-radius: calc(2*var(--r)) calc(2*var(--r)) 0 0/var(--r);
-		mask: radial-gradient(20px at 20px 0, #0000 100%, #000 107%) calc(-1*var(--r)) 100%/100% 22px repeat-x, conic-gradient(#000 0 0) padding-box;
 		margin: 0 !important;
 		box-shadow: 0px 3px 56px #69696929;
-		border-left-width: 0;
-		border-top-left-radius: 10px;
 		padding: 0.75rem;
 		font-size: 14px;
+
+		&:lang(en) {
+			border-left-width: 0;
+			border-top-left-radius: 10px;
+			mask: radial-gradient(20px at 20px 0, #0000 100%, #000 107%) calc(-1*var(--r)) 100%/100% 22px repeat-x, conic-gradient(#000 0 0) padding-box;
+
+		}
+
+		&:lang(ar) {
+			border-right-width: 0;
+			border-top-right-radius: 10px;
+			mask: radial-gradient(20px at 3px 0, #0000 102%, #000 103%) calc(-1*var(--r)) 110%/88% 23px repeat-x, conic-gradient(#000 0 0) padding-box;
+		}
 
 		i {
 			font-size: 14px;
@@ -1283,6 +1358,11 @@ label.form-label.required:after {
 		position: absolute;
 		top: 3px;
 		right: 0;
+
+		&:lang(ar) {
+			right: auto;
+			left: 0;
+		}
 	}
 }
 
@@ -1642,11 +1722,21 @@ label.form-label.required:after {
 	z-index: -1;
 	margin-top: 0px;
 	background-color: #fff;
-	left: 80px;
+
+	&:lang(en) {
+		left: 80px;
+	}
+
+	&:lang(ar) {
+		right: 80px;
+	}
 }
 
 .pull-right {
-	float: right
+	float: right;
+	&:lang(ar) {
+		float: left;
+	}
 }
 
 .pull-right.btn-warning {
@@ -1685,11 +1775,11 @@ label.form-label.required:after {
 }
 
 .modal-footer {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    border: 0;
-    padding: 1rem;
+	display: flex;
+	justify-content: center;
+	gap: 0.5rem;
+	border: 0;
+	padding: 1rem;
 }
 
 .modal-title {
@@ -1708,23 +1798,32 @@ label.form-label.required:after {
 }
 
 a.paginate_button {
-    box-sizing: border-box;
-    display: inline-block;
-    min-width: 1.5em;
-    padding: .5em 1em;
-    margin-left: 2px;
-    text-align: center;
-    text-decoration: none !important;
-    cursor: pointer;
-    color: inherit !important;
-    border: 1px solid transparent;
-    border-radius: 2px;
-    background: transparent;
+	box-sizing: border-box;
+	display: inline-block;
+	min-width: 1.5em;
+	padding: .5em 1em;
+	margin-left: 2px;
+	text-align: center;
+	text-decoration: none !important;
+	cursor: pointer;
+	color: inherit !important;
+	border: 1px solid transparent;
+	border-radius: 2px;
+	background: transparent;
+
+	&:lang(ar) {
+		margin-left: 0;
+		margin-right: 2px;
+		
+	i {
+		transform: scaleX(-1);
+	}
+	}
 }
 
 .paginate_button.active {
-    background: var(--light-blue-color);
-    border: 0;
-    border-radius: 9px;
-    color: var(--secondary-color) !important;
+	background: var(--light-blue-color);
+	border: 0;
+	border-radius: 9px;
+	color: var(--secondary-color) !important;
 }
