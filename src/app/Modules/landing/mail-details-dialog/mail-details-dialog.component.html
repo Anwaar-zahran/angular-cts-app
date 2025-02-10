@@ -4,9 +4,9 @@
     <button type="button" class="btn btn-secondary" *ngIf="data?.showActionButtons" (click)="showModalReply()">
       <i class="fa fa-reply"></i>{{ 'MAIL_DETAILS.BUTTONS.REPLY' | translate }}
     </button>
-    <!-- <button type="button" class="btn btn-secondary" *ngIf="data?.showActionButtons" (click)="showModalTransfer()">
+    <button type="button" class="btn btn-secondary" *ngIf="data?.showActionButtons" (click)="showModalTransfer()">
       <i class="fa fa-exchange"></i>{{ 'MAIL_DETAILS.BUTTONS.TRANSFER' | translate }}
-    </button> -->
+    </button>
   </div>
   <button mat-button mat-dialog-close class="btn btn-transparent">
     <i class="fa fa-times"></i>
