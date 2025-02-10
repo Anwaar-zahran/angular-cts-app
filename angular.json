@@ -56,7 +56,9 @@
               //"node_modules/datatables.net/js/jquery.dataTables.js",
               "src/assets/datatables.net/js/jquery.dataTables.js",
               //"node_modules/select2/dist/js/select2.min.js"
-              "src/assets/select2/dist/js/select2.min.js"
+              "src/assets/select2/dist/js/select2.min.js",
+               "src/assets/js/orgchart.js"
+
             ]
           },
           "configurations": {
