@@ -26,6 +26,8 @@ import { SharedModule } from '../../shared/shared.module';
 import { MailDetailsDialogComponent } from './mail-details-dialog/mail-details-dialog.component';
 
 import { HighchartsChartModule } from 'highcharts-angular';
+//import { HighchartsChartModule } from '../../../assets/highcharts-angular';
+
 import { MatDialogModule } from '@angular/material/dialog';
 import { CompleteCorrespondencesComponent } from './reports-page/complete-correspondences/complete-correspondences.component';
 
