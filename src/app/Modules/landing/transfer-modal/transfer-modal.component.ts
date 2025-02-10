@@ -1,19 +1,17 @@
-import { Component, Inject, CUSTOM_ELEMENTS_SCHEMA, OnInit, OnDestroy, QueryList, ViewChildren } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { LookupsService } from '../../../services/lookups.service';
-import { Router } from '@angular/router';
-import { AuthService } from '../../auth/auth.service';
-import { NgSelectModule } from '@ng-select/ng-select';
 import { CommonModule } from '@angular/common';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule } from '@angular/material/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { AddressBookComponent } from '../address-book/address-book.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { Router } from '@angular/router';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { LookupsService } from '../../../services/lookups.service';
 import { MailsService } from '../../../services/mail.service';
-import { ChangeDetectorRef } from '@angular/core';
+import { AuthService } from '../../auth/auth.service';
+import { AddressBookComponent } from '../address-book/address-book.component';
 
 
 interface User {
@@ -57,6 +55,10 @@ export class TransferModalComponent implements OnInit {
   showAddressBook: boolean = false;
   selectedUserId: any;
   maxUsers = 50;
+  rows = [
+    this.createEmptyRow() // Initialize with one empty row
+  ];
+  @ViewChildren('picker') pickerRefs!: QueryList<MatDatepicker<any>>;
 
   @ViewChildren('rowForm') rowForms: QueryList<NgForm> | null = null;
 
@@ -78,23 +80,92 @@ export class TransferModalComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-    this.loadLookupData();
+    this.loadUserStructures();
+  }
+  
+  transformDataWithotSort(data: Array<{ name: string; userStructure?: Array<{ user?: { firstname?: string; lastname?: string } }> }>): string[] {
+    let result: string[] = [];
+  
+    data.forEach((structure) => {
+      if (structure.name) {
+        result.push(structure.name);
+  
+        structure.userStructure?.forEach((userStruct) => {
+          if (userStruct?.user?.firstname && userStruct?.user?.lastname) {
+            result.push(`${structure.name}/${userStruct.user.firstname} ${userStruct.user.lastname}`);
+          }
+        });
+      }
+    });
+  
+    return result;
+  }
+  transformData(data: Array<{ 
+    name: string; 
+    userStructure?: Array<{ user?: { firstname?: string; lastname?: string } }> 
+  }>): string[] {
+    
+    let result: string[] = [];
+  
+    data.forEach((structure) => {
+      if (structure.name) {
+        result.push(structure.name);
+  
+        structure.userStructure?.forEach((userStruct) => {
+          if (userStruct?.user?.firstname && userStruct?.user?.lastname) {
+            result.push(`${structure.name}/${userStruct.user.firstname} ${userStruct.user.lastname}`);
+          }
+        });
+      }
+    });
+  
+    // Sort the result in ascending alphabetical order
+    return result.sort((a, b) => a.localeCompare(b));
+  }
+  
+  //Add a new row when user changes selection
+  onUserChange1(userId: number) {
+    debugger
+    const user = this.users.find(u => u.id === userId);
+    if (user) {
+      this.selectedUsers.push({
+        selectedUserId: user.id,
+        username: user.name,
+        purposeId: null,
+        priorityId: null,
+        dueDate: null,
+        instruction: '',
+        isPrivate: false,
+        isCCed: false,
+        isFollowUp: false
+      });
+    }
   }
 
-
-  loadLookupData(): void {
+  loadUserStructures(): void {
     this.lookupsService.getStructuredUsers(this.accessToken!).subscribe(
       (users) => {
-        this.users = users || [];
+        debugger
+       var data= users || [];
+      this.users =this.transformData(data);
+
       },
       (error) => {
         console.error('Error loading users:', error);
       }
     );
 
+    
     this.lookupsService.getPriorities(this.accessToken!).subscribe(
       (reponse) => {
+        debugger
         this.priorities = reponse || [];
+       // this.priorities=[...(reponse || [])].sort((a, b) => a.text.localeCompare(b.text));
+       const defaultPriorityId = this.priorities.length > 0 ? this.priorities[0].id : null;
+        this.rows = this.rows.map(row => ({
+          ...row,
+          selectedPriorityId: row.selectedPriorityId || defaultPriorityId
+        }));
       },
       (error) => {
         console.error('Error loading priorities:', error);
@@ -103,7 +174,11 @@ export class TransferModalComponent implements OnInit {
 
     this.lookupsService.getPurposes(this.accessToken!).subscribe(
       (reponse) => {
-        this.purposes = reponse || [];
+        debugger
+        //this.purposes = reponse || [];
+      //  this.purposes = reponse ? reponse.sort((a, b) => a.name.localeCompare(b.name)) : [];
+        this.purposes = [...(reponse || [])].sort((a, b) => a.name.localeCompare(b.name));
+
       },
       (error) => {
         console.error('Error loading priorities:', error);
@@ -160,8 +235,42 @@ export class TransferModalComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  // removeRow(index: number) {
+  //   this.selectedUsers.splice(index, 1);
+  // }
+  openDatepicker(index: number) {
+    const pickersArray = this.pickerRefs.toArray();
+    if (pickersArray[index]) {
+      pickersArray[index].open();
+    }
+  }
+
+  ngAfterViewInit() {
+    // Ensures the ViewChildren data is available after initialization
+  }
   removeRow(index: number) {
-    this.selectedUsers.splice(index, 1);
+    if (this.rows.length > 1) {
+      this.rows.splice(index, 1);
+    }
+  }
+  createEmptyRow() {
+    return {
+      selectedUserId: null,
+      selectedPurposeId: null,
+      selectedPriorityId: this.priorities.length > 0 ? this.priorities[0].id : null,
+      selectedDueDate: null,
+      txtInstruction: '',
+      isPrivate: false,
+      isCCed: false,
+      isFollowUp: false
+    };
+  }
+  onUserOrPurposeChange(index: number) {
+    debugger
+    // Add a new row when user is selected, only if it's the last row
+    if (index === this.rows.length - 1) {
+      this.rows.push(this.createEmptyRow());
+    }
   }
 
 

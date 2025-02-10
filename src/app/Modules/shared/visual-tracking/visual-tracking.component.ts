@@ -1,11 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy, Inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import OrgChart from '@balkangraph/orgchart.js';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LookupsService } from '../../../services/lookups.service';
 import { SearchPageService } from '../../../services/search-page.service';
 import { AuthService } from '../../auth/auth.service';
-import { CommonModule } from '@angular/common';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
+declare var OrgChart: any;
 
 @Component({
   selector: 'app-visual-tracking',

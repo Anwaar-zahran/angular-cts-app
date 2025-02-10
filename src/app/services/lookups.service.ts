@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Priority } from '../models/priority.model';
-import { environment } from '../../environments/environment';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { Priority } from '../models/priority.model';
 
 @Injectable({
   providedIn: 'root'
