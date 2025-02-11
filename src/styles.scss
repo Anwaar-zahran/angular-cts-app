@@ -199,6 +199,20 @@ ul {
 	}
 }
 
+.btn.btn-danger {
+	background: #bb2d3b;
+    height: 35px;
+    width: 35px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+	&:hover {
+		background: #dc3545;
+	}
+}
+
 a {
 	display: flex;
 	gap: 0.5rem;
