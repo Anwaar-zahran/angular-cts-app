@@ -10,3 +10,7 @@ table tbody td:has(.form-control) {
 mat-dialog-content {
   max-height: unset;
 }
+
+.layout-fixed {
+  table-layout: fixed;
+}
