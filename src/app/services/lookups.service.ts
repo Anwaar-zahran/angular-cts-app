@@ -23,6 +23,7 @@ export class LookupsService {
   private listPurposes = `${environment.apiBaseUrl}/CTS/Purpose/ListUserPurposes`;
   private listClassification = `${environment.apiBaseUrl}/Classification/List`;
   private listDocumentType = `${environment.apiBaseUrl}/DocumentType/List`;
+  private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List`;
 
   constructor(private http: HttpClient) { }
 
@@ -277,6 +278,21 @@ export class LookupsService {
         })
       );
   }
+  getPrioritiesWithDays(accessToken: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get(this.listPrioritiesWithDays, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching priorities data with getting days', error.message);
+          throw error;
+        })
+      );
+  }
+
 
   getYears(): Observable<any> {
     return this.http.get(this.listYears)

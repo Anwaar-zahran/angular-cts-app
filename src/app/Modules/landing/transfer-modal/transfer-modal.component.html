@@ -26,11 +26,11 @@
     <table class="table table-bordered">
       <thead>
         <tr>
-          <th width="15%">To<span class="text-danger">*</span></th>
-          <th width="15%">Purpose<span class="text-danger">*</span></th>
-          <th width="15%">Priority<span class="text-danger">*</span></th>
-          <th width="15%">Due date</th>
-          <th width="18%">Instruction<span class="text-danger">*</span></th>
+          <th width="20%">To<span class="text-danger">*</span></th>
+          <th width="14%">Purpose<span class="text-danger">*</span></th>
+          <th width="14%">Priority<span class="text-danger">*</span></th>
+          <th width="14%">Due date</th>
+          <th width="17%">Instruction<span class="text-danger">*</span></th>
           <th>Private</th>
           <th>CCed</th>
           <th>Follow Up</th>
@@ -40,11 +40,14 @@
       <tbody>
         <tr class="col-lg-12" *ngFor="let row of rows; let i = index">
           <td>
-            <ng-select id="ddlToUsers{{i}}" name="toUsers" [items]="users" [(ngModel)]="row.selectedUserId"
-                       (ngModelChange)="onUserOrPurposeChange(i)" bindLabel="name" bindValue="id" class="form-control">
-              <ng-template ng-label-tmp let-item="item">
+            <ng-select id="ddlToUsers{{i}}" name="toUsers" [items]="users"  [(ngModel)]="row.selectedUser" 
+                       (ngModelChange)="onUserOrPurposeChange(i)" bindLabel="name" class="form-control">
+              <!-- <ng-template ng-label-tmp let-item="item">
                 {{ item.name }}
-              </ng-template>
+              </ng-template> -->
+              <ng-template ng-label-tmp let-item="item">
+                {{ item.name }} <span *ngIf="item.isStructure">(Structure)</span>
+            </ng-template>
             </ng-select>
           </td>
           <td>
@@ -57,9 +60,9 @@
           </td>
           <td>
             <ng-select id="ddlToPriority{{i}}" name="dllPriority" [items]="priorities" [(ngModel)]="row.selectedPriorityId"
-                       bindLabel="text" bindValue="id" class="form-control">
+            (ngModelChange)="updateDueDate(i)"    bindLabel="name" bindValue="id" class="form-control">
               <ng-template ng-label-tmp let-item="item">
-                {{ item.text }}
+                {{ item.name }}
               </ng-template>
             </ng-select>
           </td>
@@ -84,17 +87,17 @@
           </td>
           <td>
             <div class="form-check justify-content-center">
-              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isPrivate" id="chbxPrivate{{i}}">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isPrivate" id="chbxPrivate{{i}}" name="ckIsPrivate" >
             </div>
           </td>
           <td>
             <div class="form-check justify-content-center">
-              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isCCed" id="chbxCCed{{i}}" name="Cced">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isCCed" id="chbxCCed{{i}}" name="ckISCced">
             </div>
           </td>
           <td>
             <div class="form-check justify-content-center">
-              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isFollowUp" id="chbxFollowUp{{i}}" name="FollowUp">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isFollowUp" id="chbxFollowUp{{i}}" name="ckIsFollowUp">
             </div>
           </td>
           <!-- <td>

@@ -1,5 +1,4 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -13,7 +12,7 @@ export class MailsService {
 
   constructor(private httpClient: HttpClient) { }
 
-  transferMail(accessToken: string, model: any): Observable<any> {
+  transferMail(accessToken: string,  model: any[]): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json', // Only one Content-Type header is needed

@@ -18,16 +18,24 @@ interface User {
   id: number;
   name: string;
 }
-
 interface TransferRow {
-  selectedUserId: number;
-  purposeId: number;
-  priorityId: number;
-  dueDate: string;
+  // selectedUserId: number | null;
+  purposeId: number | null; // Allow null
+  priorityId: number | null;
+  dueDate: string | null;
   instruction: string;
   isPrivate: boolean;
-  isCCed: boolean;
-  isFollowUp: boolean;
+  cced: boolean;
+  followUp: boolean;
+  toStructureId:number|null;
+  toUserId:number|null;
+  name: string | null;
+  PrivateInstruction: boolean;
+  FromStructureId: boolean;
+  ParentTransferId:number|null;
+  IsStructure: true,
+  DocumentId: number|null;
+  DocumentPrivacyId:number|null;
 }
 
 @Component({
@@ -41,7 +49,7 @@ interface TransferRow {
   styleUrl: './transfer-modal.component.scss'
 })
 export class TransferModalComponent implements OnInit {
-
+  receivedData: any; // This will hold the received data
   accessToken: string | null = null;
   priorities: any[] = [];
   purposes: any[] = [];
@@ -55,6 +63,10 @@ export class TransferModalComponent implements OnInit {
   showAddressBook: boolean = false;
   selectedUserId: any;
   maxUsers = 50;
+  documentId:any;
+  documentPrivacyId:any;
+  fromStructureId:any;
+  parentTransferId:any;
   rows = [
     this.createEmptyRow() // Initialize with one empty row
   ];
@@ -71,10 +83,17 @@ export class TransferModalComponent implements OnInit {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,
     private router: Router, private lookupsService: LookupsService, private dialog: MatDialog, private cdr: ChangeDetectorRef,
-    private dialogRef: MatDialogRef<TransferModalComponent>, private mailService: MailsService) { }
+    private dialogRef: MatDialogRef<TransferModalComponent>, private mailService: MailsService) { 
+      this.receivedData = data; // ✅ Initialize here to ensure it's available everywhere
+      this.documentId=this.data.documentId;
+      this.documentPrivacyId=this.data.row.privacyId;
+      this.parentTransferId=this.data.row.parentTransferId;
+      this.fromStructureId=this.data.row.toStructureId;
+    }
 
   ngOnInit(): void {
     //    console.log('Dialog opened with ID:', this.data.id, 'and Reference Number:', this.data.referenceNumber);
+   
     this.accessToken = this.authService.getToken();
     if (!this.accessToken) {
       this.router.navigate(['/login']);
@@ -100,7 +119,7 @@ export class TransferModalComponent implements OnInit {
   
     return result;
   }
-  transformData(data: Array<{ 
+  transformDataTemp(data: Array<{ 
     name: string; 
     userStructure?: Array<{ user?: { firstname?: string; lastname?: string } }> 
   }>): string[] {
@@ -122,26 +141,45 @@ export class TransferModalComponent implements OnInit {
     // Sort the result in ascending alphabetical order
     return result.sort((a, b) => a.localeCompare(b));
   }
-  
-  //Add a new row when user changes selection
-  onUserChange1(userId: number) {
-    debugger
-    const user = this.users.find(u => u.id === userId);
-    if (user) {
-      this.selectedUsers.push({
-        selectedUserId: user.id,
-        username: user.name,
-        purposeId: null,
-        priorityId: null,
-        dueDate: null,
-        instruction: '',
-        isPrivate: false,
-        isCCed: false,
-        isFollowUp: false
-      });
-    }
-  }
+  transformData(data: Array<{ 
+    id: number; 
+    name: string; 
+    userStructure?: Array<{ 
+        user?: { 
+            id: number; 
+            firstname?: string; 
+            lastname?: string;
+            structureId?: number; // Include structureId
+        } 
+    }> 
+}>) : Array<{ id: number, name: string, isStructure: boolean, structureId?: number | undefined }> {
+    
+    let result: Array<{ id: number, name: string, isStructure: boolean, structureId?: number }> = [];
 
+    data.forEach((structure) => {
+        if (structure.name) {
+            // Push the structure itself (isStructure: true, no structureId)
+            result.push({ id: structure.id, name: structure.name, isStructure: true });
+
+            structure.userStructure?.forEach((userStruct) => {
+                if (userStruct?.user?.firstname && userStruct?.user?.lastname) {
+                     debugger;
+                    result.push({
+                        id: userStruct.user.id,
+                        name: `${structure.name} / ${userStruct.user.firstname} ${userStruct.user.lastname}`,
+                        isStructure: false,
+                        structureId: structure.id ?? undefined, // Use undefined instead of null
+                    });
+                }
+            });
+        }
+    });
+
+    return result;
+}
+
+  //Add a new row when user changes selection
+  
   loadUserStructures(): void {
     this.lookupsService.getStructuredUsers(this.accessToken!).subscribe(
       (users) => {
@@ -156,7 +194,7 @@ export class TransferModalComponent implements OnInit {
     );
 
     
-    this.lookupsService.getPriorities(this.accessToken!).subscribe(
+    this.lookupsService.getPrioritiesWithDays(this.accessToken!).subscribe(
       (reponse) => {
         debugger
         this.priorities = reponse || [];
@@ -185,7 +223,25 @@ export class TransferModalComponent implements OnInit {
       }
     );
   }
+  updateDueDate(index: number) {//: Date
+    debugger;
+    let selectedRow = this.rows[index]; // Assuming 'rows' is your data array
+    let selectedPriority = this.priorities.find(p => p.id === selectedRow.selectedPriorityId);
+    if (selectedPriority && selectedPriority.numberOfDueDays !== undefined) {
+      let daysToAdd = selectedPriority.numberOfDueDays; // Get dynamic days
+      let currentDate = new Date();
+      currentDate.setDate(currentDate.getDate() + (daysToAdd-1)); // Add dynamic days
+     // selectedRow.selectedDueDate = currentDate as Date | null;
+      // Ensure only the selected row updates its date
+    this.rows = this.rows.map((row, i) =>
+    i === index ? { ...row, selectedDueDate: currentDate } : row
+  );
 
+    } else {
+      console.error("Priority not found or daysToAdd is undefined");
+    }
+    
+  }
   convertToNgbDateStruct(dateStr: string): NgbDateStruct | undefined {
     if (!dateStr) return undefined;
     const [day, month, year] = dateStr.split('/');
@@ -224,20 +280,10 @@ export class TransferModalComponent implements OnInit {
     });
   }
 
-  //onUsersSelected(selectedUsers: any[]): void {
-
-  //  console.log('selected users from AddressBookComponent:', selectedUsers);
-  //  this.selectedUsers = selectedUsers;
-  //  // You can now handle the selected users here
-  //}
-
   onClose(): void {
     this.dialogRef.close();
   }
 
-  // removeRow(index: number) {
-  //   this.selectedUsers.splice(index, 1);
-  // }
   openDatepicker(index: number) {
     const pickersArray = this.pickerRefs.toArray();
     if (pickersArray[index]) {
@@ -258,41 +304,69 @@ export class TransferModalComponent implements OnInit {
       selectedUserId: null,
       selectedPurposeId: null,
       selectedPriorityId: this.priorities.length > 0 ? this.priorities[0].id : null,
-      selectedDueDate: null,
+      selectedDueDate: null as Date |null,
       txtInstruction: '',
       isPrivate: false,
       isCCed: false,
-      isFollowUp: false
+      isFollowUp: false,
+      isStructure: false, // Default value
+      selectedUser: null as { id: number, name: string,structureId:number, isStructure: boolean } | null,
     };
   }
+  // onUserOrPurposeChange(index: number) {
+  //   debugger
+  //   // Add a new row when user is selected, only if it's the last row
+  //   if (index === this.rows.length - 1) {
+  //     this.rows.push(this.createEmptyRow());
+  //   }
+  // }
   onUserOrPurposeChange(index: number) {
-    debugger
-    // Add a new row when user is selected, only if it's the last row
-    if (index === this.rows.length - 1) {
-      this.rows.push(this.createEmptyRow());
+    const selectedUserId = this.rows[index].selectedUserId;
+
+    // Find the selected user in the users list
+    const selectedUser = this.users.find(user => user.id === selectedUserId);
+
+    if (selectedUser) {
+        console.log('Selected User:', selectedUser);
+        console.log('Is Structure:', selectedUser.isStructure);
+
+        // Store the extracted isStructure value in the row
+        this.rows[index].isStructure = selectedUser.isStructure;
     }
-  }
+    if (index === this.rows.length - 1) {
+          this.rows.push(this.createEmptyRow());
+        }
+}
 
 
   collectRowData(): TransferRow[] {
     const rowsData: TransferRow[] = [];
-
-    const firstRow: TransferRow = {
-      selectedUserId: this.selectedUserId,
-      purposeId: this.selectedPurposeId,
-      priorityId: this.selectedPriorityId,
-      dueDate: this.selectedDueDate,
-      instruction: this.txtInstruction,
-      isPrivate: this.isPrivate,
-      isCCed: this.isCCed,
-      isFollowUp: this.isFollowUp,
-    };
-    rowsData.push(firstRow);
-
-    // Collect data from dynamically added rows
-    this.selectedUsers.forEach((row) => {
-      rowsData.push(row);
-    });
+    this.rows.slice(0, -1).forEach((row) => {
+      const { selectedUser, selectedPurposeId, selectedPriorityId, selectedDueDate, txtInstruction, isPrivate, isCCed, isFollowUp } = row;
+  
+      const isStructure = selectedUser?.isStructure ?? false;
+      const userId = selectedUser?.id ?? null;
+      const formattedDate = (date: Date | null) => date ? date.toLocaleDateString('en-US') : null;
+      rowsData.push({
+          purposeId: selectedPurposeId ?? null,
+          priorityId: selectedPriorityId ?? null,
+          dueDate: formattedDate(selectedDueDate), 
+          instruction: txtInstruction ?? '',  
+          isPrivate: isPrivate ?? false,
+          cced: isCCed ?? false,
+          followUp: isFollowUp ?? false,
+          toStructureId: isStructure ? userId : selectedUser?.structureId, 
+          toUserId: !isStructure ? userId : null,
+          name: selectedUser?.name || '',
+          PrivateInstruction: false,
+          FromStructureId: this.fromStructureId ?? false,
+          ParentTransferId: this.parentTransferId ?? null, 
+          IsStructure: isStructure, 
+          DocumentId: this.documentId ?? null, 
+          DocumentPrivacyId: this.documentPrivacyId ?? null
+      } as TransferRow);
+  });
+  return rowsData; // ✅ Returns all rows except the last one
 
     return rowsData;
   }
@@ -302,11 +376,13 @@ export class TransferModalComponent implements OnInit {
 
     const model: any = [];
     const rowData = this.collectRowData();
-    this.mailService.transferMail(this.accessToken!, model).subscribe(
+    this.mailService.transferMail(this.accessToken!, rowData).subscribe(
       (result) => {
+        debugger
         //
       },
       (error) => {
+        debugger
         console.error('Error sending mail:', error);
       }
     );

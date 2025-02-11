@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
-import { DataTablesModule } from 'angular-datatables';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { DataTablesModule } from 'angular-datatables';
 
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { FormsModule } from '@angular/forms';
@@ -263,11 +263,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   showModalTransfer() {
+    debugger
     const dialogRef = this.dialog.open(TransferModalComponent, {
       disableClose: true,
       width: '90%',
       height: '90%',
-      data: { /* pass any required data here */ }
+      data: this.data//{ this.data }///* pass any required data here */
     });
 
     dialogRef.afterClosed().subscribe(result => {
