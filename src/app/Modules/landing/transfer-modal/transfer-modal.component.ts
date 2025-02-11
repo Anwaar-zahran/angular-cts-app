@@ -10,7 +10,9 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { LookupsService } from '../../../services/lookups.service';
 import { MailsService } from '../../../services/mail.service';
+import { ToasterService } from '../../../services/toaster.service';
 import { AuthService } from '../../auth/auth.service';
+import { ToasterComponent } from '../../shared/toaster/toaster.component';
 import { AddressBookComponent } from '../address-book/address-book.component';
 
 
@@ -19,7 +21,7 @@ interface User {
   name: string;
 }
 interface TransferRow {
-  // selectedUserId: number | null;
+  
   purposeId: number | null; // Allow null
   priorityId: number | null;
   dueDate: string | null;
@@ -36,6 +38,7 @@ interface TransferRow {
   IsStructure: true,
   DocumentId: number|null;
   DocumentPrivacyId:number|null;
+  showValidationError?: boolean;
 }
 
 @Component({
@@ -44,7 +47,7 @@ interface TransferRow {
     CommonModule, MatDialogModule, NgSelectModule,
     MatDatepickerModule,
     MatInputModule,
-    MatNativeDateModule, FormsModule],
+    MatNativeDateModule, FormsModule,ToasterComponent],
   templateUrl: './transfer-modal.component.html',
   styleUrl: './transfer-modal.component.scss'
 })
@@ -81,7 +84,7 @@ export class TransferModalComponent implements OnInit {
   isPrivate: any;
   isFollowUp: any;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,private toaster: ToasterService,
     private router: Router, private lookupsService: LookupsService, private dialog: MatDialog, private cdr: ChangeDetectorRef,
     private dialogRef: MatDialogRef<TransferModalComponent>, private mailService: MailsService) { 
       this.receivedData = data; // ✅ Initialize here to ensure it's available everywhere
@@ -163,7 +166,7 @@ export class TransferModalComponent implements OnInit {
 
             structure.userStructure?.forEach((userStruct) => {
                 if (userStruct?.user?.firstname && userStruct?.user?.lastname) {
-                     debugger;
+                     ;
                     result.push({
                         id: userStruct.user.id,
                         name: `${structure.name} / ${userStruct.user.firstname} ${userStruct.user.lastname}`,
@@ -183,7 +186,7 @@ export class TransferModalComponent implements OnInit {
   loadUserStructures(): void {
     this.lookupsService.getStructuredUsers(this.accessToken!).subscribe(
       (users) => {
-        debugger
+        
        var data= users || [];
       this.users =this.transformData(data);
 
@@ -196,9 +199,8 @@ export class TransferModalComponent implements OnInit {
     
     this.lookupsService.getPrioritiesWithDays(this.accessToken!).subscribe(
       (reponse) => {
-        debugger
+        
         this.priorities = reponse || [];
-       // this.priorities=[...(reponse || [])].sort((a, b) => a.text.localeCompare(b.text));
        const defaultPriorityId = this.priorities.length > 0 ? this.priorities[0].id : null;
         this.rows = this.rows.map(row => ({
           ...row,
@@ -212,9 +214,6 @@ export class TransferModalComponent implements OnInit {
 
     this.lookupsService.getPurposes(this.accessToken!).subscribe(
       (reponse) => {
-        debugger
-        //this.purposes = reponse || [];
-      //  this.purposes = reponse ? reponse.sort((a, b) => a.name.localeCompare(b.name)) : [];
         this.purposes = [...(reponse || [])].sort((a, b) => a.name.localeCompare(b.name));
 
       },
@@ -224,15 +223,12 @@ export class TransferModalComponent implements OnInit {
     );
   }
   updateDueDate(index: number) {//: Date
-    debugger;
     let selectedRow = this.rows[index]; // Assuming 'rows' is your data array
     let selectedPriority = this.priorities.find(p => p.id === selectedRow.selectedPriorityId);
     if (selectedPriority && selectedPriority.numberOfDueDays !== undefined) {
       let daysToAdd = selectedPriority.numberOfDueDays; // Get dynamic days
       let currentDate = new Date();
       currentDate.setDate(currentDate.getDate() + (daysToAdd-1)); // Add dynamic days
-     // selectedRow.selectedDueDate = currentDate as Date | null;
-      // Ensure only the selected row updates its date
     this.rows = this.rows.map((row, i) =>
     i === index ? { ...row, selectedDueDate: currentDate } : row
   );
@@ -311,80 +307,85 @@ export class TransferModalComponent implements OnInit {
       isFollowUp: false,
       isStructure: false, // Default value
       selectedUser: null as { id: number, name: string,structureId:number, isStructure: boolean } | null,
+      showValidationError: false
     };
   }
-  // onUserOrPurposeChange(index: number) {
-  //   debugger
-  //   // Add a new row when user is selected, only if it's the last row
-  //   if (index === this.rows.length - 1) {
-  //     this.rows.push(this.createEmptyRow());
-  //   }
-  // }
   onUserOrPurposeChange(index: number) {
-    const selectedUserId = this.rows[index].selectedUserId;
-
-    // Find the selected user in the users list
-    const selectedUser = this.users.find(user => user.id === selectedUserId);
-
-    if (selectedUser) {
-        console.log('Selected User:', selectedUser);
-        console.log('Is Structure:', selectedUser.isStructure);
-
-        // Store the extracted isStructure value in the row
-        this.rows[index].isStructure = selectedUser.isStructure;
+    // Add a new row when user is selected, only if it's the last row
+    if(this.rows[index].selectedPurposeId==10){
+      this.rows = this.rows.map((row, i) =>
+    i === index ? { ...row, isCCed: true } : row
+  );
     }
     if (index === this.rows.length - 1) {
-          this.rows.push(this.createEmptyRow());
-        }
+      this.rows.push(this.createEmptyRow());
+    }
+  }
+
+
+Transfer(): void {
+  // Validate required fields for each row efficiently
+  const rowsToValidate = this.rows.length > 1 ? this.rows.slice(0, -1) : this.rows;
+  const isValid = rowsToValidate.every((row) => {
+    const isRowValid = row.selectedUser && row.selectedPurposeId && row.selectedPriorityId;
+    row.showValidationError = !isRowValid; // Mark row as invalid if required fields are missing
+    return isRowValid;
+  });
+
+  if (!isValid) {
+    this.toaster.showToaster("Please fill all required fields before transferring.");
+    return;
+  }
+
+  const rowData = this.collectRowData();
+
+  this.mailService.transferMail(this.accessToken!, rowData).subscribe(
+    (result) => {
+      if (result.length > 0) {
+        const message = result[0].updated ? "Sent successfully" : result[0].message;
+        this.toaster.showToaster(message);
+        this.onClose();
+      }
+    },
+    (error) => {
+      this.toaster.showToaster(error.error.text ?? "Something went wrong");
+    }
+  );
 }
 
+collectRowData(): TransferRow[] {
+  const formattedDate = (date: Date | null) => date ? date.toLocaleDateString('en-GB') : null;
 
-  collectRowData(): TransferRow[] {
-    const rowsData: TransferRow[] = [];
-    this.rows.slice(0, -1).forEach((row) => {
-      const { selectedUser, selectedPurposeId, selectedPriorityId, selectedDueDate, txtInstruction, isPrivate, isCCed, isFollowUp } = row;
-  
-      const isStructure = selectedUser?.isStructure ?? false;
-      const userId = selectedUser?.id ?? null;
-      const formattedDate = (date: Date | null) => date ? date.toLocaleDateString('en-US') : null;
-      rowsData.push({
-          purposeId: selectedPurposeId ?? null,
-          priorityId: selectedPriorityId ?? null,
-          dueDate: formattedDate(selectedDueDate), 
-          instruction: txtInstruction ?? '',  
-          isPrivate: isPrivate ?? false,
-          cced: isCCed ?? false,
-          followUp: isFollowUp ?? false,
-          toStructureId: isStructure ? userId : selectedUser?.structureId, 
-          toUserId: !isStructure ? userId : null,
-          name: selectedUser?.name || '',
-          PrivateInstruction: false,
-          FromStructureId: this.fromStructureId ?? false,
-          ParentTransferId: this.parentTransferId ?? null, 
-          IsStructure: isStructure, 
-          DocumentId: this.documentId ?? null, 
-          DocumentPrivacyId: this.documentPrivacyId ?? null
-      } as TransferRow);
+  return this.rows.slice(0, -1).map(({ 
+    selectedUser, selectedPurposeId, selectedPriorityId, selectedDueDate, 
+    txtInstruction, isPrivate, isCCed, isFollowUp 
+  }) => {
+    const isStructure = selectedUser?.isStructure ?? false;
+    const userId = selectedUser?.id ?? null;
+
+    return {
+      purposeId: selectedPurposeId ?? null,
+      priorityId: selectedPriorityId ?? null,
+      dueDate: formattedDate(selectedDueDate),
+      instruction: txtInstruction ?? '',
+      isPrivate: isPrivate ?? false,
+      cced: isCCed ?? false,
+      followUp: isFollowUp ?? false,
+      toStructureId: isStructure ? userId : selectedUser?.structureId,
+      toUserId: !isStructure ? userId : null,
+      name: selectedUser?.name || '',
+      PrivateInstruction: false,
+      FromStructureId: this.fromStructureId ?? false,
+      ParentTransferId: this.parentTransferId ?? null,
+      IsStructure: isStructure,
+      DocumentId: this.documentId ?? null,
+      DocumentPrivacyId: this.documentPrivacyId ?? null
+    } as TransferRow;
   });
-  return rowsData; // ✅ Returns all rows except the last one
+}
 
-    return rowsData;
-  }
+ 
 
 
-  Transfer(): void {
-
-    const model: any = [];
-    const rowData = this.collectRowData();
-    this.mailService.transferMail(this.accessToken!, rowData).subscribe(
-      (result) => {
-        debugger
-        //
-      },
-      (error) => {
-        debugger
-        console.error('Error sending mail:', error);
-      }
-    );
-  }
+  
 }

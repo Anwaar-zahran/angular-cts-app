@@ -22,6 +22,8 @@ import { TransferModalComponent } from '../transfer-modal/transfer-modal.compone
 // Import OrgChart from @balkangraph/orgchart.js
 import OrgChart from '@balkangraph/orgchart.js';
 import { LookupsService } from '../../../services/lookups.service';
+import { ToasterService } from '../../../services/toaster.service';
+import { ToasterComponent } from '../../shared/toaster/toaster.component';
 
 interface TreeNode {
   id: string | number;
@@ -48,7 +50,9 @@ interface FlatTreeNode {
     MatTreeModule,
     NgSelectModule,
     FormsModule,
-    TranslateModule
+    TranslateModule,
+    ToasterComponent,
+
   ],
   templateUrl: './mail-details-dialog.component.html',
   styleUrls: ['./mail-details-dialog.component.scss']
@@ -129,7 +133,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     private lookupsService: LookupsService,
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<MailDetailsDialogComponent>,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private toaster: ToasterService
   ) {
     // Initialize Angular Material tree for attachments
     this.treeFlattener = new MatTreeFlattener(
@@ -264,6 +269,9 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   showModalTransfer() {
     debugger
+    if(this.data.row.isLocked){
+      this.toaster.showToaster("There is a file checked out, please make sure to check in or discard checkout.");
+    }else{
     const dialogRef = this.dialog.open(TransferModalComponent, {
       disableClose: true,
       width: '90%',
@@ -273,7 +281,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('Transfer modal closed', result);
+      this.dialogRef.close();
+
     });
+  }
   }
 
   showModalReply() {

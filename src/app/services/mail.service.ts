@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -16,18 +16,25 @@ export class MailsService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json', // Only one Content-Type header is needed
+      'Accept': 'application/json'
     });
 
-    const params = new URLSearchParams();
-    params.set('delegationId', '');
-    params.set('maintainTransfer', 'false');
-    params.set('withSign', 'false');
-    params.set('signatureTemplateId', '');
-
+    let params = new HttpParams();
+    params = params.set('maintainTransfer', 'false').set('withSign', 'false');
+  
     const url = `${this.transferURL}?${params.toString()}`;
+  
+    // Ensure numbers are sent correctly
+    const body = model.map(item => ({
+      ...item,
+      priorityId: Number(item.priorityId),
+      purposeId: Number(item.purposeId),
+      toUserId: item.toUserId ? Number(item.toUserId) : null,
+      toStructureId: item.toStructureId ? Number(item.toStructureId) : null
+    }));
 
-    return this.httpClient.post(url, model, { headers }).pipe(
-      catchError((error) => {
+    return this.httpClient.post(url, JSON.stringify(body), { headers }).pipe(
+      catchError((error) => { 
         console.error('Error while transferring mail', error.message);
         throw error;
       })
