@@ -37,7 +37,7 @@
       <tbody>
         <tr class="col-lg-12" *ngFor="let row of rows; let i = index">
           <td>
-            <ng-select id="ddlToUsers{{i}}" name="toUsers" [items]="users" [(ngModel)]="row.selectedUser"
+            <ng-select id="ddlToUsers{{i}}" name="toUsers{{i}}" [items]="users" [(ngModel)]="row.selectedUser"
                        (ngModelChange)="onUserOrPurposeChange(i)" bindLabel="name" class="form-control">
               <ng-template ng-label-tmp let-item="item">
                 {{ item.name }} <span *ngIf="item.isStructure">(Structure)</span>
@@ -46,7 +46,7 @@
             <div *ngIf="row.showValidationError && !row.selectedUser" class="text-danger">This field is required</div>
           </td>
           <td>
-            <ng-select id="ddlPurposes{{i}}" name="dllPurposes" [items]="purposes" [(ngModel)]="row.selectedPurposeId"
+            <ng-select id="ddlPurposes{{i}}" name="dllPurposes{{i}}" [items]="purposes" [(ngModel)]="row.selectedPurposeId"
                        (ngModelChange)="onUserOrPurposeChange(i)" bindLabel="name" bindValue="id" class="form-control">
               <ng-template ng-label-tmp let-item="item">
                 {{ item.name }}
@@ -55,7 +55,7 @@
             <div *ngIf="row.showValidationError && !row.selectedPurposeId" class="text-danger">This field is required</div>
           </td>
           <td>
-            <ng-select id="ddlToPriority{{i}}" name="dllPriority" [items]="priorities" [(ngModel)]="row.selectedPriorityId"
+            <ng-select id="ddlToPriority{{i}}" name="dllPriority{{i}}" [items]="priorities" [(ngModel)]="row.selectedPriorityId"
                        (ngModelChange)="updateDueDate(i)" bindLabel="name" bindValue="id" class="form-control">
               <ng-template ng-label-tmp let-item="item">
                 {{ item.name }}
@@ -65,27 +65,27 @@
           </td>
           <td>
             <input class="form-control date-picker" matInput [matDatepicker]="picker"
-            [(ngModel)]="row.selectedDueDate" placeholder="mm-dd-yyyy" name="dp3"
+            [(ngModel)]="row.selectedDueDate" placeholder="mm-dd-yyyy" name="dp3{{i}}"
             (click)="openDatepicker(i)" />
           <mat-datepicker #picker></mat-datepicker>
           </td>
           <td>
-            <input id="txtTransferInstruction{{i}}" name="txtTransferInstruction" [(ngModel)]="row.txtInstruction"
+            <input id="txtTransferInstruction{{i}}" name="txtTransferInstruction{{i}}" [(ngModel)]="row.txtInstruction"
                    class="form-control" type="text" />
           </td>
           <td>
             <div class="form-check justify-content-center">
-              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isPrivate" id="chbxPrivate{{i}}" name="ckIsPrivate" >
+              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isPrivate" id="chbxPrivate{{i}}" name="ckIsPrivate{{i}}" >
             </div>
           </td>
           <td>
             <div class="form-check justify-content-center">
-              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isCCed" id="chbxCCed{{i}}" name="ckISCced">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isCCed" id="chbxCCed{{i}}" name="ckISCced{{i}}">
             </div>
           </td>
           <td>
             <div class="form-check justify-content-center">
-              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isFollowUp" id="chbxFollowUp{{i}}" name="ckIsFollowUp">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isFollowUp" id="chbxFollowUp{{i}}" name="ckIsFollowUp{{i}}">
             </div>
           </td>
           <!-- <td>
