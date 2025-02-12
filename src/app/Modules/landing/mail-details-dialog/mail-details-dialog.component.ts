@@ -123,7 +123,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   users: any[] = [];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { row: any, id: string, referenceNumber: string, fromSearch: boolean, showActionButtons: boolean },
+    @Inject(MAT_DIALOG_DATA) public data: { row: any, id: string,documentId: string, referenceNumber: string, fromSearch: boolean, showActionButtons: boolean },
     private authService: AuthService,
     private router: Router,
     private sanitizer: DomSanitizer,
@@ -269,22 +269,33 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   showModalTransfer() {
     debugger
-    if(this.data.row.isLocked){
-      this.toaster.showToaster("There is a file checked out, please make sure to check in or discard checkout.");
-    }else{
-    const dialogRef = this.dialog.open(TransferModalComponent, {
-      disableClose: true,
-      width: '90%',
-      height: '90%',
-      data: this.data//{ this.data }///* pass any required data here */
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('Transfer modal closed', result);
-      this.dialogRef.close();
-
-    });
-  }
+    this.searchService.CheckDocumentAttachmnentISLocked(this.accessToken!, this.data.documentId).subscribe(
+      (isLocked: boolean) => {
+        console.log('Document is locked:', isLocked);
+        if (isLocked) {
+          this.toaster.showToaster("There is a file checked out, please make sure to check in or discard checkout.");
+        } else {
+          // Perform actions if the document is not locked
+          const dialogRef = this.dialog.open(TransferModalComponent, {
+            disableClose: true,
+            width: '90%',
+            height: '90%',
+            data: this.data//{ this.data }///* pass any required data here */
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {
+            console.log('Transfer modal closed', result);
+            this.dialogRef.close();
+      
+          });
+        }
+      },
+      (error) => {
+        console.error('Error checking document lock:', error);
+      }
+    );
+    debugger
+   
   }
 
   showModalReply() {

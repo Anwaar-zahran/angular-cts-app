@@ -167,7 +167,18 @@
         "TITLE": "Transfer",
         "TO": "To",
         "PURPOSE": "Purpose",
-        "NOTES": "Notes"
+        "NOTES": "Notes",
+        "PRIORITY":"Priority",
+        "DUEDATE":"Due date",
+        "INSTRUCTION":"Instruction",
+        "PRIVATE":"Private",
+        "CCED":"CCed",
+        "FOLLOWUP":"Follow Up",
+        "BUTTONS": {
+            "CLOSE":"Close",
+            "TRANSFER": "Transfer"
+            
+        }
     },
     "TABLE": {
         "HEADERS": {

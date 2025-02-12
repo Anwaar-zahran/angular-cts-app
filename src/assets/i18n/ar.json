@@ -148,7 +148,18 @@
         "TITLE": "تحويل",
         "TO": "إلى",
         "PURPOSE": "الغرض",
-        "NOTES": "ملاحظات"
+        "NOTES": "ملاحظات",
+        "PRIORITY":"الأولوية",
+        "DUEDATE":"تاريخ الاستحقاق",
+        "INSTRUCTION":"تعليمات",
+        "PRIVATE":"خاص",
+        "CCED":"نسخة",
+        "FOLLOWUP":"المتابعة",
+        "BUTTONS": {
+            "CLOSE":"إغلاق",
+            "TRANSFER": "تحويل"
+            
+        }
     },
     "TABLE": {
         "HEADERS": {

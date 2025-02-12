@@ -8,13 +8,13 @@ import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LookupsService } from '../../../services/lookups.service';
 import { MailsService } from '../../../services/mail.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { AuthService } from '../../auth/auth.service';
 import { ToasterComponent } from '../../shared/toaster/toaster.component';
 import { AddressBookComponent } from '../address-book/address-book.component';
-
 
 interface User {
   id: number;
@@ -47,7 +47,7 @@ interface TransferRow {
     CommonModule, MatDialogModule, NgSelectModule,
     MatDatepickerModule,
     MatInputModule,
-    MatNativeDateModule, FormsModule,ToasterComponent],
+    MatNativeDateModule, FormsModule,ToasterComponent,TranslateModule],
   templateUrl: './transfer-modal.component.html',
   styleUrl: './transfer-modal.component.scss'
 })
@@ -86,7 +86,7 @@ export class TransferModalComponent implements OnInit {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,private toaster: ToasterService,
     private router: Router, private lookupsService: LookupsService, private dialog: MatDialog, private cdr: ChangeDetectorRef,
-    private dialogRef: MatDialogRef<TransferModalComponent>, private mailService: MailsService) { 
+    private dialogRef: MatDialogRef<TransferModalComponent>, private mailService: MailsService,private translate: TranslateService) { 
       this.receivedData = data; // ✅ Initialize here to ensure it's available everywhere
       this.documentId=this.data.documentId;
       this.documentPrivacyId=this.data.row.privacyId;
