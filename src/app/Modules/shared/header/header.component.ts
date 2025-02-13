@@ -7,6 +7,8 @@ import { StructuresService } from '../../../services/structures.service';
 import { jwtDecode } from 'jwt-decode';
 import { CurrentUserStructures } from '../../../models/current-user-structures';
 import { DisplayStructure } from '../../../models/display-structure';
+import { ConfirmationmodalComponent } from '../confirmationmodal/confirmationmodal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-header',
@@ -53,8 +55,9 @@ export class HeaderComponent implements OnInit {
     private route: Router,
     private authService: AuthService,
     private translateService: TranslateService,
-    private toasterService: ToasterService,
+    private modalService: NgbModal,
     private structuresService: StructuresService
+
   ) {
     this.currentLang = this.translateService.currentLang || 'en';
   }
@@ -89,25 +92,10 @@ export class HeaderComponent implements OnInit {
     return this.languages.find(lang => lang.code === this.currentLang)?.name || 'English';
   }
 
-
-  private getUserTypeId() {
-    let token = this.authService.getToken(); 
-    if (!token) {
-      console.log("No token found");
-      return null;
-    }
-    try {
-      let decoded = jwtDecode(token); 
-      let userTypeId = decoded?.UserTypeId;
-      return userTypeId;
-    } catch (error) {
-      console.log("Invalid token", error);
-      return null;
-    }
-  }
   
   private loadStructures(){
-    let userTypeId = this.getUserTypeId();
+    let userTypeId = this.authService.getUserTypeId();
+    console.log('User Type Id:', userTypeId);
     if(!userTypeId){
       return;
     }
@@ -117,6 +105,7 @@ export class HeaderComponent implements OnInit {
 
         console.log('Response:', response);
         const structures = response.structures;
+
         localStorage.setItem('currentUser', response.fullName);
         structures.forEach((structure) => {
 
@@ -137,15 +126,20 @@ export class HeaderComponent implements OnInit {
   }
 
   onStructureChange(structureId: number) {
-    
-    let CurrentUserStructures = this.structuresItems.find(structure => structure.StructureId === structureId);
+    if(structureId){
+    const modalRef = this.modalService.open(ConfirmationmodalComponent);
+    this.translateService.get('Are you sure to change the structure').subscribe((msg: string) => {
+      modalRef.componentInstance.message = msg;
+    });
 
-    this.structuresItems.forEach(structure => structure.active = false);
+    modalRef.componentInstance.confirmed.subscribe(()=>{
+      let CurrentUserStructures = this.structuresItems.find(structure => structure.StructureId === structureId);
+      this.structuresItems.forEach(structure => structure.active = false);
 
-    if (CurrentUserStructures) {
+      if (CurrentUserStructures) {
       CurrentUserStructures.active = true;
+      }
+      localStorage.setItem('structureId', structureId.toString());})
     }
-
-    localStorage.setItem('structureId', structureId.toString());
   }
 }

@@ -30,8 +30,8 @@ export class StructuresService {
         );
     }
 
-    getStructureById(id: number | undefined): Observable<CurrentUserStructures> {
-        
+    getStructureById(id: string | undefined): Observable<CurrentUserStructures> {
+        console.log('id:', id);
         return this.http.get<CurrentUserStructures>(`${this.baseUrl}/GetUser?id=${id}`);
     }
     
