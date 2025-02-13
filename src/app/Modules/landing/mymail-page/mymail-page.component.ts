@@ -201,40 +201,7 @@ export class MymailPageComponent implements OnInit {
     });
   }
   sortOrder: { [key: string]: 'asc' | 'desc' } = { date: 'asc', ref: 'asc' };
-  sortBy2(criteria: string) {
-    if (this.sortOrder[criteria] === 'asc') {
-        this.newItems.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-        this.sortOrder[criteria] = 'desc'; // Next click will be descending
-    } else {
-        this.newItems.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        this.sortOrder[criteria] = 'asc'; // Next click will be ascending
-    }
-  }
-  sortBy1(criteria: string) {
-    debugger
-    let activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
-
-    switch (activeTab) {
-        case '#nav-new':
-          debugger
-            //this.newItems.sort((a, b) => this.compare(a, b, criteria));
-            if(criteria ==="date"){
-              this.newItems.sort((a, b) => {
-                return new Date(a.date).getTime() - new Date(b.date).getTime();
-            });
-            }
-            break;
-        case '#nav-sent':
-            this.sentItems.sort((a, b) => this.compare(a, b, criteria));
-            break;
-        case '#nav-completed':
-            this.completedItems.sort((a, b) => this.compare(a, b, criteria));
-            break;
-    }
-}
-
-
-sortBy(criteria: string) {
+  sortBy(criteria: string) {
     let activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
     let dataArray: any[] = [];
 
