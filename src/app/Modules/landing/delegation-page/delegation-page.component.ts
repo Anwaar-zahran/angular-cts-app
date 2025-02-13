@@ -142,8 +142,14 @@ export class DelegationPageComponent implements OnInit {
     this.lookupservice.getUsers(this.accessToken!).subscribe(
       (response) => {
         this.contacts = response || [];
+        console.log('Contacts', this.contacts);
+
         this.contacts.unshift({ id: 0, fullName: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_NAME') });
 
+        let currentExistUser = this.authService.getCurrentUserFullName();     
+        console.log('currentUser:', currentExistUser);
+        this.contacts = this.contacts.filter(contact => contact.fullName !== currentExistUser);
+        
         if (this.contacts.length > 0) {
           this.delegationForm.patchValue({
             userId: this.contacts[0]?.id,
@@ -233,13 +239,15 @@ export class DelegationPageComponent implements OnInit {
         toDate: this.formatDate(formValues.toDate),
         categoryIds: formValues.categoryId,
         privacyId: formValues.privacyId,
-        allowSign: formValues.allowSign ?? false,
-        showOldCorrespondecne: formValues.showOldCorrespondence,
+        allowSign: formValues.allowSign || false,
+        showOldCorrespondecne: formValues.showOldCorrespondence || false,
         toUser: formValues.userId,
         privacyName: '',
         createdDate: '',
         toUserValueText: { text: null, parentName: null },
       };
+
+      console.log('Item data:', itemData);
 
       if (this.isEdit) {
         if (this.selectedRowId !== null && this.selectedRowId !== undefined) {
@@ -344,5 +352,9 @@ export class DelegationPageComponent implements OnInit {
       month: today.getMonth() + 1,
       day: today.getDate(),
     };
+  }
+
+  preventPaste(event: ClipboardEvent): void {
+    event.preventDefault();
   }
 }

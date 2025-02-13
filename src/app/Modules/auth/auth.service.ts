@@ -79,6 +79,28 @@ export class AuthService {
     return '';
   }
 
+  getCurrentUserFullName(): string {
+    const token = localStorage.getItem('access_token');
+    if (token && token.split('.').length === 3) {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      console.log(decodedToken);
+      console.log(decodedToken.FirstName +' '+ decodedToken.LastName);
+      return decodedToken.FirstName + ' '+decodedToken.LastName || '';
+    }
+    return '';
+  }
+
+  getUserTypeId(): string {
+    const token = localStorage.getItem('access_token');
+    if (token && token.split('.').length === 3) {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      console.log(decodedToken);
+      console.log('user id from auth'+ decodedToken.Id);
+      return decodedToken.Id || '';
+    }
+    return '';
+  }
+
   getDisplayName(): string {
     const token = localStorage.getItem('access_token');
     if (token && token.split('.').length === 3) {

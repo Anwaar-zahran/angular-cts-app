@@ -118,7 +118,8 @@ export class MymailPageComponent implements OnInit {
     const payload = this.accessToken.split('.')[1];
     const decodedPayload = this.base64UrlDecode(payload);
     const parsedPayload = JSON.parse(decodedPayload);
-    this.structureId = parsedPayload.StructureId;
+    this.structureId = localStorage.getItem('structureId') || parsedPayload.StructureId;
+    console.log('Structure ID:', this.structureId);
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.accessToken}`,
     });

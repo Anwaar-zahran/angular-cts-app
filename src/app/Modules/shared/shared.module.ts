@@ -8,7 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [
     CommonModule,
     FormsModule,
-    TranslateModule
+    TranslateModule,
   ],
   exports:
     []
