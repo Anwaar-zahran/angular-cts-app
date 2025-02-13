@@ -67,7 +67,7 @@
         <div class="form-group">
           <label for="ddlCategories" class="form-label required">{{ 'DELEGATION.CATEGORY' | translate }}</label>
           <ng-select id="ddlCategories" formControlName="categoryId" multiple [items]="categories || []"
-            bindLabel="text" bindValue="id" [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_CATEGORY' | translate"
+            bindLabel="text" bindValue="id"  [closeOnSelect]="false" [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_CATEGORY' | translate"
             class="form-control">
           </ng-select>
           <div *ngIf="delegationForm.controls['categoryId'].invalid && delegationForm.controls['categoryId'].touched"
