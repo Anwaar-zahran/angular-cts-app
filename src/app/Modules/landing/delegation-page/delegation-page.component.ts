@@ -142,8 +142,14 @@ export class DelegationPageComponent implements OnInit {
     this.lookupservice.getUsers(this.accessToken!).subscribe(
       (response) => {
         this.contacts = response || [];
+        console.log('Contacts', this.contacts);
+
         this.contacts.unshift({ id: 0, fullName: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_NAME') });
 
+        let currentExistUser = localStorage.getItem('currentUser');       
+        console.log('currentUser:', currentExistUser);
+        this.contacts = this.contacts.filter(contact => contact.fullName !== currentExistUser);
+        
         if (this.contacts.length > 0) {
           this.delegationForm.patchValue({
             userId: this.contacts[0]?.id,

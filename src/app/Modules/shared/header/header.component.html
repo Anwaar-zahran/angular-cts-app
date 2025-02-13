@@ -36,7 +36,6 @@
             </ul>
         </div>
 
-        <!-- User Menu -->
         <div class="dropdown">
             <!--user info-->
             <div class="user" data-bs-toggle="dropdown" aria-expanded="false">
@@ -54,6 +53,17 @@
                         {{ item.title | translate }}
                     </a>
                 </li>
+                <!-- Strucutres menu -->
+                <div class="sidebar">
+                    <h4 class="title">Structures</h4>
+                    <ul class="menu "  aria-labelledby="">
+                      <li *ngFor="let item of structuresItems;let i = index" 
+                          [class.active]="item.active"
+                          (click)="onStructureChange(item.StructureId)">
+                        {{ item.name | translate }}
+                      </li>
+                    </ul>
+                </div>                  
             </ul>
         </div>
     </div>

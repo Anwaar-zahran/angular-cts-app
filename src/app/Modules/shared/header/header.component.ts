@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ToasterService } from '../../../services/toaster.service';
+import { StructuresService } from '../../../services/structures.service';
+import { jwtDecode } from 'jwt-decode';
+import { CurrentUserStructures } from '../../../models/current-user-structures';
+import { DisplayStructure } from '../../../models/display-structure';
 
 @Component({
   selector: 'app-header',
@@ -25,8 +30,17 @@ export class HeaderComponent implements OnInit {
   ];
 
   userNav = [
-    { link: '#', title: 'HEADER.USER_NAV.LOGOUT' },
+    { link: '#', title: 'HEADER.USER_NAV.LOGOUT' }
   ];
+
+  // structuresItems = [
+  //   { name: 'Intalio', active: true, StructureId: 4},
+  //   { name: 'PS Team', active: false,  StructureId: 1 },
+  //   { name: 'Product Egypt', active: false, StructureId: 5 }
+  // ]
+
+  structuresItems2: CurrentUserStructures[] = [];
+  structuresItems: DisplayStructure[] = [];
 
   languages = [
     { code: 'en', name: 'English', dir: 'ltr' },
@@ -38,7 +52,9 @@ export class HeaderComponent implements OnInit {
   constructor(
     private route: Router,
     private authService: AuthService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private toasterService: ToasterService,
+    private structuresService: StructuresService
   ) {
     this.currentLang = this.translateService.currentLang || 'en';
   }
@@ -47,15 +63,19 @@ export class HeaderComponent implements OnInit {
     this.authService.CurrentUser.subscribe(user => {
       this.userName = user;
     });
-
     this.route.events.subscribe(() => {
       this.showMenu = this.route.url !== '/landing';
     });
+
+    this.loadStructures();
   }
+
+ 
 
   onLogout(event: Event) {
     event.preventDefault();
     this.authService.logout();
+    console.log('Logged out');
   }
 
   switchLanguage(lang: string) {
@@ -67,5 +87,65 @@ export class HeaderComponent implements OnInit {
 
   getCurrentLangName(): string {
     return this.languages.find(lang => lang.code === this.currentLang)?.name || 'English';
+  }
+
+
+  private getUserTypeId() {
+    let token = this.authService.getToken(); 
+    if (!token) {
+      console.log("No token found");
+      return null;
+    }
+    try {
+      let decoded = jwtDecode(token); 
+      let userTypeId = decoded?.UserTypeId;
+      return userTypeId;
+    } catch (error) {
+      console.log("Invalid token", error);
+      return null;
+    }
+  }
+  
+  private loadStructures(){
+    let userTypeId = this.getUserTypeId();
+    if(!userTypeId){
+      return;
+    }
+
+    this.structuresService.getStructureById(userTypeId).subscribe({
+      next: (response:CurrentUserStructures) => {
+
+        console.log('Response:', response);
+        const structures = response.structures;
+        localStorage.setItem('currentUser', response.fullName);
+        structures.forEach((structure) => {
+
+          this.structuresItems.push({ 
+            name: structure.name,
+            active: response.defaultStructureId == structure.id,
+            StructureId: structure.id });
+        });
+        
+      },
+      error: (error) => {
+        console.log('Error fetching structure:', error.message);
+      },
+      complete: () => {
+        console.log('Request completed.');
+      }
+    });
+  }
+
+  onStructureChange(structureId: number) {
+    
+    let CurrentUserStructures = this.structuresItems.find(structure => structure.StructureId === structureId);
+
+    this.structuresItems.forEach(structure => structure.active = false);
+
+    if (CurrentUserStructures) {
+      CurrentUserStructures.active = true;
+    }
+
+    localStorage.setItem('structureId', structureId.toString());
   }
 }

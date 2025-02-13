@@ -79,6 +79,11 @@ export class AuthService {
     return '';
   }
 
+  getCurrentUserFullName(): string {
+    const fullName = localStorage.getItem('currentUser');
+    return fullName || '';
+  }
+
   getDisplayName(): string {
     const token = localStorage.getItem('access_token');
     if (token && token.split('.').length === 3) {

@@ -37,3 +37,42 @@
     }
   }
 }
+
+.sidebar {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  color: #666;
+
+  .title {
+    font-size: 14px;
+    margin: 0.5rem 1rem;
+    text-align: center;
+  };
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  };
+
+  li {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    margin: 1rem;
+  
+    &:hover{
+      background-color: #e9ecef;
+      color:var(--text-black);
+    }
+  
+    &.active{
+      color: #0095DA;
+      border-left-color: #0095DA;
+      background-color: #f8f9fa;;
+    }
+  
+  }
+
+}
+
+

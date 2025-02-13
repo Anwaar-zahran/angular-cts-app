@@ -99,15 +99,15 @@ export class MailPageComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-    debugger
     const payload = this.accessToken.split('.')[1];
     const decodedPayload = this.base64UrlDecode(payload);
     const parsedPayload = JSON.parse(decodedPayload);
-    this.structureId = parsedPayload.StructureId;
+    this.structureId = localStorage.getItem('structureId') || parsedPayload.structureId;
+    console.log('Structure ID: from mail Service ', this.structureId);
+
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.accessToken}`,
     });
-
     const formData = new FormData();
     formData.append('length', '1000');
     formData.append('structureId', this.structureId);

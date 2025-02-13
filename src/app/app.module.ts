@@ -61,14 +61,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-
-
     JwtModule.forRoot({
-      config: {
-        tokenGetter: tokenGetter, // Helps JwtHelperService find the token
-        allowedDomains: ['localhost:8090'], // Define the allowed API domains
-        disallowedRoutes: [] // Specify routes that do not require a token
-      }
+        config: {
+            tokenGetter: tokenGetter, // Helps JwtHelperService find the token
+            allowedDomains: ['localhost:8090'], // Define the allowed API domains
+            disallowedRoutes: [] // Specify routes that do not require a token
+        }
     }),
     BrowserAnimationsModule,
     MatDatepickerModule,
@@ -76,13 +74,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatInputModule,
     MatNativeDateModule,
     TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    })
-  ],
+        loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient]
+        }
+    }),
+],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
