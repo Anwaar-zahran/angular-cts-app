@@ -200,4 +200,92 @@ export class MymailPageComponent implements OnInit {
       }
     });
   }
+  sortOrder: { [key: string]: 'asc' | 'desc' } = { date: 'asc', ref: 'asc' };
+  sortBy2(criteria: string) {
+    if (this.sortOrder[criteria] === 'asc') {
+        this.newItems.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        this.sortOrder[criteria] = 'desc'; // Next click will be descending
+    } else {
+        this.newItems.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        this.sortOrder[criteria] = 'asc'; // Next click will be ascending
+    }
+  }
+  sortBy1(criteria: string) {
+    debugger
+    let activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
+
+    switch (activeTab) {
+        case '#nav-new':
+          debugger
+            //this.newItems.sort((a, b) => this.compare(a, b, criteria));
+            if(criteria ==="date"){
+              this.newItems.sort((a, b) => {
+                return new Date(a.date).getTime() - new Date(b.date).getTime();
+            });
+            }
+            break;
+        case '#nav-sent':
+            this.sentItems.sort((a, b) => this.compare(a, b, criteria));
+            break;
+        case '#nav-completed':
+            this.completedItems.sort((a, b) => this.compare(a, b, criteria));
+            break;
+    }
+}
+
+
+sortBy(criteria: string) {
+    let activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
+    let dataArray: any[] = [];
+
+    switch (activeTab) {
+        case '#nav-new':
+            dataArray = this.newItems;
+            break;
+        case '#nav-sent':
+            dataArray = this.sentItems;
+            break;
+        case '#nav-completed':
+            dataArray = this.completedItems;
+            break;
+        default:
+            return; // If no valid tab, exit function
+    }
+
+    if (!dataArray || dataArray.length === 0) return;
+
+    // Toggle sorting order
+    if (this.sortOrder[criteria] === 'asc') {
+        dataArray.sort((a, b) => {
+            if (criteria === 'date') {
+                return new Date(a.date).getTime() - new Date(b.date).getTime();
+            } else if (criteria === 'ref') {
+                return (a?.ref || '').localeCompare(b?.ref || '');
+            }
+            return 0;
+        });
+        this.sortOrder[criteria] = 'desc';
+    } else {
+        dataArray.sort((a, b) => {
+            if (criteria === 'date') {
+                return new Date(b.date).getTime() - new Date(a.date).getTime();
+            } else if (criteria === 'ref') {
+                return (b?.ref || '').localeCompare(a?.ref || '');
+            }
+            return 0;
+        });
+        this.sortOrder[criteria] = 'asc';
+    }
+}
+
+compare(a: any, b: any, criteria: string): number {
+  if (criteria === 'date') {
+      return new Date(a?.date || 0).getTime() - new Date(b?.date || 0).getTime();
+  }
+  if (criteria === 'ref') {
+      return (a?.ref || '').localeCompare(b?.ref || '');
+  }
+  return 0;
+}
+
 }

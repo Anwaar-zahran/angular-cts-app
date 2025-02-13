@@ -198,8 +198,7 @@ export class MailPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('Mail details closed', result);
       window.location.reload();
-      //this.fetchData();
-      //this.router.navigate([this.router.url]);
+   
     });
   }
 
@@ -213,5 +212,32 @@ export class MailPageComponent implements OnInit {
       }
     });
   }
+  sortBy(criteria: string) {
+    debugger
+    let activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
+
+    switch (activeTab) {
+        case '#nav-new':
+            this.newItems.sort((a, b) => this.compare(a, b, criteria));
+            break;
+        case '#nav-sent':
+            this.sentItems.sort((a, b) => this.compare(a, b, criteria));
+            break;
+        case '#nav-completed':
+            this.completedItems.sort((a, b) => this.compare(a, b, criteria));
+            break;
+    }
+}
+
+compare(a: any, b: any, criteria: string): number {
+    if (criteria === 'date') {
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+    }
+    if (criteria === 'ref') {
+        return a.ref.localeCompare(b.ref);
+    }
+    return 0;
+}
+
 }
 

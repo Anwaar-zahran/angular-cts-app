@@ -126,7 +126,7 @@
     },
     "LOGIN": {
         "TITLE": "Login",
-        "SYSTEM_TITLE": "Document Management System",
+        "SYSTEM_TITLE": "Correspondence Tracking System",
         "SUBTITLE": "Please enter your credentials to login",
         "USERNAME": "Username",
         "PASSWORD": "Password",
