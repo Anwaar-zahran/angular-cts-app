@@ -184,7 +184,7 @@ export class MymailPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('Mail details closed', result);
-      window.location.reload();
+    //  window.location.reload();
       //this.fetchData();
       //this.router.navigate([this.router.url]);
     });
