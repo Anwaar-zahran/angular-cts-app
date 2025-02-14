@@ -2,8 +2,12 @@
   <!-- Title -->
   <div class="d-flex justify-content-between">
     <h1 class="page-title">{{ 'DELEGATION.TITLE' | translate }}</h1>
+    <button class="btn btn-secondary mb-3" (click)="toggleSearchForm()">
+      <i class="fa" [ngClass]="formVisible ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+    </button>
   </div>
   <!-- Form -->
+  <div *ngIf="formVisible" [@expandCollapse]>
   <form [formGroup]="delegationForm">
     <div class="row">
       <!-- Full Name -->
@@ -108,8 +112,9 @@
     </div>
   </form>
   <hr />
+  </div>
   <!-- Table -->
-  <div class="shadow table-container">
+  <div class="shadow table-container overflow-x-auto">
     <table class="table" *ngIf="data && data.length > 0" datatable [dtOptions]="dtOptions">
       <thead>
         <tr>

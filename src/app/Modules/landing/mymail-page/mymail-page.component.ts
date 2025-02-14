@@ -54,31 +54,70 @@ export class MymailPageComponent implements OnInit {
     this.initDtOptions();
     this.loadData();
   }
-
+  ngAfterViewInit() {
+    /*reset pagination*/
+    const tabTriggers = document.querySelectorAll('[data-bs-toggle="tab"]');
+    tabTriggers.forEach(tab => {
+      tab.addEventListener('shown.bs.tab', () => {
+        setTimeout(() => {
+          const activePane = document.querySelector('.tab-pane.active');
+          if (activePane) {
+            const table = activePane.querySelector('table');
+            if (table) {
+              const dt = $(table).DataTable();
+              dt.page(0).draw('page');
+            }
+          }
+        }, 50);
+      });
+    });
+  }
   private initDtOptions() {
     this.translate.get('COMMON.DATATABLE').subscribe(translations => {
       this.dtOptions = {
         pageLength: 10,
-        search: false,
-        order: [],
         pagingType: 'full_numbers',
         paging: true,
         searching: false,
-        displayStart: 0,
         autoWidth: false,
         language: {
-          search: "",
-          info: "",
           paginate: {
             first: "<i class='text-secondary fa fa-angle-left'></i>",
             previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
             next: "<i class='text-secondary fa fa-angle-double-right'></i>",
             last: "<i class='text-secondary fa fa-angle-right'></i>",
           },
-          emptyTable: ""
         },
-        dom: "tp",
-        ordering: false
+        dom: 'tp',
+        drawCallback: (settings: any) => {
+          const api = settings.oInstance.api();
+          const pageInfo = api.page.info();
+          const pagination = $(api.table().container()).find('.dataTables_paginate');
+          pagination.find('input.paginate-input').remove();
+          const page = $('<span class="d-inline-flex align-items-center mx-2">Page <input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> of ' + pageInfo.pages + '</span>');
+            
+          
+          let timeout: any;
+          page.find('input').on('keyup', function () {
+            clearTimeout(timeout);
+            
+            timeout = setTimeout(() => {
+              const pageNumber = parseInt($(this).val() as string, 10);
+              if (pageNumber >= 1 && pageNumber <= pageInfo.pages) {
+                api.page(pageNumber - 1).draw('page');
+              }
+            }, 500);
+          });
+    
+          const previous = pagination.find('.previous');
+          const next = pagination.find('.next');
+          page.insertAfter(previous); 
+          next.insertAfter(page);
+    
+          pagination.find('a.paginate_button').on('click', function () {
+            page.find('input').val(api.page() + 1);
+          });
+        }
       };
     });
   }
@@ -203,48 +242,28 @@ export class MymailPageComponent implements OnInit {
   }
   sortOrder: { [key: string]: 'asc' | 'desc' } = { date: 'asc', ref: 'asc' };
   sortBy(criteria: string) {
-    let activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
-    let dataArray: any[] = [];
-
-    switch (activeTab) {
-        case '#nav-new':
-            dataArray = this.newItems;
-            break;
-        case '#nav-sent':
-            dataArray = this.sentItems;
-            break;
-        case '#nav-completed':
-            dataArray = this.completedItems;
-            break;
-        default:
-            return; // If no valid tab, exit function
+    const activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
+    
+    if (!activeTab) {
+      return;
     }
-
-    if (!dataArray || dataArray.length === 0) return;
-
-    // Toggle sorting order
-    if (this.sortOrder[criteria] === 'asc') {
-        dataArray.sort((a, b) => {
-            if (criteria === 'date') {
-                return new Date(a.date).getTime() - new Date(b.date).getTime();
-            } else if (criteria === 'ref') {
-                return (a?.ref || '').localeCompare(b?.ref || '');
-            }
-            return 0;
-        });
-        this.sortOrder[criteria] = 'desc';
-    } else {
-        dataArray.sort((a, b) => {
-            if (criteria === 'date') {
-                return new Date(b.date).getTime() - new Date(a.date).getTime();
-            } else if (criteria === 'ref') {
-                return (b?.ref || '').localeCompare(a?.ref || '');
-            }
-            return 0;
-        });
-        this.sortOrder[criteria] = 'asc';
+  
+    const table = $(activeTab).find('table').DataTable();
+  
+    let columnIndex = 0;
+    if (criteria === 'date') {
+      columnIndex = 1;
+    } else if (criteria === 'ref') {
+      columnIndex = 2;
     }
-}
+    const currentOrder = table.order();
+    const currentSortOrder = currentOrder.length && currentOrder[0][1];
+  
+    const newSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+    table.order([columnIndex, newSortOrder]).draw();
+  }
+  
+  
 
 compare(a: any, b: any, criteria: string): number {
   if (criteria === 'date') {

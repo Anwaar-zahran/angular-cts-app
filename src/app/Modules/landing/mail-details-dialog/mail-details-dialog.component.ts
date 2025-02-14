@@ -79,7 +79,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   activeTabIndex: number = 0;
   selectedNode: any = null;
 
-  dtOptions: DataTables.Settings = {};
+  dtOptions: any = {};
 
   treeControl: FlatTreeControl<FlatTreeNode>;
   treeFlattener: MatTreeFlattener<TreeNode, FlatTreeNode>;
@@ -247,23 +247,49 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   initDtOptions(): void {
     this.dtOptions = {
       pageLength: 10,
-      search: false,
-      order: [],
       pagingType: 'full_numbers',
       paging: true,
       searching: false,
-      displayStart: 0,
       autoWidth: false,
       language: {
         paginate: {
           first: "<i class='text-secondary fa fa-angle-left'></i>",
           previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
           next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-          last: "<i class='text-secondary fa fa-angle-right'></i>"
-        }
+          last: "<i class='text-secondary fa fa-angle-right'></i>",
+        },
       },
-      dom: "tp",
-      ordering: false
+      dom: 'tp',
+      ordering: false,
+      drawCallback: (settings: any) => {
+        const api = settings.oInstance.api();
+        const pageInfo = api.page.info();
+        const pagination = $(api.table().container()).find('.dataTables_paginate');
+        pagination.find('input.paginate-input').remove();
+        const page = $('<span class="d-inline-flex align-items-center mx-2">Page <input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> of ' + pageInfo.pages + '</span>');
+         
+        
+        let timeout: any;
+        page.find('input').on('keyup', function () {
+          clearTimeout(timeout);
+          
+          timeout = setTimeout(() => {
+            const pageNumber = parseInt($(this).val() as string, 10);
+            if (pageNumber >= 1 && pageNumber <= pageInfo.pages) {
+              api.page(pageNumber - 1).draw('page');
+            }
+          }, 500);
+        });
+  
+        const previous = pagination.find('.previous');
+        const next = pagination.find('.next');
+        page.insertAfter(previous); 
+        next.insertAfter(page);
+  
+        pagination.find('a.paginate_button').on('click', function () {
+          page.find('input').val(api.page() + 1);
+        });
+      }
     };
   }
 

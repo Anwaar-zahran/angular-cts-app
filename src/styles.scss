@@ -634,6 +634,11 @@ h2 {
 				color: $color_1;
 				padding: 1rem !important;
 				text-align: start;
+				pointer-events: none;
+
+				&:before, &:after {
+					display: none !important;
+				}
 			}
 		}
 	}
@@ -649,6 +654,7 @@ h2 {
 				p {
 					margin: 0;
 					font-size: 13px;
+					cursor: pointer;
 				}
 
 				img {
@@ -675,6 +681,11 @@ h2 {
 	left: 0;
 	right: 0;
 	text-align: center;
+	color: var(--text-color);
+
+	> span {
+		display: none;
+	}
 }
 
 .dataTables_paginate-button {
@@ -708,6 +719,7 @@ div.dt-container {
 	.form-control {
 		display: inline-block;
 		margin-left: 10px;
+		padding: 0;
 		width: 42px;
 		height: 42px;
 		background: #DEF5FF 0% 0% no-repeat padding-box;

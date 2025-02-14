@@ -70,8 +70,10 @@
             <i class='text-secondary fa fa-angle-double-left'></i>
           </a>
 
-          <a class="paginate_button" *ngFor="let page of pages" [class.active]="page === currentPage"
-            (click)="goToPage(page)">{{page}}</a>
+          <span class="d-inline-flex align-items-center mx-2">Page 
+            <input type="number" class="paginate-input form-control form-control-sm mx-2" [(ngModel)]="currentPage" (ngModelChange)="goToPage(currentPage)"
+            [min]="1" [max]="totalPages" />
+              of {{totalPages}}</span>
 
           <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()"
             [attr.aria-label]="'BAM.COMMON.PAGINATION.NEXT' | translate">

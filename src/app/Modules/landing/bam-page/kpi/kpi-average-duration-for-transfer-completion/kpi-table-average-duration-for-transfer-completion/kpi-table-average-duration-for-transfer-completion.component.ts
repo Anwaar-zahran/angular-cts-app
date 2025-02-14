@@ -132,7 +132,9 @@ export class KpiTableAverageDurationForTransferCompletionComponent implements On
   }
 
   goToPage(page: number) {
-    this.currentPage = page;
-    this.loadData();
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadData();
+    }
   }
 }

@@ -16,12 +16,25 @@ import { User } from '../../../models/user.model';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TranslateService } from '@ngx-translate/core';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-delegation-page',
   templateUrl: './delegation-page.component.html',
   styleUrls: ['./delegation-page.component.scss'],
-  standalone: false
+  standalone: false,
+  animations: [
+    trigger('expandCollapse', [
+      transition(':enter', [
+        style({ height: '0px', opacity: 0 }),
+        animate('300ms ease-out', style({ height: '*', opacity: 1 }))
+      ]),
+      transition(':leave', [
+        style({ height: '*', opacity: 1 }),
+        animate('300ms ease-in', style({ height: '0px', opacity: 0 }))
+      ])
+    ])
+  ],
 })
 export class DelegationPageComponent implements OnInit {
   fromModal: NgbDateStruct | undefined;
@@ -47,6 +60,7 @@ export class DelegationPageComponent implements OnInit {
 
   // Form group
   delegationForm!: FormGroup;
+  formVisible = true;
 
   constructor(
     private fb: FormBuilder,
@@ -113,10 +127,38 @@ export class DelegationPageComponent implements OnInit {
           next: "<i class='text-secondary fa fa-angle-double-right'></i>",
           last: "<i class='text-secondary fa fa-angle-right'></i>",
         },
-        emptyTable: ""
       },
       dom: 'tp',
       ordering: false,
+      drawCallback: (settings: any) => {
+        const api = settings.oInstance.api();
+        const pageInfo = api.page.info();
+        const pagination = $(api.table().container()).find('.dataTables_paginate');
+        pagination.find('input.paginate-input').remove();
+        const page = $('<span class="d-inline-flex align-items-center mx-2">Page <input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> of ' + pageInfo.pages + '</span>');
+         
+        
+        let timeout: any;
+        page.find('input').on('keyup', function () {
+          clearTimeout(timeout);
+          
+          timeout = setTimeout(() => {
+            const pageNumber = parseInt($(this).val() as string, 10);
+            if (pageNumber >= 1 && pageNumber <= pageInfo.pages) {
+              api.page(pageNumber - 1).draw('page');
+            }
+          }, 500);
+        });
+  
+        const previous = pagination.find('.previous');
+        const next = pagination.find('.next');
+        page.insertAfter(previous); 
+        next.insertAfter(page);
+  
+        pagination.find('a.paginate_button').on('click', function () {
+          page.find('input').val(api.page() + 1);
+        });
+      }
     };
   }
 
@@ -356,5 +398,9 @@ export class DelegationPageComponent implements OnInit {
 
   preventPaste(event: ClipboardEvent): void {
     event.preventDefault();
+  }
+
+  toggleSearchForm() {
+    this.formVisible = !this.formVisible;
   }
 }
