@@ -45,6 +45,7 @@ export class AddressBookComponent implements OnInit {
   totalItems: number = 0;
   totalPages: number = 1;
   pages: number[] = [];
+  showCodeColumn: boolean = true;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -93,6 +94,7 @@ export class AddressBookComponent implements OnInit {
         }))
         .filter(structure => structure.userStructure.length > 0);
       this.filteredAddressUsers.forEach(structure => this.expandedRows.add(structure));
+      this.showCodeColumn = true;
   
     } else if (userSearch) {
       this.filteredAddressUsers = this.addressUsers
@@ -106,14 +108,17 @@ export class AddressBookComponent implements OnInit {
               userStructure: [userStruct],
             }))
         );
+      this.showCodeColumn = false;
   
     } else if (structureSearch) {
       this.filteredAddressUsers = this.addressUsers.filter((structure: AddressUser) =>
         structure.name.toLowerCase().includes(structureSearch)
       );
+      this.showCodeColumn = true;
   
     } else {
       this.filteredAddressUsers = [...this.addressUsers];
+      this.showCodeColumn = true;
     }
   
     this.totalItems = this.filteredAddressUsers.length;

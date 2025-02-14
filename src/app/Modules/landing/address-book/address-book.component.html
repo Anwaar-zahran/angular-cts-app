@@ -27,7 +27,7 @@
                   [checked]="isAllSelected()">
               </div>
             </th>
-            <th>Code</th>
+            <th *ngIf="showCodeColumn">Code</th>
             <th>Name</th>
           </tr>
         </thead>
@@ -79,7 +79,6 @@
                       (change)="onUserSelectionChange(userStruct.user, $any($event.target).checked)">
                   </div>
                 </td>
-                <td></td>
                 <td>{{ userStruct.structure.name }}\{{ userStruct.user.firstname }} {{ userStruct.user.lastname }}</td>
               </tr>
             </ng-container>
