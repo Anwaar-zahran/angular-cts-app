@@ -112,6 +112,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   userId: any;
   docTypeId: any;
   docTypes: any;
+  categories: any;
 
 
   // OrgChart references
@@ -121,6 +122,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   // Lookup data
   structures: any[] = [];
   users: any[] = [];
+    mappedArray: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { row: any, id: string,documentId: string, referenceNumber: string, fromSearch: boolean, showActionButtons: boolean },
@@ -165,7 +167,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     this.initDtOptions();
     this.loadLookupData();
     this.fetchDetails(this.data.id);
-    console.log("rowwww", this.data.row);
+    console.log("row", this.data.row);
 
 
   }
@@ -235,11 +237,20 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
     this.lookupsService.getCarbonUsers(this.accessToken!).subscribe(
       (response) => {
-        debugger;
+         
         this.carbonUsers = response;
       },
       (error) => {
         console.error('Error loading users:', error);
+      }
+    );
+
+    this.lookupsService.getCategories(undefined).subscribe(
+      (response) => {
+        this.categories = response || [];
+      },
+      (error: any) => {
+        console.error(error);
       }
     );
   }
@@ -469,6 +480,23 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.priorityId = this.attributes.priorityId ?? '';
       this.docTypeId = this.attributes.documentTypeId ?? '';
 
+      debugger;
+      if (this.linkedDocs.length > 0) {
+        this.mappedArray = this.linkedDocs.map((doc: any) => {
+          const foundItem = this.categories.find((cat: any) => cat.id === doc.categoryId);
+          return {
+            id: doc.id,
+            linkedDocumentReferenceNumber: doc.linkedDocumentReferenceNumber,
+            categoryId: doc.categoryId,
+            statusId: doc.statusId,
+            linkedBy: doc.linkedBy,
+            createdDate: doc.createdDate,
+            category: foundItem ? foundItem.text : '',
+          };
+        });
+      }
+
+
       if (this.attributes.carbonCopy?.length > 0)
         this.userId = this.attributes.carbonCopy[0];
       else
@@ -538,7 +566,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getActivityLogByDocId(this.accessToken!, docID).subscribe(
         (response) => {
-          debugger;
+           
           this.activityLogs = response.data || [];
           resolve(response);
         },
@@ -616,8 +644,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       );
     });
   }
+  
+
   tryFetchOriginalDocument(): void {
-    debugger;
+     
 
     // Recursive function to search for folder_originalMail
     const findOriginalMailFolder = (nodes: any[]): any => {

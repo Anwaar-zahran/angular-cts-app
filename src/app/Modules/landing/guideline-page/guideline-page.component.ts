@@ -197,7 +197,7 @@ export class GuidelinePageComponent implements OnInit {
   active = 1;
 
   showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
-    debugger;
+     
     const currentName = this.authService.getDisplayName();
 
     const dialogRef = this.dialog.open(MailDetailsDialogComponent, {

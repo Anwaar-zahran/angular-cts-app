@@ -92,33 +92,60 @@
         "OUTBOX": "الصادر",
         "DRAFT": "المسودات"
     },
-    "MAIL_DETAILS": {
-        "REPLY_TO": "الرد على",
-        "SENDING_ENTITY": "الجهة المرسلة",
-        "RECEIVING_ENTITY": "الجهة المستلمة",
-        "SUBJECT": "الموضوع",
-        "REFERENCE": "المرجع",
-        "DATE": "التاريخ",
-        "STATUS": "الحالة",
-        "PRIORITY": "الأولوية",
-        "CLASSIFICATION": "التصنيف",
-        "TABS": {
-            "ATTRIBUTES": "السمات",
-            "ATTACHMENTS": "المرفقات",
-            "NOTES": "الملاحظات",
-            "LINKED_CORRESPONDENCE": "المراسلات المرتبطة",
-            "NON_ARCHIVED_ATTACHMENT": "مرفق غير مؤرشف",
-            "VISUAL_TRACKING": "التتبع المرئي",
-            "TRANSACTION_HISTORY": " تاريخ الإحالات",
-            "ACTIVITY_LOG": "سجل النشاط"
-        },
-        "BUTTONS": {
-            "REPLY": "رد",
-            "TRANSFER": "تحويل",
-            "COMPLETE": "إكمال",
-            "START_WORKFLOW": "بدء سير العمل"
-        }
+  "MAIL_DETAILS": {
+    "REPLY_TO": "الرد على",
+    "SENDING_ENTITY": "الجهة المرسلة",
+    "RECEIVING_ENTITY": "الجهة المستلمة",
+    "SUBJECT": "الموضوع",
+    "REFERENCE": "المرجع",
+    "DATE": "التاريخ",
+    "STATUS": "الحالة",
+    "PRIORITY": "الأولوية",
+    "CLASSIFICATION": "التصنيف",
+    "IMPORTANCE": "الاهمية",
+    "CARBONCOPY": "نسخة",
+    "PRIVACY": "درجة السرية",
+    "DUEDATE": "تاريخ الاستحقاق",
+    "CREATEDDATE": "تاريخ الإنشاء",
+    "CREATED_BY": "انشأ من قبل",
+    "DOCUMENT_TYPE": "نوع المستند",
+    "TABS": {
+      "ATTRIBUTES": "السمات",
+      "ATTACHMENTS": "المرفقات",
+      "NOTES": "الملاحظات",
+      "LINKED_CORRESPONDENCE": "المراسلات المرتبطة",
+      "NON_ARCHIVED_ATTACHMENT": "مرفق غير مؤرشف",
+      "VISUAL_TRACKING": "التتبع المرئي",
+      "TRANSACTION_HISTORY": " تاريخ الإحالات",
+      "ACTIVITY_LOG": "سجل النشاط"
     },
+    "BUTTONS": {
+      "REPLY": "رد",
+      "TRANSFER": "تحويل",
+      "COMPLETE": "إكمال",
+      "START_WORKFLOW": "بدء سير العمل"
+    },
+    "LINKED": {
+      "CATEGORY": "الفئة",
+      "REFERENCE_NUMBER": "الرقم المرجعي"
+    },
+    "ATTACHMENT": {
+      "TYPE": "النوع",
+      "QUANTITY": "العدد",
+      "DESC": "الوصف"
+    },
+    "HISTORY": {
+      "FROM_USER": "من",
+      "TO": "إلى",
+      "TRANSFER_DATE": "تاريخ التحويل",
+      "TRANSFER_TIME": "وقت التحويل",
+      "CLOSED_DATE": "تاريخ الإغلاق"
+    },
+    "LOGS": {
+      "USER": "المستخدم",
+      "ACTION": "الإجراء"
+    }
+  },
     "VISUAL_TRACKING": {
         "TITLE": "التتبع المرئي",
         "DETAILS": {

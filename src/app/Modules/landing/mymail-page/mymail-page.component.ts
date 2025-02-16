@@ -206,7 +206,7 @@ export class MymailPageComponent implements OnInit {
 
   showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
     const currentName = this.authService.getDisplayName();
-    debugger;
+     
     const dialogRef = this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
       width: '90%',
