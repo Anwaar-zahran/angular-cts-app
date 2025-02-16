@@ -1,20 +1,12 @@
 <div class="body-content">
   <!-- Title -->
   <div class="d-flex justify-content-between">
-<<<<<<< HEAD
-    <h1 class="page-title">{{ "DELEGATION.TITLE" | translate }}</h1>
-<<<<<<< Updated upstream
-=======
+
     <h1 class="page-title">{{ 'DELEGATION.TITLE' | translate }}</h1>
     <button class="btn btn-secondary mb-3" (click)="toggleSearchForm()">
       <i class="fa" [ngClass]="formVisible ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
     </button>
->>>>>>> b8fbd03f3eb4feed2a1ba98e5cc35f5a37cdd514
-=======
-    <button class="btn btn-secondary mb-3" (click)="toggleSearchForm()">
-      <i class="fa" [ngClass]="formVisible ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-    </button>
->>>>>>> Stashed changes
+
   </div>
   <!-- Form -->
   <div *ngIf="formVisible" [@expandCollapse]>
@@ -135,35 +127,12 @@
       <!-- Categories -->
       <div class="col-md-6">
         <div class="form-group">
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-          <label for="ddlCategories" class="form-label required">{{
-            "DELEGATION.CATEGORY" | translate
-          }}</label>
-          <ng-select
-            id="ddlCategories"
-            formControlName="categoryId"
-            multiple
-            [items]="categories || []"
-            bindLabel="text"
-            bindValue="id"
-            [placeholder]="
-              'DELEGATION.PLACEHOLDERS.SELECT_CATEGORY' | translate
-            "
-            class="form-control"
-          >
-=======
-          <label for="ddlCategories" class="form-label required">{{ 'DELEGATION.CATEGORY' | translate }}</label>
-          <ng-select id="ddlCategories" formControlName="categoryId" multiple [items]="categories || []"
-            bindLabel="text" bindValue="id"  [closeOnSelect]="false" [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_CATEGORY' | translate"
-            class="form-control">
->>>>>>> b8fbd03f3eb4feed2a1ba98e5cc35f5a37cdd514
-=======
+
           <label for="ddlCategories" class="form-label required">{{ 'DELEGATION.CATEGORY' | translate }}</label>
           <ng-select id="ddlCategories" formControlName="categoryId" multiple [items]="categories || []"
             bindLabel="text" bindValue="id" [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_CATEGORY' | translate"
             class="form-control">
->>>>>>> Stashed changes
+
           </ng-select>
           <div
             *ngIf="
@@ -294,22 +263,10 @@
   <hr />
   </div>
   <!-- Table -->
-<<<<<<< HEAD
-  <div class="shadow table-container">
-<<<<<<< Updated upstream
-    <table
-      class="table"
-      *ngIf="data && data.length > 0"
-      datatable
-      [dtOptions]="dtOptions"
-    >
-=======
+
+
   <div class="shadow table-container overflow-x-auto">
     <table class="table" *ngIf="data && data.length > 0" datatable [dtOptions]="dtOptions">
->>>>>>> b8fbd03f3eb4feed2a1ba98e5cc35f5a37cdd514
-=======
-    <table class="table" *ngIf="data && data.length > 0" datatable [dtOptions]="dtOptions">
->>>>>>> Stashed changes
       <thead>
         <tr>
           <th>{{ "DELEGATION.TABLE.DELEGATE_TO" | translate }}</th>
