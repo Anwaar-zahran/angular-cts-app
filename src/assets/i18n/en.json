@@ -22,7 +22,8 @@
             "CLEAR": "Clear",
             "BACK": "Back",
             "TITLE": "Actions",
-            "APPLY": "Apply"
+            "APPLY": "Apply",
+            "CONFIRM":"Confirm"
         },
         "SELECT": "Select",
         "LOADING": "Loading...",
@@ -234,8 +235,11 @@
         "TO_DATE": "To",
         "PRIVACY": "Privacy",
         "CATEGORY": "Category",
-        "SHOW_OLD_DOCUMENTS": "Show old documents",
+        "SHOW_OLD_CORRESPONDENCE": "Show old correspondence",
         "CAN_SIGN": "Can sign",
+        "DRAFT_INBOX": "Draft Inbox",
+        "NOTE" : "Notes",
+        "START_DATE":"Start Date",
         "DELETE_CONFIRMATION": "Are you sure you want to delete this delegation?",
         "DELETE_SUCCESS": "Delegation deleted successfully",
         "SAVE_SUCCESS": "Delegation saved successfully",
@@ -250,12 +254,15 @@
             "SEARCH": "Search...",
             "SELECT_MULTIPLE": "Select one or more"
         },
+       "CONFIRMMODALDELEGATION":{"TITLE":"Confirm Deletion"},
         "TABLE": {
             "DELEGATE_TO": "Delegate to",
             "FROM_DATE": "From date",
             "TO_DATE": "To date",
             "CREATED_DATE": "Created date",
             "PRIVACY": "Privacy",
+            "CATEGORY": "Category",
+            "NOTES": "Notes",
             "ACTIONS": "Actions"
         },
         "ERRORS": {
@@ -341,7 +348,8 @@
     "BAM": {
         "TITLE": "BAM",
         "DASHBOARD": {
-            "TITLE": "User Dashboard",
+            "SYSTEM_DASHBOARD_TITLE": "System Dashboard",
+            "USER_DASHBOARD_TITLE":"User Dashboard",
             "CHARTS": {
                 "COUNT_PER_CATEGORY": "Count per Category and Status",
                 "STATISTICS_PER_DEPARTMENT": "Statistics per Department",
@@ -633,5 +641,10 @@
                 "ACTIONS": "Actions"
             }
         }
+    },
+    "PrivacyOptions":{
+        "Normal":"Normal",
+        "Confidential":"Confidential",
+        "High Confidential":"High Confidential"
     }
 }

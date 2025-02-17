@@ -71,7 +71,7 @@ export class GuidelinePageComponent implements OnInit {
         },
       },
       dom: 'tp',
-      ordering: false,
+      ordering: true,
       drawCallback: (settings: any) => {
         const api = settings.oInstance.api();
         const pageInfo = api.page.info();
@@ -233,5 +233,38 @@ export class GuidelinePageComponent implements OnInit {
       }
     });
   }
+  sortOrder: { [key: string]: 'asc' | 'desc' } = { date: 'asc', ref: 'asc' };
+  sortBy(criteria: string) {
+    const activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
+    
+    if (!activeTab) {
+      return;
+    }
+  
+    const table = $(activeTab).find('table').DataTable();
+  
+    let columnIndex = 0;
+    if (criteria === 'date') {
+      columnIndex = 1;
+    } else if (criteria === 'ref') {
+      columnIndex = 2;
+    }
+    const currentOrder = table.order();
+    const currentSortOrder = currentOrder.length && currentOrder[0][1];
+  
+    const newSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+    table.order([columnIndex, newSortOrder]).draw();
+  }
+  
+compare(a: any, b: any, criteria: string): number {
+  if (criteria === 'date') {
+      return new Date(a?.date || 0).getTime() - new Date(b?.date || 0).getTime();
+  }
+  if (criteria === 'ref') {
+      return (a?.ref || '').localeCompare(b?.ref || '');
+  }
+  return 0;
+}
+
 }
 

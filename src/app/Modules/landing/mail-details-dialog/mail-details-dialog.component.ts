@@ -77,7 +77,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   @ViewChild('chartContainer', { static: false }) chartContainer!: ElementRef;
   @ViewChild('tabsContainer', { static: false }) tabsContainer!: ElementRef;
-
+  closeDialog() {
+    debugger
+    this.dialogRef.close(); // Ensure it only closes the dialog
+  }
   accessToken: string | null = null;
   tabs = [
     'ATTRIBUTES',
@@ -177,6 +180,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     console.log('Dialog opened with ID:', this.data.id, 'and Reference Number:', this.data.referenceNumber);
     this.accessToken = this.authService.getToken();
     if (!this.accessToken) {
+      debugger
       this.router.navigate(['/login']);
       return;
     }
@@ -338,8 +342,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
           dialogRef.afterClosed().subscribe(result => {
             console.log('Transfer modal closed', result);
-            this.dialogRef.close();
-
+           // this.dialogRef.close();
           });
         }
       },

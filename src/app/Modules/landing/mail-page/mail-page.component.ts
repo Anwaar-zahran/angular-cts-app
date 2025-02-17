@@ -73,7 +73,7 @@ export class MailPageComponent implements OnInit {
           },
         },
         dom: 'tp',
-        ordering: false,
+        ordering: true,
         drawCallback: (settings: any) => {
           const api = settings.oInstance.api();
           const pageInfo = api.page.info();
@@ -237,31 +237,37 @@ export class MailPageComponent implements OnInit {
       }
     });
   }
+  sortOrder: { [key: string]: 'asc' | 'desc' } = { date: 'asc', ref: 'asc' };
   sortBy(criteria: string) {
-    debugger
-    let activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
-
-    switch (activeTab) {
-        case '#nav-new':
-            this.newItems.sort((a, b) => this.compare(a, b, criteria));
-            break;
-        case '#nav-sent':
-            this.sentItems.sort((a, b) => this.compare(a, b, criteria));
-            break;
-        case '#nav-completed':
-            this.completedItems.sort((a, b) => this.compare(a, b, criteria));
-            break;
+    const activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
+    
+    if (!activeTab) {
+      return;
     }
-}
-
-compare(a: any, b: any, criteria: string): number {
+  
+    const table = $(activeTab).find('table').DataTable();
+  
+    let columnIndex = 0;
     if (criteria === 'date') {
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
+      columnIndex = 1;
+    } else if (criteria === 'ref') {
+      columnIndex = 2;
     }
-    if (criteria === 'ref') {
-        return a.ref.localeCompare(b.ref);
-    }
-    return 0;
+    const currentOrder = table.order();
+    const currentSortOrder = currentOrder.length && currentOrder[0][1];
+  
+    const newSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+    table.order([columnIndex, newSortOrder]).draw();
+  }
+  
+compare(a: any, b: any, criteria: string): number {
+  if (criteria === 'date') {
+      return new Date(a?.date || 0).getTime() - new Date(b?.date || 0).getTime();
+  }
+  if (criteria === 'ref') {
+      return (a?.ref || '').localeCompare(b?.ref || '');
+  }
+  return 0;
 }
 
 }

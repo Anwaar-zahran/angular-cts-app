@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, model, OnInit } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DelegationPageService } from '../../../services/delegation-page.service';
@@ -44,6 +44,7 @@ export class DelegationPageComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   data: Delegation[] = [];
   accessToken: string | null = null;
+  minToDate: Date | null = null;
 
   // Lookup data
   categories: Category[] = [];
@@ -57,6 +58,8 @@ export class DelegationPageComponent implements OnInit {
   cansign: boolean = false;
   showOldCorrespondance: boolean = false;
   selectedRowId: number | null | undefined = undefined;
+  note: string = '';
+  selectedCategoryName: string[] = [];
 
   // Form group
   delegationForm!: FormGroup;
@@ -99,6 +102,10 @@ export class DelegationPageComponent implements OnInit {
     this.getPrivacyData();
     this.getUsers();
     this.getListData();
+
+    this.delegationForm.get('fromDate')?.valueChanges.subscribe(() => {
+      this.updateMinDate();
+    });
   }
 
   setupForm(): void {
@@ -107,9 +114,14 @@ export class DelegationPageComponent implements OnInit {
       privacyId: [null, Validators.required],
       categoryId: [null, [Validators.required, this.categoryValidator]],
       fromDate: [null, Validators.required],
-      toDate: [null, Validators.required],
+      toDate: [{ value: null, disabled: true }, Validators.required],
       allowSign: [false],
       showOldCorrespondence: [false],
+      draftInbox: [false],
+      note: [''],
+      startDate: [null],
+    }, {
+      validators: this.dateRangeValidator
     });
   }
 
@@ -169,6 +181,31 @@ export class DelegationPageComponent implements OnInit {
     return null;
   }
 
+  dateRangeValidator(group: FormControl): { [key: string]: boolean } | null {
+    const fromDate = group.get('fromDate')?.value;
+    const toDate = group.get('toDate')?.value;
+
+    if (fromDate && toDate && toDate < fromDate) {
+      return { toDateInvalid: true };
+    }
+    return null;
+  }
+
+  updateMinDate(): void {
+    const fromDate = this.delegationForm.get('fromDate')?.value;
+
+    if (!fromDate) {
+      this.minToDate = null;
+      this.delegationForm.get('toDate')?.setValue(null);
+      this.delegationForm.get('toDate')?.disable();
+    } else {
+      let validDate = new Date(fromDate);
+      let newDate = new Date(validDate.setDate(validDate.getDate()));
+      this.minToDate = fromDate ? newDate : null;
+      this.delegationForm.get('toDate')?.enable();
+    }
+  }
+
   getListData(): void {
     this.delegationService.getDelegations(this.accessToken!).subscribe(
       (response) => {
@@ -188,10 +225,10 @@ export class DelegationPageComponent implements OnInit {
 
         this.contacts.unshift({ id: 0, fullName: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_NAME') });
 
-        let currentExistUser = this.authService.getCurrentUserFullName();     
+        let currentExistUser = this.authService.getCurrentUserFullName();
         console.log('currentUser:', currentExistUser);
         this.contacts = this.contacts.filter(contact => contact.fullName !== currentExistUser);
-        
+
         if (this.contacts.length > 0) {
           this.delegationForm.patchValue({
             userId: this.contacts[0]?.id,
@@ -204,10 +241,27 @@ export class DelegationPageComponent implements OnInit {
     );
   }
 
+  getCategoriesName(categoriesId: any): string {
+    console.log('categoriesId:', categoriesId);
+  
+    if (!categoriesId || categoriesId.length === 0) {
+      return " ";
+    }
+  
+   let categoriesName = categoriesId
+      .map((id: number) => {
+        const category = this.categories.find(cat => cat.id === id);
+        return category ? category.text : " ";
+      }).join(' - ');
+
+    return categoriesName;
+  }
+
   getCategories(): void {
     this.lookupservice.getCategories(undefined).subscribe(
       (response) => {
         this.categories = response || [];
+        console.log('Categories:', this.categories);
       },
       (error: any) => {
         console.error(error);
@@ -235,6 +289,8 @@ export class DelegationPageComponent implements OnInit {
 
   formatDate(date: Date | undefined): string {
     if (!date) return '';
+    console.log('Date:', date);
+
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear().toString();
@@ -246,6 +302,7 @@ export class DelegationPageComponent implements OnInit {
       this.isEdit = true;
       this.selectedRowId = item.id;
       this.selectedUserId = item.toUserValueText.id;
+      this.showOldCorrespondance = true;
 
       if (this.contacts && this.contacts.length > 0) {
         this.delegationForm.patchValue({
@@ -256,8 +313,14 @@ export class DelegationPageComponent implements OnInit {
           toDate: this.convertToNgbDateStruct(item.toDate),
           allowSign: item.allowSign,
           showOldCorrespondence: item.showOldCorrespondecne,
+          draftInbox: item.draftInbox,
+          note: item.note,
+          startDate: this.convertToNgbDateStruct(item.startDate),
         });
 
+        this.note = item.note;
+        console.log('note:', item.note);
+        console.log('note:', this.note);
         // Convert fromDate and toDate to NgbDateStruct if they exist
         if (item.fromDate) {
           const [day, month, year] = item.fromDate.split('/');
@@ -268,6 +331,13 @@ export class DelegationPageComponent implements OnInit {
           const [day, month, year] = item.toDate.split('/');
           this.tomodel = { year: +year, month: +month, day: +day };
         }
+
+        if (item.startDate) {
+          const [day, month, year] = item.toDate.split('/');
+          this.tomodel = { year: +year, month: +month, day: +day };
+        }
+
+        console.log('Item data: FROM EDDDIT ', item);
       }
     }
   }
@@ -283,12 +353,17 @@ export class DelegationPageComponent implements OnInit {
         privacyId: formValues.privacyId,
         allowSign: formValues.allowSign || false,
         showOldCorrespondecne: formValues.showOldCorrespondence || false,
+        draftInbox: formValues.draftInbox || false,
+        note: formValues.note || '',
+        startDate: this.formatDate(formValues.startDate),
         toUser: formValues.userId,
         privacyName: '',
         createdDate: '',
         toUserValueText: { text: null, parentName: null },
       };
 
+      this.note = itemData.note;
+      console.log('note:', this.note);
       console.log('Item data:', itemData);
 
       if (this.isEdit) {
@@ -318,7 +393,7 @@ export class DelegationPageComponent implements OnInit {
             this.isEdit = false;
             this.clear();
             this.getListData();
-            this.translate.get('DELEGATION.ADD_SUCCESS').subscribe((msg: string) => {
+            this.translate.get('DELEGATION.SAVE_SUCCESS').subscribe((msg: string) => {
               this.toaster.showToaster(msg);
             });
           },
@@ -342,6 +417,16 @@ export class DelegationPageComponent implements OnInit {
       const modalRef = this.modalService.open(ConfirmationmodalComponent);
       this.translate.get('DELEGATION.DELETE_CONFIRMATION').subscribe((msg: string) => {
         modalRef.componentInstance.message = msg;
+         // Pass translated button labels for "Cancel" and "Confirm"
+        this.translate.get('COMMON.ACTIONS.CANCEL').subscribe((cancelLabel: string) => {
+          modalRef.componentInstance.cancelLabel = cancelLabel;
+        });
+        this.translate.get('COMMON.ACTIONS.CONFIRM').subscribe((confirmLabel: string) => {
+          modalRef.componentInstance.confirmLabel = confirmLabel;
+        });
+        this.translate.get('DELEGATION.CONFIRMMODALDELEGATION.TITLE').subscribe((ConfirmTitle: string) => {
+          modalRef.componentInstance.ConfirmTitle = ConfirmTitle;
+        });
       });
 
       modalRef.componentInstance.confirmed.subscribe(() => {
@@ -382,6 +467,7 @@ export class DelegationPageComponent implements OnInit {
 
   clear(): void {
     this.delegationForm.reset();
+    this.showOldCorrespondance = false;
     this.resetDropDowns();
     const today = new Date();
     this.fromModal = {
@@ -396,11 +482,20 @@ export class DelegationPageComponent implements OnInit {
     };
   }
 
+  cancel(): void {
+    this.isEdit = false;
+    this.showOldCorrespondance = false;
+    this.clear();
+  }
+
   preventPaste(event: ClipboardEvent): void {
     event.preventDefault();
   }
 
   toggleSearchForm() {
     this.formVisible = !this.formVisible;
+  }
+  toggleShowOldCorrespondance() {
+    this.showOldCorrespondance = !this.showOldCorrespondance;
   }
 }

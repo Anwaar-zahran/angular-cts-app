@@ -57,9 +57,10 @@ export class DelegationPageService {
     formData.append('ToDate', updatedItem["toDate"]);
     formData.append('ShowOldCorespondence', updatedItem["showOldCorrespondecne"]);
     formData.append('AllowSign', updatedItem["allowSign"]);
-    formData.append('DraftInbox', 'false');
-    formData.append('StartDate', '');
-    formData.append('Note', '');
+    formData.append('DraftInbox', updatedItem["draftInbox"]);
+    formData.append('StartDate', updatedItem["startDate"]);
+    formData.append('Note', updatedItem["note"]);
+    console.log('updatedItem', updatedItem);
     if (updatedItem.id)
       formData.append('Id', updatedItem.id);
 
