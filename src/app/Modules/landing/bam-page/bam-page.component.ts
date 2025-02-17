@@ -18,7 +18,7 @@ export class BamPageComponent {
     {
       backgroundColor: '#DEF5FF',
       imgSrc: 'assets/images/icons/BAM.png',
-      title: 'BAM.DASHBOARD.TITLE',
+      title: 'BAM.DASHBOARD.USER_DASHBOARD_TITLE',
       link: '/bam/dashboard',
     },
     {
