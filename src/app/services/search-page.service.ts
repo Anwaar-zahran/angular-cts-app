@@ -74,7 +74,7 @@ export class SearchPageService {
     });
 
     const start = 0;
-    const length = 10;
+    const length = 10000;
 
     const params = new URLSearchParams();
     params.set('id', id);
@@ -129,7 +129,7 @@ export class SearchPageService {
     });
 
     const draw = 0;
-    const length = 10;
+    const length = 1000;
 
     const params = new URLSearchParams();
     params.set('documentId', id);
@@ -174,7 +174,7 @@ export class SearchPageService {
     });
 
     const draw = 0;
-    const length = 10;
+    const length = 10000;
     const start = 0;
 
     const params = new URLSearchParams();

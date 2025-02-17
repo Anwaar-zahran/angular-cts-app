@@ -98,33 +98,62 @@
             "TRANSFERRED_FROM": "Transferred from: {{user}}"
         }
     },
-    "MAIL_DETAILS": {
-        "REPLY_TO": "Reply To",
-        "SENDING_ENTITY": "Sending entity",
-        "RECEIVING_ENTITY": "Receiving entity",
-        "SUBJECT": "Subject",
-        "REFERENCE": "Reference",
-        "DATE": "Date",
-        "STATUS": "Status",
-        "PRIORITY": "Priority",
-        "CLASSIFICATION": "Classification",
-        "TABS": {
-            "ATTRIBUTES": "Attributes",
-            "ATTACHMENTS": "Attachments",
-            "NOTES": "Notes",
-            "LINKED_CORRESPONDENCE": "Linked correspondence",
-            "NON_ARCHIVED_ATTACHMENT": "Non-Archived Attachment",
-            "VISUAL_TRACKING": "Visual tracking",
-            "TRANSACTION_HISTORY": "Transfers History",
-            "ACTIVITY_LOG": "Activity Log"
-        },
-        "BUTTONS": {
-            "REPLY": "Reply",
-            "TRANSFER": "Transfer",
-            "COMPLETE": "Complete",
-            "START_WORKFLOW": "Start workflow"
-        }
+  "MAIL_DETAILS": {
+    "REPLY_TO": "Reply To",
+    "SENDING_ENTITY": "Sending entity",
+    "RECEIVING_ENTITY": "Receiving entity",
+    "SUBJECT": "Subject",
+    "REFERENCE": "Reference",
+    "DATE": "Date",
+    "STATUS": "Status",
+    "PRIORITY": "Priority",
+    "CLASSIFICATION": "Classification",
+    "IMPORTANCE": "Importance",
+    "CARBONCOPY": "Carbon copy",
+    "PRIVACY": "Privacy",
+    "DUEDATE": "Due date",
+    "CREATEDDATE": "Created date",
+    "CREATED_BY": "Created by",
+    "DOCUMENT_TYPE": "Document type",
+    "KEYWORD": "Keyword",
+    "BODY": "Body",
+    "TABS": {
+      "ATTRIBUTES": "Attributes",
+      "ATTACHMENTS": "Attachments",
+      "NOTES": "Notes",
+      "LINKED_CORRESPONDENCE": "Linked correspondence",
+      "NON_ARCHIVED_ATTACHMENT": "Non-Archived Attachment",
+      "VISUAL_TRACKING": "Visual tracking",
+      "TRANSACTION_HISTORY": "Transfers History",
+      "ACTIVITY_LOG": "Activity Log"
     },
+    "BUTTONS": {
+      "REPLY": "Reply",
+      "TRANSFER": "Transfer",
+      "COMPLETE": "Complete",
+      "START_WORKFLOW": "Start workflow"
+    },
+    "LINKED": {
+      "CATEGORY": "Category",
+      "REFERENCE_NUMBER": "Reference Number"
+    },
+    "ATTACHMENT": {
+      "TYPE": "Type",
+      "QUANTITY": "Quantity",
+      "DESC": "Description"
+    },
+    "HISTORY": {
+      "FROM_USER": "From",
+      "TO": "To",
+      "TRANSFER_DATE": "Transfer date",
+      "TRANSFER_TIME": "Transfer time",
+      "CLOSED_DATE": "Closed Date"
+    },
+    "LOGS": {
+      "USER": "User",
+      "ACTION": "Action"
+    }
+  },
     "LOGIN": {
         "TITLE": "Login",
         "SYSTEM_TITLE": "Correspondence Tracking System",

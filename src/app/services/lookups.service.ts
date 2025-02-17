@@ -36,6 +36,7 @@ export class LookupsService {
     ];
     return of(privacyOptions);
   }
+
   getCarbonUsers(accessToken: string): Observable<any> {
 
     const headers = new HttpHeaders({
@@ -154,6 +155,7 @@ export class LookupsService {
         })
       );
   }
+
   getCategories(delegationId: string | undefined): Observable<{ id: number, text: string }[]> {
     let params = new HttpParams();
     if (delegationId !== undefined) {
@@ -278,6 +280,7 @@ export class LookupsService {
         })
       );
   }
+
   getPrioritiesWithDays(accessToken: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
@@ -292,8 +295,7 @@ export class LookupsService {
         })
       );
   }
-
-
+  
   getYears(): Observable<any> {
     return this.http.get(this.listYears)
       .pipe(
