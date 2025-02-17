@@ -312,7 +312,8 @@
     "BAM": {
         "TITLE": "BAM",
         "DASHBOARD": {
-            "TITLE": "User Dashboard",
+            "SYSTEM_DASHBOARD_TITLE": "System Dashboard",
+            "USER_DASHBOARD_TITLE":"User Dashboard",
             "CHARTS": {
                 "COUNT_PER_CATEGORY": "Count per Category and Status",
                 "STATISTICS_PER_DEPARTMENT": "Statistics per Department",
@@ -604,5 +605,10 @@
                 "ACTIONS": "Actions"
             }
         }
+    },
+    "PrivacyOptions":{
+        "Normal":"Normal",
+        "Confidential":"Confidential",
+        "High Confidential":"High Confidential"
     }
 }

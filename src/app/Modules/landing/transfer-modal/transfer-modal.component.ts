@@ -70,6 +70,7 @@ export class TransferModalComponent implements OnInit {
   documentPrivacyId:any;
   fromStructureId:any;
   parentTransferId:any;
+  minDate: Date = new Date(); 
   rows = [
     this.createEmptyRow() // Initialize with one empty row
   ];

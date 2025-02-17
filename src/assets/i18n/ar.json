@@ -226,7 +226,7 @@
         }
     },
     "MAIL": {
-        "TITLE": "البريد",
+        "TITLE": "بريد للتوقيع",
         "TABS": {
             "NEW": "جديد",
             "SENT": "مرسل",
@@ -293,7 +293,8 @@
     "BAM": {
         "TITLE": "مؤشرات الأداء",
         "DASHBOARD": {
-            "TITLE": "لوحة معلومات المستخدم",
+            "SYSTEM_DASHBOARD_TITLE": "لوحة معلومات النظام",
+            "USER_DASHBOARD_TITLE":"لوحة معلومات المستخدم",
             "CHARTS": {
                 "COUNT_PER_CATEGORY": "العدد حسب الفئة والحالة",
                 "STATISTICS_PER_DEPARTMENT": "الإحصائيات حسب القسم",
@@ -575,5 +576,10 @@
                 "ACTIONS": "الإجراءات"
             }
         }
+    },
+    "PrivacyOptions":{
+        "Normal":"عادي",
+        "Confidential":"سري",
+        "High Confidential":"سري جدا"
     }
 }
