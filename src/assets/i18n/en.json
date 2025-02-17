@@ -205,8 +205,11 @@
         "TO_DATE": "To",
         "PRIVACY": "Privacy",
         "CATEGORY": "Category",
-        "SHOW_OLD_DOCUMENTS": "Show old documents",
+        "SHOW_OLD_CORRESPONDENCE": "Show old correspondence",
         "CAN_SIGN": "Can sign",
+        "DRAFT_INBOX": "Draft Inbox",
+        "NOTE" : "Notes",
+        "START_DATE":"Start Date",
         "DELETE_CONFIRMATION": "Are you sure you want to delete this delegation?",
         "DELETE_SUCCESS": "Delegation deleted successfully",
         "SAVE_SUCCESS": "Delegation saved successfully",
@@ -227,6 +230,8 @@
             "TO_DATE": "To date",
             "CREATED_DATE": "Created date",
             "PRIVACY": "Privacy",
+            "CATEGORY": "Category",
+            "NOTES": "Notes",
             "ACTIONS": "Actions"
         },
         "ERRORS": {
