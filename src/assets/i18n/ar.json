@@ -22,7 +22,8 @@
             "CLEAR": "مسح",
             "BACK": "رجوع",
             "TITLE": "الإجراءات",
-            "APPLY": "تطبيق"
+            "APPLY": "تطبيق",
+            "CONFIRM":"تاكيد"
         },
         "SELECT": "اختر",
         "LOADING": "جاري التحميل...",
@@ -201,7 +202,7 @@
             "TO_DATE": "اختر تاريخ النهاية",
             "SEARCH": "بحث...",
             "SELECT_MULTIPLE": "اختر واحد أو أكثر"
-        },
+        },"CONFIRMMODALDELEGATION":{"TITLE":"تأكيد الحذف"},
         "TABLE": {
             "DELEGATE_TO": "مفوض إلى",
             "FROM_DATE": "من تاريخ",

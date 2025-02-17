@@ -22,7 +22,8 @@
             "CLEAR": "Clear",
             "BACK": "Back",
             "TITLE": "Actions",
-            "APPLY": "Apply"
+            "APPLY": "Apply",
+            "CONFIRM":"Confirm"
         },
         "SELECT": "Select",
         "LOADING": "Loading...",
@@ -224,6 +225,7 @@
             "SEARCH": "Search...",
             "SELECT_MULTIPLE": "Select one or more"
         },
+       "CONFIRMMODALDELEGATION":{"TITLE":"Confirm Deletion"},
         "TABLE": {
             "DELEGATE_TO": "Delegate to",
             "FROM_DATE": "From date",

@@ -37,7 +37,7 @@ export class SearchPageService {
     const structureId = parsedPayload.StructureId; // Adjust based on your token's payload
     const draw = 0;
     const start = 0;
-    const length = 10;
+    const length = 10000;
 
     const body = new URLSearchParams();
     body.set('draw', draw.toString());

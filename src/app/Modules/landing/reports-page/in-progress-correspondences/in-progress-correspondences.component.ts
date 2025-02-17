@@ -374,6 +374,7 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
       next: (options) => {
         this.privacyOptions = options.map(option => {
           const formattedKey = option.name.trim().toLowerCase().replace(/\s+/g, ' '); // Remove extra spaces
+         debugger
           return {
             ...option,
             translatedName: this.translate.instant(`PrivacyOptions.${formattedKey}`) || option.name // Translate option name
