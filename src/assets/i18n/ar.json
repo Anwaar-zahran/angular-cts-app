@@ -109,6 +109,8 @@
     "CREATEDDATE": "تاريخ الإنشاء",
     "CREATED_BY": "انشأ من قبل",
     "DOCUMENT_TYPE": "نوع المستند",
+    "KEYWORD": "نوع المستند",
+    "BODY": "نوع المستند",
     "TABS": {
       "ATTRIBUTES": "السمات",
       "ATTACHMENTS": "المرفقات",

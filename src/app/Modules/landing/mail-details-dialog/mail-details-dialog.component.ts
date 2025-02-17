@@ -15,6 +15,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { environment } from '../../../../environments/environment';
 import { AttachmentsApiResponce } from '../../../models/attachments.model';
 import { DocAttributesApiResponse } from '../../../models/searchDocAttributes.model';
+import { CustomAttributeComponent } from '../../../models/custom.attributes.model';
 import { SearchPageService } from '../../../services/search-page.service';
 import { AuthService } from '../../auth/auth.service';
 import { ReplyToComponent } from '../reply-to/reply-to.component';
@@ -24,6 +25,7 @@ import OrgChart from '@balkangraph/orgchart.js';
 import { LookupsService } from '../../../services/lookups.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { ToasterComponent } from '../../shared/toaster/toaster.component';
+import { DatePipe } from '@angular/common';
 
 interface TreeNode {
   id: string | number;
@@ -40,6 +42,18 @@ interface FlatTreeNode {
   expanded?: boolean;
 }
 
+interface BasicAttribute {
+  Name: string;
+  Enabled: boolean;
+  DefaultValue?: string;
+  Type?: string;
+  UseCurrentStructure?: string;
+  DisableField?: boolean;
+  MultipleReceivingEntity?: boolean;
+  BroadcastReceivingEntity?: boolean;
+  RelatedToPriority?: boolean;
+}
+
 @Component({
   selector: 'app-mail-details-dialog',
   imports: [
@@ -54,6 +68,7 @@ interface FlatTreeNode {
     ToasterComponent,
 
   ],
+  providers: [DatePipe],
   templateUrl: './mail-details-dialog.component.html',
   styleUrls: ['./mail-details-dialog.component.scss']
 
@@ -122,10 +137,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   // Lookup data
   structures: any[] = [];
   users: any[] = [];
-    mappedArray: any;
+  mappedArray: any;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { row: any, id: string,documentId: string, referenceNumber: string, fromSearch: boolean, showActionButtons: boolean },
+    @Inject(MAT_DIALOG_DATA) public data: { row: any, id: string, documentId: string, referenceNumber: string, fromSearch: boolean, showActionButtons: boolean },
     private authService: AuthService,
     private router: Router,
     private sanitizer: DomSanitizer,
@@ -136,7 +151,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<MailDetailsDialogComponent>,
     private translate: TranslateService,
-    private toaster: ToasterService
+    private toaster: ToasterService,
+    public datePipe: DatePipe
   ) {
     // Initialize Angular Material tree for attachments
     this.treeFlattener = new MatTreeFlattener(
@@ -237,7 +253,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
     this.lookupsService.getCarbonUsers(this.accessToken!).subscribe(
       (response) => {
-         
+
         this.carbonUsers = response;
       },
       (error) => {
@@ -278,12 +294,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         const pagination = $(api.table().container()).find('.dataTables_paginate');
         pagination.find('input.paginate-input').remove();
         const page = $('<span class="d-inline-flex align-items-center mx-2">Page <input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> of ' + pageInfo.pages + '</span>');
-         
-        
+
+
         let timeout: any;
         page.find('input').on('keyup', function () {
           clearTimeout(timeout);
-          
+
           timeout = setTimeout(() => {
             const pageNumber = parseInt($(this).val() as string, 10);
             if (pageNumber >= 1 && pageNumber <= pageInfo.pages) {
@@ -291,12 +307,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             }
           }, 500);
         });
-  
+
         const previous = pagination.find('.previous');
         const next = pagination.find('.next');
-        page.insertAfter(previous); 
+        page.insertAfter(previous);
         next.insertAfter(page);
-  
+
         pagination.find('a.paginate_button').on('click', function () {
           page.find('input').val(api.page() + 1);
         });
@@ -319,11 +335,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             height: '90%',
             data: this.data//{ this.data }///* pass any required data here */
           });
-      
+
           dialogRef.afterClosed().subscribe(result => {
             console.log('Transfer modal closed', result);
             this.dialogRef.close();
-      
+
           });
         }
       },
@@ -332,7 +348,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       }
     );
     debugger
-   
+
   }
 
   showModalReply() {
@@ -497,7 +513,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       }
 
 
-      if (this.attributes.carbonCopy?.length > 0)
+      if (this.attributes.carbonCopy ?.length > 0)
         this.userId = this.attributes.carbonCopy[0];
       else
         this.userId = '';
@@ -514,13 +530,27 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     }
   }
 
+  basicAttributes: any;
+  customAttribute: any;
+  customFormData: any;
+  customAttributes: { components: CustomAttributeComponent[] } = { components: [] };
+
   getAttributes(docID: string): Promise<DocAttributesApiResponse> {
     return new Promise((resolve, reject) => {
       this.searchService.getDocAttributes(this.accessToken!, docID).subscribe(
         (response: any) => {
           this.attributes = response || [];
+          this.basicAttributes = JSON.parse(response ?.basicAttributes);
+          this.customAttribute = JSON.parse(response ?.customAttributes);
+          this.customAttributes = JSON.parse(response ?.customAttributes);
+          this.customFormData = JSON.parse(response ?.formData);
+
+          this.getFormDataValue();
 
           console.log("Attributes:", this.attributes);
+          console.log("BasicAttributes:", this.basicAttributes);
+          console.log("CustomAttributes:", this.customAttribute);
+          console.log("customFormData:", this.customFormData);
           resolve(response);
         },
         (error: any) => {
@@ -566,7 +596,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getActivityLogByDocId(this.accessToken!, docID).subscribe(
         (response) => {
-           
+
           this.activityLogs = response.data || [];
           resolve(response);
         },
@@ -644,10 +674,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       );
     });
   }
-  
+
 
   tryFetchOriginalDocument(): void {
-     
+
 
     // Recursive function to search for folder_originalMail
     const findOriginalMailFolder = (nodes: any[]): any => {
@@ -666,7 +696,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     // Search recursively starting from root
     const originalMailFolder = findOriginalMailFolder(this.TREE_DATA);
     debugger
-    if (originalMailFolder?.children?.[0]?.id) {
+    if (originalMailFolder ?.children ?.[0] ?.id) {
       const firstChild = originalMailFolder.children[0];
       const idParts = firstChild.id.split('_');
       if (idParts.length > 1) {
@@ -742,8 +772,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           id: String(item.id || Math.random()),
           pid: item.parentId ? String(item.parentId) : null,
           category: isFirstNode ? (item.category || '') : (item.category || ''),
-          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user?.fullName || ''}`,
-          createdBy: isFirstNode ? (item.createdBy || '') : user?.fullName || '',
+          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`,
+          createdBy: isFirstNode ? (item.createdBy || '') : user ?.fullName || '',
           date: isFirstNode ? (item.createdDate || '') : (item.transferDate || '')
         };
       });
@@ -834,6 +864,32 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.chartInitialized = false;
     }
   }
+
+
+  isEnabled(name: string): boolean {
+    const attribute = this.basicAttributes ?.find((attr: BasicAttribute) => attr.Name === name);
+    return attribute ? attribute.Enabled : false;
+  }
+
+  controlValues: { [key: string]: string } = {};
+
+  getFormDataValue() {
+    this.customAttributes ?.components ?.forEach((component: CustomAttributeComponent) => {
+      const key = component.key;
+      if (this.customFormData) {
+        const value = this.customFormData[key];
+        if (value && typeof value === 'object' && Object.keys(value).length === 0) {
+          this.controlValues[key] = "";
+        }
+        else {
+          this.controlValues[key] = value || component.defaultValue || "";
+        }
+      }
+      else
+        this.controlValues[key] = component.defaultValue;
+    });
+  }
+
 
   ngOnDestroy() {
     if (this.orgChart) {

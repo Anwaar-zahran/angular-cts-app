@@ -39,35 +39,35 @@
           <div class="p-3">
             <form class="form">
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('SendingEntity')">
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.SENDING_ENTITY' | translate }}</label>
                     <input class="form-control" type="text" [value]="data.row?.sendingEntity|| ''" [disabled]="true" />
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('ReceivingEntity')">
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.RECEIVING_ENTITY' | translate }}</label>
                     <input class="form-control" type="text" [value]="data.row?.receivingEntity|| ''"
                            [disabled]="true" />
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('CarbonCopy')">
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.CARBONCOPY' | translate }}</label>
-                    <ng-select id="ddlUsers" [(ngModel)]="userId" name="ddlUsers" [items]="carbonUsers || []" 
+                    <ng-select id="ddlUsers" [(ngModel)]="userId" name="ddlUsers" [items]="carbonUsers || []"
                                bindLabel="name" bindValue="id" placeholder="" class="form-control" [disabled]="true">
                     </ng-select>
                   </div>
                 </div>
-                <div class="col-sm-12">
+                <div class="col-sm-12" *ngIf="isEnabled('Subject')">
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.SUBJECT' | translate }}</label>
                     <textarea class="form-control" maxlength="2000" rows="5"
                               [disabled]="true">{{data.row.subject||''}}</textarea>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('Privacy')">
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.PRIVACY' | translate }}</label>
                     <ng-select id="ddlPrivacy" [(ngModel)]="privacyId" name="ddlPrivacy" [items]="privacy || []"
@@ -75,7 +75,7 @@
                     </ng-select>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('Priority')">
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.PRIORITY' | translate }}</label>
                     <ng-select id="ddlPriority" [(ngModel)]="priorityId" name="ddlPriority" [items]="priority || []"
@@ -83,7 +83,7 @@
                     </ng-select>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('DueDate')">
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.DUEDATE' | translate }}</label>
                     <input class="form-control date-picker" [value]="attributes?.dueDate" placeholder="yyyy-mm-dd"
@@ -103,7 +103,7 @@
                     <input class="form-control" type="text" [value]="data.row?.createdByUser" [disabled]="true" />
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('Importance')">
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.IMPORTANCE' | translate }}</label>
                     <ng-select id="ddlImp" [(ngModel)]="ImpoeranceId" name="ddlImp" [items]="importance || []"
@@ -111,7 +111,7 @@
                     </ng-select>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('Classification')">
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.CLASSIFICATION' | translate }}</label>
                     <ng-select id="ddlClass" [(ngModel)]="classId" name="ddlClass" [items]="classification || []"
@@ -119,12 +119,93 @@
                     </ng-select>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('DocumentType')">
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.DOCUMENT_TYPE' | translate }}</label>
                     <input class="form-control" type="text" [value]="attributes?.documentType?.text"
                            [disabled]="true" />
                   </div>
+                </div>
+                <div class="col-sm-12" *ngIf="isEnabled('Body')">
+                  <div class="form-group">
+                    <label class="form-label">{{ 'MAIL_DETAILS.BODY' | translate }}</label>
+                    <textarea class="form-control" maxlength="2000" rows="3" type="text" [value]="attributes?.body"
+                              [disabled]="true"></textarea>
+                  </div>
+                </div>
+                <div class="col-md-6" *ngIf="isEnabled('Keyword')">
+                  <div class="form-group">
+                    <label class="form-label">{{ 'MAIL_DETAILS.KEYWORD' | translate }}</label>
+                    <input class="form-control" type="text" [value]="attributes?.keyword"
+                           [disabled]="true" />
+                  </div>
+                </div>
+
+                <!--Dynamic Custom Attributes-->
+                <div class="col-md-6" *ngFor="let component of customAttributes?.components">
+                  <!-- Render controls based on the component type -->
+                  <!--<div *ngIf="component.type === 'tags'" class="form-group">
+    <label class="form-label">{{ component.label }}</label>
+    <input class="form-control" type="text"
+           [placeholder]="component.placeholder"
+           [disabled]="true"
+           [value]="controlValues[component.key]" />
+  </div>-->
+
+                  <div *ngIf="component.type !== 'checkbox' && component.type !== 'datetime' && component.type !== 'selectboxes' && component.type !== 'radio'" class="form-group">
+                    <label class="form-label">{{ component.label }}</label>
+                    <input class="form-control" type="text"
+                           [placeholder]="component.placeholder"
+                           [disabled]="true"
+                           [value]="controlValues[component.key]" />
+                  </div>
+                  <div *ngIf="component.type === 'datetime'" class="form-group">
+                    <label class="form-label">{{ component.label }}</label>
+                    <input class="form-control" type="text"
+                           [placeholder]="component.placeholder"
+                           [disabled]="true"
+                           [value]="datePipe.transform(controlValues[component.key], 'yyyy-MM-dd')" />
+                  </div>
+
+                  <div *ngIf="component.type === 'checkbox'" class="form-group">
+                    <label class="form-label">
+                      <input class="form-check-input" type="checkbox"
+                             [disabled]="true"
+                             [checked]="controlValues[component.key]" />
+                      {{ component.label }}
+                    </label>
+                  </div>
+
+
+                  <div *ngIf="component.type === 'radio'" class="form-group">
+                    <label class="form-label">
+                      {{ component.label }}
+                    </label>
+                    <div *ngFor="let option of component.values">
+
+                      <input type="radio"
+                             [id]="option.value"
+                             [name]="component.key"
+                               [checked]="controlValues[component.key]"
+                             [value]="option.value" />
+                      <label [for]="option.value">{{ option.label }}</label>
+                    </div>
+                  </div>
+                  <div *ngIf="component.type === 'selectboxes'" class="form-group">
+                    <label class="form-label">
+                      {{ component.label }}
+                    </label>
+                    <div *ngFor="let option of component.values">
+
+                      <input type="radio"
+                             [id]="option.value"
+                             [name]="component.key"
+                             [checked]="controlValues[component.key]"
+                             [value]="option.value" />
+                      <label [for]="option.value">{{ option.label }}</label>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </form>

@@ -114,6 +114,8 @@
     "CREATEDDATE": "Created date",
     "CREATED_BY": "Created by",
     "DOCUMENT_TYPE": "Document type",
+    "KEYWORD": "Keyword",
+    "BODY": "Body",
     "TABS": {
       "ATTRIBUTES": "Attributes",
       "ATTACHMENTS": "Attachments",
