@@ -20,6 +20,11 @@ interface User {
   id: number;
   name: string;
 }
+
+interface StructureUsers {
+  structureName: string,
+  userName: string
+}
 interface TransferRow {
 
   purposeId: number | null; // Allow null
@@ -39,6 +44,7 @@ interface TransferRow {
   DocumentId: number | null;
   DocumentPrivacyId: number | null;
   showValidationError?: boolean;
+  selectedToUsers?: StructureUsers[];
 }
 
 @Component({
@@ -69,6 +75,7 @@ export class TransferModalComponent implements OnInit {
   documentId: any;
   documentPrivacyId: any;
   fromStructureId: any;
+  selectedToUsers: StructureUsers[] = []
   parentTransferId: any;
   rows = [
     this.createEmptyRow() // Initialize with one empty row
@@ -122,6 +129,7 @@ export class TransferModalComponent implements OnInit {
 
     return result;
   }
+
   transformDataTemp(data: Array<{
     name: string;
     userStructure?: Array<{ user?: { firstname?: string; lastname?: string } }>
@@ -269,11 +277,28 @@ export class TransferModalComponent implements OnInit {
           ...user,
           selectedUserId: user.id
         }));
-        console.log('selected user after selection by Eyad');
+      console.log('selected userssssssssssssss')
+        console.log(this.selectedUsers)
         this.selectedUsers.forEach((user, index) => {
-          console.log(`User ${index}:`, user);
-          console.log(`User ${index} userStructure:`, user.userStructure);
+          if (Array.isArray(user.userStructure)){
+            user.userStructure.forEach((u: any )=> {
+
+              let userName = u.user.firstname+ ' '+ u.user.lastname;
+              this.selectedToUsers.push({structureName: user.name,userName: userName})
+
+            });
+          }
         });
+
+        console.log('handle the rows')
+        if (this.rows.length > 0) {
+          this.rows[0] = {
+            ...this.rows[0],
+            selectedToUsers: [...this.selectedToUsers]
+          };
+        }
+        console.log('loopin in html on this list')
+        console.log(this.selectedToUsers)
         this.cdr.detectChanges();
       } else {
         console.log('Address Book dialog was closed without submitting');
@@ -312,7 +337,8 @@ export class TransferModalComponent implements OnInit {
       isFollowUp: false,
       isStructure: false, // Default value
       selectedUser: null as { id: number, name: string, structureId: number, isStructure: boolean } | null,
-      showValidationError: false
+      showValidationError: false,
+      selectedToUsers: [] as StructureUsers[] 
     };
   }
   onUserOrPurposeChange(index: number) {
@@ -363,7 +389,7 @@ export class TransferModalComponent implements OnInit {
 
     return this.rows.slice(0, -1).map(({
       selectedUser, selectedPurposeId, selectedPriorityId, selectedDueDate,
-      txtInstruction, isPrivate, isCCed, isFollowUp
+      txtInstruction, isPrivate, isCCed, isFollowUp , selectedToUsers
     }) => {
       const isStructure = selectedUser?.isStructure ?? false;
       const userId = selectedUser?.id ?? null;
