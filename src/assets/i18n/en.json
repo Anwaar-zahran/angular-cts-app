@@ -376,6 +376,10 @@
                         "INFO": "Number of completed transfers per category divided into 2 circles (Only for transfers with due date)"
                     }
                 },
+                "Status": {
+                    "InProgress": "In Progress",
+                    "Completed": "Completed"
+                },
                 "LABELS": {
                     "STRUCTURES": "Structures",
                     "CATEGORIES": "Categories",
