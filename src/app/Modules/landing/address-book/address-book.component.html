@@ -7,26 +7,45 @@
   </div>
   <div class="modal-body px-3 d-flex flex-column">
     <div class="d-flex gap-3 my-3">
-      <input type="text" class="flex-1 form-control" [(ngModel)]="txtSearchStructure" (keydown.enter)="applyFilters()"
-        placeholder="Search by Structure Name" />
-      <input type="text" class="flex-1 form-control" [(ngModel)]="txtSearchUser" (keydown.enter)="applyFilters()"
-        placeholder="Search by User Name" />
-      <button class="btn btn-secondary ml-2" (click)="resetFilters()">Reset</button>
+      <input
+        type="text"
+        class="flex-1 form-control"
+        [(ngModel)]="txtSearchStructure"
+        (keydown.enter)="applyFilters()"
+        placeholder="Search by Structure Name"
+      />
+      <input
+        type="text"
+        class="flex-1 form-control"
+        [(ngModel)]="txtSearchUser"
+        (keydown.enter)="applyFilters()"
+        placeholder="Search by User Name"
+      />
+      <button class="btn btn-secondary ml-2" (click)="resetFilters()">
+        Reset
+      </button>
       <button class="btn btn-primary" (click)="applyFilters()">Search</button>
     </div>
 
     <!-- Table -->
     <div class="table-responsive flex-1">
-      <table class="table" *ngIf="filteredAddressUsers && filteredAddressUsers.length > 0">
+      <table
+        class="table"
+        *ngIf="filteredAddressUsers && filteredAddressUsers.length > 0"
+      >
         <thead>
           <tr>
-            <th width="80px"></th>
             <th width="60px">
               <div class="form-check justify-content-center">
-                <input class="form-check-input" type="checkbox" (change)="toggleSelectAll($event)"
-                  [checked]="isAllSelected()">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  (change)="toggleSelectAll($event)"
+                  [checked]="isAllSelected()"
+                />
               </div>
             </th>
+            <th width="80px"></th>
             <th *ngIf="showCodeColumn">Code</th>
             <th>Name</th>
           </tr>
@@ -35,17 +54,32 @@
           <ng-container *ngFor="let row of filteredAddressUsers">
             <ng-container *ngIf="row.name">
               <tr>
-                <td width="80px">
-                  <button class="btn btn-sm btn-link btn-row-expand" (click)="toggleRow(row)" *ngIf="row.userStructure?.length > 0">
-                    <i class="fa"
-                      [ngClass]="{'fa-plus': !isRowExpanded(row), 'fa-minus': isRowExpanded(row)}"></i>
-                  </button>
-                </td>
                 <td width="60px">
                   <div class="form-check justify-content-center">
-                    <input class="form-check-input" type="checkbox"
-                      (change)="onUserSelectionChange(row, $any($event.target).checked)" [checked]="row.selected">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      (change)="
+                        onAllUserSelectionChange(row.userStructure,$any($event.target).checked)
+                      "
+                      [checked]="row.selected"
+                    />
                   </div>
+                </td>
+                <td width="80px">
+                  <button
+                    class="btn btn-sm btn-link btn-row-expand"
+                    (click)="toggleRow(row)"
+                    *ngIf="row.userStructure?.length > 0"
+                  >
+                    <i
+                      class="fa"
+                      [ngClass]="{
+                        'fa-plus': !isRowExpanded(row),
+                        'fa-minus': isRowExpanded(row)
+                      }"
+                    ></i>
+                  </button>
                 </td>
                 <td>{{ row.code }}</td>
                 <td>{{ row.name }}</td>
@@ -58,11 +92,23 @@
                         <td width="80px"></td>
                         <td width="60px">
                           <div class="form-check justify-content-center">
-                            <input class="form-check-input" type="checkbox" [(ngModel)]="user.user.selected"
-                              (change)="onUserSelectionChange(user.user, $any($event.target).checked)">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              [(ngModel)]="user.user.selected"
+                              (change)="
+                                onUserSelectionChange(
+                                  user.user,
+                                  user.structure,
+                                  $any($event.target).checked
+                                )
+                              "
+                            />
                           </div>
                         </td>
-                        <td>{{ user.user.firstname }} {{ user.user.lastname }}</td>
+                        <td>
+                          {{ user.user.firstname }} {{ user.user.lastname }}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -75,11 +121,26 @@
                 <td width="80px"></td>
                 <td width="60px">
                   <div class="form-check justify-content-center">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="userStruct.user.selected"
-                      (change)="onUserSelectionChange(userStruct.user, $any($event.target).checked)">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [(ngModel)]="userStruct.user.selected"
+                      (change)="
+                        onUserSelectionChange(
+                          userStruct.user,
+                          userStruct.structure,
+                          $any($event.target).checked
+                        )
+                      "
+                    />
                   </div>
                 </td>
-                <td>{{ userStruct.structure.name }}\{{ userStruct.user.firstname }} {{ userStruct.user.lastname }}</td>
+                <td>
+                  {{ userStruct.structure.name }}\{{
+                    userStruct.user.firstname
+                  }}
+                  {{ userStruct.user.lastname }}
+                </td>
               </tr>
             </ng-container>
           </ng-container>
@@ -90,27 +151,57 @@
       </div>
     </div>
 
-    <div class="dataTables_paginate paging_full_numbers" *ngIf="filteredAddressUsers.length > 0">
-      <a class="paginate_button first" [class.disabled]="currentPage === 1" (click)="goToPage(1)"><i
-          class='text-secondary fa fa-angle-left'></i></a>
+    <div
+      class="dataTables_paginate paging_full_numbers"
+      *ngIf="filteredAddressUsers.length > 0"
+    >
+      <a
+        class="paginate_button first"
+        [class.disabled]="currentPage === 1"
+        (click)="goToPage(1)"
+        ><i class="text-secondary fa fa-angle-left"></i
+      ></a>
 
-      <a class="paginate_button previous" (click)="previousPage()" [class.disabled]="currentPage === 1"><i
-          class='text-secondary fa fa-angle-double-left'></i></a>
-      <span class="d-inline-flex align-items-center mx-2">Page
-        <input type="number" class="paginate-input form-control form-control-sm mx-2" [(ngModel)]="currentPage"
-          (ngModelChange)="goToPage(currentPage)" [min]="1" [max]="totalPages" />
-        of {{totalPages}}</span>
+      <a
+        class="paginate_button previous"
+        (click)="previousPage()"
+        [class.disabled]="currentPage === 1"
+        ><i class="text-secondary fa fa-angle-double-left"></i
+      ></a>
+      <span class="d-inline-flex align-items-center mx-2"
+        >Page
+        <input
+          type="number"
+          class="paginate-input form-control form-control-sm mx-2"
+          [(ngModel)]="currentPage"
+          (ngModelChange)="goToPage(currentPage)"
+          [min]="1"
+          [max]="totalPages"
+        />
+        of {{ totalPages }}</span
+      >
 
-      <a class="paginate_button next" (click)="nextPage()" [class.disabled]="currentPage === totalPages"><i
-          class='text-secondary fa fa-angle-double-right'></i></a>
+      <a
+        class="paginate_button next"
+        (click)="nextPage()"
+        [class.disabled]="currentPage === totalPages"
+        ><i class="text-secondary fa fa-angle-double-right"></i
+      ></a>
 
-      <a class="paginate_button last" [class.disabled]="currentPage === totalPages" (click)="goToPage(totalPages)"><i
-          class='text-secondary fa fa-angle-right'></i></a>
-
+      <a
+        class="paginate_button last"
+        [class.disabled]="currentPage === totalPages"
+        (click)="goToPage(totalPages)"
+        ><i class="text-secondary fa fa-angle-right"></i
+      ></a>
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="onClose()">Close</button>
-    <button type="button" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+    <button type="button" class="btn btn-secondary" (click)="onClose()">
+      Close
+    </button>
+    <button type="button" class="btn btn-primary" (click)="onSubmit()">
+      Submit
+    </button>
   </div>
 </div>
