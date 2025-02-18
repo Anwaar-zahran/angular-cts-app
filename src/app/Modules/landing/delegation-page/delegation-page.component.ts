@@ -383,7 +383,8 @@ export class DelegationPageComponent implements OnInit {
           (error: any) => {
             console.error('Error updating:', error);
             this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
-              this.toaster.showToaster(error?.message || msg);
+              // this.toaster.showToaster(error?.message || msg);
+              this.toaster.showToaster(msg);
             });
           }
         );
@@ -400,7 +401,7 @@ export class DelegationPageComponent implements OnInit {
           (error: any) => {
             console.error('Error adding:', error);
             this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
-              this.toaster.showToaster(error?.message || msg);
+              this.toaster.showToaster(msg);
             });
           }
         );

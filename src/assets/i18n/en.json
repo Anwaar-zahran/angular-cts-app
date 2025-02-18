@@ -225,7 +225,8 @@
         "REQUIRED_FIELD": "This field is required",
         "INVALID_FORMAT": "Invalid format",
         "SERVER_ERROR": "Server error occurred",
-        "NO_PERMISSION": "You don't have permission"
+        "NO_PERMISSION": "You don't have permission",
+         "SOMETHING_WRONG":"Something went wrong"
     },
     "DELEGATION": {
         "TITLE": "Delegations",
