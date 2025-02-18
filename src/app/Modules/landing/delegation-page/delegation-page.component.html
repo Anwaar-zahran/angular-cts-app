@@ -245,7 +245,9 @@
         class="btn btn-primary btn-lg"
         (click)="onSave()"
       >
-        <i class="fa fa-save"></i> {{ "COMMON.ACTIONS.SAVE" | translate }}
+        <!-- <i class="fa fa-save"></i> {{ "COMMON.ACTIONS.SAVE" | translate }} -->
+        <i class="fa fa-save"></i> 
+        {{ isEdit ? ('COMMON.ACTIONS.SAVE' | translate) : ('COMMON.ACTIONS.SUBMIT' | translate) }}
       </button>
 
       <ng-template #clearText>

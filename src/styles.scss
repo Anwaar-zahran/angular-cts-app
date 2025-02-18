@@ -1868,3 +1868,8 @@ a.paginate_button {
 	border-radius: 9px;
 	color: var(--secondary-color) !important;
 }
+
+
+.cdk-global-overlay-wrapper, .cdk-overlay-connected-position-bounding-box {
+    direction: inherit;
+}

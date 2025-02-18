@@ -46,7 +46,7 @@ export class MailsService {
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json', // Only one Content-Type header is needed
     });
-    debugger;
+     
 
     //Transfer / Reply ? id = 80 & transferId=35 & purposeId=1 & dueDate & instruction & structureId & delegationId & structureReceivers[]=1 &
     //  transferToType=2 & withSign=false & SignatureTemplateId & documentId=80

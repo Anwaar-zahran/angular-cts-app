@@ -29,7 +29,7 @@ export class ReplyToComponent {
   replyForm!: FormGroup;
   accessToken: string | null = null;
   to: string | null = null;
-
+  minDate: Date = new Date(); 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private router: Router, private fb: FormBuilder,

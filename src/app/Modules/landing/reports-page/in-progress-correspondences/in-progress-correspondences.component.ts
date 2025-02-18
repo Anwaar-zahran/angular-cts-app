@@ -358,13 +358,31 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
     this.structureSearchSubject.complete();
   }
 
-  loadPrivacyOptions() {
+  loadPrivacyOptionsWithoutTranslate() {
     this.lookupsService.getPrivacyOptions().subscribe({
       next: (options) => {
         this.privacyOptions = options;
       },
       error: (error) => {
         console.error('Error loading privacy options:', error);
+      }
+    });
+  }
+  loadPrivacyOptions() {
+    debugger;
+    this.lookupsService.getPrivacyOptions().subscribe({
+      next: (options) => {
+        this.privacyOptions = options.map(option => {
+          const formattedKey = option.name.trim().toLowerCase().replace(/\s+/g, ' '); // Remove extra spaces
+         debugger
+          return {
+            ...option,
+            translatedName: this.translate.instant(`PrivacyOptions.${formattedKey}`) || option.name // Translate option name
+          };
+        });
+      },
+      error: (error) => {
+        console.error(this.translate.instant('ERROR.LOADING_PRIVACY_OPTIONS'), error);
       }
     });
   }

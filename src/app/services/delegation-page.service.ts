@@ -23,7 +23,7 @@ export class DelegationPageService {
     });
     const draw = 0;
     const start = 0;
-    const length = 10;
+    const length = 10000;
 
     const body = new URLSearchParams();
     body.set('draw', draw.toString());

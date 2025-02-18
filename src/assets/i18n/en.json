@@ -22,7 +22,8 @@
             "CLEAR": "Clear",
             "BACK": "Back",
             "TITLE": "Actions",
-            "APPLY": "Apply"
+            "APPLY": "Apply",
+            "CONFIRM":"Confirm"
         },
         "SELECT": "Select",
         "LOADING": "Loading...",
@@ -97,33 +98,62 @@
             "TRANSFERRED_FROM": "Transferred from: {{user}}"
         }
     },
-    "MAIL_DETAILS": {
-        "REPLY_TO": "Reply To",
-        "SENDING_ENTITY": "Sending entity",
-        "RECEIVING_ENTITY": "Receiving entity",
-        "SUBJECT": "Subject",
-        "REFERENCE": "Reference",
-        "DATE": "Date",
-        "STATUS": "Status",
-        "PRIORITY": "Priority",
-        "CLASSIFICATION": "Classification",
-        "TABS": {
-            "ATTRIBUTES": "Attributes",
-            "ATTACHMENTS": "Attachments",
-            "NOTES": "Notes",
-            "LINKED_CORRESPONDENCE": "Linked correspondence",
-            "NON_ARCHIVED_ATTACHMENT": "Non-Archived Attachment",
-            "VISUAL_TRACKING": "Visual tracking",
-            "TRANSACTION_HISTORY": "Transfers History",
-            "ACTIVITY_LOG": "Activity Log"
-        },
-        "BUTTONS": {
-            "REPLY": "Reply",
-            "TRANSFER": "Transfer",
-            "COMPLETE": "Complete",
-            "START_WORKFLOW": "Start workflow"
-        }
+  "MAIL_DETAILS": {
+    "REPLY_TO": "Reply To",
+    "SENDING_ENTITY": "Sending entity",
+    "RECEIVING_ENTITY": "Receiving entity",
+    "SUBJECT": "Subject",
+    "REFERENCE": "Reference",
+    "DATE": "Date",
+    "STATUS": "Status",
+    "PRIORITY": "Priority",
+    "CLASSIFICATION": "Classification",
+    "IMPORTANCE": "Importance",
+    "CARBONCOPY": "Carbon copy",
+    "PRIVACY": "Privacy",
+    "DUEDATE": "Due date",
+    "CREATEDDATE": "Created date",
+    "CREATED_BY": "Created by",
+    "DOCUMENT_TYPE": "Document type",
+    "KEYWORD": "Keyword",
+    "BODY": "Body",
+    "TABS": {
+      "ATTRIBUTES": "Attributes",
+      "ATTACHMENTS": "Attachments",
+      "NOTES": "Notes",
+      "LINKED_CORRESPONDENCE": "Linked correspondence",
+      "NON_ARCHIVED_ATTACHMENT": "Non-Archived Attachment",
+      "VISUAL_TRACKING": "Visual tracking",
+      "TRANSACTION_HISTORY": "Transfers History",
+      "ACTIVITY_LOG": "Activity Log"
     },
+    "BUTTONS": {
+      "REPLY": "Reply",
+      "TRANSFER": "Transfer",
+      "COMPLETE": "Complete",
+      "START_WORKFLOW": "Start workflow"
+    },
+    "LINKED": {
+      "CATEGORY": "Category",
+      "REFERENCE_NUMBER": "Reference Number"
+    },
+    "ATTACHMENT": {
+      "TYPE": "Type",
+      "QUANTITY": "Quantity",
+      "DESC": "Description"
+    },
+    "HISTORY": {
+      "FROM_USER": "From",
+      "TO": "To",
+      "TRANSFER_DATE": "Transfer date",
+      "TRANSFER_TIME": "Transfer time",
+      "CLOSED_DATE": "Closed Date"
+    },
+    "LOGS": {
+      "USER": "User",
+      "ACTION": "Action"
+    }
+  },
     "LOGIN": {
         "TITLE": "Login",
         "SYSTEM_TITLE": "Correspondence Tracking System",
@@ -195,7 +225,8 @@
         "REQUIRED_FIELD": "This field is required",
         "INVALID_FORMAT": "Invalid format",
         "SERVER_ERROR": "Server error occurred",
-        "NO_PERMISSION": "You don't have permission"
+        "NO_PERMISSION": "You don't have permission",
+         "SOMETHING_WRONG":"Something went wrong"
     },
     "DELEGATION": {
         "TITLE": "Delegations",
@@ -224,6 +255,7 @@
             "SEARCH": "Search...",
             "SELECT_MULTIPLE": "Select one or more"
         },
+       "CONFIRMMODALDELEGATION":{"TITLE":"Confirm Deletion"},
         "TABLE": {
             "DELEGATE_TO": "Delegate to",
             "FROM_DATE": "From date",
@@ -317,7 +349,8 @@
     "BAM": {
         "TITLE": "BAM",
         "DASHBOARD": {
-            "TITLE": "User Dashboard",
+            "SYSTEM_DASHBOARD_TITLE": "System Dashboard",
+            "USER_DASHBOARD_TITLE":"User Dashboard",
             "CHARTS": {
                 "COUNT_PER_CATEGORY": "Count per Category and Status",
                 "STATISTICS_PER_DEPARTMENT": "Statistics per Department",
@@ -609,5 +642,10 @@
                 "ACTIONS": "Actions"
             }
         }
+    },
+    "PrivacyOptions":{
+        "Normal":"Normal",
+        "Confidential":"Confidential",
+        "High Confidential":"High Confidential"
     }
 }

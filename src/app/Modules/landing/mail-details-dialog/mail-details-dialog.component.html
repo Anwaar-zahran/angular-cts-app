@@ -8,7 +8,10 @@
       <i class="fa fa-exchange"></i>{{ 'MAIL_DETAILS.BUTTONS.TRANSFER' | translate }}
     </button>
   </div>
-  <button mat-button mat-dialog-close class="btn btn-transparent">
+  <!-- <button mat-button mat-dialog-close class="btn btn-transparent">
+    <i class="fa fa-times"></i>
+  </button> -->
+  <button mat-button class="btn btn-transparent" (click)="closeDialog()">
     <i class="fa fa-times"></i>
   </button>
 </div>
@@ -23,7 +26,7 @@
 
         <div #tabsContainer class="nav nav-tabs responsive-tabs">
           <div *ngFor="let tab of tabs; let i = index" [ngClass]="{'active': activeTabIndex === i}"
-            (click)="setActiveTab(i)" class="nav-link">
+               (click)="setActiveTab(i)" class="nav-link">
             {{ 'MAIL_DETAILS.TABS.' + tab | translate }}
           </div>
         </div>
@@ -39,92 +42,173 @@
           <div class="p-3">
             <form class="form">
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('SendingEntity')">
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.SENDING_ENTITY' | translate }}</label>
                     <input class="form-control" type="text" [value]="data.row?.sendingEntity|| ''" [disabled]="true" />
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('ReceivingEntity')">
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.RECEIVING_ENTITY' | translate }}</label>
                     <input class="form-control" type="text" [value]="data.row?.receivingEntity|| ''"
-                      [disabled]="true" />
+                           [disabled]="true" />
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('CarbonCopy')">
                   <div class="form-group">
-                    <label class="form-label">Carbon copy</label>
+                    <label class="form-label">{{ 'MAIL_DETAILS.CARBONCOPY' | translate }}</label>
                     <ng-select id="ddlUsers" [(ngModel)]="userId" name="ddlUsers" [items]="carbonUsers || []"
-                      bindLabel="name" bindValue="id" placeholder="Select" class="form-control" [disabled]="true">
+                               bindLabel="name" bindValue="id" placeholder="" class="form-control" [disabled]="true">
                     </ng-select>
                   </div>
                 </div>
-                <div class="col-sm-12">
+                <div class="col-sm-12" *ngIf="isEnabled('Subject')">
                   <div class="form-group">
-                    <label class="form-label">Subject</label>
+                    <label class="form-label">{{ 'MAIL_DETAILS.SUBJECT' | translate }}</label>
                     <textarea class="form-control" maxlength="2000" rows="5"
-                      [disabled]="true">{{data.row.subject||''}}</textarea>
+                              [disabled]="true">{{data.row.subject||''}}</textarea>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('Privacy')">
                   <div class="form-group">
-                    <label class="form-label">Privacy</label>
+                    <label class="form-label">{{ 'MAIL_DETAILS.PRIVACY' | translate }}</label>
                     <ng-select id="ddlPrivacy" [(ngModel)]="privacyId" name="ddlPrivacy" [items]="privacy || []"
-                      bindLabel="text" bindValue="id" placeholder="Select" class="form-control" [disabled]="true">
+                               bindLabel="text" bindValue="id" placeholder="" class="form-control" [disabled]="true">
                     </ng-select>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('Priority')">
                   <div class="form-group">
-                    <label class="form-label">Priority</label>
+                    <label class="form-label">{{ 'MAIL_DETAILS.PRIORITY' | translate }}</label>
                     <ng-select id="ddlPriority" [(ngModel)]="priorityId" name="ddlPriority" [items]="priority || []"
-                      bindLabel="text" bindValue="id" placeholder="Select" class="form-control" [disabled]="true">
+                               bindLabel="text" bindValue="id" placeholder="" class="form-control" [disabled]="true">
                     </ng-select>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('DueDate')">
                   <div class="form-group">
-                    <label class="form-label">Due date</label>
+                    <label class="form-label">{{ 'MAIL_DETAILS.DUEDATE' | translate }}</label>
                     <input class="form-control date-picker" [value]="attributes?.dueDate" placeholder="yyyy-mm-dd"
-                      name="dp2" [disabled]="true" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()" />
+                           name="dp2" [disabled]="true" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()" />
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label class="form-label">Created date</label>
+                    <label class="form-label">{{ 'MAIL_DETAILS.CREATEDDATE' | translate }}</label>
                     <input class="form-control date-picker" [value]="data.row?.createdDate" placeholder="yyyy-mm-dd"
-                      name="dp1" [disabled]="true" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle()" />
+                           name="dp1" [disabled]="true" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle()" />
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label class="form-label">Created By</label>
+                    <label class="form-label">{{ 'MAIL_DETAILS.CREATED_BY' | translate }}</label>
                     <input class="form-control" type="text" [value]="data.row?.createdByUser" [disabled]="true" />
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('Importance')">
                   <div class="form-group">
-                    <label class="form-label">Importance</label>
+                    <label class="form-label">{{ 'MAIL_DETAILS.IMPORTANCE' | translate }}</label>
                     <ng-select id="ddlImp" [(ngModel)]="ImpoeranceId" name="ddlImp" [items]="importance || []"
-                      bindLabel="text" bindValue="id" placeholder="Select" class="form-control" [disabled]="true">
+                               bindLabel="text" bindValue="id" placeholder="" class="form-control" [disabled]="true">
                     </ng-select>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('Classification')">
                   <div class="form-group">
-                    <label class="form-label">Classification</label>
+                    <label class="form-label">{{ 'MAIL_DETAILS.CLASSIFICATION' | translate }}</label>
                     <ng-select id="ddlClass" [(ngModel)]="classId" name="ddlClass" [items]="classification || []"
-                      bindLabel="text" bindValue="id" placeholder="Select" class="form-control" [disabled]="true">
+                               bindLabel="text" bindValue="id" placeholder="" class="form-control" [disabled]="true">
                     </ng-select>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="isEnabled('DocumentType')">
                   <div class="form-group">
-                    <label class="form-label">Document Type</label>
+                    <label class="form-label">{{ 'MAIL_DETAILS.DOCUMENT_TYPE' | translate }}</label>
                     <input class="form-control" type="text" [value]="attributes?.documentType?.text"
-                      [disabled]="true" />
+                           [disabled]="true" />
                   </div>
+                </div>
+                <div class="col-sm-12" *ngIf="isEnabled('Body')">
+                  <div class="form-group">
+                    <label class="form-label">{{ 'MAIL_DETAILS.BODY' | translate }}</label>
+                    <textarea class="form-control" maxlength="2000" rows="3" type="text" [value]="attributes?.body"
+                              [disabled]="true"></textarea>
+                  </div>
+                </div>
+                <div class="col-md-6" *ngIf="isEnabled('Keyword')">
+                  <div class="form-group">
+                    <label class="form-label">{{ 'MAIL_DETAILS.KEYWORD' | translate }}</label>
+                    <input class="form-control" type="text" [value]="attributes?.keyword"
+                           [disabled]="true" />
+                  </div>
+                </div>
+
+                <!--Dynamic Custom Attributes-->
+                <div class="col-md-6" *ngFor="let component of customAttributes?.components">
+                  <!-- Render controls based on the component type -->
+                  <!--<div *ngIf="component.type === 'tags'" class="form-group">
+    <label class="form-label">{{ component.label }}</label>
+    <input class="form-control" type="text"
+           [placeholder]="component.placeholder"
+           [disabled]="true"
+           [value]="controlValues[component.key]" />
+  </div>-->
+
+                  <div *ngIf="component.type !== 'checkbox' && component.type !== 'datetime' && component.type !== 'selectboxes' && component.type !== 'radio'" class="form-group">
+                    <label class="form-label">{{ component.label }}</label>
+                    <input class="form-control" type="text"
+                           [placeholder]="component.placeholder"
+                           [disabled]="true"
+                           [value]="controlValues[component.key]" />
+                  </div>
+                  <div *ngIf="component.type === 'datetime'" class="form-group">
+                    <label class="form-label">{{ component.label }}</label>
+                    <input class="form-control" type="text"
+                           [placeholder]="component.placeholder"
+                           [disabled]="true"
+                           [value]="datePipe.transform(controlValues[component.key], 'yyyy-MM-dd')" />
+                  </div>
+
+                  <div *ngIf="component.type === 'checkbox'" class="form-group">
+                    <label class="form-label">
+                      <input class="form-check-input" type="checkbox"
+                             [disabled]="true"
+                             [checked]="controlValues[component.key]" />
+                      {{ component.label }}
+                    </label>
+                  </div>
+
+
+                  <div *ngIf="component.type === 'radio'" class="form-group">
+                    <label class="form-label">
+                      {{ component.label }}
+                    </label>
+                    <div *ngFor="let option of component.values">
+
+                      <input type="radio"
+                             [id]="option.value"
+                             [name]="component.key"
+                               [checked]="controlValues[component.key]"
+                             [value]="option.value" />
+                      <label [for]="option.value">{{ option.label }}</label>
+                    </div>
+                  </div>
+                  <div *ngIf="component.type === 'selectboxes'" class="form-group">
+                    <label class="form-label">
+                      {{ component.label }}
+                    </label>
+                    <div *ngFor="let option of component.values">
+
+                      <input type="radio"
+                             [id]="option.value"
+                             [name]="component.key"
+                             [checked]="controlValues[component.key]"
+                             [value]="option.value" />
+                      <label [for]="option.value">{{ option.label }}</label>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </form>
@@ -136,7 +220,7 @@
           <div class="p-3">
             <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
               <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodeToggle class="mat-tree-node"
-                [ngStyle]="{'--level': treeControl.getLevel(node)}">
+                             [ngStyle]="{'--level': treeControl.getLevel(node)}">
                 <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
                   <i class="fa" [ngClass]="treeControl.isExpanded(node) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
                 </button>
@@ -144,9 +228,9 @@
                 <span>{{node.name}}</span>
               </mat-tree-node>
               <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle class="mat-tree-node"
-                [ngStyle]="{'--level': treeControl.getLevel(node)}">
+                             [ngStyle]="{'--level': treeControl.getLevel(node)}">
                 <a href="#" class="mx-2 align-items-center" [ngClass]="{'selected': selectedNode === node}"
-                  (click)="selectNode(node, $event)">
+                   (click)="selectNode(node, $event)">
                   <i class="far fa-file"></i>
                   <span>{{node.name}}</span>
                 </a>
@@ -160,9 +244,9 @@
             <table class="table" datatable [dtOptions]="dtOptions" *ngIf="notes && notes?.length >0">
               <thead>
                 <tr>
-                  <th>Notes</th>
-                  <th>Created By</th>
-                  <th>Created Date</th>
+                  <th>{{ 'MAIL_DETAILS.TABS.NOTES' | translate }}</th>
+                  <th>{{ 'MAIL_DETAILS.CREATED_BY' | translate }}</th>
+                  <th>{{ 'MAIL_DETAILS.CREATEDDATE' | translate }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -175,8 +259,9 @@
                 </tr>
               </tbody>
             </table>
+            {{ 'SEARCH.TABLE.TOTAL_RECORDS' | translate:{ count: notes?.length } }}
             <div *ngIf="!notes?.length" class="text-center mt-3">
-              <p>No data found</p>
+              <p>{{ 'COMMON.NO_DATA' | translate }}</p>
             </div>
           </div>
         </div>
@@ -188,14 +273,14 @@
               <table class="table" datatable [dtOptions]="dtOptions" *ngIf="linkedDocs?.length">
                 <thead>
                   <tr>
-                    <th>Category</th>
-                    <th>Reference Number</th>
-                    <th>Created By</th>
-                    <th>Created Date</th>
+                    <th>{{ 'MAIL_DETAILS.LINKED.CATEGORY' | translate }}</th>
+                    <th>{{ 'MAIL_DETAILS.LINKED.REFERENCE_NUMBER' | translate }}</th>
+                    <th>{{ 'MAIL_DETAILS.CREATED_BY' | translate }}</th>
+                    <th>{{ 'MAIL_DETAILS.CREATEDDATE' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of linkedDocs">
+                  <tr *ngFor="let item of mappedArray">
                     <td>{{ item.category || '' }}</td>
                     <td>{{ item.linkedDocumentReferenceNumber }}</td>
                     <td>{{ item.linkedBy }}</td>
@@ -204,7 +289,7 @@
                 </tbody>
               </table>
               <div *ngIf="!linkedDocs?.length" class="text-center mt-3">
-                <p>No data found</p>
+                <p>{{ 'COMMON.NO_DATA' | translate }}</p>
               </div>
             </div>
           </div>
@@ -217,10 +302,10 @@
               <table class="table" datatable [dtOptions]="dtOptions" *ngIf="nonArchAttachments?.length">
                 <thead>
                   <tr>
-                    <th>Type</th>
-                    <th>Quantity</th>
-                    <th>Description</th>
-                    <th>Created By</th>
+                    <th>{{ 'MAIL_DETAILS.ATTACHMENT.TYPE' | translate }}</th>
+                    <th>{{ 'MAIL_DETAILS.ATTACHMENT.QUANTITY' | translate }}</th>
+                    <th>{{ 'MAIL_DETAILS.ATTACHMENT.DESC' | translate }}</th>
+                    <th>{{ 'MAIL_DETAILS.CREATED_BY' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -233,7 +318,7 @@
                 </tbody>
               </table>
               <div *ngIf="!nonArchAttachments?.length" class="text-center mt-3">
-                <p>No data found</p>
+                <p>{{ 'COMMON.NO_DATA' | translate }}</p>
               </div>
             </div>
           </div>
@@ -253,18 +338,18 @@
               <table class="table" datatable [dtOptions]="dtOptions" *ngIf="transHistory?.length">
                 <thead>
                   <tr>
-                    <th>From User</th>
-                    <th>To</th>
-                    <th>Transfer Date</th>
-                    <th>Transfer Time</th>
-                    <th>Due Date</th>
-                    <th>Closed Date</th>
+                    <th>{{ 'MAIL_DETAILS.HISTORY.FROM_USER' | translate }}</th>
+                    <th>{{ 'MAIL_DETAILS.HISTORY.TO' | translate }}</th>
+                    <th>{{ 'MAIL_DETAILS.HISTORY.TRANSFER_DATE' | translate }}</th>
+                    <th>{{ 'MAIL_DETAILS.HISTORY.TRANSFER_TIME' | translate }}</th>
+                    <th>{{ 'MAIL_DETAILS.DUEDATE' | translate }}</th>
+                    <th>{{ 'MAIL_DETAILS.HISTORY.CLOSED_DATE' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let item of transHistory">
-                    <td>{{ item.fromUser || '' }}</td>
-                    <td>{{ item.toUser || '' }}</td>
+                    <td>{{ item.fromUser || ''}}</td>
+                    <td>{{ item.toStructure || '' }}{{ item.toStructure && item.toUser ? ' / ' : '' }}{{ item.toUser || '' }}</td>
                     <td>{{ item.transferDate || '' }}</td>
                     <td>{{ item.transferTime }}</td>
                     <td>{{ item.dueDate || '' }}</td>
@@ -273,7 +358,7 @@
                 </tbody>
               </table>
               <div *ngIf="!transHistory?.length" class="text-center mt-3">
-                <p>No data found</p>
+                <p>{{ 'COMMON.NO_DATA' | translate }}</p>
               </div>
             </div>
           </div>
@@ -286,10 +371,10 @@
               <table class="table" datatable [dtOptions]="dtOptions" *ngIf="activityLogs?.length">
                 <thead>
                   <tr>
-                    <th>User</th>
-                    <th>Action</th>
-                    <th>Created Date</th>
-                    <th>Note</th>
+                    <th>{{ 'MAIL_DETAILS.LOGS.USER' | translate }}</th>
+                    <th>{{ 'MAIL_DETAILS.LOGS.ACTION' | translate }}</th>
+                    <th>{{ 'MAIL_DETAILS.CREATED_BY' | translate }}</th>
+                    <th>{{ 'MAIL_DETAILS.TABS.NOTES' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -302,7 +387,7 @@
                 </tbody>
               </table>
               <div *ngIf="!activityLogs?.length" class="text-center mt-3">
-                <p>No data found</p>
+                <p>{{ 'COMMON.NO_DATA' | translate }}</p>
               </div>
             </div>
           </div>
@@ -313,7 +398,7 @@
     <div class="col-md-7" style="height: calc(90vh - 100px);">
       <div *ngIf="selectedDocumentId && documentViewerUrl" style="height: 100%;">
         <iframe id="component_1738404262045_viewerFrame" style="width: 100%; height: 100%; border: 0px; padding: 0px;"
-          [src]="documentViewerUrl"></iframe>
+                [src]="documentViewerUrl"></iframe>
       </div>
     </div>
   </div>

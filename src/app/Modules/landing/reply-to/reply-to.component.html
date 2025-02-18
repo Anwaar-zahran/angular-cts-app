@@ -30,7 +30,7 @@
         <div class="form-group">
           <label for="datepicker1" class="form-label">Due Date</label>
           <input class="form-control date-picker" matInput [matDatepicker]="picker" placeholder="dd-mm-yyyy"
-                 formControlName="dueDate" name="dp1" (click)="picker.open()" />
+                 formControlName="dueDate" name="dp1" (click)="picker.open()"  [min]="minDate" />
           <mat-datepicker #picker></mat-datepicker>
 
         </div>
@@ -51,9 +51,10 @@
 <app-toaster></app-toaster>
 
 <div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="onClose()">Close</button>
   <button type="button" class="btn btn-primary" (click)="onSubmit()">
     <i class="fa fa-save"></i> Send
   </button>
  
-  <button type="button" class="btn btn-secondary" (click)="onClose()">Close</button>
+ 
 </div>

@@ -180,7 +180,6 @@ export class MymailPageComponent implements OnInit {
       callApi(`${environment.apiBaseUrl}/Transfer/ListInbox`)
     ])
       .then(([sentResponse, completedResponse, inboxResponse]) => {
-        debugger
         console.log('Sent Response:', sentResponse);
         console.log('Completed Response:', completedResponse);
         console.log('Inbox Response:', inboxResponse);
@@ -206,7 +205,7 @@ export class MymailPageComponent implements OnInit {
 
   showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
     const currentName = this.authService.getDisplayName();
-    debugger;
+     
     const dialogRef = this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
       width: '90%',
@@ -263,8 +262,6 @@ export class MymailPageComponent implements OnInit {
     table.order([columnIndex, newSortOrder]).draw();
   }
   
-  
-
 compare(a: any, b: any, criteria: string): number {
   if (criteria === 'date') {
       return new Date(a?.date || 0).getTime() - new Date(b?.date || 0).getTime();

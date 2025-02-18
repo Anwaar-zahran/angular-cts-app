@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, model, OnInit } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DelegationPageService } from '../../../services/delegation-page.service';
@@ -383,7 +383,8 @@ export class DelegationPageComponent implements OnInit {
           (error: any) => {
             console.error('Error updating:', error);
             this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
-              this.toaster.showToaster(error?.message || msg);
+              // this.toaster.showToaster(error?.message || msg);
+              this.toaster.showToaster(msg);
             });
           }
         );
@@ -400,7 +401,7 @@ export class DelegationPageComponent implements OnInit {
           (error: any) => {
             console.error('Error adding:', error);
             this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
-              this.toaster.showToaster(error?.message || msg);
+              this.toaster.showToaster(msg);
             });
           }
         );
@@ -417,6 +418,16 @@ export class DelegationPageComponent implements OnInit {
       const modalRef = this.modalService.open(ConfirmationmodalComponent);
       this.translate.get('DELEGATION.DELETE_CONFIRMATION').subscribe((msg: string) => {
         modalRef.componentInstance.message = msg;
+         // Pass translated button labels for "Cancel" and "Confirm"
+        this.translate.get('COMMON.ACTIONS.CANCEL').subscribe((cancelLabel: string) => {
+          modalRef.componentInstance.cancelLabel = cancelLabel;
+        });
+        this.translate.get('COMMON.ACTIONS.CONFIRM').subscribe((confirmLabel: string) => {
+          modalRef.componentInstance.confirmLabel = confirmLabel;
+        });
+        this.translate.get('DELEGATION.CONFIRMMODALDELEGATION.TITLE').subscribe((ConfirmTitle: string) => {
+          modalRef.componentInstance.ConfirmTitle = ConfirmTitle;
+        });
       });
 
       modalRef.componentInstance.confirmed.subscribe(() => {

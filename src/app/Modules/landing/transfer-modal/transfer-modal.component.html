@@ -8,7 +8,7 @@
     </button>
     <div title="Set purpose for all">
       <i class="fa fa-chevron-circle-down pl-sm fa-2x" aria-hidden="true"></i>
-    </div>
+    </div> -->
     <!--<button type="button" class="btn btn-info pull-right" ref="multipleTransfer">
     <em class="fa fa-eye mr-sm" aria-hidden="true"></em>Show favorite Contacts    </button>-->
     <!--<div style="width: 25%;" class="pull-right">
@@ -134,16 +134,10 @@
             </div>
           </td>
           <td>
-            <input
-              class="form-control date-picker"
-              matInput
-              [matDatepicker]="picker"
-              [(ngModel)]="row.selectedDueDate"
-              placeholder="mm-dd-yyyy"
-              name="dp3{{ i }}"
-              (click)="openDatepicker(i)"
-            />
-            <mat-datepicker #picker></mat-datepicker>
+            <input class="form-control date-picker" matInput [matDatepicker]="picker"
+            [(ngModel)]="row.selectedDueDate" placeholder="mm-dd-yyyy" name="dp3{{i}}"
+            (click)="openDatepicker(i)" />
+          <mat-datepicker #picker></mat-datepicker>
           </td>
           <td>
             <input

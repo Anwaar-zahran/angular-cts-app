@@ -22,7 +22,8 @@
             "CLEAR": "مسح",
             "BACK": "رجوع",
             "TITLE": "الإجراءات",
-            "APPLY": "تطبيق"
+            "APPLY": "تطبيق",
+            "CONFIRM":"تاكيد"
         },
         "SELECT": "اختر",
         "LOADING": "جاري التحميل...",
@@ -92,33 +93,62 @@
         "OUTBOX": "الصادر",
         "DRAFT": "المسودات"
     },
-    "MAIL_DETAILS": {
-        "REPLY_TO": "الرد على",
-        "SENDING_ENTITY": "الجهة المرسلة",
-        "RECEIVING_ENTITY": "الجهة المستلمة",
-        "SUBJECT": "الموضوع",
-        "REFERENCE": "المرجع",
-        "DATE": "التاريخ",
-        "STATUS": "الحالة",
-        "PRIORITY": "الأولوية",
-        "CLASSIFICATION": "التصنيف",
-        "TABS": {
-            "ATTRIBUTES": "السمات",
-            "ATTACHMENTS": "المرفقات",
-            "NOTES": "الملاحظات",
-            "LINKED_CORRESPONDENCE": "المراسلات المرتبطة",
-            "NON_ARCHIVED_ATTACHMENT": "مرفق غير مؤرشف",
-            "VISUAL_TRACKING": "التتبع المرئي",
-            "TRANSACTION_HISTORY": " تاريخ الإحالات",
-            "ACTIVITY_LOG": "سجل النشاط"
-        },
-        "BUTTONS": {
-            "REPLY": "رد",
-            "TRANSFER": "تحويل",
-            "COMPLETE": "إكمال",
-            "START_WORKFLOW": "بدء سير العمل"
-        }
+  "MAIL_DETAILS": {
+    "REPLY_TO": "الرد على",
+    "SENDING_ENTITY": "الجهة المرسلة",
+    "RECEIVING_ENTITY": "الجهة المستلمة",
+    "SUBJECT": "الموضوع",
+    "REFERENCE": "المرجع",
+    "DATE": "التاريخ",
+    "STATUS": "الحالة",
+    "PRIORITY": "الأولوية",
+    "CLASSIFICATION": "التصنيف",
+    "IMPORTANCE": "الاهمية",
+    "CARBONCOPY": "نسخة",
+    "PRIVACY": "درجة السرية",
+    "DUEDATE": "تاريخ الاستحقاق",
+    "CREATEDDATE": "تاريخ الإنشاء",
+    "CREATED_BY": "انشأ من قبل",
+    "DOCUMENT_TYPE": "نوع المستند",
+    "KEYWORD": "نوع المستند",
+    "BODY": "نوع المستند",
+    "TABS": {
+      "ATTRIBUTES": "السمات",
+      "ATTACHMENTS": "المرفقات",
+      "NOTES": "الملاحظات",
+      "LINKED_CORRESPONDENCE": "المراسلات المرتبطة",
+      "NON_ARCHIVED_ATTACHMENT": "مرفق غير مؤرشف",
+      "VISUAL_TRACKING": "التتبع المرئي",
+      "TRANSACTION_HISTORY": " تاريخ الإحالات",
+      "ACTIVITY_LOG": "سجل النشاط"
     },
+    "BUTTONS": {
+      "REPLY": "رد",
+      "TRANSFER": "تحويل",
+      "COMPLETE": "إكمال",
+      "START_WORKFLOW": "بدء سير العمل"
+    },
+    "LINKED": {
+      "CATEGORY": "الفئة",
+      "REFERENCE_NUMBER": "الرقم المرجعي"
+    },
+    "ATTACHMENT": {
+      "TYPE": "النوع",
+      "QUANTITY": "العدد",
+      "DESC": "الوصف"
+    },
+    "HISTORY": {
+      "FROM_USER": "من",
+      "TO": "إلى",
+      "TRANSFER_DATE": "تاريخ التحويل",
+      "TRANSFER_TIME": "وقت التحويل",
+      "CLOSED_DATE": "تاريخ الإغلاق"
+    },
+    "LOGS": {
+      "USER": "المستخدم",
+      "ACTION": "الإجراء"
+    }
+  },
     "VISUAL_TRACKING": {
         "TITLE": "التتبع المرئي",
         "DETAILS": {
@@ -201,7 +231,7 @@
             "TO_DATE": "اختر تاريخ النهاية",
             "SEARCH": "بحث...",
             "SELECT_MULTIPLE": "اختر واحد أو أكثر"
-        },
+        },"CONFIRMMODALDELEGATION":{"TITLE":"تأكيد الحذف"},
         "TABLE": {
             "DELEGATE_TO": "مفوض إلى",
             "FROM_DATE": "من تاريخ",
@@ -226,7 +256,7 @@
         }
     },
     "MAIL": {
-        "TITLE": "البريد",
+        "TITLE": "بريد للتوقيع",
         "TABS": {
             "NEW": "جديد",
             "SENT": "مرسل",
@@ -293,7 +323,8 @@
     "BAM": {
         "TITLE": "مؤشرات الأداء",
         "DASHBOARD": {
-            "TITLE": "لوحة معلومات المستخدم",
+            "SYSTEM_DASHBOARD_TITLE": "لوحة معلومات النظام",
+            "USER_DASHBOARD_TITLE":"لوحة معلومات المستخدم",
             "CHARTS": {
                 "COUNT_PER_CATEGORY": "العدد حسب الفئة والحالة",
                 "STATISTICS_PER_DEPARTMENT": "الإحصائيات حسب القسم",
@@ -575,5 +606,10 @@
                 "ACTIONS": "الإجراءات"
             }
         }
+    },
+    "PrivacyOptions":{
+        "Normal":"عادي",
+        "Confidential":"سري",
+        "High Confidential":"سري جدا"
     }
 }
