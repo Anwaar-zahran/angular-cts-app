@@ -384,7 +384,7 @@ export class DelegationPageComponent implements OnInit {
             console.error('Error updating:', error);
             this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
               // this.toaster.showToaster(error?.message || msg);
-              this.toaster.showToaster(msg);
+              this.toaster.showToaster(msg, 'danger');
             });
           }
         );
@@ -401,14 +401,14 @@ export class DelegationPageComponent implements OnInit {
           (error: any) => {
             console.error('Error adding:', error);
             this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
-              this.toaster.showToaster(msg);
+              this.toaster.showToaster(msg, 'danger');
             });
           }
         );
       }
     } else {
       this.translate.get('ERRORS.REQUIRED_FIELDS').subscribe((msg: string) => {
-        this.toaster.showToaster(msg);
+        this.toaster.showToaster(msg, 'danger');
       });
     }
   }
@@ -443,7 +443,7 @@ export class DelegationPageComponent implements OnInit {
             (error: any) => {
               console.error('Error deleting item:', error);
               this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
-                this.toaster.showToaster(error?.message || msg);
+                this.toaster.showToaster(error?.message || msg, 'danger');
               });
             }
           );
