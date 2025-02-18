@@ -1,11 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chart-count-per-category-and-status',
@@ -13,7 +14,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   styleUrls: ['./chart-count-per-category-and-status.component.css'],
   imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
 })
-export class ChartCountPerCategoryAndStatusComponent implements OnInit {
+export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestroy {
   @Input() categories: { id: number, text: string }[] = [];
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
@@ -25,6 +26,7 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit {
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
   statuses: { id: number, text: string }[] = [];
+  private languageSubscription!: Subscription
 
   constructor(
     private chartsService: ChartsService,
@@ -32,10 +34,23 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit {
     private translate: TranslateService
   ) { }
 
+  
+  ngOnDestroy() {
+    if (this.languageSubscription) {
+      this.languageSubscription.unsubscribe();
+    }
+  }
+  
+
   ngOnInit() {
+
+    this.languageSubscription = this.translate.onLangChange.subscribe((event:LangChangeEvent)=>{
+      this.loadChartData();
+    });
     // Only load chart data when categories are available
     this.lookupsService.getStatus().subscribe((res: any) => {
       this.statuses = res;
+
       if (this.categories && this.categories.length > 0) {
         this.loadChartData();
       }

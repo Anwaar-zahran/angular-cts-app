@@ -5,7 +5,8 @@ import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chart-documents-completed-overdue-and-onTime-perCategory',
@@ -26,6 +27,7 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
+  private languageSubscription! : Subscription
 
   constructor(
     private chartsService: ChartsService,
@@ -34,6 +36,10 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
   ) { }
 
   ngOnInit() {
+
+    this.languageSubscription = this.translate.onLangChange.subscribe((event:LangChangeEvent) =>{
+      this.loadChartData()
+    });
     // Only load chart data when categories are available
     if (this.categories && this.categories.length > 0) {
       this.loadChartData();

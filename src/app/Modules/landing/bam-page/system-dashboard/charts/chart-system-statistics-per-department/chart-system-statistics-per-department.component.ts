@@ -5,7 +5,8 @@ import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chart-system-statistics-per-department',
@@ -26,6 +27,7 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
   tempToDate: string = this.toDate;
   isModalOpen: boolean = false;
   entities: { id: number, name: string }[] = [];
+  private languageSubscription!: Subscription;
 
   constructor(
     private chartsService: ChartsService,
@@ -34,6 +36,10 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
   ) { }
 
   ngOnInit() {
+
+    this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.loadChartData();
+    });
     this.lookupsService.getEntities().subscribe((res: any) => {
       this.entities = res;
       console.log('entities', this.entities);

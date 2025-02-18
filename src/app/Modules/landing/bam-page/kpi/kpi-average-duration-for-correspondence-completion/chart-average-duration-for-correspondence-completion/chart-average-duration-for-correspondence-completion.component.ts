@@ -4,7 +4,8 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { KpiService } from '../../../../../../services/kpi.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chart-average-duration-for-correspondence-completion',
@@ -17,6 +18,7 @@ export class ChartAverageDurationForCorrespondenceCompletionComponent implements
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
   isModalOpen: boolean = false;
+  private langChangeSubscription!: Subscription;
 
   constructor(
     private kpiService: KpiService,
@@ -25,7 +27,10 @@ export class ChartAverageDurationForCorrespondenceCompletionComponent implements
 
   ngOnInit() {
     this.loadChartData();
-  }
+
+    this.langChangeSubscription = this.translateService.onLangChange.subscribe((event:LangChangeEvent) => {
+      this.loadChartData();
+    });}
 
   ngOnChanges() {
     this.loadChartData();
@@ -49,6 +54,10 @@ export class ChartAverageDurationForCorrespondenceCompletionComponent implements
           this.translateService.instant('BAM.MONTHS.NOV'),
           this.translateService.instant('BAM.MONTHS.DEC')
         ];
+
+
+        console.log(this.translateService.instant('BAM.MONTHS.NOV'));
+
 
         const dataPoints = Array(12).fill(0);
         res.documentAverageDurationList.forEach((item: any) => {

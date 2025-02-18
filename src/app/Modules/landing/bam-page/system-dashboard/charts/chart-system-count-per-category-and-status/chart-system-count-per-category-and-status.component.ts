@@ -5,7 +5,8 @@ import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chart-system-count-per-category-and-status',
@@ -26,6 +27,7 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
   statuses: { id: number, text: string }[] = [];
+  private languageSubscription!: Subscription;
 
   constructor(
     private chartsService: ChartsService,
@@ -34,6 +36,9 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.loadChartData();
+    });
     // Only load chart data when categories are available
     this.lookupsService.getStatus().subscribe((res: any) => {
       this.statuses = res;

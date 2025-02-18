@@ -1,10 +1,11 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   styleUrls: ['./chart-percentage-of-correspondences-completed-and-inprogress.component.css'],
   imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
 })
-export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent implements OnInit, OnChanges {
+export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent implements OnInit, OnChanges, OnDestroy {
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
@@ -25,6 +26,7 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
+  private languageSubscription! : Subscription;
 
   constructor(
     private chartsService: ChartsService,
@@ -32,6 +34,12 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
   ) { }
 
   ngOnInit() {
+
+    this.languageSubscription = this.translate.onLangChange.subscribe((event:LangChangeEvent) =>{
+          this.loadChartData();
+        })
+
+        
     // Only load chart data when categories are available
     if (this.categories && this.categories.length > 0) {
       this.loadChartData();
@@ -42,6 +50,12 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
     // Reload chart data whenever categories input changes and is not empty
     if (this.categories && this.categories.length > 0) {
       this.loadChartData();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.languageSubscription) {
+      this.languageSubscription.unsubscribe();
     }
   }
 

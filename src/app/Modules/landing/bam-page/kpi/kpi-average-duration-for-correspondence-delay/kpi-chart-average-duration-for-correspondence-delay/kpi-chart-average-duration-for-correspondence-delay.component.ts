@@ -4,7 +4,8 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { KpiService } from '../../../../../../services/kpi.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-kpi-chart-average-duration-for-correspondence-delay',
@@ -18,6 +19,7 @@ export class KpiChartAverageDurationForCorrespondenceDelayComponent implements O
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
   isModalOpen: boolean = false;
+  private languageSubscription!: Subscription;
 
   constructor(
     private kpiService: KpiService,
@@ -25,6 +27,10 @@ export class KpiChartAverageDurationForCorrespondenceDelayComponent implements O
   ) { }
 
   ngOnInit() {
+
+    this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.loadChartData();
+    });
     this.loadChartData();
   }
 
