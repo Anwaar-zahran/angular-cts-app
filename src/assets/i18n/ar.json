@@ -42,22 +42,24 @@
         "CLOSE": "إغلاق",
         "SELECT_DATE_RANGE": "اختر نطاق التاريخ"
     },
-    "LOGIN": {
-        "TITLE": "تسجيل الدخول",
-        "SYSTEM_TITLE": "نظام تتبع المراسلات",
-        "SUBTITLE": "الرجاء إدخال بيانات تسجيل الدخول",
-        "USERNAME": "اسم المستخدم",
-        "PASSWORD": "كلمة المرور",
-        "SUBMIT": "تسجيل الدخول",
-        "REMEMBER_ME": "تذكرني",
-        "FORGOT_PASSWORD": "نسيت كلمة المرور؟",
-        "ERRORS": {
-            "REQUIRED_FIELDS": "اسم المستخدم وكلمة المرور مطلوبان",
-            "REQUIRED_USERNAME": "اسم المستخدم مطلوب",
-            "REQUIRED_PASSWORD": "كلمة المرور مطلوبة",
-            "INVALID_CREDENTIALS": "اسم المستخدم أو كلمة المرور غير صحيحة"
-        }
-    },
+  "LOGIN": {
+    "TITLE": "تسجيل الدخول",
+    "SYSTEM_TITLE": "نظام تتبع المراسلات",
+    "SUBTITLE": "الرجاء إدخال بيانات تسجيل الدخول",
+    "USERNAME": "اسم المستخدم",
+    "PASSWORD": "كلمة المرور",
+    "SUBMIT": "تسجيل الدخول",
+    "REMEMBER_ME": "تذكرني",
+    "UNATHOURIZED": "انت غير مسرح بالدخول الى هذه الصفحة",
+
+    "FORGOT_PASSWORD": "نسيت كلمة المرور؟",
+    "ERRORS": {
+      "REQUIRED_FIELDS": "اسم المستخدم وكلمة المرور مطلوبان",
+      "REQUIRED_USERNAME": "اسم المستخدم مطلوب",
+      "REQUIRED_PASSWORD": "كلمة المرور مطلوبة",
+      "INVALID_CREDENTIALS": "اسم المستخدم أو كلمة المرور غير صحيحة"
+    }
+  },
     "GUIDELINES": {
         "TITLE": "الإرشادات",
         "TABLE": {
@@ -208,53 +210,58 @@
         "SERVER_ERROR": "حدث خطأ في الخادم",
         "NO_PERMISSION": "ليس لديك صلاحية"
     },
-    "DELEGATION": {
-        "TITLE": "التفويضات",
-        "FULL_NAME": "الاسم الكامل",
-        "SELECT_NAME": "اختر الاسم",
-        "FROM_DATE": "من",
-        "TO_DATE": "إلى",
-        "PRIVACY": "الخصوصية",
-        "CATEGORY": "الفئة",
-        "SHOW_OLD_DOCUMENTS": "عرض المستندات القديمة",
-        "CAN_SIGN": "صلاحية التوقيع",
-        "DELETE_CONFIRMATION": "هل أنت متأكد من حذف هذا التفويض؟",
-        "DELETE_SUCCESS": "تم حذف التفويض بنجاح",
-        "SAVE_SUCCESS": "تم حفظ التفويض بنجاح",
-        "UPDATE_SUCCESS": "تم تحديث التفويض بنجاح",
-        "PLACEHOLDERS": {
-            "SELECT_USER": "اختر المستخدم",
-            "SELECT_PRIVACY": "اختر مستوى الخصوصية",
-            "SELECT_CATEGORY": "اختر الفئة",
-            "SELECT_NAME": "اختر الاسم",
-            "FROM_DATE": "اختر تاريخ البداية",
-            "TO_DATE": "اختر تاريخ النهاية",
-            "SEARCH": "بحث...",
-            "SELECT_MULTIPLE": "اختر واحد أو أكثر"
-        },"CONFIRMMODALDELEGATION":{"TITLE":"تأكيد الحذف"},
-        "TABLE": {
-            "DELEGATE_TO": "مفوض إلى",
-            "FROM_DATE": "من تاريخ",
-            "TO_DATE": "إلى تاريخ",
-            "CREATED_DATE": "تاريخ الإنشاء",
-            "PRIVACY": "الخصوصية",
-            "ACTIONS": "الإجراءات"
-        },
-        "ERRORS": {
-            "REQUIRED_NAME": "الاسم الكامل مطلوب",
-            "REQUIRED_FROM_DATE": "تاريخ البداية مطلوب",
-            "REQUIRED_TO_DATE": "تاريخ النهاية مطلوب",
-            "REQUIRED_PRIVACY": "الخصوصية مطلوبة",
-            "REQUIRED_CATEGORY": "الفئة مطلوبة",
-            "INVALID_DATE_RANGE": "يجب أن يكون تاريخ النهاية بعد تاريخ البداية",
-            "OVERLAPPING_DELEGATION": "يوجد تفويض متداخل لهذا المستخدم"
-        },
-        "BUTTONS": {
-            "ADD_NEW": "إضافة تفويض جديد",
-            "EDIT": "تعديل التفويض",
-            "DELETE": "حذف التفويض"
-        }
+  "DELEGATION": {
+    "TITLE": "التفويضات",
+    "FULL_NAME": "الاسم الكامل",
+    "SELECT_NAME": "اختر الاسم",
+    "FROM_DATE": "من",
+    "TO_DATE": "إلى",
+    "PRIVACY": "الخصوصية",
+    "CATEGORY": "الفئة",
+    "NOTE": "ملاحظات",
+    "SHOW_OLD_DOCUMENTS": "عرض المستندات القديمة",
+    "CAN_SIGN": "صلاحية التوقيع",
+    "DRAFT_INBOX": "مسودة البريد الوارد",
+    "SHOW_OLD_CORRESPONDENCE": "عرض المراسلات القديمة",
+    "DELETE_CONFIRMATION": "هل أنت متأكد من حذف هذا التفويض؟",
+    "DELETE_SUCCESS": "تم حذف التفويض بنجاح",
+    "SAVE_SUCCESS": "تم حفظ التفويض بنجاح",
+    "UPDATE_SUCCESS": "تم تحديث التفويض بنجاح",
+    "PLACEHOLDERS": {
+      "SELECT_USER": "اختر المستخدم",
+      "SELECT_PRIVACY": "اختر مستوى الخصوصية",
+      "SELECT_CATEGORY": "اختر الفئة",
+      "SELECT_NAME": "اختر الاسم",
+      "FROM_DATE": "اختر تاريخ البداية",
+      "TO_DATE": "اختر تاريخ النهاية",
+      "SEARCH": "بحث...",
+      "SELECT_MULTIPLE": "اختر واحد أو أكثر"
     },
+    "CONFIRMMODALDELEGATION": { "TITLE": "تأكيد الحذف" },
+    "TABLE": {
+      "DELEGATE_TO": "مفوض إلى",
+      "FROM_DATE": "من تاريخ",
+      "TO_DATE": "إلى تاريخ",
+      "CREATED_DATE": "تاريخ الإنشاء",
+      "PRIVACY": "الخصوصية",
+      "ACTIONS": "الإجراءات",
+      "CATEGORY": "فئة"
+    },
+    "ERRORS": {
+      "REQUIRED_NAME": "الاسم الكامل مطلوب",
+      "REQUIRED_FROM_DATE": "تاريخ البداية مطلوب",
+      "REQUIRED_TO_DATE": "تاريخ النهاية مطلوب",
+      "REQUIRED_PRIVACY": "الخصوصية مطلوبة",
+      "REQUIRED_CATEGORY": "الفئة مطلوبة",
+      "INVALID_DATE_RANGE": "يجب أن يكون تاريخ النهاية بعد تاريخ البداية",
+      "OVERLAPPING_DELEGATION": "يوجد تفويض متداخل لهذا المستخدم"
+    },
+    "BUTTONS": {
+      "ADD_NEW": "إضافة تفويض جديد",
+      "EDIT": "تعديل التفويض",
+      "DELETE": "حذف التفويض"
+    }
+  },
     "MAIL": {
         "TITLE": "بريد للتوقيع",
         "TABS": {
@@ -607,9 +614,13 @@
             }
         }
     },
-    "PrivacyOptions":{
-        "Normal":"عادي",
-        "Confidential":"سري",
-        "High Confidential":"سري جدا"
-    }
+  "PrivacyOptions": {
+    "Normal": "عادي",
+    "Confidential": "سري",
+    "High Confidential": "سري جدا"
+  },
+  "REPLY": {
+    "SENT": "تم الإرسال بنجاح",
+    "ERROR": "حدث خطأ"
+  }
 }
