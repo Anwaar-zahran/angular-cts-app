@@ -12,10 +12,12 @@ export class LanguageService {
     constructor(private translate: TranslateService) {
         // Get language from localStorage or default to 'en'
         const savedLang = localStorage.getItem('language') || 'en';
+        //const savedLang ='ar';
         this.initializeLanguage(savedLang);
     }
 
-    private initializeLanguage(lang: string) {
+  private initializeLanguage(lang: string) {
+    
         this.translate.setDefaultLang(lang);
         this.translate.use(lang);
         this.currentLang.next(lang);

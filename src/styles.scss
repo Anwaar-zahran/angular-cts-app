@@ -255,6 +255,10 @@ a {
 	font-weight: bold;
 	letter-spacing: 0.44px;
 	color: $color_9;
+
+	.fa-arrow-left:lang(ar) {
+		transform: scaleX(-1);
+	}
 }
 
 .dropdown-menu {
@@ -291,6 +295,12 @@ a {
 	content: url('assets/images/icons/edit.svg');
 }
 
+.fa.fa-eye:before {
+	content: url('assets/images/icons/eye.svg');
+    width: 20px;
+    height: 20px;
+    display: block;
+}
 .fa-times-circle {
 	font-size: 20px;
 	color: $color_7;
@@ -378,6 +388,11 @@ h2 {
 		background-position: calc(100% - 1rem);
 	}
 
+	input[type="password"]::-ms-reveal,
+	input[type="password"]::-webkit-credentials-auto-fill-button {
+	  display: none;
+	}
+
 	.toggle-password {
 		color: $color_4 !important;
 		position: absolute;
@@ -385,7 +400,6 @@ h2 {
 		top: 50%;
 		transform: translateY(-50%);
 		padding: 0 1rem;
-		background-color: #FFF;
 
 		&:lang(ar) {
 			right: auto;
@@ -461,6 +475,13 @@ h2 {
 		align-content: center;
 		align-items: center;
 		justify-content: center;
+
+		 a {
+			width: 100%;
+			height: 100%;
+			justify-content: center;
+			cursor: pointer;
+		}
 
 		img {
 			opacity: 0.4;
@@ -770,7 +791,7 @@ input[type="number"] {
 }
 
 textarea.form-control {
-	min-height: 150px;
+	min-height: 90px;
 	resize: none;
 	padding: 1rem;
 }
@@ -1153,7 +1174,10 @@ span.glyphicon.glyphicon-chevron-up {
 	border-radius: 0 0 10px 10px;
 	position: static !important;
 	overflow: auto;
-	margin-bottom: 3.5rem;
+
+	&:has(.active .dataTables_wrapper) {
+		margin-bottom: 3.5rem;
+	}
 }
 
 .charts .card {
@@ -1872,4 +1896,28 @@ a.paginate_button {
 
 .cdk-global-overlay-wrapper, .cdk-overlay-connected-position-bounding-box {
     direction: inherit;
+}
+
+
+.details-dialog-content {
+	 .dataTables_paginate.paging_full_numbers {
+		bottom: 0.25rem;
+	}
+
+
+	.boc-light > div:not(.boc-toolbar-container) {
+		opacity: 0;
+	}
+}
+
+
+app-back-button {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+}
+
+.fa-filter {
+    color: var(--text-black);
+    font-size: 16px;
 }

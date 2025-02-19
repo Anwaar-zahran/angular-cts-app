@@ -179,11 +179,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   ngOnInit(): void {
     console.log('Dialog opened with ID:', this.data.id, 'and Reference Number:', this.data.referenceNumber);
     this.accessToken = this.authService.getToken();
-    if (!this.accessToken) {
-      debugger
-      this.router.navigate(['/login']);
-      return;
-    }
+    //if (!this.accessToken) {
+    //  debugger
+    //  this.router.navigate(['/login']);
+    //  return;
+    //}
     this.initDtOptions();
     this.loadLookupData();
     this.fetchDetails(this.data.id);
@@ -297,7 +297,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         const pageInfo = api.page.info();
         const pagination = $(api.table().container()).find('.dataTables_paginate');
         pagination.find('input.paginate-input').remove();
-        const page = $('<span class="d-inline-flex align-items-center mx-2">Page <input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> of ' + pageInfo.pages + '</span>');
+        const page = $('<span class="d-inline-flex align-items-center mx-2">' + this.translate.instant('COMMON.PAGE') + '<input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> ' + this.translate.instant('COMMON.FROM') + ' ' + pageInfo.pages + '</span>');
 
 
         let timeout: any;

@@ -105,10 +105,10 @@ export class TransferModalComponent implements OnInit {
     //    console.log('Dialog opened with ID:', this.data.id, 'and Reference Number:', this.data.referenceNumber);
 
     this.accessToken = this.authService.getToken();
-    if (!this.accessToken) {
-      this.router.navigate(['/login']);
-      return;
-    }
+    //if (!this.accessToken) {
+    //  this.router.navigate(['/login']);
+    //  return;
+    //}
     this.loadUserStructures();
   }
 

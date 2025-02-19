@@ -37,6 +37,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { BackButtonComponent } from '../shared/back-button/back-button.component';
+
 @NgModule({
   declarations: [
     DelegationPageComponent,
@@ -51,7 +53,8 @@ import { TranslateModule } from '@ngx-translate/core';
     CompletedTransfersComponent,
     InProgressCorrespondencesComponent,
     CompleteCorrespondencesComponent,
-    ConfirmationmodalComponent
+    ConfirmationmodalComponent,
+    
   ],
   imports: [
     CommonModule,
@@ -74,7 +77,8 @@ import { TranslateModule } from '@ngx-translate/core';
     MatInputModule,
     MatNativeDateModule,
     SharedModule,
-    TranslateModule
+    TranslateModule,
+    BackButtonComponent
   ],
 })
 export class LandingModule { }

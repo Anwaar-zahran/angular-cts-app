@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ToasterService } from '../../../services/toaster.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common'; // Import CommonModule for directives like ngIf, ngFor
@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common'; // Import CommonModule for direc
 export class ToasterComponent {
   message: string = '';
   show: boolean = false;
+  toasterClass: string = '';
   toasterSubscription: Subscription = new Subscription();
 
   constructor(private toasterService: ToasterService) { }
@@ -19,11 +20,13 @@ export class ToasterComponent {
   ngOnInit(): void {
     // Subscribe to the toaster message observable
     this.toasterSubscription = this.toasterService.toasterMessage$.subscribe(
-      (message) => {
-        this.message = message;
+      (data) => {
+        this.message = data.message;
+        this.toasterClass = data.className;
         this.show = true;
+        
         setTimeout(() => {
-          this.show = false; // Hide the toaster after 3 seconds
+          this.show = false;
         }, 3000);
       }
     );
@@ -33,5 +36,9 @@ export class ToasterComponent {
     if (this.toasterSubscription) {
       this.toasterSubscription.unsubscribe();
     }
+  }
+
+  @Input() set className(value: string) {
+    this.toasterClass = value;
   }
 }

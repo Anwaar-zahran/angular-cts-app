@@ -16,9 +16,10 @@
   </button>
 </div>
 
-<mat-dialog-content>
+<mat-dialog-content class="details-dialog-content pb-0">
   <div class="row">
     <div class="col-md-5">
+      <div class="d-flex flex-column position-relative" style="height: calc(90vh - 102px);">
       <div class="tabs-wrapper">
         <button mat-icon-button class="scroll-btn left" (click)="scrollLeft()" *ngIf="checkScroll()">
           <i class="fa fa-chevron-left"></i>
@@ -37,7 +38,7 @@
       </div>
 
       <!-- Attributes Tab -->
-      <div class="tab-content">
+      <div class="tab-content flex-1">
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 0}">
           <div class="p-3">
             <form class="form">
@@ -144,16 +145,18 @@
                   </div>
                 </div>
 
+                <div class="col-md-6" *ngIf="isEnabled('ExternalReferenceNumber')">
+                  <div class="form-group">
+                    <label class="form-label">{{ 'MAIL_DETAILS.KEYWORD' | translate }}</label>
+                    <input class="form-control" type="text" [value]="attributes?.externalReferenceNumber"
+                           [disabled]="true" />
+                  </div>
+                </div>
+
                 <!--Dynamic Custom Attributes-->
                 <div class="col-md-6" *ngFor="let component of customAttributes?.components">
                   <!-- Render controls based on the component type -->
-                  <!--<div *ngIf="component.type === 'tags'" class="form-group">
-    <label class="form-label">{{ component.label }}</label>
-    <input class="form-control" type="text"
-           [placeholder]="component.placeholder"
-           [disabled]="true"
-           [value]="controlValues[component.key]" />
-  </div>-->
+                  
 
                   <div *ngIf="component.type !== 'checkbox' && component.type !== 'datetime' && component.type !== 'selectboxes' && component.type !== 'radio'" class="form-group">
                     <label class="form-label">{{ component.label }}</label>
@@ -189,7 +192,8 @@
                       <input type="radio"
                              [id]="option.value"
                              [name]="component.key"
-                               [checked]="controlValues[component.key]"
+                               [disabled]="true"
+                             [checked]="controlValues[component.key]"
                              [value]="option.value" />
                       <label [for]="option.value">{{ option.label }}</label>
                     </div>
@@ -203,6 +207,7 @@
                       <input type="radio"
                              [id]="option.value"
                              [name]="component.key"
+                               [disabled]="true"
                              [checked]="controlValues[component.key]"
                              [value]="option.value" />
                       <label [for]="option.value">{{ option.label }}</label>
@@ -240,7 +245,7 @@
         </div>
         <!-- Notes Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 2}">
-          <div class="position-relative static-pagination">
+          <div>
             <table class="table" datatable [dtOptions]="dtOptions" *ngIf="notes && notes?.length >0">
               <thead>
                 <tr>
@@ -259,7 +264,9 @@
                 </tr>
               </tbody>
             </table>
-            {{ 'SEARCH.TABLE.TOTAL_RECORDS' | translate:{ count: notes?.length } }}
+            <div *ngIf="notes?.length">
+              {{ 'SEARCH.TABLE.TOTAL_RECORDS' | translate:{ count: notes?.length } }}
+            </div>
             <div *ngIf="!notes?.length" class="text-center mt-3">
               <p>{{ 'COMMON.NO_DATA' | translate }}</p>
             </div>
@@ -269,7 +276,7 @@
         <!-- Linked Documents Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 3}">
           <div class="p-3">
-            <div class="position-relative static-pagination">
+            <div>
               <table class="table" datatable [dtOptions]="dtOptions" *ngIf="linkedDocs?.length">
                 <thead>
                   <tr>
@@ -298,7 +305,7 @@
         <!-- Non-archived Attachments Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 4}">
           <div class="p-3">
-            <div class="position-relative static-pagination">
+            <div>
               <table class="table" datatable [dtOptions]="dtOptions" *ngIf="nonArchAttachments?.length">
                 <thead>
                   <tr>
@@ -334,7 +341,7 @@
         <!-- Transaction History Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 6}">
           <div class="p-3">
-            <div class="position-relative static-pagination">
+            <div>
               <table class="table" datatable [dtOptions]="dtOptions" *ngIf="transHistory?.length">
                 <thead>
                   <tr>
@@ -367,7 +374,7 @@
         <!-- Activity Logs Tab -->
         <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 7}">
           <div class="p-3">
-            <div class="position-relative static-pagination">
+            <div>
               <table class="table" datatable [dtOptions]="dtOptions" *ngIf="activityLogs?.length">
                 <thead>
                   <tr>
@@ -394,8 +401,9 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="col-md-7" style="height: calc(90vh - 100px);">
+    <div class="col-md-7" style="height: calc(90vh - 102px);">
       <div *ngIf="selectedDocumentId && documentViewerUrl" style="height: 100%;">
         <iframe id="component_1738404262045_viewerFrame" style="width: 100%; height: 100%; border: 0px; padding: 0px;"
                 [src]="documentViewerUrl"></iframe>

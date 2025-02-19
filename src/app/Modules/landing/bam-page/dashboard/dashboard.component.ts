@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Helpers } from '../../../shared/helpers';
 import { LookupsService } from '../../../../services/lookups.service';
-
+import { BackButtonComponent } from '../../../shared/back-button/back-button.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,7 +27,8 @@ import { LookupsService } from '../../../../services/lookups.service';
     ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent,
     ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent,
     ChartCountPerCategoryAndStatusComponent,
-    TranslateModule
+    TranslateModule,
+    BackButtonComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'

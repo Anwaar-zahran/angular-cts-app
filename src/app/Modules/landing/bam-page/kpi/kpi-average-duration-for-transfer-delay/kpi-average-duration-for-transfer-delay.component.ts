@@ -7,6 +7,7 @@ import { LookupsService } from '../../../../../services/lookups.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { KpiTableAverageDurationForTransferDelayComponent } from './kpi-table-average-duration-for-transfer-delay/kpi-table-average-duration-for-transfer-delay.component';
 import { KpiChartAverageDurationForTransferDelayComponent } from './kpi-chart-average-duration-for-transfer-delay/kpi-chart-average-duration-for-transfer-delay.component';
+import { BackButtonComponent } from '../../../../shared/back-button/back-button.component';
 
 @Component({
   selector: 'app-kpi-average-duration-for-transfer-delay',
@@ -16,7 +17,8 @@ import { KpiChartAverageDurationForTransferDelayComponent } from './kpi-chart-av
     CommonModule, FormsModule, NgbModalModule,
     TranslateModule,
     KpiChartAverageDurationForTransferDelayComponent,
-    KpiTableAverageDurationForTransferDelayComponent
+    KpiTableAverageDurationForTransferDelayComponent,
+    BackButtonComponent
   ]
 })
 export class KpiAverageDurationForTransferDelayComponent implements OnInit {

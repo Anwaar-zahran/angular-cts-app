@@ -79,7 +79,7 @@ export class MailPageComponent implements OnInit {
           const pageInfo = api.page.info();
           const pagination = $(api.table().container()).find('.dataTables_paginate');
           pagination.find('input.paginate-input').remove();
-          const page = $('<span class="d-inline-flex align-items-center mx-2">Page <input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> of ' + pageInfo.pages + '</span>');
+          const page = $('<span class="d-inline-flex align-items-center mx-2">' + this.translate.instant('COMMON.PAGE') + '<input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> ' + this.translate.instant('COMMON.FROM') + ' ' + pageInfo.pages + '</span>');
            
           
           let timeout: any;
@@ -118,13 +118,13 @@ export class MailPageComponent implements OnInit {
   }
 
   loadData() {
-    if (!this.accessToken) {
-      console.error('Access token not found');
+    //if (!this.accessToken) {
+    //  console.error('Access token not found');
 
-      this.router.navigate(['/login']);
-      return;
-    }
-    const payload = this.accessToken.split('.')[1];
+    //  this.router.navigate(['/login']);
+    //  return;
+    //}
+    const payload = this.accessToken?.split('.')[1] ||'';
     const decodedPayload = this.base64UrlDecode(payload);
     const parsedPayload = JSON.parse(decodedPayload);
     this.structureId = localStorage.getItem('structureId') || parsedPayload.structureId;
@@ -154,7 +154,7 @@ export class MailPageComponent implements OnInit {
         console.log('Completed Response:', completedResponse);
         console.log('Inbox Response:', inboxResponse);
         // Map the API data to respective items
-        this.sentItems = sentResponse.data.map((item: ApiResponseItem) => ({
+        this.sentItems = sentResponse?.data?.map((item: ApiResponseItem) => ({
           subject: item.subject,
           details: `Transferred from: ${item.fromUser}`,
           date: item.transferDate,
@@ -165,7 +165,7 @@ export class MailPageComponent implements OnInit {
           documentId: item.documentId,
           row: item
         })) || [];
-        this.completedItems = completedResponse.data.map((item: ApiResponseItem) => ({
+        this.completedItems = completedResponse?.data?.map((item: ApiResponseItem) => ({
           subject: item.subject,
           details: `Transferred from: ${item.fromUser}`,
           date: item.transferDate,
@@ -176,7 +176,7 @@ export class MailPageComponent implements OnInit {
           documentId: item.documentId,
           row: item
         })) || [];
-        this.newItems = inboxResponse.data.map((item: ApiResponseItem) => ({
+        this.newItems = inboxResponse?.data?.map((item: ApiResponseItem) => ({
           subject: item.subject,
           details: `Transferred from: ${item.fromUser}`,
           date: item.transferDate,
