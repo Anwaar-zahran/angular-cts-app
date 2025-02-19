@@ -5,7 +5,8 @@ import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chart-transfers-completed-overdue-and-onTime-per-category',
@@ -23,6 +24,7 @@ export class ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent impleme
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
+  private languageSubscription!: Subscription;
 
   constructor(
     private chartsService: ChartsService,
@@ -31,6 +33,9 @@ export class ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent impleme
   ) { }
 
   ngOnInit() {
+    this.languageSubscription = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.loadChartData();
+    });
     // Only load chart data when categories are available
     if (this.categories && this.categories.length > 0) {
       this.loadChartData();
@@ -81,7 +86,10 @@ export class ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent impleme
       },
       colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
       xAxis: {
-        categories: categories,
+        categories: [
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
+        ],
         title: {
           text: this.translate.instant('BAM.CHARTS.LABELS.CATEGORY')
         }
@@ -106,16 +114,16 @@ export class ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent impleme
       },
       series: [
         {
-          name: 'Overdue',
+          name: this.translate.instant('BAM.DASHBOARD.CHARTS.LABELS.OVERDUE'),
           type: 'column',
           data: overdueData,
-          color: '#8D0034' // Red
+          color: '#8D0034'
         },
         {
-          name: 'On-Time',
+          name: this.translate.instant('BAM.DASHBOARD.CHARTS.LABELS.ON_TIME'),
           type: 'column',
           data: onTimeData,
-          color: '#00695E' // Green
+          color: '#00695E'
         }
       ]
     };

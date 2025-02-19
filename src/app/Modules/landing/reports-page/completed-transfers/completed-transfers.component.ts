@@ -29,6 +29,7 @@ export class CompletedTransfersComponent implements OnInit {
   selectedStructures: number[] = [];
   structures: Structure[] = [];
   structureError: string = '';
+  expandedRows: Set<any> = new Set();
 
   fromDate: Date | undefined;
   toDate: Date | undefined;
@@ -164,6 +165,9 @@ export class CompletedTransfersComponent implements OnInit {
         this.totalItems = response.recordsTotal;
         this.calculatePagination();
 
+        console.log('reports --------------------------------------- ')
+        console.log(this.reports)
+
         if (this.isDtInitialized) {
           this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
             dtInstance.destroy();
@@ -202,6 +206,18 @@ export class CompletedTransfersComponent implements OnInit {
         this.isLoadingStructures = false;
       }
     });
+  }
+  toggleRow(row: any): void {
+    if (this.expandedRows.has(row)) {
+      this.expandedRows.delete(row);
+    } else {
+      console.log(row)
+      this.expandedRows.add(row);
+    }
+  }
+
+  isRowExpanded(row: any): boolean {
+    return this.expandedRows.has(row);
   }
 
   loadUsers(searchText: string = '') {

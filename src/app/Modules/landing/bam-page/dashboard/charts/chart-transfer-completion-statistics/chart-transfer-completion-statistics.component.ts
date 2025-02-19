@@ -4,7 +4,8 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -23,10 +24,16 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
+  private languageSubscription!: Subscription;
 
   constructor(private chartsService: ChartsService, private translate: TranslateService) { }
 
   ngOnInit() {
+
+    this.languageSubscription = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.loadChartData();
+    });
+
     this.loadChartData();
   }
 
@@ -42,8 +49,8 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
         structureId: '1',
       })
       .subscribe((res: any) => {
-        const averageCreatedByUser = parseFloat(res?.averageCreatedByUser) || 0;
-        const averageTransfers = parseFloat(res?.averageTransfers) || 0;
+        const averageCreatedByUser = (parseFloat(res?.averageCreatedByUser) || 0) / 10000;
+        const averageTransfers = (parseFloat(res?.averageTransfers) || 0) / 10000;
 
         this.chartOptions = {
           chart: {
@@ -77,8 +84,13 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
           yAxis: {
             min: 0,
             title: {
-              text: 'Value',
+              text: this.translate.instant("BAM.DASHBOARD.CHARTS.LABELS.VALUE"),
             },
+            labels: {
+              formatter: function() {
+                return Number(this.value).toFixed(1);
+              }
+            }
           },
           series: [
             {

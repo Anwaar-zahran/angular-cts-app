@@ -7,6 +7,7 @@ import { VisualTrackingComponent } from '../../shared/visual-tracking/visual-tra
 import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-dialog.component';
 import { AuthService } from '../../auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
+import { MailsService } from '../../../services/mail.service';
 
 interface ApiResponseItem {
   id: number;
@@ -46,7 +47,8 @@ export class MailPageComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private authService: AuthService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private mailService: MailsService,
   ) {
     this.accessToken = localStorage.getItem('access_token');
   }
@@ -202,7 +204,7 @@ export class MailPageComponent implements OnInit {
 
   active = 1;
 
-  showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
+  showMailDetailsOld(item: ApiResponseItem, showActionbtns: boolean) {
      
     const currentName = this.authService.getDisplayName();
     console.log("Name=", currentName);
@@ -224,6 +226,44 @@ export class MailPageComponent implements OnInit {
       console.log('Mail details closed', result);
       window.location.reload();
    
+    });
+  }
+ showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
+    debugger;
+    const currentName = this.authService.getDisplayName();
+    
+    // Mark correspondence as read
+    this.mailService.markCorrespondanceAsRead(this.accessToken!, item.id).subscribe({
+      next: () => {
+        console.log('Marked as read');
+        item.row.isRead = true; // Update item locally to reflect the change
+      },
+      error: (err) => console.error('Error marking as read:', err)
+    });
+  
+    // Open the dialog
+    const dialogRef = this.dialog.open(MailDetailsDialogComponent, {
+      disableClose: true,
+      width: '90%',
+      height: '90%',
+      data: {
+        id: item.row.documentId,
+        documentId: item.documentId,
+        referenceNumber: item.ref,
+        row: item.row,
+        fromSearch: false,
+        showActionButtons: (showActionbtns && (!item.row?.isLocked || (item.row?.isLocked && item.row?.lockedBy == currentName)))
+      }
+    });
+  
+    // Refresh the item when dialog closes
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Mail details closed', result);
+  
+     // if (result === 'updated') { 
+        this.loadData(); // Call API again to refresh only the necessary data
+      //}
+
     });
   }
 

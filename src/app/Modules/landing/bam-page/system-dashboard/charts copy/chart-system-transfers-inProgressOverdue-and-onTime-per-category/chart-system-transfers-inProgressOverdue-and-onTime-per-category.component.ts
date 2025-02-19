@@ -83,7 +83,14 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
       },
       colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
       xAxis: {
-        categories: categories,
+        categories: [
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.IN_PROGRESS"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.COMPLETED"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
+        ],
         title: {
           text: this.translateService.instant('BAM.DASHBOARD.CHARTS.LABELS.CATEGORIES')
         }
