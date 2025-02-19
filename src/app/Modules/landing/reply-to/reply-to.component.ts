@@ -13,6 +13,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { AuthService } from '../../auth/auth.service';
 import { ToasterComponent } from '../../shared/toaster/toaster.component';
 import { TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-reply-to',
   imports: [
@@ -22,7 +23,6 @@ import { TranslateService } from '@ngx-translate/core';
     MatNativeDateModule, FormsModule, ToasterComponent],
   templateUrl: './reply-to.component.html',
   styleUrl: './reply-to.component.scss',
-  //providers: [ToasterService]
 })
 
 export class ReplyToComponent {
@@ -76,6 +76,19 @@ export class ReplyToComponent {
     );
   }
 
+  // To get lookup names based on language
+  getName(item: any): string {
+
+    const currentLang = this.translate.currentLang;
+    switch (currentLang) {
+      case 'ar':
+        return item ?.nameAr || item ?.name;
+      case 'fr':
+        return item ?.nameFr || item ?.name;
+      default:
+        return item ?.name;
+    }
+  }
   onSubmit(): void {
     if (this.replyForm.valid) {
       const formValues = this.replyForm.value;

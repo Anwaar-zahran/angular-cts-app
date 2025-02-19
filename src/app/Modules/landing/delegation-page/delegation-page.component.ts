@@ -1,6 +1,6 @@
 import { Component, model, OnInit } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, NgModel, FormsModule } from '@angular/forms';
 import { DelegationPageService } from '../../../services/delegation-page.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
@@ -17,6 +17,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TranslateService } from '@ngx-translate/core';
 import { trigger, transition, style, animate } from '@angular/animations';
+//import { setTimeout } from 'timers';
 
 @Component({
   selector: 'app-delegation-page',
@@ -35,6 +36,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
       ])
     ])
   ],
+  //imports
 })
 export class DelegationPageComponent implements OnInit {
   fromModal: NgbDateStruct | undefined;
@@ -49,12 +51,13 @@ export class DelegationPageComponent implements OnInit {
   // Lookup data
   categories: Category[] = [];
   contacts: Partial<User>[] = [];
-  privacy: Privacy[] = [];
+  privacy: Partial<Privacy>[] = [];
 
   isEdit = false;
   selectedCategoryId: number | null = null;
   selectedUserId: number | null | undefined = undefined;
-  selectedPrivacyId: number | null = null;
+  //selectedPrivacyId: number | null = null;
+  selectedPrivacyId: any = undefined;// = "";//=null;
   cansign: boolean = false;
   showOldCorrespondance: boolean = false;
   selectedRowId: number | null | undefined = undefined;
@@ -64,6 +67,13 @@ export class DelegationPageComponent implements OnInit {
   // Form group
   delegationForm!: FormGroup;
   formVisible = true;
+  placeholder: any;
+
+  //col: any = null;
+  //@NgModel({ imports: [FormsModule] })
+  //@NgModule({
+  //  imports: [FormsModule]
+  //})
 
   constructor(
     private fb: FormBuilder,
@@ -102,7 +112,7 @@ export class DelegationPageComponent implements OnInit {
     this.getPrivacyData();
     this.getUsers();
     this.getListData();
-
+    
     this.delegationForm.get('fromDate')?.valueChanges.subscribe(() => {
       this.updateMinDate();
     });
@@ -207,6 +217,7 @@ export class DelegationPageComponent implements OnInit {
   }
 
   getListData(): void {
+    
     this.delegationService.getDelegations(this.accessToken!).subscribe(
       (response) => {
         this.data = response.data || [];
@@ -215,6 +226,7 @@ export class DelegationPageComponent implements OnInit {
         console.error(error);
       }
     );
+
   }
 
   getUsers(): void {
@@ -251,16 +263,21 @@ export class DelegationPageComponent implements OnInit {
    let categoriesName = categoriesId
       .map((id: number) => {
         const category = this.categories.find(cat => cat.id === id);
-        return category ? category.text : " ";
+        return category ? this.getName(category):'';
       }).join(' - ');
 
     return categoriesName;
   }
 
+  getPrivacyName(privacyID: number): string {
+    const privacy = this.privacy.find(p => p.id === privacyID);  
+    return privacy ? this.getName(privacy) : '';  
+  }
+
   getCategories(): void {
     this.lookupservice.getCategories(undefined).subscribe(
-      (response) => {
-        this.categories = response || [];
+      (response:any) => {
+        this.categories = response.data || [];
         //console.log('Categories:', this.categories);
       },
       (error: any) => {
@@ -268,24 +285,35 @@ export class DelegationPageComponent implements OnInit {
       }
     );
   }
-
   getPrivacyData(): void {
     this.lookupservice.getPrivacy(this.accessToken!).subscribe(
       (response) => {
+        const placeholder = {
+          id: 0,
+          name: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_PRIVACY')
+          //text: "tesssst"
+        };
         this.privacy = response || [];
-        this.privacy.unshift({ id: 0, text: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_PRIVACY') });
+        
+         // this.placeholder = placeholder;
+        this.privacy.unshift(placeholder);
 
-        if (this.privacy.length > 0) {
-          this.delegationForm.patchValue({
-            privacyId: this.privacy[0]?.id,
-          });
-        }
+      
+        //if (this.privacy.length > 0) {
+        //  this.delegationForm.patchValue({
+        //    privacyId: this.privacy[0] ?.id,
+        //  });
+        //}
+
+        this.selectedPrivacyId = null;
+
       },
       (error: any) => {
         console.error(error);
       }
     );
   }
+
 
   formatDate(date: Date | undefined): string {
     if (!date) return '';
@@ -303,7 +331,7 @@ export class DelegationPageComponent implements OnInit {
       this.selectedRowId = item.id;
       this.selectedUserId = item.toUserValueText.id;
       this.showOldCorrespondance = true;
-
+      debugger;
       if (this.contacts && this.contacts.length > 0) {
         this.delegationForm.patchValue({
           userId: this.selectedUserId,
@@ -318,6 +346,7 @@ export class DelegationPageComponent implements OnInit {
           startDate: this.convertToNgbDateStruct(item.startDate),
         });
 
+        //this.selectedPrivacyId = item.privacyId;
         this.note = item.note;
         //console.log('note:', item.note);
         //console.log('note:', this.note);
@@ -350,7 +379,9 @@ export class DelegationPageComponent implements OnInit {
         fromDate: this.formatDate(formValues.fromDate),
         toDate: this.formatDate(formValues.toDate),
         categoryIds: formValues.categoryId,
+        //privacyId: formValues.privacyId?.id,
         privacyId: formValues.privacyId,
+        //privacyId: this.selectedPrivacyId,
         allowSign: formValues.allowSign || false,
         showOldCorrespondecne: formValues.showOldCorrespondence || false,
         draftInbox: formValues.draftInbox || false,
@@ -480,6 +511,7 @@ export class DelegationPageComponent implements OnInit {
     );
 
   }
+
   convertToNgbDateStruct(dateStr: string): Date | null {
     if (!dateStr) return null;
     const [day, month, year] = dateStr.split('/').map(Number);
@@ -498,6 +530,8 @@ export class DelegationPageComponent implements OnInit {
     this.delegationForm.reset();
     this.showOldCorrespondance = false;
     this.resetDropDowns();
+    this.selectedPrivacyId = null;
+
     const today = new Date();
     this.fromModal = {
       year: today.getFullYear(),
@@ -527,7 +561,19 @@ export class DelegationPageComponent implements OnInit {
     this.formVisible = !this.formVisible;
   }
 
+  // To get lookup names based on language
+  getName(item: any): string {
 
+    const currentLang = this.translate.currentLang;
+    switch (currentLang) {
+      case 'ar':
+        return item?.nameAr || item?.name;
+      case 'fr':
+        return item?.nameFr || item?.name;
+      default:
+        return item?.name;
+    }
+  }
   toggleShowOldCorrespondance() {
     this.showOldCorrespondance = !this.showOldCorrespondance;
   }

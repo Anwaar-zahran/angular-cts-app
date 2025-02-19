@@ -59,7 +59,7 @@
                 <div class="col-md-6" *ngIf="isEnabled('CarbonCopy')">
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.CARBONCOPY' | translate }}</label>
-                    <ng-select id="ddlUsers" [(ngModel)]="userId" name="ddlUsers" [items]="carbonUsers || []"
+                    <ng-select id="ddlUsers" [(ngModel)]="userId" name="ddlUsers" [multiple]="true" [items]="carbonUsers || []"
                                bindLabel="name" bindValue="id" placeholder="" class="form-control" [disabled]="true">
                     </ng-select>
                   </div>
@@ -75,7 +75,13 @@
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.PRIVACY' | translate }}</label>
                     <ng-select id="ddlPrivacy" [(ngModel)]="privacyId" name="ddlPrivacy" [items]="privacy || []"
-                               bindLabel="text" bindValue="id" placeholder="" class="form-control" [disabled]="true">
+                                bindValue="id" placeholder="" class="form-control" [disabled]="true">
+                      <ng-template ng-option-tmp let-item="item">
+                        {{ getName(item) }}
+                      </ng-template>
+                      <ng-template ng-label-tmp let-item="item">
+                        {{ getName(item) }}
+                      </ng-template>
                     </ng-select>
                   </div>
                 </div>
@@ -83,7 +89,14 @@
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.PRIORITY' | translate }}</label>
                     <ng-select id="ddlPriority" [(ngModel)]="priorityId" name="ddlPriority" [items]="priority || []"
-                               bindLabel="text" bindValue="id" placeholder="" class="form-control" [disabled]="true">
+                                bindValue="id" placeholder="" class="form-control" [disabled]="true">
+
+                      <ng-template ng-option-tmp let-item="item">
+                        {{ getName(item) }}
+                      </ng-template>
+                      <ng-template ng-label-tmp let-item="item">
+                        {{ getName(item) }}
+                      </ng-template>
                     </ng-select>
                   </div>
                 </div>
@@ -110,8 +123,14 @@
                 <div class="col-md-6" *ngIf="isEnabled('Importance')">
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.IMPORTANCE' | translate }}</label>
-                    <ng-select id="ddlImp" [(ngModel)]="ImpoeranceId" name="ddlImp" [items]="importance || []"
-                               bindLabel="text" bindValue="id" placeholder="" class="form-control" [disabled]="true">
+                    <ng-select id="ddlImp" [(ngModel)]="importanceId" name="ddlImp" [items]="importance || []"
+                                bindValue="id" placeholder="" class="form-control" [disabled]="true">
+                      <ng-template ng-option-tmp let-item="item">
+                        {{ getName(item) }}
+                      </ng-template>
+                      <ng-template ng-label-tmp let-item="item">
+                        {{ getName(item) }}
+                      </ng-template>
                     </ng-select>
                   </div>
                 </div>
@@ -119,15 +138,31 @@
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.CLASSIFICATION' | translate }}</label>
                     <ng-select id="ddlClass" [(ngModel)]="classId" name="ddlClass" [items]="classification || []"
-                               bindLabel="text" bindValue="id" placeholder="" class="form-control" [disabled]="true">
+                              bindValue="id" placeholder="" class="form-control" [disabled]="true">
+                      <ng-template ng-option-tmp let-item="item">
+                        {{ getName(item) }}
+                      </ng-template>
+                      <ng-template ng-label-tmp let-item="item">
+                        {{ getName(item) }}
+                      </ng-template>
                     </ng-select>
                   </div>
                 </div>
                 <div class="col-md-6" *ngIf="isEnabled('DocumentType')">
                   <div class="form-group">
                     <label class="form-label">{{ 'MAIL_DETAILS.DOCUMENT_TYPE' | translate }}</label>
-                    <input class="form-control" type="text" [value]="attributes?.documentType?.text"
-                           [disabled]="true" />
+                    <!--<input class="form-control" type="text" [value]="attributes?.documentType?.text"
+                           [disabled]="true" />-->
+                    <ng-select id="ddlDocTypes" [(ngModel)]="docTypeId" name="ddlDocTypes" [items]="docTypes || []"
+                               bindValue="id" placeholder="" class="form-control" [disabled]="true">
+
+                      <ng-template ng-option-tmp let-item="item">
+                        {{ getName(item) }}
+                      </ng-template>
+                      <ng-template ng-label-tmp let-item="item">
+                        {{ getName(item) }}
+                      </ng-template>
+                    </ng-select>
                   </div>
                 </div>
                 <div class="col-sm-12" *ngIf="isEnabled('Body')">
@@ -147,7 +182,7 @@
 
                 <div class="col-md-6" *ngIf="isEnabled('ExternalReferenceNumber')">
                   <div class="form-group">
-                    <label class="form-label">{{ 'MAIL_DETAILS.KEYWORD' | translate }}</label>
+                    <label class="form-label">{{ 'MAIL_DETAILS.ExternalReferenceNumber' | translate }}</label>
                     <input class="form-control" type="text" [value]="attributes?.externalReferenceNumber"
                            [disabled]="true" />
                   </div>
