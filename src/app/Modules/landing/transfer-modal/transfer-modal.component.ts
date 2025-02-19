@@ -166,7 +166,7 @@ export class TransferModalComponent implements OnInit {
   }>): Array<{ id: number, name: string, isStructure: boolean, structureId?: number | undefined }> {
 
     let result: Array<{ id: number, name: string, isStructure: boolean, structureId?: number }> = [];
-
+debugger
     data.forEach((structure) => {
       if (structure.name) {
         // Push the structure itself (isStructure: true, no structureId)
@@ -271,6 +271,7 @@ export class TransferModalComponent implements OnInit {
 
     dialog.afterClosed().subscribe((result: User[]) => {
       if (result) {
+        debugger
         console.log('Address Book result:', result);
 
         this.selectedUsers = result.map((user: User) => ({
@@ -291,12 +292,20 @@ export class TransferModalComponent implements OnInit {
         });
 debugger
         console.log('handle the rows')
-        if (this.rows.length > 0) {
-          this.rows[0] = {
-            ...this.rows[0],
-            selectedToUsers: [...this.selectedToUsers]
-          };
-        }
+        // if (this.rows.length > 0) {
+        //   this.rows = this.rows.map(row => ({
+        //     ...row,
+        //     selectedToUsers: [...this.selectedToUsers] // Ensure selectedToUsers is copied properly
+        //   }));
+        // }
+        // if (this.selectedToUsers.length > 0) {
+        //   this.rows = this.selectedToUsers.map(user => ({
+        //     ...this.createEmptyRow(), // Create a new row structure
+        //     selectedUser: user, // Assign user details
+        //     selectedUserId: user.id // Store user ID for reference
+        //   }));
+        // }
+        
         console.log('loopin in html on this list')
         console.log(this.selectedToUsers)
         this.cdr.detectChanges();
