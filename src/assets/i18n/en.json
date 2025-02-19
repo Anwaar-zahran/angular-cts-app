@@ -6,6 +6,7 @@
         "SUBJECT": "Subject",
         "NO_DATA": "No data available",
         "VISUAL_TRACKING": "Visual Tracking",
+        "PAGE": "Page",
         "TABS": {
             "NEW": "New",
             "SENT": "Sent",

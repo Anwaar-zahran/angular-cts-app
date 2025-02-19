@@ -260,9 +260,10 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
     });
 
     console.log('Search Parameters:', params); // Debugging line
-
+debugger
     this.reportsService.listInProgressCorrespondences(params).subscribe({
       next: (response) => {
+        
         this.reports = response.data;
         this.totalItems = response.recordsTotal;
         this.calculatePagination();
