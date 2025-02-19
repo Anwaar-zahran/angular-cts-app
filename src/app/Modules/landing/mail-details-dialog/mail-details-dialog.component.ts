@@ -362,8 +362,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      debugger
       console.log('Transfer modal closed', result);
-      this.dialogRef.close();
+      if (result && result.shouldCloseParent) {
+        this.dialogRef.close();
+      }
 
     });
   }

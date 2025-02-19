@@ -289,7 +289,7 @@ export class TransferModalComponent implements OnInit {
             });
           }
         });
-
+debugger
         console.log('handle the rows')
         if (this.rows.length > 0) {
           this.rows[0] = {
@@ -343,6 +343,7 @@ export class TransferModalComponent implements OnInit {
   }
   onUserOrPurposeChange(index: number) {
     // Add a new row when user is selected, only if it's the last row
+    debugger
     if (this.rows[index].selectedPurposeId == 10) {
       this.rows = this.rows.map((row, i) =>
         i === index ? { ...row, isCCed: true } : row

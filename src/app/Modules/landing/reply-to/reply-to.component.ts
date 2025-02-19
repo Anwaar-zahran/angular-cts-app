@@ -89,7 +89,7 @@ export class ReplyToComponent {
       this.mailService.replyToMail(this.accessToken!, itemData).subscribe(
         (response) => {
           this.toaster.showToaster(response??"Sent successfully");
-          this.onClose();
+          this.onClose(true);
         },
         (error) => {
           this.toaster.showToaster(error.error.text??"Something went wrong");
@@ -106,7 +106,7 @@ export class ReplyToComponent {
     return `${day}/${month}/${year}`;
   }
 
-  onClose(): void {
-    this.dialogRef.close();
+  onClose(shouldCloseParent: boolean = false): void {
+    this.dialogRef.close({ shouldCloseParent });
   }
 }
