@@ -42,8 +42,8 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
         structureId: '1',
       })
       .subscribe((res: any) => {
-        const averageCreatedByUser = parseFloat(res?.averageCreatedByUser) || 0;
-        const averageTransfers = parseFloat(res?.averageTransfers) || 0;
+        const averageCreatedByUser = (parseFloat(res?.averageCreatedByUser) || 0) / 10000;
+        const averageTransfers = (parseFloat(res?.averageTransfers) || 0) / 10000;
 
         this.chartOptions = {
           chart: {
@@ -79,6 +79,11 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
             title: {
               text: 'Value',
             },
+            labels: {
+              formatter: function() {
+                return Number(this.value).toFixed(1);
+              }
+            }
           },
           series: [
             {
