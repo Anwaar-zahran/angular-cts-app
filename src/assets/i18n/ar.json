@@ -43,7 +43,7 @@
     },
     "LOGIN": {
         "TITLE": "تسجيل الدخول",
-        "SYSTEM_TITLE": "نظام إدارة الوثائق",
+        "SYSTEM_TITLE": "نظام تتبع المراسلات",
         "SUBTITLE": "الرجاء إدخال بيانات تسجيل الدخول",
         "USERNAME": "اسم المستخدم",
         "PASSWORD": "كلمة المرور",
@@ -109,7 +109,7 @@
             "LINKED_CORRESPONDENCE": "المراسلات المرتبطة",
             "NON_ARCHIVED_ATTACHMENT": "مرفق غير مؤرشف",
             "VISUAL_TRACKING": "التتبع المرئي",
-            "TRANSACTION_HISTORY": "سجل المعاملات",
+            "TRANSACTION_HISTORY": " تاريخ الإحالات",
             "ACTIVITY_LOG": "سجل النشاط"
         },
         "BUTTONS": {

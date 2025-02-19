@@ -136,7 +136,9 @@ export class TableStructureAverageDurationForCorrespondenceCompletionComponent i
   }
 
   goToPage(page: number) {
-    this.currentPage = page;
-    this.loadData();
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadData();
+    }
   }
 }
