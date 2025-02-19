@@ -21,9 +21,8 @@
             <th class="min-max-width-50-250">{{ 'BAM.KPI.AVERAGE_DURATION.STRUCTURE' | translate }}</th>
             <th class="min-max-width-50-250">{{ 'BAM.KPI.AVERAGE_DURATION.AVERAGE_DAYS' | translate }}</th>
             <th class="min-max-width-50-250">{{ 'BAM.KPI.AVERAGE_DURATION.COMPARE_TO_TOTAL' | translate }}</th>
-            <!--
           <th class="min-max-width-50-250">{{ 'BAM.KPI.AVERAGE_DURATION.YEARLY_GRAPH' | translate }}</th>
-          -->
+         
           </tr>
         </thead>
         <tbody>
@@ -64,10 +63,10 @@
           <a class="paginate_button previous" [class.disabled]="currentPage === 1" (click)="previousPage()"><i
               class='text-secondary fa fa-angle-double-left'></i></a>
 
-          <span class="d-inline-flex align-items-center mx-2">Page 
+          <span class="d-inline-flex align-items-center mx-2">{{ 'COMMON.PAGE' | translate }} 
             <input type="number" class="paginate-input form-control form-control-sm mx-2" [(ngModel)]="currentPage" (ngModelChange)="goToPage(currentPage)"
             [min]="1" [max]="totalPages" />
-              of {{totalPages}}</span>
+            {{ 'COMMON.FROM' | translate }} {{totalPages}}</span>
 
           <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()"><i
               class='text-secondary fa fa-angle-double-right'></i></a>

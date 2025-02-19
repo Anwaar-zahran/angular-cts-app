@@ -7,7 +7,7 @@ import { VisualTrackingComponent } from '../../shared/visual-tracking/visual-tra
 import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-dialog.component';
 import { AuthService } from '../../auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
-
+import { MailsService } from '../../../services/mail.service';
 interface ApiResponseItem {
   id: number;
   documentId: number;
@@ -45,7 +45,8 @@ export class GuidelinePageComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private authService: AuthService,
-    private translateService: TranslateService
+    private translate: TranslateService,
+    private mailService: MailsService,
   ) {
     this.accessToken = localStorage.getItem('access_token');
   }
@@ -71,13 +72,13 @@ export class GuidelinePageComponent implements OnInit {
         },
       },
       dom: 'tp',
-      ordering: false,
+      ordering: true,
       drawCallback: (settings: any) => {
         const api = settings.oInstance.api();
         const pageInfo = api.page.info();
         const pagination = $(api.table().container()).find('.dataTables_paginate');
         pagination.find('input.paginate-input').remove();
-        const page = $('<span class="d-inline-flex align-items-center mx-2">Page <input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> of ' + pageInfo.pages + '</span>');
+        const page = $('<span class="d-inline-flex align-items-center mx-2">' + this.translate.instant('COMMON.PAGE') + '<input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> ' + this.translate.instant('COMMON.FROM') + ' ' + pageInfo.pages + '</span>');
          
         
         let timeout: any;
@@ -115,14 +116,14 @@ export class GuidelinePageComponent implements OnInit {
   }
 
   fetchData() {
-    if (!this.accessToken) {
-      console.error('Access token not found');
+    //if (!this.accessToken) {
+    //  console.error('Access token not found');
 
-      this.router.navigate(['/login']);
-      return;
-    }
+    //  this.router.navigate(['/login']);
+    //  return;
+    //}
     debugger
-    const payload = this.accessToken.split('.')[1];
+    const payload = this.accessToken ?.split('.')[1] || '';
     const decodedPayload = this.base64UrlDecode(payload);
     const parsedPayload = JSON.parse(decodedPayload);
     this.structureId = parsedPayload.StructureId;
@@ -152,7 +153,7 @@ export class GuidelinePageComponent implements OnInit {
         // Map the API data to respective items
         this.sentItems = sentResponse.data.map((item: ApiResponseItem) => ({
           subject: item.subject,
-          details: this.translateService.instant('GUIDELINES.DETAILS.TRANSFERRED_FROM', { user: item.fromUser }),
+          details: this.translate.instant('GUIDELINES.DETAILS.TRANSFERRED_FROM', { user: item.fromUser }),
           date: item.transferDate,
           ref: item.referenceNumber,
           isRead: item.isRead,
@@ -163,7 +164,7 @@ export class GuidelinePageComponent implements OnInit {
         })) || [];
         this.completedItems = completedResponse.data.map((item: ApiResponseItem) => ({
           subject: item.subject,
-          details: this.translateService.instant('GUIDELINES.DETAILS.TRANSFERRED_FROM', { user: item.fromUser }),
+          details: this.translate.instant('GUIDELINES.DETAILS.TRANSFERRED_FROM', { user: item.fromUser }),
           date: item.transferDate,
           ref: item.referenceNumber,
           isRead: item.isRead,
@@ -174,7 +175,7 @@ export class GuidelinePageComponent implements OnInit {
         })) || [];
         this.newItems = inboxResponse.data.map((item: ApiResponseItem) => ({
           subject: item.subject,
-          details: this.translateService.instant('GUIDELINES.DETAILS.TRANSFERRED_FROM', { user: item.fromUser }),
+          details: this.translate.instant('GUIDELINES.DETAILS.TRANSFERRED_FROM', { user: item.fromUser }),
           date: item.transferDate,
           ref: item.referenceNumber,
           isRead: item.isRead,
@@ -196,8 +197,8 @@ export class GuidelinePageComponent implements OnInit {
 
   active = 1;
 
-  showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
-    debugger;
+  showMailDetailsOld(item: ApiResponseItem, showActionbtns: boolean) {
+     
     const currentName = this.authService.getDisplayName();
 
     const dialogRef = this.dialog.open(MailDetailsDialogComponent, {
@@ -221,7 +222,44 @@ export class GuidelinePageComponent implements OnInit {
       //this.router.navigate([this.router.url]);
     });
   }
+ showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
+    debugger;
+    const currentName = this.authService.getDisplayName();
+    
+    // Mark correspondence as read
+    this.mailService.markCorrespondanceAsRead(this.accessToken!, item.id).subscribe({
+      next: () => {
+        console.log('Marked as read');
+        item.row.isRead = true; // Update item locally to reflect the change
+      },
+      error: (err) => console.error('Error marking as read:', err)
+    });
+  
+    // Open the dialog
+    const dialogRef = this.dialog.open(MailDetailsDialogComponent, {
+      disableClose: true,
+      width: '90%',
+      height: '90%',
+      data: {
+        id: item.row.documentId,
+        documentId: item.documentId,
+        referenceNumber: item.ref,
+        row: item.row,
+        fromSearch: false,
+        showActionButtons: (showActionbtns && (!item.row?.isLocked || (item.row?.isLocked && item.row?.lockedBy == currentName)))
+      }
+    });
+  
+    // Refresh the item when dialog closes
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Mail details closed', result);
+  
+     // if (result === 'updated') { 
+        this.fetchData(); // Call API again to refresh only the necessary data
+      //}
 
+    });
+  }
   showVisualTracking(item: ApiResponseItem) {
     console.log(item)
     this.dialog.open(VisualTrackingComponent, {
@@ -233,5 +271,38 @@ export class GuidelinePageComponent implements OnInit {
       }
     });
   }
+  sortOrder: { [key: string]: 'asc' | 'desc' } = { date: 'asc', ref: 'asc' };
+  sortBy(criteria: string) {
+    const activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
+    
+    if (!activeTab) {
+      return;
+    }
+  
+    const table = $(activeTab).find('table').DataTable();
+  
+    let columnIndex = 0;
+    if (criteria === 'date') {
+      columnIndex = 1;
+    } else if (criteria === 'ref') {
+      columnIndex = 2;
+    }
+    const currentOrder = table.order();
+    const currentSortOrder = currentOrder.length && currentOrder[0][1];
+  
+    const newSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+    table.order([columnIndex, newSortOrder]).draw();
+  }
+  
+compare(a: any, b: any, criteria: string): number {
+  if (criteria === 'date') {
+      return new Date(a?.date || 0).getTime() - new Date(b?.date || 0).getTime();
+  }
+  if (criteria === 'ref') {
+      return (a?.ref || '').localeCompare(b?.ref || '');
+  }
+  return 0;
+}
+
 }
 

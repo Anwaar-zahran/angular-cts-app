@@ -1,122 +1,104 @@
+
+<!-- (click)="toggleSearchForm()" -->
 <div class="body-content">
   <!-- Title -->
   <div class="d-flex justify-content-between">
-<<<<<<< HEAD
     <h1 class="page-title">{{ "DELEGATION.TITLE" | translate }}</h1>
-=======
     <h1 class="page-title">{{ 'DELEGATION.TITLE' | translate }}</h1>
-    <button class="btn btn-secondary mb-3" (click)="toggleSearchForm()">
+    <button class="btn btn-secondary mb-3" >   
       <i class="fa" [ngClass]="formVisible ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
     </button>
->>>>>>> b8fbd03f3eb4feed2a1ba98e5cc35f5a37cdd514
+    <h1 class="page-title">{{ "DELEGATION.TITLE" | translate }}</h1>
   </div>
   <!-- Form -->
   <div *ngIf="formVisible" [@expandCollapse]>
-  <form [formGroup]="delegationForm">
-    <div class="row">
-      <!-- Full Name -->
-      <div class="col-md-3">
-        <div class="form-group">
-          <label for="ddlUsers" class="form-label required">{{
-            "DELEGATION.FULL_NAME" | translate
-          }}</label>
-          <ng-select
-            id="ddlUsers"
-            formControlName="userId"
-            *ngIf="contacts.length"
-            [items]="contacts"
-            bindLabel="fullName"
-            bindValue="id"
-            [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_NAME' | translate"
-            class="form-control"
-          >
-          </ng-select>
-          <div
-            *ngIf="
+    <form [formGroup]="delegationForm">
+      <div class="row">
+        <!-- Full Name -->
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="ddlUsers" class="form-label required">
+              {{"DELEGATION.FULL_NAME" | translate}}
+            </label>
+            <ng-select id="ddlUsers"
+                       formControlName="userId"
+                       *ngIf="contacts.length"
+                       [items]="contacts"
+                       bindLabel="fullName"
+                       bindValue="id"
+                       [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_NAME' | translate"
+                       class="form-control">
+            </ng-select>
+            <div *ngIf="
               delegationForm.controls['userId'].invalid &&
-              delegationForm.controls['userId'].touched
-            "
-            class="error-msg"
-          >
-            {{ "DELEGATION.ERRORS.REQUIRED_NAME" | translate }}
+              delegationForm.controls['userId'].touched "
+                 class="error-msg">
+              {{ "DELEGATION.ERRORS.REQUIRED_NAME" | translate }}
+            </div>
           </div>
         </div>
-      </div>
-      <!-- Date Pickers -->
-      <div class="col-md-3">
-        <div class="form-group">
-          <label for="datepicker1" class="form-label required">{{
-            "DELEGATION.FROM_DATE" | translate
-          }}</label>
-          <input
-            class="form-control date-picker"
-            matInput
-            [matDatepicker]="picker"
-            [placeholder]="'COMMON.DATE.FORMAT' | translate"
-            formControlName="fromDate"
-            name="dp1"
-            (click)="picker.open()"
-            (paste)="preventPaste($event)"
-            (dateChange)="updateMinDate()"
-          />
-          <mat-datepicker #picker></mat-datepicker>
-          <div
-            *ngIf="
+        <!-- Date Pickers -->
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="datepicker1" class="form-label required">
+              {{ "DELEGATION.FROM_DATE" | translate}}
+            </label>
+            <input class="form-control date-picker"
+                   matInput
+                   [matDatepicker]="picker"
+                   [placeholder]="'COMMON.DATE.FORMAT' | translate"
+                   formControlName="fromDate"
+                   name="dp1"
+                   (click)="picker.open()"
+                   (paste)="preventPaste($event)"
+                   (dateChange)="updateMinDate()" />
+            <mat-datepicker #picker></mat-datepicker>
+            <div *ngIf="
               delegationForm.controls['fromDate'].invalid &&
-              delegationForm.controls['fromDate'].touched
-            "
-            class="error-msg"
-          >
-            {{ "DELEGATION.ERRORS.REQUIRED_FROM_DATE" | translate }}
+              delegationForm.controls['fromDate'].touched "
+                 class="error-msg">
+              {{ "DELEGATION.ERRORS.REQUIRED_FROM_DATE" | translate }}
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col-md-3">
-        <div class="form-group">
-          <label for="datepicker2" class="form-label required">{{
-            "DELEGATION.TO_DATE" | translate
-          }}</label>
-          <input
-            class="form-control date-picker"
-            matInput
-            [matDatepicker]="picker1"
-            [placeholder]="'COMMON.DATE.FORMAT' | translate"
-            formControlName="toDate"
-            name="dp2"
-            (click)="picker1.open()"
-            (paste)="preventPaste($event)"
-            [min]="minToDate"
-          />
-          <mat-datepicker #picker1></mat-datepicker>
-          <div
-            *ngIf="
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="datepicker2" class="form-label required">
+              {{"DELEGATION.TO_DATE" | translate }}
+            </label>
+            <input class="form-control date-picker"
+                   matInput
+                   [matDatepicker]="picker1"
+                   [placeholder]="'COMMON.DATE.FORMAT' | translate"
+                   formControlName="toDate"
+                   name="dp2"
+                   (click)="picker1.open()"
+                   (paste)="preventPaste($event)"
+                   [min]="minToDate" />
+            <mat-datepicker #picker1></mat-datepicker>
+            <div *ngIf="
               delegationForm.controls['toDate'].invalid &&
-              delegationForm.controls['toDate'].touched
-            "
-            class="error-msg"
-          >
-            {{ "DELEGATION.ERRORS.REQUIRED_TO_DATE" | translate }}
+              delegationForm.controls['toDate'].touched"
+                 class="error-msg">
+              {{ "DELEGATION.ERRORS.REQUIRED_TO_DATE" | translate }}
+            </div>
           </div>
         </div>
-      </div>
-      <!-- Privacy -->
-      <div class="col-md-3">
-        <div class="form-group">
-          <label for="ddlPrivacy" class="form-label required">{{
-            "DELEGATION.PRIVACY" | translate
-          }}</label>
-          <ng-select
-            id="ddlPrivacy"
-            formControlName="privacyId"
-            [items]="privacy || []"
-            bindLabel="text"
-            bindValue="id"
-            [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_PRIVACY' | translate"
-            class="form-control"
-          >
-          </ng-select>
-          <div
-            *ngIf="
+        <!-- Privacy -->
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="ddlPrivacy" class="form-label required">
+              {{"DELEGATION.PRIVACY" | translate }}
+            </label>
+            <ng-select id="ddlPrivacy"
+                       formControlName="privacyId"
+                       [items]="privacy || []"
+                       bindLabel="text"
+                       bindValue="id"
+                       [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_PRIVACY' | translate"
+                       class="form-control">
+            </ng-select>
+            <div *ngIf="
               delegationForm.controls['privacyId'].invalid &&
               delegationForm.controls['privacyId'].touched
             "
@@ -129,8 +111,11 @@
       <!-- Categories -->
       <div class="col-md-6">
         <div class="form-group">
-<<<<<<< HEAD
-          <label for="ddlCategories" class="form-label required">{{
+          <label for="ddlCategories" class="form-label required">{{ 'DELEGATION.CATEGORY' | translate }}</label>
+          <ng-select id="ddlCategories" formControlName="categoryId" multiple [items]="categories || []"
+            bindLabel="text" bindValue="id"  [closeOnSelect]="false" [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_CATEGORY' | translate"
+            class="form-control">
+          <!-- <label for="ddlCategories" class="form-label required">{{
             "DELEGATION.CATEGORY" | translate
           }}</label>
           <ng-select
@@ -144,144 +129,130 @@
               'DELEGATION.PLACEHOLDERS.SELECT_CATEGORY' | translate
             "
             class="form-control"
-          >
-=======
-          <label for="ddlCategories" class="form-label required">{{ 'DELEGATION.CATEGORY' | translate }}</label>
-          <ng-select id="ddlCategories" formControlName="categoryId" multiple [items]="categories || []"
-            bindLabel="text" bindValue="id"  [closeOnSelect]="false" [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_CATEGORY' | translate"
-            class="form-control">
->>>>>>> b8fbd03f3eb4feed2a1ba98e5cc35f5a37cdd514
+          > -->
           </ng-select>
           <div
             *ngIf="
               delegationForm.controls['categoryId'].invalid &&
               delegationForm.controls['categoryId'].touched
             "
-            class="error-msg"
-          >
-            {{ "DELEGATION.ERRORS.REQUIRED_CATEGORY" | translate }}
-          </div>
-        </div>
-      </div>
-      <!-- Checkboxes -->
-      <div class="col-md-4">
-        <div class="d-flex gap-3 mt-4">
-          <div class="mt-2">
-            <div class="form-group form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                formControlName="showOldCorrespondence"
-                (change)="toggleShowOldCorrespondance()"
-              />
-              <label class="form-check-label" for="oldDocuments">
-                {{ "DELEGATION.SHOW_OLD_CORRESPONDENCE" | translate }}
-              </label>
+                 class="error-msg">
+              {{ "DELEGATION.ERRORS.REQUIRED_CATEGORY" | translate }}
             </div>
           </div>
-          <div *ngIf="showOldCorrespondance" class="col-md-6">
-            <div class="form-group">
-              <label for="datepicker2" class="form-label required">{{
-                "DELEGATION.START_DATE" | translate
-              }}</label>
-              <input
-                class="form-control date-picker"
-                matInput
-                [matDatepicker]="picker2"
-                [placeholder]="'COMMON.DATE.FORMAT' | translate"
-                formControlName="startDate"
-                name="dp2"
-                (click)="picker2.open()"
-                (paste)="preventPaste($event)"
-              />
-              <mat-datepicker #picker2></mat-datepicker>
-              <div
-                *ngIf="
+        </div>
+        <!-- Checkboxes -->
+        <div class="col-md-4">
+          <div class="d-flex gap-3 mt-4">
+            <div class="mt-2">
+              <div class="form-group form-check">
+                <input class="form-check-input"
+                       type="checkbox"
+                       formControlName="showOldCorrespondence"
+                       (change)="toggleShowOldCorrespondance()" />
+                <label class="form-check-label" for="oldDocuments">
+                  {{ "DELEGATION.SHOW_OLD_CORRESPONDENCE" | translate }}
+                </label>
+              </div>
+            </div>
+            <div *ngIf="showOldCorrespondance" class="col-md-6">
+              <div class="form-group">
+                <label for="datepicker2" class="form-label required">
+                  {{"DELEGATION.START_DATE" | translate }}
+                </label>
+                <input class="form-control date-picker"
+                       matInput
+                       [matDatepicker]="picker2"
+                       [placeholder]="'COMMON.DATE.FORMAT' | translate"
+                       formControlName="startDate"
+                       name="dp2"
+                       (click)="picker2.open()"
+                       (paste)="preventPaste($event)" />
+                <mat-datepicker #picker2></mat-datepicker>
+                <div *ngIf="
                   delegationForm.controls['startDate'].invalid &&
                   delegationForm.controls['startDate'].touched
                 "
-                class="error-msg"
-              >
+                     class="error-msg">
+                </div>
+              </div>
+            </div>
+            <div class="mt-2">
+              <div class="form-group form-check">
+                <input class="form-check-input"
+                       type="checkbox"
+                       formControlName="allowSign" />
+                <label class="form-check-label" for="canSign">
+                  {{ "DELEGATION.CAN_SIGN" | translate}}
+                </label>
+              </div>
+            </div>
+            <div class="mt-2">
+              <div class="form-group form-check">
+                <input class="form-check-input"
+                       type="checkbox"
+                       formControlName="draftInbox" />
+                <label class="form-check-label" for="draftInbox">
+                  {{"DELEGATION.DRAFT_INBOX" | translate }}
+                </label>
               </div>
             </div>
           </div>
-          <div class="mt-2">
-            <div class="form-group form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                formControlName="allowSign"
-              />
-              <label class="form-check-label" for="canSign">{{
-                "DELEGATION.CAN_SIGN" | translate
-              }}</label>
-            </div>
-          </div>
-          <div class="mt-2">
-            <div class="form-group form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                formControlName="draftInbox"
-              />
-              <label class="form-check-label" for="draftInbox">{{
-                "DELEGATION.DRAFT_INBOX" | translate
-              }}</label>
-            </div>
+        </div>
+        <div>
+          <div class="form-group">
+            <label for="note" class="form-label">
+              {{"DELEGATION.NOTE" | translate }}
+            </label>
+            <textarea class="form-control"
+                      formControlName="note"
+                      id="note"
+                      rows="2"
+                      name="note"></textarea>
           </div>
         </div>
       </div>
-      <div>
-        <div class="form-group">
-          <label for="note" class="form-label">{{
-            "DELEGATION.NOTE" | translate
-          }}</label>
-          <textarea
-            class="form-control"
-            formControlName="note"
-            id="note"  
-            rows="3"
-            name="note"
-          ></textarea>
-        </div>
-      </div>
-    </div>
-    <div></div>
-    <!-- Buttons -->
-    <div class="d-flex justify-content-end gap-3 mt-1">
-      <button
-        *ngIf="isEdit; else clearText"
-        type="button"
-        class="btn btn-secondary btn-lg"
-        (click)="cancel()"
-      >
-        {{ "COMMON.ACTIONS.CANCEL" | translate }}
-      </button>
-      <button
-        [disabled]="delegationForm.invalid"
-        type="button"
-        class="btn btn-primary btn-lg"
-        (click)="onSave()"
-      >
-        <i class="fa fa-save"></i> {{ "COMMON.ACTIONS.SAVE" | translate }}
-      </button>
-
-      <ng-template #clearText>
-        <button
-          type="button"
-          *ngIf="!delegationForm.pristine"
-          class="btn btn-secondary btn-lg"
-          (click)="clear()"
-        >
-          {{ "COMMON.ACTIONS.CLEAR" | translate }}
+      <div></div>
+      <!-- Buttons -->
+      <div class="d-flex justify-content-end gap-3 mt-1">
+        <button *ngIf="isEdit; else clearText"
+                type="button"
+                class="btn btn-secondary btn-lg"
+                (click)="cancel()">
+          {{ "COMMON.ACTIONS.CANCEL" | translate }}
         </button>
-      </ng-template>
-    </div>
-  </form>
-  <hr />
+        <button [disabled]="delegationForm.invalid"
+                type="button"
+                class="btn btn-primary btn-lg"
+                (click)="onSave()">
+          <!-- <i class="fa fa-save"></i> {{ "COMMON.ACTIONS.SAVE" | translate }} -->
+          <i class="fa fa-save"></i>
+          {{ isEdit ? ('COMMON.ACTIONS.SAVE' | translate) : ('COMMON.ACTIONS.SUBMIT' | translate) }}
+        </button>
+        <button 
+                type="button"
+                class="btn btn-primary btn-lg"
+                (click)="onSearch()">
+          <i class="fa fa-search"></i>
+          {{  ('REPORTS.SEARCH' | translate) }}
+        </button>
+        <ng-template #clearText>
+          <button type="button"
+                  *ngIf="!delegationForm.pristine"
+                  class="btn btn-secondary btn-lg"
+                  (click)="clear()">
+            {{ "COMMON.ACTIONS.CLEAR" | translate }}
+          </button>
+        </ng-template>
+      </div>
+    </form>
+    <hr />
   </div>
   <!-- Table -->
-<<<<<<< HEAD
+<<<<<<<<< Temporary merge branch 1
+  <div class="shadow table-container overflow-x-auto">
+    <table class="table" *ngIf="data && data.length > 0" datatable [dtOptions]="dtOptions">
+=========
   <div class="shadow table-container">
     <table
       class="table"
@@ -289,10 +260,7 @@
       datatable
       [dtOptions]="dtOptions"
     >
-=======
-  <div class="shadow table-container overflow-x-auto">
-    <table class="table" *ngIf="data && data.length > 0" datatable [dtOptions]="dtOptions">
->>>>>>> b8fbd03f3eb4feed2a1ba98e5cc35f5a37cdd514
+>>>>>>>>> Temporary merge branch 2
       <thead>
         <tr>
           <th>{{ "DELEGATION.TABLE.DELEGATE_TO" | translate }}</th>
@@ -301,7 +269,7 @@
           <th>{{ "DELEGATION.TABLE.CREATED_DATE" | translate }}</th>
           <th>{{ "DELEGATION.TABLE.PRIVACY" | translate }}</th>
           <th>{{ "DELEGATION.TABLE.CATEGORY" | translate }}</th>
-          <th>{{ "DELEGATION.TABLE.NOTES" | translate }}</th>
+          <th>{{ "DELEGATION.NOTE" | translate }}</th>
           <th>{{ "COMMON.ACTIONS.TITLE" | translate }}</th>
         </tr>
       </thead>
@@ -317,20 +285,16 @@
           <td>{{ getCategoriesName(row.categoryIds) }} {{selectedCategoryName}}</td>
           <td>{{ row.note }}</td>
           <td>
-            <button
-              type="button"
-              class="btn"
-              (click)="onEdit(row)"
-              [title]="'COMMON.ACTIONS.EDIT' | translate"
-            >
+            <button type="button"
+                    class="btn"
+                    (click)="onEdit(row)"
+                    [title]="'COMMON.ACTIONS.EDIT' | translate">
               <i class="fa fa-edit"></i>
             </button>
-            <button
-              type="button"
-              class="btn"
-              (click)="onDelete(row)"
-              [title]="'COMMON.ACTIONS.DELETE' | translate"
-            >
+            <button type="button"
+                    class="btn"
+                    (click)="onDelete(row)"
+                    [title]="'COMMON.ACTIONS.DELETE' | translate">
               <i class="fa fa-times-circle"></i>
             </button>
           </td>
@@ -343,4 +307,3 @@
       <p>{{ "COMMON.NO_DATA" | translate }}</p>
     </div>
   </div>
-</div>

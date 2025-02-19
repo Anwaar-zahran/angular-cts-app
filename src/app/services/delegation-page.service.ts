@@ -23,7 +23,7 @@ export class DelegationPageService {
     });
     const draw = 0;
     const start = 0;
-    const length = 10;
+    const length = 10000;
 
     const body = new URLSearchParams();
     body.set('draw', draw.toString());
@@ -31,6 +31,34 @@ export class DelegationPageService {
     body.set('length', length.toString());
 
     return this.httpClient.post(this.apiUrl, body.toString(), { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching data', error.message);
+          throw error;
+        })
+      );
+  }
+
+  searchDelegations(accessToken: string, searchData: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      // 'Content-Type': 'application/json', 
+    });
+    const draw = 0;
+    const start = 0;
+    const length = 10000;
+
+    const formData = new FormData();
+   
+    formData.append('ToUserId', searchData["toUser"]);    
+    formData.append('FromDate', searchData["fromDate"]);
+    formData.append('ToDate', searchData["toDate"]);
+
+    formData.append('draw', draw.toString());
+    formData.append('start', start.toString());
+    formData.append('length', length.toString());
+
+    return this.httpClient.post(this.apiUrl, formData, { headers })
       .pipe(
         catchError((error) => {
           console.error('Error while fetching data', error.message);

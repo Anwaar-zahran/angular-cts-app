@@ -1,10 +1,11 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   styleUrls: ['./chart-percentage-of-correspondences-completed-and-inprogress.component.css'],
   imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
 })
-export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent implements OnInit, OnChanges {
+export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent implements OnInit, OnChanges, OnDestroy {
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
@@ -25,6 +26,7 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
+  private languageSubscription! : Subscription;
 
   constructor(
     private chartsService: ChartsService,
@@ -32,16 +34,33 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
   ) { }
 
   ngOnInit() {
+
+    this.languageSubscription = this.translate.onLangChange.subscribe((event:LangChangeEvent) =>{
+          this.loadChartData();
+        })
+
+        
     // Only load chart data when categories are available
     if (this.categories && this.categories.length > 0) {
       this.loadChartData();
     }
+
+    // Detect language changes and reload the chart
+    this.translate.onLangChange.subscribe(() => {
+      this.loadChartData();
+    });
   }
 
   ngOnChanges() {
     // Reload chart data whenever categories input changes and is not empty
     if (this.categories && this.categories.length > 0) {
       this.loadChartData();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.languageSubscription) {
+      this.languageSubscription.unsubscribe();
     }
   }
 
@@ -54,13 +73,23 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
         categoryIds: []
       })
       .subscribe((res: { text: string, count: number }[]) => {
-        this.translate.get(['BAM.CHARTS.COMPLETION_VS_PROGRESS']).subscribe(translations => {
+        this.translate.get(['BAM.CHARTS.COMPLETION_VS_PROGRESS', 'Status.InProgress', 'Status.Completed']).subscribe(translations => {
+          
+          const chartData = res.map(item => {
+            const translatedText = this.translate.instant(`BAM.DASHBOARD.CHARTS.STATUS.${item.text.toUpperCase()}`);
+            console.log(translatedText)
+            return {
+              name: translatedText,
+              y: item.count
+            };
+          });
+  
           this.chartOptions = {
             chart: {
               type: 'pie',
             },
             title: {
-              text: '',
+              text: translations['BAM.CHARTS.COMPLETION_VS_PROGRESS'],
             },
             colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
             exporting: {
@@ -83,19 +112,21 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
                 cursor: 'pointer',
                 dataLabels: {
                   enabled: true,
-                  format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                  format: '<b>{point.name}:</b><b> %{point.percentage:.1f}</b>'
                 }
               }
             },
             series: [{
               name: translations['BAM.CHARTS.COMPLETION_VS_PROGRESS'],
               type: 'pie',
-              data: res.map(item => [this.translate.instant(item.text), item.count])
+              data: chartData
             }]
           };
         });
       });
   }
+  
+  
 
   toggleModal() {
     this.isModalOpen = !this.isModalOpen;

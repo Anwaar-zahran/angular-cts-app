@@ -37,7 +37,7 @@ export class VisualTrackingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    debugger;
+     
     this.loadLookupData();
     if (this.data.documentId) {
       this.getVisualTracking(this.data.documentId);

@@ -31,6 +31,7 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
   selectedStructures: number[] = [];
   structures: Structure[] = [];
   structureError: string = '';
+  expandedRows: Set<any> = new Set();
 
   fromDate: Date | undefined; // or set to a specific date like { year: 2023, month: 1, day: 1 }
   //fromDate: NgbDateStruct | undefined;
@@ -168,6 +169,9 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
       next: (response: ApiResponse<InprogressCorrespondence[]>) => {
         this.reports = response.data;
         this.totalItems = response.recordsTotal;
+
+        console.log('reportssssss data from API')
+        console.log(this.reports)
         this.calculatePagination();
 
         if (this.isDtInitialized) {
@@ -194,6 +198,19 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
     this.endIndex = Math.min(this.startIndex + this.dtOptions.pageLength - 1, this.totalItems);
 
     this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  toggleRow(row: any): void {
+    if (this.expandedRows.has(row)) {
+      this.expandedRows.delete(row);
+    } else {
+      console.log(row)
+      this.expandedRows.add(row);
+    }
+  }
+
+  isRowExpanded(row: any): boolean {
+    return this.expandedRows.has(row);
   }
 
   loadStructures(searchText: string = '') {
@@ -260,9 +277,10 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
     });
 
     console.log('Search Parameters:', params); // Debugging line
-
+debugger
     this.reportsService.listInProgressCorrespondences(params).subscribe({
       next: (response) => {
+        
         this.reports = response.data;
         this.totalItems = response.recordsTotal;
         this.calculatePagination();
@@ -358,13 +376,31 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
     this.structureSearchSubject.complete();
   }
 
-  loadPrivacyOptions() {
+  loadPrivacyOptionsWithoutTranslate() {
     this.lookupsService.getPrivacyOptions().subscribe({
       next: (options) => {
         this.privacyOptions = options;
       },
       error: (error) => {
         console.error('Error loading privacy options:', error);
+      }
+    });
+  }
+  loadPrivacyOptions() {
+    debugger;
+    this.lookupsService.getPrivacyOptions().subscribe({
+      next: (options) => {
+        this.privacyOptions = options.map(option => {
+          const formattedKey = option.name.trim().toLowerCase().replace(/\s+/g, ' '); // Remove extra spaces
+          debugger
+          return {
+            ...option,
+            translatedName: this.translate.instant(`PrivacyOptions.${formattedKey}`) || option.name // Translate option name
+          };
+        });
+      },
+      error: (error) => {
+        console.error(this.translate.instant('ERROR.LOADING_PRIVACY_OPTIONS'), error);
       }
     });
   }
