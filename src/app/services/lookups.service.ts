@@ -10,20 +10,26 @@ import { Priority } from '../models/priority.model';
 })
 export class LookupsService {
   private listUsersUrl = `${environment.iAMUrl}/api/SearchUsersByStructureIds`;
-  private listPrivacies = `${environment.apiBaseUrl}/Privacy/ListPrivacies`;
-  private listCategories = `${environment.apiBaseUrl}/Category/ListCategories`;
+  //private listPrivacies = `${environment.apiBaseUrl}/Privacy/ListPrivacies`;
+  private listPrivacies = `${environment.apiBaseUrl}/Privacy/List?Name=`;
+  //private listCategories = `${environment.apiBaseUrl}/Category/ListCategories`;
+  private listCategories = `${environment.apiBaseUrl}/Category/List?Name`;
   private listEntities = `${environment.iAMUrl}/api/SearchStructuresWithSearchAttributes`;
   private listSearchUsers = `${environment.iAMUrl}/api/SearchUsers`;
   private listStructuredUsers = `${environment.apiBaseUrl}/User/GetUsersStructuresFromCTS`;
   private listDelegateToUsers = `${environment.apiBaseUrl}/CTS/Delegation/ListDelegationToUser`;
-  private listImportance = `${environment.apiBaseUrl}/Importance/ListImportances`;
+ // private listImportance = `${environment.apiBaseUrl}/Importance/ListImportances`;
+  private listImportance = `${environment.apiBaseUrl}/Importance/List?Name=`;
   private listStatus = `${environment.apiBaseUrl}/Status/ListStatuses`;
-  private listPriorities = `${environment.apiBaseUrl}/Priority/ListPriorities`;
+ // private listPriorities = `${environment.apiBaseUrl}/Priority/ListPriorities`;
+  private listPriorities = `${environment.apiBaseUrl}/Priority/List?Name=`;
   private listYears = `${environment.apiBaseUrl}/Dashboard/GetAvailableYears`;
   private listPurposes = `${environment.apiBaseUrl}/CTS/Purpose/ListUserPurposes`;
-  private listClassification = `${environment.apiBaseUrl}/Classification/List`;
+  //private listClassification = `${environment.apiBaseUrl}/Classification/List`;
+  private listClassification = `${environment.apiBaseUrl}/Classification/List?Name=`;
   private listDocumentType = `${environment.apiBaseUrl}/DocumentType/List`;
-  private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List`;
+  //private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List`;
+  private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List?Name=`;
 
   constructor(private http: HttpClient) { }
 
@@ -60,7 +66,7 @@ export class LookupsService {
   }
 
   getPriorityOptions(): Observable<Priority[]> {
-    return this.http.get<Priority[]>(`${environment.apiBaseUrl}/Priority/ListPriorities`);
+    return this.http.get<Priority[]>(`${environment.apiBaseUrl}/Priority/List?Name=`);
   }
 
   getUsers(accessToken: string): Observable<any> {
@@ -196,7 +202,8 @@ export class LookupsService {
     let params = new HttpParams();
 
     params = params.set('text', '');
-    params = params.set('language', 'en');
+    const lang = localStorage.getItem("language")||'en';
+    params = params.set('language', lang);
 
     return this.http.get(this.listSearchUsers, { headers, params })
       .pipe(

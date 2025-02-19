@@ -370,16 +370,17 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
   }
   loadPrivacyOptions() {
     debugger;
-    this.lookupsService.getPrivacyOptions().subscribe({
+    this.lookupsService.getPrivacy('').subscribe({
       next: (options) => {
-        this.privacyOptions = options.map(option => {
-          const formattedKey = option.name.trim().toLowerCase().replace(/\s+/g, ' '); // Remove extra spaces
-         debugger
-          return {
-            ...option,
-            translatedName: this.translate.instant(`PrivacyOptions.${formattedKey}`) || option.name // Translate option name
-          };
-        });
+        this.privacyOptions = options;
+        //this.privacyOptions = options.map(option => {
+          //const formattedKey = option.name.trim().toLowerCase().replace(/\s+/g, ' '); // Remove extra spaces
+         //debugger
+         // return {
+         //   ...option,
+         //   translatedName: this.translate.instant(`PrivacyOptions.${formattedKey}`) || option.name // Translate option name
+         // };
+        //});
       },
       error: (error) => {
         console.error(this.translate.instant('ERROR.LOADING_PRIVACY_OPTIONS'), error);
@@ -397,5 +398,17 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
       }
     });
   }
+  // To get lookup names based on language
+  getName(item: any): string {
 
+    const currentLang = this.translate.currentLang;
+    switch (currentLang) {
+      case 'ar':
+        return item ?.nameAr || item ?.name;
+      case 'fr':
+        return item ?.nameFr || item ?.name;
+      default:
+        return item ?.name;
+    }
+  }
 }

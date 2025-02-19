@@ -16,18 +16,27 @@
     <div class="row">
       <div class="col-md-6" id="sendPurposeContainer">
         <div class="form-group">
-          <label for="ddlPrivacy" class="form-label required">Purpose</label>
-          <ng-select id="ddlPurpose" formControlName="purpose" [items]="purposes || []" bindLabel="text" bindValue="id"
-                     placeholder="Select" class="form-control">
+          <label for="ddlPurpose" class="form-label required">Purpose</label>
+          <!--<label for="ddlPurpose" class="form-label required"> {{"TRANSFER_DIALOG.PURPOSE" | translate }}</label>-->
+          <ng-select id="ddlPurpose" formControlName="purpose" [items]="purposes || []" bindValue="id"
+                     placeholder="" class="form-control">
+            <ng-template ng-option-tmp let-item="item">
+              {{ getName(item) }}
+            </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+              {{ getName(item) }}
+            </ng-template>
           </ng-select>
           <div *ngIf="replyForm.controls['purpose'].invalid && replyForm.controls['purpose'].touched"
                class="error-msg">
+           <!-- {{ 'REPLY_DIALOG.PURPOSE_REQUIRED' | translate }}-->
             Purpose is required
           </div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
+          <!--<label for="datepicker1" class="form-label">{{ 'MAIL_DETAILS.DUEDATE' | translate }}</label>-->
           <label for="datepicker1" class="form-label">Due Date</label>
           <input class="form-control date-picker" matInput [matDatepicker]="picker" placeholder="dd-mm-yyyy"
                  formControlName="dueDate" name="dp1" (click)="picker.open()"  [min]="minDate" />
@@ -46,7 +55,10 @@
       </div>
     </div>
   </form>
-  <small class="required"><span class="text-danger">*</span> Required fields</small>
+  <small class="required">
+    <span class="text-danger">*</span>Required Fields
+    <!--<span class="text-danger">*</span> {{ 'REPLY_DIALOG.PURPOSE_REQUIRED' | translate }}-->
+  </small>
 </mat-dialog-content>
 <app-toaster></app-toaster>
 

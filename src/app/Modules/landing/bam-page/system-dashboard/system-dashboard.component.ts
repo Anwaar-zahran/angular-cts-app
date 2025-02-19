@@ -43,7 +43,7 @@ export class SystemDashboardComponent {
 
   getCategories() {
     this.lookupsService.getCategories(undefined).subscribe((res: any) => {
-      this.categories = res;
+      this.categories = res?.data;
     });
   }
 

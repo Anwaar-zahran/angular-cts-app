@@ -116,6 +116,7 @@
     "CREATED_BY": "Created by",
     "DOCUMENT_TYPE": "Document type",
     "KEYWORD": "Keyword",
+    "ExternalReferenceNumber": "External Reference Number",
     "BODY": "Body",
     "TABS": {
       "ATTRIBUTES": "Attributes",
@@ -184,15 +185,17 @@
             "FIT": "Fit"
         }
     },
-    "REPLY_DIALOG": {
-        "TITLE": "Reply",
-        "TO": "To",
-        "CC": "CC",
-        "SUBJECT": "Subject",
-        "MESSAGE": "Message",
-        "ATTACHMENTS": "Attachments",
-        "ADD_ATTACHMENT": "Add Attachment"
-    },
+  "REPLY_DIALOG": {
+    "TITLE": "Reply",
+    "TO": "To",
+    "CC": "CC",
+    "SUBJECT": "Subject",
+    "MESSAGE": "Message",
+    "ATTACHMENTS": "Attachments",
+    "ADD_ATTACHMENT": "Add Attachment",
+    "PURPOSE_REQUIRED":"Purpose is required"
+
+  },
     "TRANSFER_DIALOG": {
         "TITLE": "Transfer",
         "TO": "To",

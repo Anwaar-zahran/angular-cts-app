@@ -43,13 +43,24 @@
       <div class="col-md-3">
         <div class="form-group">
           <label class="form-label">{{ 'REPORTS.PRIVACY' | translate }}</label>
-          <ng-select [items]="privacyOptions" bindLabel="name" bindValue="id" [(ngModel)]="selectedPrivacyId"
-            [ngModelOptions]="{standalone: true}" [placeholder]="'REPORTS.PLACEHOLDERS.SELECT_PRIVACY' | translate"
-            class="form-control">
-            <ng-template ng-option-tmp let-item="item">
-              {{item.name}}
-            </ng-template>
-          </ng-select>
+          <!--<ng-select [items]="privacyOptions" bindValue="id" [(ngModel)]="selectedPrivacyId"
+             [ngModelOptions]="{standalone: true}" [placeholder]="'REPORTS.PLACEHOLDERS.SELECT_PRIVACY' | translate"
+             class="form-control">
+    <ng-template ng-option-tmp let-item="item">
+      {{ getName(item) }}
+    </ng-template>
+    <ng-template ng-label-tmp let-item="item">
+      {{ getName(item) }}
+    </ng-template>
+  </ng-select>-->
+          <select [(ngModel)]="selectedPrivacyId" class="form-control" id="ddlPrivacy">
+            <option [ngValue]="null" disabled>
+              {{ "REPORTS.PLACEHOLDERS.SELECT_PRIVACY" | translate }}
+            </option>
+            <option *ngFor="let item of privacyOptions" [ngValue]="item.id">
+              {{ getName(item) }}
+            </option>
+          </select>
         </div>
       </div>
 
@@ -57,13 +68,25 @@
       <div class="col-md-3">
         <div class="form-group">
           <label class="form-label">{{ 'REPORTS.PRIORITY' | translate }}</label>
-          <ng-select [items]="priorityOptions" bindLabel="text" bindValue="id" [(ngModel)]="selectedPriorityId"
-            [ngModelOptions]="{standalone: true}" [placeholder]="'REPORTS.PLACEHOLDERS.SELECT_PRIORITY' | translate"
-            class="form-control">
-            <ng-template ng-option-tmp let-item="item">
-              {{item.text}}
-            </ng-template>
-          </ng-select>
+          <!--<ng-select [items]="priorityOptions" bindValue="id" [(ngModel)]="selectedPriorityId"
+             [ngModelOptions]="{standalone: true}" [placeholder]="'REPORTS.PLACEHOLDERS.SELECT_PRIORITY' | translate"
+             class="form-control">
+    <ng-template ng-option-tmp let-item="item">
+      {{ getName(item) }}
+    </ng-template>
+    <ng-template ng-label-tmp let-item="item">
+      {{ getName(item) }}
+    </ng-template>
+  </ng-select>-->
+
+          <select [(ngModel)]="selectedPriorityId" class="form-control" id="ddlPriority">
+            <option [ngValue]="null" disabled >
+              {{ "REPORTS.PLACEHOLDERS.SELECT_PRIORITY" | translate }}
+            </option>
+            <option *ngFor="let item of priorityOptions" [ngValue]="item.id">
+              {{ getName(item) }}
+            </option>
+          </select>
         </div>
       </div>
       <!-- Date Controls -->

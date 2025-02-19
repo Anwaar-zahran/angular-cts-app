@@ -69,6 +69,7 @@ export class CompleteCorrespondencesComponent implements OnInit {
   priorityOptions: Priority[] = [];
   selectedPrivacyId: number | null = null;
   selectedPriorityId: number | null = null;
+  //selectedPriorityId: any = null;// | null = null;
 
   constructor(
     private router: Router,
@@ -100,7 +101,7 @@ export class CompleteCorrespondencesComponent implements OnInit {
     this.loadStructures();
     this.loadReports();
     this.loadPrivacyOptions();
-    this.loadPriorityOptions();
+   // this.loadPriorityOptions();
     this.loadUsers();
   }
 
@@ -372,11 +373,25 @@ export class CompleteCorrespondencesComponent implements OnInit {
       }
     });
   }
+  // To get lookup names based on language
+  getName(item: any): string {
+
+    const currentLang = this.translate.currentLang;
+    switch (currentLang) {
+      case 'ar':
+        return item ?.nameAr || item ?.name;
+      case 'fr':
+        return item ?.nameFr || item ?.name;
+      default:
+        return item ?.name;
+    }
+  }
 
   loadPriorityOptions() {
     this.lookupsService.getPriorityOptions().subscribe({
       next: (options) => {
         this.priorityOptions = options;
+        this.selectedPriorityId = null;
       },
       error: (error) => {
         console.error('Error loading priority options:', error);

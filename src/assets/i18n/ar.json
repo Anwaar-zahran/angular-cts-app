@@ -113,8 +113,9 @@
     "CREATEDDATE": "تاريخ الإنشاء",
     "CREATED_BY": "انشأ من قبل",
     "DOCUMENT_TYPE": "نوع المستند",
-    "KEYWORD": "نوع المستند",
-    "BODY": "نوع المستند",
+    "KEYWORD": "الكلمة المفتاح",
+    "ExternalReferenceNumber": "الرقم المرجعي الخارجي",
+    "BODY": "محتوى",
     "TABS": {
       "ATTRIBUTES": "السمات",
       "ATTACHMENTS": "المرفقات",
@@ -168,15 +169,17 @@
         "REFERENCE": "المرجع",
         "NO_DATA": "لا تتوفر بيانات التتبع"
     },
-    "REPLY_DIALOG": {
-        "TITLE": "رد",
-        "TO": "إلى",
-        "CC": "نسخة إلى",
-        "SUBJECT": "الموضوع",
-        "MESSAGE": "الرسالة",
-        "ATTACHMENTS": "المرفقات",
-        "ADD_ATTACHMENT": "إضافة مرفق"
-    },
+  "REPLY_DIALOG": {
+    "TITLE": "رد",
+    "TO": "إلى",
+    "CC": "نسخة إلى",
+    "SUBJECT": "الموضوع",
+    "MESSAGE": "الرسالة",
+    "ATTACHMENTS": "المرفقات",
+    "ADD_ATTACHMENT": "إضافة مرفق",
+    "PURPOSE_REQUIRED": "الحقل مطلوب"
+
+  },
     "TRANSFER_DIALOG": {
         "TITLE": "تحويل",
         "TO": "إلى",
@@ -217,6 +220,7 @@
     "SELECT_NAME": "اختر الاسم",
     "FROM_DATE": "من",
     "TO_DATE": "إلى",
+    "START_DATE": "تاريخ البداية",
     "PRIVACY": "الخصوصية",
     "CATEGORY": "الفئة",
     "NOTE": "ملاحظات",

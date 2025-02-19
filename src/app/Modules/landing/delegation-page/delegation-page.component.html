@@ -10,7 +10,7 @@
   </div>
   <!-- Form -->
   <div *ngIf="formVisible" [@expandCollapse]>
-    <form [formGroup]="delegationForm">
+    <form role="form" [formGroup]="delegationForm">
       <div class="row">
         <!-- Full Name -->
         <div class="col-md-3">
@@ -88,14 +88,30 @@
             <label for="ddlPrivacy" class="form-label required">
               {{"DELEGATION.PRIVACY" | translate }}
             </label>
-            <ng-select id="ddlPrivacy"
+            <!--<ng-select id="ddlPrivacy"
                        formControlName="privacyId"
-                       [items]="privacy || []"
-                       bindLabel="text"
+                       [items]="privacy"
                        bindValue="id"
                        [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_PRIVACY' | translate"
                        class="form-control">
-            </ng-select>
+              <ng-template ng-option-tmp let-item="item">
+                {{ getName(item) }}
+              </ng-template>
+              <ng-template ng-label-tmp let-item="item">
+                {{ getName(item) }}
+              </ng-template>
+            </ng-select>-->
+
+            <select  id="ddlPrivacy" formControlName="privacyId"  class="form-control">
+              <option [ngValue]="null" hidden disabled>
+                {{ "DELEGATION.PLACEHOLDERS.SELECT_PRIVACY" | translate }}
+              </option>
+              <option *ngFor="let item of privacy" [ngValue]="item.id">
+                {{ getName(item) }}
+              </option>
+
+            </select>
+
             <div *ngIf="
               delegationForm.controls['privacyId'].invalid &&
               delegationForm.controls['privacyId'].touched
@@ -111,10 +127,16 @@
 
             <label for="ddlCategories" class="form-label required">{{ 'DELEGATION.CATEGORY' | translate }}</label>
             <ng-select id="ddlCategories" formControlName="categoryId" multiple [items]="categories || []"
-                       bindLabel="text" bindValue="id" [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_CATEGORY' | translate"
+                       bindValue="id"
                        class="form-control">
-
+              <ng-template ng-option-tmp let-item="item">
+                {{ getName(item) }}
+              </ng-template>
+              <ng-template ng-label-tmp let-item="item">
+                {{ getName(item) }}
+              </ng-template>
             </ng-select>
+
             <div *ngIf="
               delegationForm.controls['categoryId'].invalid &&
               delegationForm.controls['categoryId'].touched
@@ -212,8 +234,7 @@
           <i class="fa fa-save"></i>
           {{ isEdit ? ('COMMON.ACTIONS.SAVE' | translate) : ('COMMON.ACTIONS.SUBMIT' | translate) }}
         </button>
-        <button 
-                type="button"
+        <button type="button"
                 class="btn btn-primary btn-lg"
                 (click)="onSearch()">
           <i class="fa fa-search"></i>
@@ -256,7 +277,7 @@
           <td>{{ row.fromDate }}</td>
           <td>{{ row.toDate }}</td>
           <td>{{ row.createdDate }}</td>
-          <td>{{ row.privacyName }}</td>
+          <td>{{ getPrivacyName(row.privacyId) }}</td>
           <td>{{ getCategoriesName(row.categoryIds) }} {{selectedCategoryName}}</td>
           <td>{{ row.note }}</td>
           <td>
