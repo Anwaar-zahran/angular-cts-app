@@ -58,9 +58,55 @@
         "SUBJECT": "Subject",
         "TRANSFER_DATE": "Transfer Date",
         "REFERENCE_NB": "Reference No.",
-        "ACTIONS": "Actions",
-        "STATUS": "Status"
-      }
+         "STATUS": "Status",
+          "ACTIONS": "Actions",
+        "NO_DATA": "No data available",
+        "VISUAL_TRACKING": "Visual Tracking",
+        "TABS": {
+            "NEW": "New",
+            "SENT": "Sent",
+            "COMPLETED": "Completed"
+        },
+        "ACTIONS": {
+            "EDIT": "Edit",
+            "DELETE": "Delete",
+            "SAVE": "Save",
+            "CANCEL": "Cancel",
+            "CLOSE": "Close",
+            "SUBMIT": "Submit",
+            "SEARCH": "Search",
+            "CLEAR": "Clear",
+            "BACK": "Back",
+            "TITLE": "Actions",
+            "APPLY": "Apply",
+            "CONFIRM":"Confirm"
+        },
+        "SELECT": "Select",
+        "LOADING": "Loading...",
+        "DATE": {
+            "PLACEHOLDER": "Select date",
+            "FORMAT": "MM/DD/YYYY"
+        },
+        "PAGE": "Page",
+        "FROM": "From",
+        "TO": "To",
+        "TABLE_INFO": "Showing _START_ to _END_ of _TOTAL_ entries",
+        "TABLE_EMPTY": "No entries available",
+        "DATATABLE": {
+            "EMPTY": "No data available",
+            "SEARCH": "Search",
+            "INFO": "Showing _START_ to _END_ of _TOTAL_ entries",
+            "PREVIOUS": "Previous",
+            "NEXT": "Next",
+            "FIRST": "First",
+            "LAST": "Last"
+        },
+        "SEARCH": "Search",
+        "FROM_DATE": "From Date",
+        "TO_DATE": "To Date",
+        "APPLY": "Apply",
+        "CLOSE": "Close",
+        "SELECT_DATE_RANGE": "Select Date Range"
     },
     "DETAILS": {
       "TRANSFERRED_FROM": "Transferred from: {{user}}"
@@ -267,37 +313,65 @@
       "ACTIONS": "Actions"
     },
     "ERRORS": {
-      "REQUIRED_NAME": "Full Name is required",
-      "REQUIRED_FROM_DATE": "From date is required",
-      "REQUIRED_TO_DATE": "To date is required",
-      "REQUIRED_PRIVACY": "Privacy is required",
-      "REQUIRED_CATEGORY": "Category is required",
-      "INVALID_DATE_RANGE": "To date must be after From date",
-      "OVERLAPPING_DELEGATION": "There is an overlapping delegation for this user"
+
+        "REQUIRED_FIELD": "This field is required",
+        "INVALID_FORMAT": "Invalid format",
+        "SERVER_ERROR": "Server error occurred",
+        "NO_PERMISSION": "You don't have permission",
+         "SOMETHING_WRONG":"Something went wrong"
     },
-    "BUTTONS": {
-      "ADD_NEW": "Add New Delegation",
-      "EDIT": "Edit Delegation",
-      "DELETE": "Delete Delegation"
-    }
-  },
-  "MAIL": {
-    "TITLE": "Mail",
-    "TABS": {
-      "NEW": "New",
-      "SENT": "Sent",
-      "COMPLETED": "Completed"
-    },
-    "TABLE": {
-      "SUBJECT": "Subject",
-      "TRANSFER_DATE": "Transfer Date",
-      "REFERENCE": "Reference",
-      "ACTIONS": "Actions",
-      "STATUS": "Status"
-    },
-    "MESSAGES": {
-      "NO_DATA": "No mail items available",
-      "LOADING": "Loading mail items..."
+    "DELEGATION": {
+        "TITLE": "Delegations",
+        "FULL_NAME": "Full Name",
+        "SELECT_NAME": "Select name",
+        "FROM_DATE": "From",
+        "TO_DATE": "To",
+        "PRIVACY": "Privacy",
+        "CATEGORY": "Category",
+        "SHOW_OLD_CORRESPONDENCE": "Show old correspondence",
+        "CAN_SIGN": "Can sign",
+        "DRAFT_INBOX": "Draft Inbox",
+        "NOTE" : "Notes",
+        "START_DATE":"Start Date",
+        "DELETE_CONFIRMATION": "Are you sure you want to delete this delegation?",
+        "DELETE_SUCCESS": "Delegation deleted successfully",
+        "SAVE_SUCCESS": "Delegation saved successfully",
+        "UPDATE_SUCCESS": "Delegation updated successfully",
+        "PLACEHOLDERS": {
+            "SELECT_USER": "Select user",
+            "SELECT_PRIVACY": "Select privacy",
+            "SELECT_CATEGORY": "Select category",
+            "SELECT_NAME": "Select name",
+            "FROM_DATE": "Select from date",
+            "TO_DATE": "Select to date",
+            "SEARCH": "Search...",
+            "SELECT_MULTIPLE": "Select one or more"
+        },
+       "CONFIRMMODALDELEGATION":{"TITLE":"Confirm Deletion"},
+        "TABLE": {
+            "DELEGATE_TO": "Delegate to",
+            "FROM_DATE": "From date",
+            "TO_DATE": "To date",
+            "CREATED_DATE": "Created date",
+            "PRIVACY": "Privacy",
+            "CATEGORY": "Category",
+            "NOTES": "Notes",
+            "ACTIONS": "Actions"
+        },
+        "ERRORS": {
+            "REQUIRED_NAME": "Full Name is required",
+            "REQUIRED_FROM_DATE": "From date is required",
+            "REQUIRED_TO_DATE": "To date is required",
+            "REQUIRED_PRIVACY": "Privacy is required",
+            "REQUIRED_CATEGORY": "Category is required",
+            "INVALID_DATE_RANGE": "To date must be after From date",
+            "OVERLAPPING_DELEGATION": "There is an overlapping delegation for this user"
+        },
+        "BUTTONS": {
+            "ADD_NEW": "Add New Delegation",
+            "EDIT": "Edit Delegation",
+            "DELETE": "Delete Delegation"
+        }
     },
     "STATUS": {
       "READ": "Read",
@@ -457,29 +531,206 @@
         "PERCENTAGE": "Percentage"
       }
     },
-    "KPI": {
-      "AVERAGE_DURATION": {
-        "TITLE": "Average duration for correspondence completion",
-        "SELECT_YEAR": "Select Year",
-        "YEAR": "Year",
-        "AVERAGE_PER_STRUCTURE": "Average per Structure",
-        "STRUCTURE": "Structure",
-        "AVERAGE_DAYS": "Average (Days)",
-        "COMPARE_TO_TOTAL": "Compare to Total Average",
-        "YEARLY_GRAPH": "Yearly Graph",
-        "AVERAGE_PER_YEAR": "Average per Year",
-        "TOTAL_AVERAGE": "Total Average: {{days}} days",
-        "ALL_CATEGORIES": "All Categories"
-      },
-      "DELAY_DURATION": {
-        "TITLE": "Average duration for correspondence delay",
-        "SELECT_YEAR": "Select Year",
-        "YEAR": "Year",
-        "TABLE": {
-          "STRUCTURE": "Structure",
-          "AVERAGE_DAYS": "Average (Days)",
-          "COMPARE_TO_TOTAL": "Compare to total average",
-          "YEARLY_GRAPH": "Yearly graph"
+
+    "BAM": {
+        "TITLE": "BAM",
+        "DASHBOARD": {
+            "SYSTEM_DASHBOARD_TITLE": "System Dashboard",
+            "USER_DASHBOARD_TITLE":"User Dashboard",
+            "CHARTS": {
+                "COUNT_PER_CATEGORY": "Count per Category and Status",
+                "STATISTICS_PER_DEPARTMENT": "Statistics per Department",
+                "DOCUMENTS_IN_PROGRESS": "Documents In Progress (Overdue and On Time)",
+                "DOCUMENTS_COMPLETED": "Documents Completed (Overdue and On Time)",
+                "TRANSFERS_IN_PROGRESS": "Transfers In Progress (Overdue and On Time)",
+                "TRANSFERS_COMPLETED": "Transfers Completed (Overdue and On Time)",
+                "STATISTICS_PER_STRUCTURE": {
+                    "TITLE": "Statistics per structure",
+                    "INFO": "Number of correspondences for each structure grouped by category"
+                },
+                "COUNT_PER_STATUS": {
+                    "TITLE": "Count per status grouped by category",
+                    "INFO": "Number of correspondences for each category grouped by status"
+                },
+                "TRANSFERS": {
+                    "IN_PROGRESS": {
+                        "TITLE": "Due date statistics for in progress transfers",
+                        "INFO": "Number of in progress transfers per category divided into 2 circles (Only for transfers with due date)"
+                    },
+                    "COMPLETED": {
+                        "TITLE": "Due date statistics for completed transfers",
+                        "INFO": "Number of completed transfers per category divided into 2 circles (Only for transfers with due date)"
+                    }
+                },
+                "Status": {
+                    "InProgress": "In Progress",
+                    "Completed": "Completed"
+                },
+                "LABELS": {
+                    "STRUCTURES": "Structures",
+                    "CATEGORIES": "Categories",
+                    "COUNT": "Count",
+                    "COUNTS": "counts",
+                    "TOTAL": "Total",
+                    "UNKNOWN_CATEGORY": "Unknown Category",
+                    "STRUCTURE": "Structure",
+                    "DOCUMENT_COUNT": "Document Count",
+                    "DOCUMENTS": "documents",
+                    "OVERDUE": "Overdue",
+                    "ON_TIME": "On-Time",
+                    "STATUS": "Status",
+                    "CATEGORY": "Category",
+                    "TRANSFERS": "transfers"
+                }
+            }
+        },
+        "SYSTEM_DASHBOARD": "System Dashboard",
+        "AVERAGE_DURATION_CORRESPONDENCE_COMPLETION": "Average Duration for Correspondence Completion",
+        "AVERAGE_DURATION_CORRESPONDENCE_DELAY": "Average Duration for Correspondence Delay",
+        "AVERAGE_DURATION_TRANSFER_COMPLETION": "Average Duration for Transfer Completion",
+        "AVERAGE_DURATION_TRANSFER_DELAY": "Average Duration for Transfer Delay",
+        "CHARTS": {
+            "TRANSFER_COMPLETION": "Transfer Completion Statistics",
+            "TRANSFER_COMPLETION_INFO": "Average transfer completion for transfers sent to you",
+            "DUE_DATE_COMPLETED": "Due Date Statistics for Completed Correspondences",
+            "DUE_DATE_COMPLETED_INFO": "Number of completed correspondences created by you per category divided into 2 circles (Only for correspondences with due date)",
+            "DUE_DATE_IN_PROGRESS": "Due Date Statistics for In Progress Correspondences",
+            "DUE_DATE_IN_PROGRESS_INFO": "Number of in progress correspondences created by you per category divided into 2 circles (Only for correspondences with due date)",
+            "COMPLETION_VS_PROGRESS": "Percentage of Correspondences \"Completed\" vs \"In Progress\"",
+            "COMPLETION_VS_PROGRESS_INFO": "Percentage of correspondences created by you or transferred to you",
+            "TRANSFERS_COMPLETED": "Due Date Statistics for Completed Transfers",
+            "TRANSFERS_COMPLETED_INFO": "Number of completed transfers sent to you grouped by category divided into 2 circles (Only for transfers with due date)",
+            "TRANSFERS_IN_PROGRESS": "Due Date Statistics for In Progress Transfers",
+            "TRANSFERS_IN_PROGRESS_INFO": "Number of in progress transfers sent to you grouped by category divided into 2 circles (Only for transfers with due date)",
+            "FILTER": {
+                "TITLE": "Select Date Range",
+                "FROM_DATE": "From Date",
+                "TO_DATE": "To Date",
+                "APPLY": "Apply"
+            },
+            "STATUS": {
+                "COMPLETED": "Completed",
+                "IN_PROGRESS": "In Progress",
+                "OVERDUE": "Overdue",
+                "ON_TIME": "On Time"
+            },
+            "TRANSFER_COMPLETION_STATISTICS": {
+                "AVERAGE_CREATED_BY_USER": "Average Created By User",
+                "AVERAGE_TRANSFERS": "Average Transfers"
+            },
+            "TITLES": {
+                "STATISTICS_PER_STRUCTURE": "Statistics per structure",
+                "COUNT_PER_STATUS": "Count per status grouped by category",
+                "IN_PROGRESS_DOCUMENTS_DUE_DATE": "Due date statistics for in progress correspondences",
+                "COMPLETED_DOCUMENTS_DUE_DATE": "Due date statistics for completed correspondences"
+            },
+            "INFO": {
+                "STATISTICS_PER_STRUCTURE": "Number of correspondences for each structure grouped by category",
+                "COUNT_PER_STATUS": "Number of correspondences for each category grouped by status",
+                "IN_PROGRESS_DOCUMENTS_DUE_DATE": "Number of in progress correspondences per category divided into 2 circles (Only for correspondences with due date)",
+                "COMPLETED_DOCUMENTS_DUE_DATE": "Number of completed correspondences created by you per category divided into 2 circles (Only for correspondences with due date)"
+            },
+            "LABELS": {
+                "STRUCTURES": "Structures",
+                "CATEGORIES": "Categories",
+                "COUNT": "Count",
+                "COUNTS": "counts",
+                "TOTAL": "Total",
+                "UNKNOWN_CATEGORY": "Unknown Category",
+                "STRUCTURE": "Structure",
+                "DOCUMENT_COUNT": "Document Count",
+                "DOCUMENTS": "documents",
+                "OVERDUE": "Overdue",
+                "ON_TIME": "On-Time",
+                "STATUS": "Status",
+                "CATEGORY": "Category",
+                "PERCENTAGE": "Percentage"
+            }
+        },
+        "KPI": {
+            "AVERAGE_DURATION": {
+                "TITLE": "Average duration for correspondence completion",
+                "SELECT_YEAR": "Select Year",
+                "YEAR": "Year",
+                "AVERAGE_PER_STRUCTURE": "Average per Structure",
+                "STRUCTURE": "Structure",
+                "AVERAGE_DAYS": "Average (Days)",
+                "COMPARE_TO_TOTAL": "Compare to Total Average",
+                "YEARLY_GRAPH": "Yearly Graph",
+                "AVERAGE_PER_YEAR": "Average per Year",
+                "TOTAL_AVERAGE": "Total Average: {{days}} days",
+                "ALL_CATEGORIES": "All Categories"
+            },
+            "DELAY_DURATION": {
+                "TITLE": "Average duration for correspondence delay",
+                "SELECT_YEAR": "Select Year",
+                "YEAR": "Year",
+                "TABLE": {
+                    "STRUCTURE": "Structure",
+                    "AVERAGE_DAYS": "Average (Days)",
+                    "COMPARE_TO_TOTAL": "Compare to total average",
+                    "YEARLY_GRAPH": "Yearly graph"
+                },
+                "CHART": {
+                    "AVERAGE_PER_YEAR": "Average per year",
+                    "INFO_TEXT": "Number of in progress transfers per category divided into 2 circles (Only for transfers with due date)",
+                    "YEAR": "Year",
+                    "TOTAL_AVERAGE": "Total Average: {{days}} day(s)",
+                    "AVERAGE_DAYS": "Average (Days)",
+                    "ALL_CATEGORIES": "All categories"
+                }
+            },
+            "TRANSFER_DURATION": {
+                "TITLE": "Average duration for transfer completion",
+                "SELECT_YEAR": "Select Year",
+                "YEAR": "Year",
+                "TABLE": {
+                    "AVERAGE_PER_STRUCTURE": "Average per Structure",
+                    "STRUCTURE": "Structure",
+                    "AVERAGE_DAYS": "Average (Days)",
+                    "COMPARE_TO_TOTAL": "Compare to total average"
+                },
+                "CHART": {
+                    "AVERAGE_PER_YEAR": "Average per year",
+                    "TOTAL_AVERAGE": "Total Average: {{days}} day(s)",
+                    "AVERAGE_DAYS": "Average (Days)",
+                    "ALL_CATEGORIES": "All categories"
+                }
+            },
+            "TRANSFER_DELAY": {
+                "TITLE": "Average duration for transfer delay",
+                "SELECT_YEAR": "Select Year",
+                "YEAR": "Year",
+                "TABLE": {
+                    "STRUCTURE": "Structure",
+                    "AVERAGE_DAYS": "Average (Days)",
+                    "COMPARE_TO_TOTAL": "Compare to total average",
+                    "YEARLY_GRAPH": "Yearly graph"
+                },
+                "CHART": {
+                    "AVERAGE_PER_YEAR": "Average per year",
+                    "INFO_TEXT": "Number of in progress transfers per category divided into 2 circles (Only for transfers with due date)",
+                    "YEAR": "Year",
+                    "TOTAL_AVERAGE": "Total Average: {{days}} day(s)",
+                    "AVERAGE_DAYS": "Average (Days)",
+                    "ALL_CATEGORIES": "All categories"
+                }
+            }
+        },
+        "MONTHS": {
+            "JAN": "January",
+            "FEB": "February",
+            "MAR": "March",
+            "APR": "April",
+            "MAY": "May",
+            "JUN": "June",
+            "JUL": "July",
+            "AUG": "August",
+            "SEP": "September",
+            "OCT": "October",
+            "NOV": "November",
+            "DEC": "December"
+
         },
         "CHART": {
           "AVERAGE_PER_YEAR": "Average per year",

@@ -5,7 +5,7 @@ import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-
+import { data } from 'jquery';
 
 @Component({
   selector: 'app-chart-percentage-of-correspondences-completed-and-inprogress',
@@ -36,6 +36,11 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
     if (this.categories && this.categories.length > 0) {
       this.loadChartData();
     }
+
+    // Detect language changes and reload the chart
+    this.translate.onLangChange.subscribe(() => {
+      this.loadChartData();
+    });
   }
 
   ngOnChanges() {
@@ -54,13 +59,23 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
         categoryIds: []
       })
       .subscribe((res: { text: string, count: number }[]) => {
-        this.translate.get(['BAM.CHARTS.COMPLETION_VS_PROGRESS']).subscribe(translations => {
+        this.translate.get(['BAM.CHARTS.COMPLETION_VS_PROGRESS', 'Status.InProgress', 'Status.Completed']).subscribe(translations => {
+          
+          const chartData = res.map(item => {
+            const translatedText = this.translate.instant(`BAM.DASHBOARD.CHARTS.Status.${item.text}`);
+            console.log(translatedText)
+            return {
+              name: translatedText,
+              y: item.count
+            };
+          });
+  
           this.chartOptions = {
             chart: {
               type: 'pie',
             },
             title: {
-              text: '',
+              text: translations['BAM.CHARTS.COMPLETION_VS_PROGRESS'],
             },
             colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
             exporting: {
@@ -83,19 +98,21 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
                 cursor: 'pointer',
                 dataLabels: {
                   enabled: true,
-                  format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                  format: '<b>{point.name}:</b><b> %{point.percentage:.1f}</b>'
                 }
               }
             },
             series: [{
               name: translations['BAM.CHARTS.COMPLETION_VS_PROGRESS'],
               type: 'pie',
-              data: res.map(item => [this.translate.instant(item.text), item.count])
+              data: chartData
             }]
           };
         });
       });
   }
+  
+  
 
   toggleModal() {
     this.isModalOpen = !this.isModalOpen;

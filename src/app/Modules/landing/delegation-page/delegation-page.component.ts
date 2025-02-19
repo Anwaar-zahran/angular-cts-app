@@ -147,7 +147,7 @@ export class DelegationPageComponent implements OnInit {
         const pageInfo = api.page.info();
         const pagination = $(api.table().container()).find('.dataTables_paginate');
         pagination.find('input.paginate-input').remove();
-        const page = $('<span class="d-inline-flex align-items-center mx-2">Page <input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> of ' + pageInfo.pages + '</span>');
+        const page = $('<span class="d-inline-flex align-items-center mx-2">' + this.translate.instant('COMMON.PAGE') + '<input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> ' + this.translate.instant('COMMON.FROM') + ' ' + pageInfo.pages + '</span>');
          
         
         let timeout: any;
@@ -383,7 +383,8 @@ export class DelegationPageComponent implements OnInit {
           (error: any) => {
             console.error('Error updating:', error);
             this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
-              this.toaster.showToaster(error?.message || msg);
+              // this.toaster.showToaster(error?.message || msg);
+              this.toaster.showToaster(msg, 'danger');
             });
           }
         );
@@ -400,14 +401,14 @@ export class DelegationPageComponent implements OnInit {
           (error: any) => {
             console.error('Error adding:', error);
             this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
-              this.toaster.showToaster(error?.message || msg);
+              this.toaster.showToaster(msg, 'danger');
             });
           }
         );
       }
     } else {
       this.translate.get('ERRORS.REQUIRED_FIELDS').subscribe((msg: string) => {
-        this.toaster.showToaster(msg);
+        this.toaster.showToaster(msg, 'danger');
       });
     }
   }
@@ -442,7 +443,7 @@ export class DelegationPageComponent implements OnInit {
             (error: any) => {
               console.error('Error deleting item:', error);
               this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
-                this.toaster.showToaster(error?.message || msg);
+                this.toaster.showToaster(error?.message || msg, 'danger');
               });
             }
           );

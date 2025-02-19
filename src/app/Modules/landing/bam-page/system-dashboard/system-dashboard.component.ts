@@ -9,6 +9,7 @@ import { ChartSystemDocumentsCompletedOverdueAndOnTimePerCategoryComponent } fro
 import { ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent } from './charts/chart-system-transfers-inProgressOverdue-and-onTime-per-category/chart-system-transfers-inProgressOverdue-and-onTime-per-category.component';
 import { ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent } from './charts/chart-system-transfers-completed-overdue-and-onTime-per-category/chart-system-transfers-completed-overdue-and-onTime-per-category.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { BackButtonComponent } from '../../../shared/back-button/back-button.component';
 
 @Component({
   selector: 'app-system-dashboard',
@@ -19,7 +20,8 @@ import { TranslateModule } from '@ngx-translate/core';
     ChartSystemDocumentsCompletedOverdueAndOnTimePerCategoryComponent,
     ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent,
     ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent,
-    TranslateModule
+    TranslateModule,
+    BackButtonComponent
   ],
   templateUrl: './system-dashboard.component.html',
   styleUrl: './system-dashboard.component.scss'
