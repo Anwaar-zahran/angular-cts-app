@@ -4,7 +4,7 @@
         <a *ngFor="let card of reportscards" [routerLink]="card.link" class="card"
             [ngStyle]="{'background-color': card.backgroundColor}">
             <div class="icon">
-                <img [src]="card.imgSrc" alt="" />
+                <img [src]="card.imgSrc" alt="" [ngStyle]="{'width': card.width ? card.width : ''}" />
             </div>
             <div class="title">
                 <h2>{{ card.translationKey | translate }}</h2>

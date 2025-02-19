@@ -169,7 +169,7 @@
         ><i class="text-secondary fa fa-angle-double-left"></i
       ></a>
       <span class="d-inline-flex align-items-center mx-2"
-        >Page
+        >{{ 'COMMON.PAGE' | translate }}
         <input
           type="number"
           class="paginate-input form-control form-control-sm mx-2"
@@ -178,7 +178,7 @@
           [min]="1"
           [max]="totalPages"
         />
-        of {{ totalPages }}</span
+        {{ 'COMMON.OF' | translate }} {{ totalPages }}</span
       >
 
       <a

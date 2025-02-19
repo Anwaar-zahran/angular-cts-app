@@ -32,6 +32,7 @@
             "PLACEHOLDER": "اختر التاريخ"
         },
         "PAGE": "صفحة",
+        "OF": "من",
         "FROM": "من",
         "TO": "إلى",
         "TABLE_INFO": "عرض _START_ إلى _END_ من _TOTAL_ سجل",
