@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 @Injectable({
@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 export class MailsService {
   private replyToURL = `${environment.apiBaseUrl}/Transfer/Reply`;
   private transferURL = `${environment.apiBaseUrl}/Transfer/Transfer`;
-
+private CorrsondanceViewURL=`${environment.apiBaseUrl}/Transfer/View`;
   constructor(private httpClient: HttpClient) { }
 
   transferMail(accessToken: string,  model: any[]): Observable<any> {
@@ -73,4 +73,21 @@ export class MailsService {
       })
     );
   }
+  markCorrespondanceAsRead(accessToken: string, documentID: number): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Accept': 'application/json' // Only Accept header is needed, remove Content-Type
+    });
+
+    const formData = new FormData();
+    formData.append('Id', documentID.toString()); // Ensure API expects 'Id' as the correct key
+
+    return this.httpClient.post(`${this.CorrsondanceViewURL}`, formData, { headers }).pipe(
+      catchError((error) => { 
+        console.error('Error while marking correspondence as read', error.message);
+        return throwError(() => error); // Proper error handling
+      })
+    );
+}
+
 }

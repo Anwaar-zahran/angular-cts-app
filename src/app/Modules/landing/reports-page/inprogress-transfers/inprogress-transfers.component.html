@@ -83,6 +83,11 @@
         <table id="inprogress-report-table" class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
             <thead>
                 <tr>
+                    <th colspan="8" class="text-center text-muted fs-5">
+                      {{ "REPORTS.TOTAL_REPORTS" | translate }} : {{ totalItems }}
+                    </th>
+                  </tr>
+                <tr>
                     <th>{{ 'REPORTS.CATEGORY' | translate }}</th>
                     <th>{{ 'REPORTS.REFERENCE_NUMBER' | translate }}</th>
                     <th>{{ 'REPORTS.SUBJECT' | translate }}</th>
