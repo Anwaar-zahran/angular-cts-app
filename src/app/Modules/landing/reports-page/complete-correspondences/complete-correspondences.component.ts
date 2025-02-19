@@ -31,6 +31,7 @@ export class CompleteCorrespondencesComponent implements OnInit {
   selectedStructures: number[] = [];
   structures: Structure[] = [];
   structureError: string = '';
+  expandedRows: Set<any> = new Set();
 
   fromDate: Date | undefined;
   toDate: Date | undefined;
@@ -195,6 +196,18 @@ export class CompleteCorrespondencesComponent implements OnInit {
     });
   }
 
+  toggleRow(row: any): void {
+    if (this.expandedRows.has(row)) {
+      this.expandedRows.delete(row);
+    } else {
+      console.log(row)
+      this.expandedRows.add(row);
+    }
+  }
+
+  isRowExpanded(row: any): boolean {
+    return this.expandedRows.has(row);
+  }
   calculatePagination() {
     this.totalPages = Math.ceil(this.totalItems / this.dtOptions.pageLength);
     this.startIndex = (this.currentPage - 1) * this.dtOptions.pageLength + 1;
