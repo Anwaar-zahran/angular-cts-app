@@ -1230,7 +1230,7 @@ label.form-label.required:after {
 			tr {
 				td {
 					img {
-						width: 20px;
+						width: 25px;
 					}
 				}
 			}
@@ -1279,6 +1279,17 @@ label.form-label.required:after {
 }
 
 @media screen and (min-width: 1600px) {
+	.table {
+		tbody {
+			tr {
+				td {
+					img {
+						width: 25px;
+					}
+				}
+			}
+		}
+	}
 	.form-control {
 		height: 50px;
 		font-size: 17px;
@@ -1418,7 +1429,7 @@ label.form-label.required:after {
 	}
 
 	textarea.form-control {
-		min-height: 250px;
+		min-height: 120px;
 	}
 }
 
