@@ -89,8 +89,11 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
             labels: {
               formatter: function() {
                 return Number(this.value).toFixed(1);
-              }
-            }
+              },
+            },
+          },
+          tooltip: {
+            pointFormat: '{series.name}: <b>{point.y:.1f}</b>',
           },
           series: [
             {

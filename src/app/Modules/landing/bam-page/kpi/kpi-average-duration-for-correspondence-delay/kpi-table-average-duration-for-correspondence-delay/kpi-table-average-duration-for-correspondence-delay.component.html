@@ -55,7 +55,7 @@
       <span class="d-inline-flex align-items-center mx-2">{{ 'COMMON.PAGE' | translate }}  
         <input type="number" class="paginate-input form-control form-control-sm mx-2" [(ngModel)]="currentPage" (ngModelChange)="goToPage(currentPage)"
         [min]="1" [max]="totalPages" />
-          {{ 'COMMON.FROM' | translate }} {{totalPages}}</span>
+          {{ 'COMMON.OF' | translate }} {{totalPages}}</span>
 
       <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()"
         [attr.aria-label]="'BAM.COMMON.PAGINATION.NEXT' | translate">

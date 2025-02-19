@@ -298,7 +298,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         const pageInfo = api.page.info();
         const pagination = $(api.table().container()).find('.dataTables_paginate');
         pagination.find('input.paginate-input').remove();
-        const page = $('<span class="d-inline-flex align-items-center mx-2">' + this.translate.instant('COMMON.PAGE') + '<input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> ' + this.translate.instant('COMMON.FROM') + ' ' + pageInfo.pages + '</span>');
+        const page = $('<span class="d-inline-flex align-items-center mx-2">' + this.translate.instant('COMMON.PAGE') + '<input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> ' + this.translate.instant('COMMON.OF') + ' ' + pageInfo.pages + '</span>');
 
 
         let timeout: any;
