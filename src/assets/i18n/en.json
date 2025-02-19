@@ -6,6 +6,7 @@
         "SUBJECT": "Subject",
         "NO_DATA": "No data available",
         "VISUAL_TRACKING": "Visual Tracking",
+        "PAGE": "Page",
         "TABS": {
             "NEW": "New",
             "SENT": "Sent",
@@ -31,7 +32,6 @@
             "PLACEHOLDER": "Select date",
             "FORMAT": "MM/DD/YYYY"
         },
-        "PAGE": "Page",
         "FROM": "From",
         "TO": "To",
         "TABLE_INFO": "Showing _START_ to _END_ of _TOTAL_ entries",
@@ -378,6 +378,7 @@
                         "INFO": "Number of completed transfers per category divided into 2 circles (Only for transfers with due date)"
                     }
                 },
+<<<<<<< HEAD
                "STATUS": {
                 "COMPLETED": "Completed",
                 "IN_PROGRESS": "In Progress",
@@ -390,6 +391,8 @@
                 "FOLLOWUP": "Follow Up",
                 "INCOMING":"Incoming"
                 },
+=======
+>>>>>>> 8fe42e38a994a158b244911e5c70c802b09ada61
                 "LABELS": {
                     "STRUCTURES": "Structures",
                     "CATEGORIES": "Categories",

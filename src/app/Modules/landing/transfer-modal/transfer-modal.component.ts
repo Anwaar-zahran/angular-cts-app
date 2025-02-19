@@ -105,10 +105,10 @@ export class TransferModalComponent implements OnInit {
     //    console.log('Dialog opened with ID:', this.data.id, 'and Reference Number:', this.data.referenceNumber);
 
     this.accessToken = this.authService.getToken();
-    if (!this.accessToken) {
-      this.router.navigate(['/login']);
-      return;
-    }
+    //if (!this.accessToken) {
+    //  this.router.navigate(['/login']);
+    //  return;
+    //}
     this.loadUserStructures();
   }
 
@@ -289,7 +289,7 @@ export class TransferModalComponent implements OnInit {
             });
           }
         });
-
+debugger
         console.log('handle the rows')
         if (this.rows.length > 0) {
           this.rows[0] = {
@@ -343,6 +343,7 @@ export class TransferModalComponent implements OnInit {
   }
   onUserOrPurposeChange(index: number) {
     // Add a new row when user is selected, only if it's the last row
+    debugger
     if (this.rows[index].selectedPurposeId == 10) {
       this.rows = this.rows.map((row, i) =>
         i === index ? { ...row, isCCed: true } : row

@@ -55,7 +55,7 @@ export class AuthService {
   getToken(): string | null {
     const token = localStorage.getItem('access_token');
     const expiry = JSON.parse(localStorage.getItem('expiry') || '0');
-
+    
     if (token && expiry && new Date().getTime() < expiry) {
       return token;
     } else {

@@ -145,16 +145,18 @@
                   </div>
                 </div>
 
+                <div class="col-md-6" *ngIf="isEnabled('ExternalReferenceNumber')">
+                  <div class="form-group">
+                    <label class="form-label">{{ 'MAIL_DETAILS.KEYWORD' | translate }}</label>
+                    <input class="form-control" type="text" [value]="attributes?.externalReferenceNumber"
+                           [disabled]="true" />
+                  </div>
+                </div>
+
                 <!--Dynamic Custom Attributes-->
                 <div class="col-md-6" *ngFor="let component of customAttributes?.components">
                   <!-- Render controls based on the component type -->
-                  <!--<div *ngIf="component.type === 'tags'" class="form-group">
-    <label class="form-label">{{ component.label }}</label>
-    <input class="form-control" type="text"
-           [placeholder]="component.placeholder"
-           [disabled]="true"
-           [value]="controlValues[component.key]" />
-  </div>-->
+                  
 
                   <div *ngIf="component.type !== 'checkbox' && component.type !== 'datetime' && component.type !== 'selectboxes' && component.type !== 'radio'" class="form-group">
                     <label class="form-label">{{ component.label }}</label>
@@ -190,7 +192,8 @@
                       <input type="radio"
                              [id]="option.value"
                              [name]="component.key"
-                               [checked]="controlValues[component.key]"
+                               [disabled]="true"
+                             [checked]="controlValues[component.key]"
                              [value]="option.value" />
                       <label [for]="option.value">{{ option.label }}</label>
                     </div>
@@ -204,6 +207,7 @@
                       <input type="radio"
                              [id]="option.value"
                              [name]="component.key"
+                               [disabled]="true"
                              [checked]="controlValues[component.key]"
                              [value]="option.value" />
                       <label [for]="option.value">{{ option.label }}</label>
@@ -260,7 +264,9 @@
                 </tr>
               </tbody>
             </table>
-            {{ 'SEARCH.TABLE.TOTAL_RECORDS' | translate:{ count: notes?.length } }}
+            <div *ngIf="notes?.length">
+              {{ 'SEARCH.TABLE.TOTAL_RECORDS' | translate:{ count: notes?.length } }}
+            </div>
             <div *ngIf="!notes?.length" class="text-center mt-3">
               <p>{{ 'COMMON.NO_DATA' | translate }}</p>
             </div>

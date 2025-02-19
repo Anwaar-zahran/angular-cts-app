@@ -179,16 +179,15 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   ngOnInit(): void {
     console.log('Dialog opened with ID:', this.data.id, 'and Reference Number:', this.data.referenceNumber);
     this.accessToken = this.authService.getToken();
-    if (!this.accessToken) {
-      debugger
-      this.router.navigate(['/login']);
-      return;
-    }
+    //if (!this.accessToken) {
+    //  debugger
+    //  this.router.navigate(['/login']);
+    //  return;
+    //}
     this.initDtOptions();
     this.loadLookupData();
     this.fetchDetails(this.data.id);
     console.log("row", this.data.row);
-
 
   }
 
@@ -362,8 +361,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      debugger
       console.log('Transfer modal closed', result);
-      this.dialogRef.close();
+      if (result && result.shouldCloseParent) {
+        this.dialogRef.close();
+      }
 
     });
   }

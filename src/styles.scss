@@ -480,6 +480,7 @@ h2 {
 			width: 100%;
 			height: 100%;
 			justify-content: center;
+			align-items: center;
 			cursor: pointer;
 		}
 
@@ -1044,6 +1045,9 @@ span.glyphicon.glyphicon-chevron-up {
 .mat-datepicker-content .mat-calendar {
 	width: 296px;
 	height: 340px;
+	&:lang(ar) {
+		font-family: "Montserrat";
+	}
 }
 
 .mat-datepicker-content td.mat-calendar-body-label {

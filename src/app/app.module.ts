@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID ,NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 
+import { LanguageService } from './services/language.service';
 // Imports
 import { HeaderComponent } from './Modules/shared/header/header.component';
 import { FooterComponent } from './Modules/shared/footer/footer.component';
@@ -31,6 +32,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 declare var $: any;
 if (typeof $ !== 'undefined') {
   $.fn.dataTable.ext.errMode = 'none';
+}
+
+// Factory to provide LOCALE_ID dynamically
+export function localeIdFactory(languageService: LanguageService): string {
+  return languageService.getCurrentLang();
 }
 
 export function tokenGetter() {
@@ -82,6 +88,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
 ],
   providers: [
+    LanguageService,
+    {
+      provide: LOCALE_ID,
+      useFactory: localeIdFactory,
+      deps: [LanguageService],
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

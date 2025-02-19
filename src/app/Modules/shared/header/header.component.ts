@@ -59,7 +59,9 @@ export class HeaderComponent implements OnInit {
   }
 
   switchLanguage(lang: string) {
+    debugger;
     this.translateService.use(lang);
+    localStorage.setItem('language', lang);
     this.currentLang = lang;
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
