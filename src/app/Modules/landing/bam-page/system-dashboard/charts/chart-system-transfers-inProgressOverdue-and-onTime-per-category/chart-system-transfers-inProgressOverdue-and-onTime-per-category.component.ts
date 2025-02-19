@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { ChartsService } from '../../../../../../services/charts.service';
@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./chart-system-transfers-inProgressOverdue-and-onTime-per-category.component.css'],
   imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
 })
-export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent implements OnInit {
+export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent implements OnInit, OnDestroy {
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
@@ -32,12 +32,15 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
     private lookupsService: LookupsService,
     private translateService: TranslateService
   ) { }
+  ngOnDestroy(): void {
+    this.languageSubscription.unsubscribe();
+  }
 
   ngOnInit() {
 
     this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-              this.loadChartData();
-            });
+      this.loadChartData();
+    });
     // Only load chart data when categories are available
     if (this.categories && this.categories.length > 0) {
       this.loadChartData();
@@ -80,6 +83,7 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
   }
 
   private drawChart(categories: string[], overdueData: number[], onTimeData: number[]) {
+
     this.chartOptions = {
       chart: {
         type: 'column'
@@ -89,9 +93,14 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
       },
       colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
       xAxis: {
-        categories: categories,
+        categories: [
+          this.translateService.instant('BAM.DASHBOARD.CHARTS.STATUS.INCOMING'),
+          this.translateService.instant('BAM.DASHBOARD.CHARTS.STATUS.OUTGOING'),
+          this.translateService.instant('BAM.DASHBOARD.CHARTS.STATUS.INTERNAL'),
+          this.translateService.instant('BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP')
+        ],
         title: {
-          text: this.translateService.instant('BAM.DASHBOARD.CHARTS.LABELS.CATEGORIES')
+          text: this.translateService.instant('BAM.DASHBOARD.CHARTS.LABELS.CATEGORIES'),
         }
       },
       yAxis: {
@@ -125,7 +134,7 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
           type: 'column',
           data: onTimeData,
           color: '#00695E'
-        }
+        } 
       ]
     };
   }

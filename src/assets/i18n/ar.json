@@ -31,6 +31,7 @@
             "FORMAT": "DD/MM/YYYY",
             "PLACEHOLDER": "اختر التاريخ"
         },
+        "PAGE": "صفحة",
         "FROM": "من",
         "TO": "إلى",
         "TABLE_INFO": "عرض _START_ إلى _END_ من _TOTAL_ سجل",
@@ -301,6 +302,7 @@
         "CREATED_DATE": "تاريخ الإنشاء",
         "SENDING_ENTITY": "الجهة المرسلة",
         "RECEIVING_ENTITY": "الجهة المستلمة",
+        "TOTAL_REPORTS": "اجمالي التقارير",
         "PLACEHOLDERS": {
             "SELECT_STRUCTURE": "اختر الهيكل",
             "SELECT_USER": "اختر المستخدم",
@@ -348,6 +350,18 @@
                     "TITLE": "إحصائيات تاريخ الاستحقاق للمراسلات المكتملة",
                     "INFO": "عدد المراسلات المكتملة التي أنشأتها لكل فئة مقسمة إلى دائرتين (فقط للمراسلات ذات تاريخ الاستحقاق)"
                 },
+                "STATUS": {
+                "COMPLETED": "مكتمل",
+                "IN_PROGRESS": "قيد التنفيذ",
+                "OVERDUE": "متأخر",
+                "ON_TIME": "في الوقت المحدد",
+                "INPROGRESS": "قيد التنفيذ",
+                "INTERNAL": "داخلي",
+                "INCOMING": "الوارد",
+                "OUTGOING": "الصادر",
+                "FOLLOW_UP":"المتابعة",
+                "FOLLOWUP":"المتابعة"
+                },
                 "LABELS": {
                     "STRUCTURES": "الهياكل",
                     "CATEGORIES": "الفئات",
@@ -362,7 +376,8 @@
                     "ON_TIME": "في الوقت المحدد",
                     "STATUS": "الحالة",
                     "CATEGORY": "الفئة",
-                    "TRANSFERS": "تحويلات"
+                    "TRANSFERS": "تحويلات",
+                    "VALUE":"القيمة"
                 },
                 "TRANSFERS": {
                     "IN_PROGRESS": {
@@ -404,13 +419,13 @@
                 "COMPLETED": "مكتمل",
                 "IN_PROGRESS": "قيد التنفيذ",
                 "OVERDUE": "متأخر",
-                "ON_TIME": "في الوقت المحدد"
-            },
-            "LABELS": {
-                "PERCENTAGE": "النسبة المئوية",
-                "COUNT": "العدد",
-                "CATEGORY": "الفئة",
-                "STATUS": "الحالة"
+                "ON_TIME": "في الوقت المحدد",
+                "INPROGRESS": "قيد التنفيذ",
+                "INTERNAL": "داخلي",
+                "INCOMING": "الوارد",
+                "OUTGOING": "الصادر",
+                "FOLLOW_UP":"المتابعة",
+                "FOLLOWUP":"المتابعة"
             },
             "TRANSFER_COMPLETION_STATISTICS": {
                 "AVERAGE_CREATED_BY_USER": "متوسط الإنشاء بواسطة المستخدم",
@@ -419,18 +434,15 @@
             "TITLES": {
                 "COUNT_PER_STATUS": "العدد حسب الحالة مجمعة حسب الفئة",
                 "COMPLETED_DOCUMENTS_DUE_DATE": "إحصائيات تاريخ الاستحقاق للمراسلات المكتملة",
-                "IN_PROGRESS_DOCUMENTS_DUE_DATE": "إحصائيات تاريخ الاستحقاق للمراسلات قيد التنفيذ"
+                "IN_PROGRESS_DOCUMENTS_DUE_DATE": "إحصائيات تاريخ الاستحقاق للمراسلات قيد التنفيذ",
+                "STATISTICS_PER_STRUCTURE": "الإحصائيات حسب الهيكل"
             },
             "INFO": {
                 "COUNT_PER_STATUS": "عدد المراسلات لكل فئة مجمعة حسب الحالة",
                 "COMPLETED_DOCUMENTS_DUE_DATE": "عدد المراسلات المكتملة التي أنشأتها لكل فئة مقسمة إلى دائرتين (فقط للمراسلات ذات تاريخ الاستحقاق)",
-                "IN_PROGRESS_DOCUMENTS_DUE_DATE": "عدد المراسلات قيد التنفيذ لكل فئة مقسمة إلى دائرتين (فقط للمراسلات ذات تاريخ الاستحقاق)"
-            },
-            "TITLES": {
-                "STATISTICS_PER_STRUCTURE": "الإحصائيات حسب الهيكل"
-            },
-            "INFO": {
+                "IN_PROGRESS_DOCUMENTS_DUE_DATE": "عدد المراسلات قيد التنفيذ لكل فئة مقسمة إلى دائرتين (فقط للمراسلات ذات تاريخ الاستحقاق)",
                 "STATISTICS_PER_STRUCTURE": "عدد المراسلات لكل هيكل مجمعة حسب الفئة"
+
             },
             "LABELS": {
                 "STRUCTURES": "الهياكل",
@@ -444,9 +456,11 @@
                 "DOCUMENTS": "مستندات",
                 "OVERDUE": "متأخر",
                 "ON_TIME": "في الوقت المحدد",
-                "STATUS": "الحالة",
+                "TRANSFERS": "تحويلات",
+                "PERCENTAGE": "النسبة المئوية",
                 "CATEGORY": "الفئة",
-                "TRANSFERS": "تحويلات"
+                "STATUS": "الحالة",
+                "VALUE":"القيمة"
             }
         },
         "KPI": {

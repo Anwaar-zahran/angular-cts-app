@@ -84,7 +84,7 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
           yAxis: {
             min: 0,
             title: {
-              text: 'Value',
+              text: this.translate.instant("BAM.DASHBOARD.CHARTS.LABELS.VALUE"),
             },
           },
           series: [

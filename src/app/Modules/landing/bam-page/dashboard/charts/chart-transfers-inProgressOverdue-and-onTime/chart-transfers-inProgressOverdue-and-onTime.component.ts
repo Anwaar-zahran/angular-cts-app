@@ -114,13 +114,13 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
       },
       series: [
         {
-          name: 'Overdue',
+          name: this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.OVERDUE"),
           type: 'column',
           data: overdueData,
           color: '#8D0034' // Red
         },
         {
-          name: 'On-Time',
+          name: this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.ON_TIME"),
           type: 'column',
           data: onTimeData,
           color: '#00695E' // Green

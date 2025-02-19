@@ -168,7 +168,14 @@ export class CompleteCorrespondencesComponent implements OnInit {
       next: (response: ApiResponse<InprogressCorrespondence[]>) => {
         this.reports = response.data;
         this.totalItems = response.recordsTotal;
+        console.log(response.recordsTotal)
         this.calculatePagination();
+
+        console.log('total reports')
+        console.log(this.totalItems)
+
+        console.log('------------------------------------------')
+        console.log(this.reports)
 
         if (this.isDtInitialized) {
           this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {

@@ -78,11 +78,12 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
               const item = res.find((r: any) => r.categoryId === category.id && r.statusId === statusId);
               return item ? item.count : 0;
             });
+          
 
             // Only include categories that have at least one non-zero value
             if (data.some(count => count > 0)) {
               return {
-                name: category.text,
+                name:  this.translateService.instant(`BAM.DASHBOARD.CHARTS.STATUS.${category.text.toUpperCase().replace(/\s+/g, '_')}`),
                 type: 'column',
                 data: data
               };
@@ -100,7 +101,15 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
           },
           colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
           xAxis: {
-            categories: statusNames,
+            categories: [
+              this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
+              this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
+              this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
+              this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
+            ],
+            title: {
+              text: this.translateService.instant("BAM.DASHBOARD.CHARTS.LABELS.CATEGORY")
+            },
             crosshair: true,
           },
           yAxis: {
@@ -117,8 +126,8 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
             }
           },
           tooltip: {
-            headerFormat: '<b>{point.x}</b><br/>',
-            pointFormat: '{series.name}: {point.y}<br/>' +
+            headerFormat: this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING") + '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y} <br/>' +
               this.translateService.instant('BAM.CHARTS.LABELS.TOTAL') + ': {point.stackTotal}',
             formatter: function () {
               if (this.y === 0) return false;
@@ -138,7 +147,10 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
           },
           series: seriesData as Highcharts.SeriesOptionsType[]
         };
+        console.log('ssssssssss')
+        console.log(seriesData)
       });
+       
   }
 
   toggleModal() {

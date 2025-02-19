@@ -94,7 +94,7 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
             // Only include categories that have at least one non-zero value
             if (data.some(count => count > 0)) {
               return {
-                name: category.text,
+                name: this.translate.instant(`BAM.DASHBOARD.CHARTS.STATUS.${category.text.toUpperCase().replace(/\s+/g, '_')}`),
                 type: 'column',
                 data: data
               };
@@ -112,13 +112,23 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
           },
           colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
           xAxis: {
-            categories: statusNames,
+            categories: [
+              this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
+              this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
+              this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
+              this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
+              this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.IN_PROGRESS"),
+              this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.COMPLETED"),
+            ],
+            title:{
+              text: this.translate.instant('BAM.DASHBOARD.CHARTS.LABELS.CATEGORY')
+            },
             crosshair: true,
           },
           yAxis: {
             min: 0,
             title: {
-              text: 'Count',
+              text: this.translate.instant("BAM.DASHBOARD.CHARTS.LABELS.COUNT"),
             },
             stackLabels: {
               enabled: true,

@@ -86,7 +86,10 @@ export class ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent impleme
       },
       colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
       xAxis: {
-        categories: categories,
+        categories: [
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
+        ],
         title: {
           text: this.translate.instant('BAM.CHARTS.LABELS.CATEGORY')
         }
@@ -111,16 +114,16 @@ export class ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent impleme
       },
       series: [
         {
-          name: 'Overdue',
+          name: this.translate.instant('BAM.DASHBOARD.CHARTS.LABELS.OVERDUE'),
           type: 'column',
           data: overdueData,
-          color: '#8D0034' // Red
+          color: '#8D0034'
         },
         {
-          name: 'On-Time',
+          name: this.translate.instant('BAM.DASHBOARD.CHARTS.LABELS.ON_TIME'),
           type: 'column',
           data: onTimeData,
-          color: '#00695E' // Green
+          color: '#00695E'
         }
       ]
     };

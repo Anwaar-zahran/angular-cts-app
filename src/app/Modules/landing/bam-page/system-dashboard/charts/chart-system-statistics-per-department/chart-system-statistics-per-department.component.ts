@@ -91,9 +91,12 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
           .filter((series: any) => series.data.some((count: number) => count > 0))
           .map((series: any) => ({
             ...series,
+            name: this.translateService.instant(`BAM.DASHBOARD.CHARTS.STATUS.${series.name.toUpperCase().replace(/\s+/g, '_')}`),
             type: 'bar'
           }));
 
+        console.log('series new data ')
+        console.log(seriesData)
         const translateService = this.translateService;
 
         this.chartOptions = {
