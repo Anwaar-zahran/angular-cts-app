@@ -6,7 +6,6 @@
         "SUBJECT": "Subject",
         "NO_DATA": "No data available",
         "VISUAL_TRACKING": "Visual Tracking",
-        "PAGE": "Page",
         "TABS": {
             "NEW": "New",
             "SENT": "Sent",
@@ -32,6 +31,8 @@
             "PLACEHOLDER": "Select date",
             "FORMAT": "MM/DD/YYYY"
         },
+        "PAGE": "Page",
+        "OF": "Of",
         "FROM": "From",
         "TO": "To",
         "TABLE_INFO": "Showing _START_ to _END_ of _TOTAL_ entries",

@@ -24,7 +24,8 @@ export class ReportsPageComponent {
     },
     {
       backgroundColor: '#D2FAF1',
-      imgSrc: 'assets/images/icons/time.png',
+      width: '180px',
+      imgSrc: 'assets/images/icons/completed_transfer.svg',
       title: 'Completed Transfers',
       translationKey: 'REPORTS.COMPLETED_TRANSFERS',
       link: '/reports/completed-transfers',
@@ -32,7 +33,7 @@ export class ReportsPageComponent {
 
     {
       backgroundColor: '#FEEAF3',
-      imgSrc: 'assets/images/icons/calendar.png',
+      imgSrc: 'assets/images/icons/time.png',
       title: 'In Progress Correspondences',
       translationKey: 'REPORTS.IN_PROGRESS_CORRESPONDENCES',
       link: '/reports/inprogress-correspondences',
@@ -40,7 +41,8 @@ export class ReportsPageComponent {
 
     {
       backgroundColor: '#FEEAF3',
-      imgSrc: 'assets/images/icons/calendar.png',
+      width: '160px',
+      imgSrc: 'assets/images/icons/completed_corr.svg',
       title: 'Completed Correspondences',
       translationKey: 'REPORTS.COMPLETED_CORRESPONDENCES',
       link: '/reports/completed-correspondences',

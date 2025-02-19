@@ -7,6 +7,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
 interface User {
   firstname: string;
@@ -27,7 +29,7 @@ interface AddressUser {
   selector: 'app-address-book',
   imports: [
     CommonModule, MatDialogModule, NgSelectModule,
-    MatInputModule, FormsModule
+    MatInputModule, FormsModule, TranslateModule
   ],
   templateUrl: './address-book.component.html',
   styleUrls: ['./address-book.component.scss']
@@ -55,7 +57,8 @@ export class AddressBookComponent implements OnInit {
     private router: Router,
     private lookupservice: LookupsService,
     private authService: AuthService,
-    private dialogRef: MatDialogRef<AddressBookComponent>
+    private dialogRef: MatDialogRef<AddressBookComponent>,
+    private translate: TranslateService
   ) { }
 
   @Output() selectedUsersChange = new EventEmitter<any[]>();
