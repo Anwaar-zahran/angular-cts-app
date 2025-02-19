@@ -115,14 +115,14 @@ export class GuidelinePageComponent implements OnInit {
   }
 
   fetchData() {
-    if (!this.accessToken) {
-      console.error('Access token not found');
+    //if (!this.accessToken) {
+    //  console.error('Access token not found');
 
-      this.router.navigate(['/login']);
-      return;
-    }
+    //  this.router.navigate(['/login']);
+    //  return;
+    //}
     debugger
-    const payload = this.accessToken.split('.')[1];
+    const payload = this.accessToken ?.split('.')[1] || '';
     const decodedPayload = this.base64UrlDecode(payload);
     const parsedPayload = JSON.parse(decodedPayload);
     this.structureId = parsedPayload.StructureId;

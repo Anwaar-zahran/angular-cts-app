@@ -179,11 +179,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   ngOnInit(): void {
     console.log('Dialog opened with ID:', this.data.id, 'and Reference Number:', this.data.referenceNumber);
     this.accessToken = this.authService.getToken();
-    if (!this.accessToken) {
-      debugger
-      this.router.navigate(['/login']);
-      return;
-    }
+    //if (!this.accessToken) {
+    //  debugger
+    //  this.router.navigate(['/login']);
+    //  return;
+    //}
     this.initDtOptions();
     this.loadLookupData();
     this.fetchDetails(this.data.id);
