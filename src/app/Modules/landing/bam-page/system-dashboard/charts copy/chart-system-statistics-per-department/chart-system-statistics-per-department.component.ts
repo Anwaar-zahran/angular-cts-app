@@ -94,6 +94,7 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
           chart: {
             type: 'bar'
           },
+         
           title: {
             text: this.translateService.instant('BAM.CHARTS.TITLES.STATISTICS_PER_STRUCTURE')
           },

@@ -328,6 +328,7 @@
         "CREATED_DATE": "Created date",
         "SENDING_ENTITY": "Sending entity",
         "RECEIVING_ENTITY": "Receiving entity",
+        "TOTAL_REPORTS": "Total Reports",
         "PLACEHOLDERS": {
             "SELECT_STRUCTURE": "Select structure",
             "SELECT_USER": "Select user",
@@ -377,6 +378,21 @@
                         "INFO": "Number of completed transfers per category divided into 2 circles (Only for transfers with due date)"
                     }
                 },
+<<<<<<< HEAD
+               "STATUS": {
+                "COMPLETED": "Completed",
+                "IN_PROGRESS": "In Progress",
+                "OVERDUE": "Overdue",
+                "ON_TIME": "On Time",
+                "INPROGRESS": "In Progress",
+                "INTERNAL": "Internal",
+                "OUTGOING": "Outgoing",
+                "FOLLOW_UP":"Follow Up",
+                "FOLLOWUP": "Follow Up",
+                "INCOMING":"Incoming"
+                },
+=======
+>>>>>>> 8fe42e38a994a158b244911e5c70c802b09ada61
                 "LABELS": {
                     "STRUCTURES": "Structures",
                     "CATEGORIES": "Categories",
@@ -391,7 +407,8 @@
                     "ON_TIME": "On-Time",
                     "STATUS": "Status",
                     "CATEGORY": "Category",
-                    "TRANSFERS": "transfers"
+                    "TRANSFERS": "transfers",
+                    "VALUE":"Value"
                 }
             }
         },
@@ -423,7 +440,13 @@
                 "COMPLETED": "Completed",
                 "IN_PROGRESS": "In Progress",
                 "OVERDUE": "Overdue",
-                "ON_TIME": "On Time"
+                "ON_TIME": "On Time",
+                "INPROGRESS": "In Progress",
+                "INTERNAL": "Internal",
+                "OUTGOING": "Outgoing",
+                "FOLLOW_UP":"Follow Up",
+                "FOLLOWUP": "Follow Up",
+                "INCOMING":"Incoming"
             },
             "TRANSFER_COMPLETION_STATISTICS": {
                 "AVERAGE_CREATED_BY_USER": "Average Created By User",
@@ -455,7 +478,8 @@
                 "ON_TIME": "On-Time",
                 "STATUS": "Status",
                 "CATEGORY": "Category",
-                "PERCENTAGE": "Percentage"
+                "PERCENTAGE": "Percentage",
+                "VALUE":"Value"
             }
         },
         "KPI": {

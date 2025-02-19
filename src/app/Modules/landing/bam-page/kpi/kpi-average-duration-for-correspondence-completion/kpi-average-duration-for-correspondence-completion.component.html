@@ -20,7 +20,6 @@
       </div>
     </div>
   </div>
-
   <!-- Modal Structure -->
   <div *ngIf="isModalOpen" class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -36,7 +35,7 @@
             <div class="form-group">
               <label for="year">{{ 'BAM.KPI.AVERAGE_DURATION.YEAR' | translate }}</label>
               <select id="year" [(ngModel)]="tempYear" name="tempYear" class="form-control" required>
-                <option *ngFor="let year of availableYears" [value]="year">{{year}}</option>
+                <option *ngFor="let year of availableYears" [value]="year">{{year }}</option>
               </select>
             </div>
 

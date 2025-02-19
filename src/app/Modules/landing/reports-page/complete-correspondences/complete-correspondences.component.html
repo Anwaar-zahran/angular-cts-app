@@ -1,7 +1,10 @@
 <div class="body-content">
   <!-- Title Section -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="page-title"><app-back-button></app-back-button>{{ 'REPORTS.COMPLETED_CORRESPONDENCES' | translate }}</h1>
+    <h1 class="page-title">
+      <app-back-button></app-back-button
+      >{{ "REPORTS.COMPLETED_CORRESPONDENCES" | translate }}
+    </h1>
   </div>
 
   <!-- Search Form -->
@@ -10,14 +13,26 @@
       <!-- Structures Select -->
       <div class="col-md-3">
         <div class="form-group">
-          <label class="form-label">{{ 'REPORTS.STRUCTURE' | translate }}</label>
-          <ng-select [items]="structures" [multiple]="true" [closeOnSelect]="false" [searchable]="true" bindLabel="name"
-            bindValue="id" [(ngModel)]="selectedStructures" [ngModelOptions]="{standalone: true}"
-            [loading]="isLoadingStructures" (search)="onStructureSearch($event)"
-            [placeholder]="'REPORTS.PLACEHOLDERS.SELECT_STRUCTURE' | translate" class="form-control">
+          <label class="form-label">{{
+            "REPORTS.STRUCTURE" | translate
+          }}</label>
+          <ng-select
+            [items]="structures"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            [searchable]="true"
+            bindLabel="name"
+            bindValue="id"
+            [(ngModel)]="selectedStructures"
+            [ngModelOptions]="{ standalone: true }"
+            [loading]="isLoadingStructures"
+            (search)="onStructureSearch($event)"
+            [placeholder]="'REPORTS.PLACEHOLDERS.SELECT_STRUCTURE' | translate"
+            class="form-control"
+          >
             <ng-template ng-option-tmp let-item="item">
               <i class="fas fa-building me-2"></i>
-              {{item.name}}
+              {{ item.name }}
             </ng-template>
           </ng-select>
         </div>
@@ -26,14 +41,24 @@
       <!-- Users Select -->
       <div class="col-md-3">
         <div class="form-group">
-          <label class="form-label">{{ 'REPORTS.USER' | translate }}</label>
-          <ng-select [items]="users" [multiple]="true" [closeOnSelect]="false" [searchable]="true" bindLabel="fullName"
-            bindValue="id" [(ngModel)]="selectedUsers" [ngModelOptions]="{standalone: true}" [loading]="isLoadingUsers"
-            (search)="onUserSearch($event)" [placeholder]="'REPORTS.PLACEHOLDERS.SELECT_USER' | translate"
-            class="form-control">
+          <label class="form-label">{{ "REPORTS.USER" | translate }}</label>
+          <ng-select
+            [items]="users"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            [searchable]="true"
+            bindLabel="fullName"
+            bindValue="id"
+            [(ngModel)]="selectedUsers"
+            [ngModelOptions]="{ standalone: true }"
+            [loading]="isLoadingUsers"
+            (search)="onUserSearch($event)"
+            [placeholder]="'REPORTS.PLACEHOLDERS.SELECT_USER' | translate"
+            class="form-control"
+          >
             <ng-template ng-option-tmp let-item="item">
               <i class="fas fa-user me-2"></i>
-              {{getUserDisplayName(item)}}
+              {{ getUserDisplayName(item) }}
             </ng-template>
           </ng-select>
         </div>
@@ -42,12 +67,18 @@
       <!-- Privacy Select -->
       <div class="col-md-3">
         <div class="form-group">
-          <label class="form-label">{{ 'REPORTS.PRIVACY' | translate }}</label>
-          <ng-select [items]="privacyOptions" bindLabel="name" bindValue="id" [(ngModel)]="selectedPrivacyId"
-            [ngModelOptions]="{standalone: true}" [placeholder]="'REPORTS.PLACEHOLDERS.SELECT_PRIVACY' | translate"
-            class="form-control">
+          <label class="form-label">{{ "REPORTS.PRIVACY" | translate }}</label>
+          <ng-select
+            [items]="privacyOptions"
+            bindLabel="name"
+            bindValue="id"
+            [(ngModel)]="selectedPrivacyId"
+            [ngModelOptions]="{ standalone: true }"
+            [placeholder]="'REPORTS.PLACEHOLDERS.SELECT_PRIVACY' | translate"
+            class="form-control"
+          >
             <ng-template ng-option-tmp let-item="item">
-              {{item.name}}
+              {{ item.name }}
             </ng-template>
           </ng-select>
         </div>
@@ -56,12 +87,18 @@
       <!-- Priority Select -->
       <div class="col-md-3">
         <div class="form-group">
-          <label class="form-label">{{ 'REPORTS.PRIORITY' | translate }}</label>
-          <ng-select [items]="priorityOptions" bindLabel="text" bindValue="id" [(ngModel)]="selectedPriorityId"
-            [ngModelOptions]="{standalone: true}" [placeholder]="'REPORTS.PLACEHOLDERS.SELECT_PRIORITY' | translate"
-            class="form-control">
+          <label class="form-label">{{ "REPORTS.PRIORITY" | translate }}</label>
+          <ng-select
+            [items]="priorityOptions"
+            bindLabel="text"
+            bindValue="id"
+            [(ngModel)]="selectedPriorityId"
+            [ngModelOptions]="{ standalone: true }"
+            [placeholder]="'REPORTS.PLACEHOLDERS.SELECT_PRIORITY' | translate"
+            class="form-control"
+          >
             <ng-template ng-option-tmp let-item="item">
-              {{item.text}}
+              {{ item.text }}
             </ng-template>
           </ng-select>
         </div>
@@ -69,19 +106,34 @@
       <!-- Date Controls -->
       <div class="col-md-3">
         <div class="form-group">
-          <label class="form-label">{{ 'REPORTS.FROM_DATE' | translate }}</label>
-          <input class="form-control date-picker" matInput [matDatepicker]="picker1"
-            [placeholder]="'COMMON.DATE.FORMAT' | translate" [(ngModel)]="fromDate" name="dp1"
-            (click)="picker1.open()" />
+          <label class="form-label">{{
+            "REPORTS.FROM_DATE" | translate
+          }}</label>
+          <input
+            class="form-control date-picker"
+            matInput
+            [matDatepicker]="picker1"
+            [placeholder]="'COMMON.DATE.FORMAT' | translate"
+            [(ngModel)]="fromDate"
+            name="dp1"
+            (click)="picker1.open()"
+          />
           <mat-datepicker #picker1></mat-datepicker>
         </div>
       </div>
 
       <div class="col-md-3">
         <div class="form-group">
-          <label class="form-label">{{ 'REPORTS.TO_DATE' | translate }}</label>
-          <input class="form-control date-picker" matInput [matDatepicker]="picker2"
-            [placeholder]="'COMMON.DATE.FORMAT' | translate" [(ngModel)]="toDate" name="dp2" (click)="picker2.open()" />
+          <label class="form-label">{{ "REPORTS.TO_DATE" | translate }}</label>
+          <input
+            class="form-control date-picker"
+            matInput
+            [matDatepicker]="picker2"
+            [placeholder]="'COMMON.DATE.FORMAT' | translate"
+            [(ngModel)]="toDate"
+            name="dp2"
+            (click)="picker2.open()"
+          />
           <mat-datepicker #picker2></mat-datepicker>
         </div>
       </div>
@@ -89,39 +141,77 @@
       <!-- Checkbox -->
       <div class="col-md-3">
         <div class="form-check mt-4 pt-2">
-          <input class="form-check-input" type="checkbox" id="isOverdue" name="isOverdue" [(ngModel)]="isOverdue">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="isOverdue"
+            name="isOverdue"
+            [(ngModel)]="isOverdue"
+          />
           <label class="form-check-label" for="isOverdue">
-            {{ 'REPORTS.SHOW_OVERDUE' | translate }}
+            {{ "REPORTS.SHOW_OVERDUE" | translate }}
           </label>
         </div>
       </div>
     </div>
     <!-- Action Buttons -->
     <div class="d-flex justify-content-end gap-3 mt-2">
-      <button class="btn btn-secondary btn-lg" (click)="clear()">{{ 'COMMON.ACTIONS.CLEAR' | translate }}</button>
-      <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-search"></i> {{ 'COMMON.ACTIONS.SEARCH' |
-        translate }}</button>
+      <button class="btn btn-secondary btn-lg" (click)="clear()">
+        {{ "COMMON.ACTIONS.CLEAR" | translate }}
+      </button>
+      <button type="submit" class="btn btn-primary btn-lg">
+        <i class="fa fa-search"></i> {{ "COMMON.ACTIONS.SEARCH" | translate }}
+      </button>
     </div>
   </form>
 
+
+  <!-- <div class="d-flex justify-content-center my-3">
+    <span class="text-muted fs-5 fw-bold">
+      {{ "REPORTS.TOTAL_REPORTS" | translate }} : {{ totalItems }}
+    </span>
+  </div> -->
+
   <hr />
   <!-- Table -->
-  <div class="shadow table-container overflow-x-auto">
-    <table id="inprogress-report-table" class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-      <thead>
+ <!-- Main table structure -->
+ <div class="shadow table-container overflow-x-auto">
+  <table id="inprogress-report-table" class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+    <thead>
+      <tr>
+        <th colspan="8" class="text-center text-muted fs-5">
+          {{ "REPORTS.TOTAL_REPORTS" | translate }} : {{ totalItems }}
+        </th>
+      </tr>
+      <tr>
+        <th class="details-control"></th>
+        <th>{{ 'REPORTS.CATEGORY' | translate }}</th>
+        <th>{{ 'REPORTS.REFERENCE_NUMBER' | translate }}</th>
+        <th>{{ 'REPORTS.SUBJECT' | translate }}</th>
+        <th>{{ 'REPORTS.SENDING_ENTITY' | translate }}</th>
+        <th>{{ 'REPORTS.RECEIVING_ENTITY' | translate }}</th>
+        <th>{{ 'REPORTS.CREATED_DATE' | translate }}</th>
+        <th class="text-right"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of reports">
         <tr>
-          <th class="details-control"></th>
-          <th>{{ 'REPORTS.CATEGORY' | translate }}</th>
-          <th>{{ 'REPORTS.REFERENCE_NUMBER' | translate }}</th>
-          <th>{{ 'REPORTS.SUBJECT' | translate }}</th>
-          <th>{{ 'REPORTS.SENDING_ENTITY' | translate }}</th>
-          <th>{{ 'REPORTS.RECEIVING_ENTITY' | translate }}</th>
-          <th>{{ 'REPORTS.CREATED_DATE' | translate }}</th>
-          <th class="text-right"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of reports">
+          <td width="80px">
+            <button
+              class="btn btn-sm btn-link btn-row-expand"
+              (click)="toggleRow(item)"
+              *ngIf="item.transfers.length > 0"
+            >
+              <i
+                class="fa"
+                [ngClass]="{
+                  'fa-plus': !isRowExpanded(item),
+                  'fa-minus': isRowExpanded(item)
+                }"
+              ></i>
+            </button>
+          </td>
           <td class="details-control"></td>
           <td>{{item.categoryName}}</td>
           <td>{{item.referenceNumber}}</td>
@@ -131,33 +221,82 @@
           <td>{{item.createdDate}}</td>
           <td class="text-right"></td>
         </tr>
-      </tbody>
-    </table>
-
+        <tr *ngIf="isRowExpanded(item)" class="expandable-row">
+          <td colspan="8" class="p-0">
+            <div class="transfers-container">
+              <h6 class="transfers-title">Transfers</h6>
+              <table class="table table-sm mb-0 transfers-table">
+                <thead>
+                  <tr>
+                    <th>{{ 'REPORTS.FROM_STRUCTURE_USER' | translate }}</th>
+                    <th>{{ 'REPORTS.TO_STRUCTURE_USER' | translate }}</th>
+                    <th>{{ 'REPORTS.TRANSFER_DATE' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let transfer of item.transfers; let odd = odd" [ngClass]="{'odd-row': odd}">
+                    <td>{{transfer.fromStructure}} / {{transfer.fromUser}}</td>
+                    <td>{{transfer.toStructure}}</td>
+                    <td>{{transfer.transferDate}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
     <!-- Only show pagination if there's data -->
-    <div class="d-flex justify-content-between align-items-center" *ngIf="reports && reports.length > 0">
-      <!--<div>
+    <div
+      class="d-flex justify-content-between align-items-center"
+      *ngIf="reports && reports.length > 0"
+    >
+      <!-- <div>
         Showing {{startIndex}} to {{endIndex}} of {{totalItems}} entries
-      </div>-->
+      </div> -->
       <div class="dataTables_paginate paging_full_numbers">
-        <a class="paginate_button first" [class.disabled]="currentPage === 1" (click)="goToPage(1)"><i
-            class='text-secondary fa fa-angle-left'></i></a>
+        <a
+          class="paginate_button first"
+          [class.disabled]="currentPage === 1"
+          (click)="goToPage(1)"
+          ><i class="text-secondary fa fa-angle-left"></i
+        ></a>
 
-        <a class="paginate_button previous" [class.disabled]="currentPage === 1" (click)="previousPage()"><i
-            class='text-secondary fa fa-angle-double-left'></i></a>
+        <a
+          class="paginate_button previous"
+          [class.disabled]="currentPage === 1"
+          (click)="previousPage()"
+          ><i class="text-secondary fa fa-angle-double-left"></i
+        ></a>
 
-            <span class="d-inline-flex align-items-center mx-2">{{ 'COMMON.PAGE' | translate }}  
-              <input type="number" class="paginate-input form-control form-control-sm mx-2" [(ngModel)]="currentPage" (ngModelChange)="goToPage(currentPage)"
-              [min]="1" [max]="totalPages" />
-                {{ 'COMMON.FROM' | translate }} {{totalPages}}</span>
+        <span class="d-inline-flex align-items-center mx-2"
+          >{{ "COMMON.PAGE" | translate }}
+          <input
+            type="number"
+            class="paginate-input form-control form-control-sm mx-2"
+            [(ngModel)]="currentPage"
+            (ngModelChange)="goToPage(currentPage)"
+            [min]="1"
+            [max]="totalPages"
+          />
+          {{ "COMMON.FROM" | translate }} {{ totalPages }}</span
+        >
 
-        <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()"><i
-            class='text-secondary fa fa-angle-double-right'></i></a>
+        <a
+          class="paginate_button next"
+          [class.disabled]="currentPage === totalPages"
+          (click)="nextPage()"
+          ><i class="text-secondary fa fa-angle-double-right"></i
+        ></a>
 
-        <a class="paginate_button last" [class.disabled]="currentPage === totalPages" (click)="goToPage(totalPages)"><i
-            class='text-secondary fa fa-angle-right'></i></a>
-
+        <a
+          class="paginate_button last"
+          [class.disabled]="currentPage === totalPages"
+          (click)="goToPage(totalPages)"
+          ><i class="text-secondary fa fa-angle-right"></i
+        ></a>
       </div>
     </div>
   </div>
-</div>
