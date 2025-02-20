@@ -48,7 +48,7 @@
                     <div class="form-group mb-1">
                       <label class="form-label">{{ 'MAIL_DETAILS.SENDING_ENTITY' | translate }} :</label>
                       <span class="form-label">{{ transfers?.sendingEntity || '' }}</span>
-          
+
                     </div>
                   </div>
                   <div class="col-sm-12">
@@ -57,73 +57,79 @@
                       <span class="form-label">{{ transfers?.receivingEntity || '' }}</span>
                     </div>
                   </div>
-          
+
                   <div class="col-sm-12">
                     <div class="form-group mb-1">
                       <label class="form-label">{{ 'MAIL_DETAILS.SUBJECT' | translate }} :</label>
                       <span class="form-label">{{ transfers?.subject || '' }}</span>
-          
+
                     </div>
                   </div>
 
-                  <hr/>
+                  <div class="col-sm-12">
+                    <div class="form-group mb-1">
+                      <i ref="icnOpenedDate" class="fa fa-envelope-open margin-0-5 light-blue font-18" [title]="'Opened date: ' + (transfers?.openedDate || '')"></i>
+                    </div>
+                  </div>
+
+                  <hr />
                   <!--<i ref="icnOpenedDate" class="fa fa-envelope-open margin-0-5 light-blue font-18" [title]="'Opened date: ' + (transfers?.openedDate || '')"></i>
-                -->
+  -->
                   <div class="col-sm-12">
                     <div class="form-group mb-1">
                       <label class="form-label">{{ 'MAIL_DETAILS.FROMSTRUCTURE' | translate }} :</label>
                       <span class="form-label">{{ transfers?.fromStructure || '' }}</span>
-          
+
                     </div>
                   </div>
                   <div class="col-sm-12">
                     <div class="form-group mb-1">
                       <label class="form-label">{{ 'MAIL_DETAILS.FROMUSER' | translate }} :</label>
                       <span class="form-label">{{ transfers?.fromUser || '' }}</span>
-          
+
                     </div>
                   </div>
-          
+
                   <div class="col-sm-12">
                     <div class="form-group mb-1">
                       <label class="form-label">{{ 'MAIL_DETAILS.PURPOSE' | translate }} :</label>
                       <span class="form-label">{{ transfers?.purpose || '' }}</span>
-          
+
                     </div>
                   </div>
                   <div class="col-sm-12">
                     <div class="form-group mb-1">
                       <label class="form-label">{{ 'MAIL_DETAILS.PRIORITY' | translate }} :</label>
                       <span class="form-label">{{ transfers?.priority || '' }}</span>
-          
+
                     </div>
                   </div>
                   <div class="col-sm-12">
                     <div class="form-group mb-1">
                       <label class="form-label">{{ 'MAIL_DETAILS.INSTRUCTIONS' | translate }} :</label>
-                      <span class="form-label">{{ transfers?.instruction || '' }}</span>
-          
+                      <span class="form-label" [innerHTML]="transfers?.instruction "></span>
+
                     </div>
                   </div>
                   <div class="col-sm-12">
                     <div class="form-group mb-1">
                       <label class="form-label">{{ 'MAIL_DETAILS.CREATEDDATE' | translate }} :</label>
                       <span class="form-label">{{ transfers?.createdDate || '' }}</span>
-          
+
                     </div>
                   </div>
                   <div class="col-sm-12">
                     <div class="form-group mb-1">
                       <label class="form-label">{{ 'MAIL_DETAILS.DUEDATE' | translate }} :</label>
                       <span class="form-label">{{ transfers?.dueDate || '' }}</span>
-          
+
                     </div>
                   </div>
                   <div class="col-sm-12">
                     <div class="form-group mb-1">
                       <label class="form-label">{{ 'MAIL_DETAILS.OPENEDDATE' | translate }} :</label>
                       <span class="form-label">{{ transfers?.openedDate || '' }}</span>
-          
+
                     </div>
                   </div>
                 </div>
