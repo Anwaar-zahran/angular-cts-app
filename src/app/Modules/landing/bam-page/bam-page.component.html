@@ -4,7 +4,7 @@
         <a *ngFor="let card of BAMCards" [routerLink]="card.link" class="card"
             [ngStyle]="{'background-color': card.backgroundColor}">
             <div class="icon">
-                <img [src]="card.imgSrc" alt="" [ngStyle]="{'width': card.width ? card.width : ''}" />
+                <img [src]="card.imgSrc" alt="" [ngStyle]="{'width': card.width ? card.width : '180px'}" />
             </div>
             <div class="title">
                 <h2>{{ card.title | translate }}</h2>
