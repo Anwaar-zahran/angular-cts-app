@@ -148,9 +148,8 @@ export class MymailPageComponent implements OnInit {
   }
 
   loadData() {
-    debugger;
     const payload = this.accessToken ?.split('.')[1] || '';
-
+debugger
     const decodedPayload = this.base64UrlDecode(payload);
     const parsedPayload = JSON.parse(decodedPayload);
     this.structureId = localStorage.getItem('structureId') || parsedPayload.StructureId;
