@@ -79,11 +79,12 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
               return item ? item.count : 0;
             });
           
-
+            debugger;
+            
             // Only include categories that have at least one non-zero value
             if (data.some(count => count > 0)) {
               return {
-                name:  this.translateService.instant(`BAM.DASHBOARD.CHARTS.STATUS.${category.text.toUpperCase().replace(/\s+/g, '_')}`),
+                name:  this.translateService.instant(`BAM.DASHBOARD.CHARTS.STATUS.${category.text?.toUpperCase().replace(/\s+/g, '_')}`),
                 type: 'column',
                 data: data
               };
