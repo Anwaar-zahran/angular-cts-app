@@ -43,7 +43,7 @@
         <div class="form-group">
           <label for="ddlToUsers" class="form-label">{{ 'SEARCH.FORM.TRANSFER.TO_USER' | translate }}</label>
           <ng-select id="ddlToUsers" name="toUsers" [(ngModel)]="searchModel.toUser" [items]="searchUsers"
-            bindLabel="fullName" bindValue="id" placeholder="Select user" class="form-control">
+            bindLabel="fullName" bindValue="id" [placeholder]="'SEARCH.FORM.SELECT_USER' | translate" class="form-control">
           </ng-select>
         </div>
       </div>
@@ -51,7 +51,7 @@
         <div class="form-group">
           <label for="ddlTransEntity" class="form-label">{{ 'SEARCH.FORM.TRANSFER.FROM_STRUCTURE' | translate }}</label>
           <ng-select id="ddlTransEntity" name="transFrom" [(ngModel)]="searchModel.fromStructure" [items]="entities"
-            bindLabel="name" bindValue="id" placeholder="Select entity" class="form-control">
+            bindLabel="name" bindValue="id" [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE' | translate" class="form-control">
           </ng-select>
         </div>
       </div>
@@ -60,7 +60,7 @@
           <label for="ddlTransFromEntity" class="form-label">{{ 'SEARCH.FORM.TRANSFER.TO_STRUCTURE' | translate
             }}</label>
           <ng-select id="ddlTransFromEntity" name="transTo" [(ngModel)]="searchModel.toStructure" [items]="entities"
-            bindLabel="name" bindValue="id" placeholder="Select entity" class="form-control">
+            bindLabel="name" bindValue="id" [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE' | translate" class="form-control">
           </ng-select>
         </div>
       </div>
@@ -144,18 +144,10 @@
       </thead>
       <tbody>
         <tr *ngFor="let row of response.data">
-          <td>{{ row.categoryText }}</td>
+          <td>{{ getCategoryName(row.categoryId) }}</td>
           <td>{{ row.referenceNumber }}</td>
           <td>{{ row.subject }}</td>
-          <td>{{ row.createdDate }}</td>
-          <!--<td>{{ row.sendingEntity }}</td>
-        <td>{{ row.receivingEntity }}</td>
-        <td>{{ row.createdByUser }}</td>
-        <td>{{ row.dueDate }}</td>
-        <td>{{ row.documentDate }}</td>
-        <td>{{ row.priorityText }}</td>
-        <td>{{ row.importanceText }}</td>
-        <td>{{ row.privacyText }}</td>-->
+          <td>{{ row.createdDate }}</td>       
           <td>{{ row.statusText }}</td>
           <td>
             <button type="button" class="btn" (click)="showDetails(row)">
@@ -170,7 +162,7 @@
     </table>
     <!-- Message for No Data Found -->
     <div *ngIf="response && response.data.length === 0" class="text-center noData mt-3">
-      <p>No data found</p>
+      <p>{{ 'COMMON.NO_DATA' | translate }}</p>
     </div>
     <app-toaster></app-toaster>
   </div> 

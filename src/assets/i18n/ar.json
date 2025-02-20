@@ -115,6 +115,11 @@
     "SENDING_ENTITY": "الجهة المرسلة",
     "RECEIVING_ENTITY": "الجهة المستلمة",
     "SUBJECT": "الموضوع",
+    "FROMSTRUCTURE": "من هيكل",
+    "FROMUSER": "من",
+    "PURPOSE": "الهدف",
+    "INSTRUCTIONS": "التعليمات",
+    "OPENEDDATE": "تاريخ الفتح",
     "REFERENCE": "المرجع",
     "DATE": "التاريخ",
     "STATUS": "الحالة",
@@ -131,6 +136,7 @@
     "ExternalReferenceNumber": "الرقم المرجعي الخارجي",
     "BODY": "محتوى",
     "TABS": {
+      "MY_TRANSFER": "إحالتي",
       "ATTRIBUTES": "السمات",
       "ATTACHMENTS": "المرفقات",
       "NOTES": "الملاحظات",
@@ -191,8 +197,17 @@
     "MESSAGE": "الرسالة",
     "ATTACHMENTS": "المرفقات",
     "ADD_ATTACHMENT": "إضافة مرفق",
-    "PURPOSE_REQUIRED": "الحقل مطلوب"
-
+    "PURPOSE_REQUIRED": "الحقل مطلوب",
+    "REQUIRED": "الحقول الإلزامية",
+    "SENT": "تم الإرسال بنجاح",
+    "INSTRUCTIONS": "التعليمات",
+    "FILEINUSEERROR": "هناك ملف تم حجزه, يرجي التأكد من إيداعه أو تجاهل الحجز",
+    "ERROR": "حدث خطأ",
+    "PURPOSE": "الهدف",
+    "BUTTONS": {
+      "SEND": "إرسال",
+      "CLOSE": "إغلاق"
+    }
   },
     "TRANSFER_DIALOG": {
         "TITLE": "تحويل",
@@ -250,6 +265,7 @@
       "SELECT_USER": "اختر المستخدم",
       "SELECT_PRIVACY": "اختر مستوى الخصوصية",
       "SELECT_CATEGORY": "اختر الفئة",
+      "SELECT_STRUCTURE": "اختر هيكل",
       "SELECT_NAME": "اختر الاسم",
       "FROM_DATE": "اختر تاريخ البداية",
       "TO_DATE": "اختر تاريخ النهاية",

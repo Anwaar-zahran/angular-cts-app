@@ -97,12 +97,16 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.selectedPrivacyId = null;
+    this.selectedPriorityId = null;
+
     this.initDtOptions();
     this.loadStructures();
     this.loadReports();
     this.loadPrivacyOptions();
     this.loadPriorityOptions();
     this.loadUsers();
+
   }
 
   initDtOptions() {
@@ -409,7 +413,7 @@ debugger
   loadPriorityOptions() {
     this.lookupsService.getPriorityOptions().subscribe({
       next: (options) => {
-        this.priorityOptions = options;
+        this.priorityOptions = options;        
       },
       error: (error) => {
         console.error('Error loading priority options:', error);

@@ -12,7 +12,7 @@ export class LookupsService {
   private listUsersUrl = `${environment.iAMUrl}/api/SearchUsersByStructureIds`;
   //private listPrivacies = `${environment.apiBaseUrl}/Privacy/ListPrivacies`;
   private listPrivacies = `${environment.apiBaseUrl}/Privacy/List?Name=`;
- private listCategories = `${environment.apiBaseUrl}/Category/ListCategories`;
+  private listCategories = `${environment.apiBaseUrl}/Category/ListCategories`;
   private listCategoriesByName = `${environment.apiBaseUrl}/Category/List?Name`;
   private listEntities = `${environment.iAMUrl}/api/SearchStructuresWithSearchAttributes`;
   private listSearchUsers = `${environment.iAMUrl}/api/SearchUsers`;
@@ -177,6 +177,20 @@ export class LookupsService {
       );
   }
 
+  getCategoriesByName(delegationId: string | undefined): Observable<{ id: number, text: string }[]> {
+    let params = new HttpParams();
+    if (delegationId !== undefined) {
+      params = params.set('delegationId', delegationId);
+    }
+
+    return this.http.get<{ id: number, text: string }[]>(this.listCategoriesByName, { params })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching categories data', error.message);
+          throw error;
+        })
+      );
+  }
   getEntities(): Observable<any> {
 
 

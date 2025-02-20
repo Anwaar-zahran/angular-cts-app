@@ -98,11 +98,16 @@ export class CompleteCorrespondencesComponent implements OnInit {
   }
 
   ngOnInit() {
+    debugger;
+
+    //this.selectedPrivacyId = null;
+    //this.selectedPriorityId = null;
+
     this.initDtOptions();
     this.loadStructures();
     this.loadReports();
     this.loadPrivacyOptions();
-   // this.loadPriorityOptions();
+    this.loadPriorityOptions();
     this.loadUsers();
   }
 
@@ -384,8 +389,9 @@ export class CompleteCorrespondencesComponent implements OnInit {
   }
 
   loadPrivacyOptions() {
-    this.lookupsService.getPrivacyOptions().subscribe({
+    this.lookupsService.getPrivacy('').subscribe({
       next: (options) => {
+        debugger;
         this.privacyOptions = options;
       },
       error: (error) => {
@@ -411,7 +417,6 @@ export class CompleteCorrespondencesComponent implements OnInit {
     this.lookupsService.getPriorityOptions().subscribe({
       next: (options) => {
         this.priorityOptions = options;
-        this.selectedPriorityId = null;
       },
       error: (error) => {
         console.error('Error loading priority options:', error);
