@@ -99,7 +99,7 @@
                   <div class="col-sm-12">
                     <div class="form-group">
                       <label class="form-label">{{ 'MAIL_DETAILS.INSTRUCTIONS' | translate }}</label> :
-                      <span class="form-label">{{ transfers?.instruction || '' }}</span>
+                      <span class="form-label" [innerHTML]=" transfers?.instruction "></span>
 
                     </div>
                   </div>
