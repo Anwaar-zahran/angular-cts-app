@@ -81,6 +81,7 @@
             "SENT": "مرسل",
             "COMPLETED": "مكتمل"
         },
+        
         "NO_DATA": {
             "NEW": "لا توجد إرشادات جديدة",
             "SENT": "لا توجد إرشادات مرسلة",
@@ -95,7 +96,19 @@
         "TITLE": "بريدي",
         "INBOX": "الوارد",
         "OUTBOX": "الصادر",
-        "DRAFT": "المسودات"
+        "DRAFT": "المسودات",
+        "TABLE": {
+            "HEADERS": {
+                "SUBJECT": "الموضوع",
+                "TRANSFER_DATE": "تاريخ التحويل",
+                "REFERENCE_NB": "رقم المرجع",
+                "ACTIONS": "الإجراءات",
+                "STATUS": "الحالة"
+            }
+        },
+        "DETAILS": {
+            "TRANSFERRED_FROM": "تم التحويل من: {{user}}"
+        }
     },
   "MAIL_DETAILS": {
     "REPLY_TO": "الرد على",
@@ -306,6 +319,8 @@
             "READ": "مقروء",
             "UNREAD": "غير مقروء",
             "OVERDUE": "متأخر"
+        }, "DETAILS": {
+            "TRANSFERRED_FROM": "تم التحويل من: {{user}}"
         }
     },
     "REPORTS": {
@@ -612,6 +627,9 @@
     "HEADER": {
         "USER_NAV": {
             "LOGOUT": "تسجيل الخروج"
+        },
+        "CONFIRMMODAL":{
+          "MESSAGE":"هل أنت متأكد أنك تريد تغيير الادارة الخاصه بك؟"
         }
     },
     "SEARCH": {

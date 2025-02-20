@@ -617,6 +617,7 @@
         "ACTIONS": "Actions",
         "STATUS": "Status"
       }
+
     },
     "DETAILS": {
       "TRANSFERRED_FROM": "Transferred from: {{user}}"
@@ -650,7 +651,9 @@
   "HEADER": {
     "USER_NAV": {
       "LOGOUT": "Log out"
-    }
+    },"CONFIRMMODAL":{
+          "MESSAGE":"Are you sure to change the structure?"
+        }
   },
   "SEARCH": {
     "TITLE": "Search",

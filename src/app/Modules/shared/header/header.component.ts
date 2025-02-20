@@ -58,6 +58,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.authService.CurrentUser.subscribe(user => {
       this.userName = user;
     });
@@ -126,18 +127,46 @@ export class HeaderComponent implements OnInit {
   onStructureChange(structureId: number) {
     if(structureId){
     const modalRef = this.modalService.open(ConfirmationmodalComponent);
-    this.translateService.get('Are you sure to change the structure').subscribe((msg: string) => {
+   //Are you sure to change the structure
+    this.translateService.get('HEADER.CONFIRMMODAL.MESSAGE').subscribe((msg: string) => {
       modalRef.componentInstance.message = msg;
+       // Pass translated button labels for "Cancel" and "Confirm"
+      this.translateService.get('COMMON.ACTIONS.CANCEL').subscribe((cancelLabel: string) => {
+        modalRef.componentInstance.cancelLabel = cancelLabel;
+      });
+      this.translateService.get('COMMON.ACTIONS.CONFIRM').subscribe((confirmLabel: string) => {
+        modalRef.componentInstance.confirmLabel = confirmLabel;
+      });
     });
-
     modalRef.componentInstance.confirmed.subscribe(()=>{
       let CurrentUserStructures = this.structuresItems.find(structure => structure.StructureId === structureId);
       this.structuresItems.forEach(structure => structure.active = false);
-
+     // let currentUserStructure = this.structuresItems.find(structure => structure.StructureId === structureId);
       if (CurrentUserStructures) {
       CurrentUserStructures.active = true;
       }
-      localStorage.setItem('structureId', structureId.toString());})
+      localStorage.setItem('structureId', structureId.toString());
+      // Navigate to the landing page WITHOUT manually calling reloadData()
+      // this.route.navigate(['/landing']);
+      this.route.navigate(['/landing']).then(() => {
+       // this.updateActiveStructure();
+      });
+    })
+     
     }
   }
+  updateActiveStructure() {
+    debugger
+    const savedStructureId = localStorage.getItem('structureId');
+  
+    if (savedStructureId) {
+      const savedId = Number(savedStructureId);
+  
+      // Update the active structure based on stored value
+      this.structuresItems.forEach(structure => {
+        structure.active = structure.StructureId === savedId;
+      });
+    }
+  }
+  
 }
