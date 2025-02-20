@@ -42,18 +42,8 @@
       <!-- Privacy Select -->
       <div class="col-md-3">
         <div class="form-group">
-          <label class="form-label">{{ 'REPORTS.PRIVACY' | translate }}</label>
-          <!--<ng-select [items]="privacyOptions"  bindValue="id" [(ngModel)]="selectedPrivacyId"
-             [ngModelOptions]="{standalone: true}" [placeholder]="'REPORTS.PLACEHOLDERS.SELECT_PRIVACY' | translate"
-             class="form-control">
-    <ng-template ng-option-tmp let-item="item">
-      {{ getName(item) }}
-    </ng-template>
-    <ng-template ng-label-tmp let-item="item">
-      {{ getName(item) }}
-    </ng-template>
-  </ng-select>-->
-          <select [(ngModel)]="selectedPrivacyId" class="form-control" id="ddlPrivacy">
+          <label class="form-label">{{ 'REPORTS.PRIVACY' | translate }}</label>        
+          <select [(ngModel)]="selectedPrivacyId" class="form-control" id="ddlPrivacy" name="ddlPrivacy">
             <option [ngValue]="null" disabled>
               {{ "REPORTS.PLACEHOLDERS.SELECT_PRIVACY" | translate }}
             </option>
@@ -68,17 +58,8 @@
       <div class="col-md-3">
         <div class="form-group">
           <label class="form-label">{{ 'REPORTS.PRIORITY' | translate }}</label>
-          <!--<ng-select [items]="priorityOptions"  bindValue="id" [(ngModel)]="selectedPriorityId"
-             [ngModelOptions]="{standalone: true}" [placeholder]="'REPORTS.PLACEHOLDERS.SELECT_PRIORITY' | translate"
-             class="form-control">
-    <ng-template ng-option-tmp let-item="item">
-      {{ getName(item) }}
-    </ng-template>
-    <ng-template ng-label-tmp let-item="item">
-      {{ getName(item) }}
-    </ng-template>
-  </ng-select>-->
-          <select [(ngModel)]="selectedPriorityId" class="form-control" id="ddlPriority">
+         
+          <select [(ngModel)]="selectedPriorityId" class="form-control" id="ddlPriority" name="ddlPriority">
             <option [ngValue]="null" disabled>
               {{ "REPORTS.PLACEHOLDERS.SELECT_PRIORITY" | translate }}
             </option>
