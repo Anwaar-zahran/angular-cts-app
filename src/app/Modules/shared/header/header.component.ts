@@ -98,22 +98,26 @@ export class HeaderComponent implements OnInit {
     if(!userTypeId){
       return;
     }
-
+  
     this.structuresService.getStructureById(userTypeId).subscribe({
       next: (response:CurrentUserStructures) => {
 
         console.log('Response:', response);
         const structures = response.structures;
-
+  
         localStorage.setItem('currentUser', response.fullName);
+        const savedStructureId = localStorage.getItem('structureId');
         structures.forEach((structure) => {
-
+  
           this.structuresItems.push({ 
             name: structure.name,
-            active: response.defaultStructureId == structure.id,
-            StructureId: structure.id });
+            active: savedStructureId 
+            ? structure.id === Number(savedStructureId)
+            : structure.id === response.defaultStructureId,
+            StructureId: structure.id 
+          });
         });
-        
+
       },
       error: (error) => {
         console.log('Error fetching structure:', error.message);
@@ -123,35 +127,35 @@ export class HeaderComponent implements OnInit {
       }
     });
   }
-
+  
   onStructureChange(structureId: number) {
     if(structureId){
-    const modalRef = this.modalService.open(ConfirmationmodalComponent);
+      const modalRef = this.modalService.open(ConfirmationmodalComponent);
    //Are you sure to change the structure
-    this.translateService.get('HEADER.CONFIRMMODAL.MESSAGE').subscribe((msg: string) => {
-      modalRef.componentInstance.message = msg;
-       // Pass translated button labels for "Cancel" and "Confirm"
-      this.translateService.get('COMMON.ACTIONS.CANCEL').subscribe((cancelLabel: string) => {
-        modalRef.componentInstance.cancelLabel = cancelLabel;
+      this.translateService.get('HEADER.CONFIRMMODAL.MESSAGE').subscribe((msg: string) => {
+        modalRef.componentInstance.message = msg;
+        // Pass translated button labels for "Cancel" and "Confirm"
+        this.translateService.get('COMMON.ACTIONS.CANCEL').subscribe((cancelLabel: string) => {
+          modalRef.componentInstance.cancelLabel = cancelLabel;
+        });
+        this.translateService.get('COMMON.ACTIONS.CONFIRM').subscribe((confirmLabel: string) => {
+          modalRef.componentInstance.confirmLabel = confirmLabel;
+        });
       });
-      this.translateService.get('COMMON.ACTIONS.CONFIRM').subscribe((confirmLabel: string) => {
-        modalRef.componentInstance.confirmLabel = confirmLabel;
-      });
-    });
-    modalRef.componentInstance.confirmed.subscribe(()=>{
-      let CurrentUserStructures = this.structuresItems.find(structure => structure.StructureId === structureId);
-      this.structuresItems.forEach(structure => structure.active = false);
-     // let currentUserStructure = this.structuresItems.find(structure => structure.StructureId === structureId);
-      if (CurrentUserStructures) {
-      CurrentUserStructures.active = true;
-      }
-      localStorage.setItem('structureId', structureId.toString());
-      // Navigate to the landing page WITHOUT manually calling reloadData()
+      modalRef.componentInstance.confirmed.subscribe(()=>{
+        let CurrentUserStructures = this.structuresItems.find(structure => structure.StructureId === structureId);
+        this.structuresItems.forEach(structure => structure.active = false);
+       // let currentUserStructure = this.structuresItems.find(structure => structure.StructureId === structureId);
+        if (CurrentUserStructures) {
+        CurrentUserStructures.active = true;
+        }
+        localStorage.setItem('structureId', structureId.toString());
+              // Navigate to the landing page WITHOUT manually calling reloadData()
       // this.route.navigate(['/landing']);
       this.route.navigate(['/landing']).then(() => {
-       // this.updateActiveStructure();
-      });
-    })
+         // this.updateActiveStructure();
+       });
+      })
      
     }
   }
@@ -167,6 +171,6 @@ export class HeaderComponent implements OnInit {
         structure.active = structure.StructureId === savedId;
       });
     }
-  }
+  } 
   
 }

@@ -76,3 +76,33 @@
 }
 
 
+.menu {
+  li {
+      margin: 0.25rem 0.5rem;
+      border-radius: 4px;
+      border: 0 !important;
+      position: relative;
+      font-size: 13px;
+      padding: 0.65rem 0.75rem;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    
+    &.active:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -2px;
+        background-color: var(--secondary-color);
+        height: calc(100% - 0.75rem);
+        width: 4px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: 20px;
+      }
+  }
+  span {
+    font-size: 14px;
+  }
+}

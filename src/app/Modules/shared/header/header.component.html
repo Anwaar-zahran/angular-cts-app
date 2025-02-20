@@ -47,23 +47,24 @@
             </div>
             <!--user menu-->
             <ul class="dropdown-menu" aria-labelledby="">
-                <li *ngFor="let item of userNav">
-                    <a [href]="item.link" [title]="item.title | translate" (click)="onLogout($event)"
-                        class="dropdown-item">
-                        {{ item.title | translate }}
-                    </a>
-                </li>
-                <!-- Strucutres menu -->
-                <div class="sidebar">
-                    <h4 class="title">Structures</h4>
-                    <ul class="menu "  aria-labelledby="">
+                <!-- Strucutres menu --> 
+                    <h6 class="title p-3 py-2 pb-0 mb-0">Structures</h6>
+                    <hr/>
+                    <ul class="menu sidebar p-0"  aria-labelledby="">
                       <li *ngFor="let item of structuresItems;let i = index" 
                           [class.active]="item.active"
                           (click)="onStructureChange(item.StructureId)">
                         {{ item.name | translate }}
                       </li>
-                    </ul>
-                </div>                  
+                    </ul> 
+
+                    <hr class="mt-4" />
+                <li *ngFor="let item of userNav">
+                    <a [href]="item.link" [title]="item.title | translate" (click)="onLogout($event)"
+                        class="dropdown-item pt-0">
+                        <i class="fa fa-sign-out"></i> {{ item.title | translate }}
+                    </a>
+                </li>             
             </ul>
         </div>
     </div>
