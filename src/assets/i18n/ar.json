@@ -178,8 +178,17 @@
     "MESSAGE": "الرسالة",
     "ATTACHMENTS": "المرفقات",
     "ADD_ATTACHMENT": "إضافة مرفق",
-    "PURPOSE_REQUIRED": "الحقل مطلوب"
-
+    "PURPOSE_REQUIRED": "الحقل مطلوب",
+    "REQUIRED": "الحقول الإلزامية",
+    "SENT": "تم الإرسال بنجاح",
+    "INSTRUCTIONS": "التعليمات",
+    "FILEINUSEERROR": "هناك ملف تم حجزه, يرجي التأكد من إيداعه أو تجاهل الحجز",
+    "ERROR": "حدث خطأ",
+    "PURPOSE": "الهدف",
+    "BUTTONS": {
+      "SEND": "إرسال",
+      "CLOSE": "إغلاق"
+    }
   },
     "TRANSFER_DIALOG": {
         "TITLE": "تحويل",

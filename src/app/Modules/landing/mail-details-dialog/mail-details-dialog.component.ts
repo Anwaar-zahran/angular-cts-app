@@ -266,7 +266,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       }
     );
 
-    this.lookupsService.getCategories(undefined).subscribe(
+    this.lookupsService.getCategoriesByName(undefined).subscribe(
       (response) => {
         this.categories = response || [];
       },
@@ -343,7 +343,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
           dialogRef.afterClosed().subscribe(result => {
             console.log('Transfer modal closed', result);
-           // this.dialogRef.close();
+            // this.dialogRef.close();
           });
         }
       },
