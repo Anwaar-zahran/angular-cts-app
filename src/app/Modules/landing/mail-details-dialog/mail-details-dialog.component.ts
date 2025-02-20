@@ -512,7 +512,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       debugger;
       if (this.linkedDocs.length > 0) {
         this.mappedArray = this.linkedDocs.map((doc: any) => {
-          const foundItem = this.categories.find((cat: any) => cat.id === doc.categoryId);
+          const foundItem = this.categories?.data.find((cat: any) => cat.id === doc.categoryId);
           return {
             id: doc.id,
             linkedDocumentReferenceNumber: doc.linkedDocumentReferenceNumber,
@@ -520,7 +520,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             statusId: doc.statusId,
             linkedBy: doc.linkedBy,
             createdDate: doc.createdDate,
-            category: foundItem ? foundItem.text : '',
+            category: foundItem ? this.getName(foundItem) : '',
           };
         });
       }
