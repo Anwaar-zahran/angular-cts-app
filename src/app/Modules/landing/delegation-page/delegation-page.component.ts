@@ -574,6 +574,7 @@ export class DelegationPageComponent implements OnInit {
         return item ?.name;
     }
   }
+
   toggleShowOldCorrespondance() {
     this.showOldCorrespondance = !this.showOldCorrespondance;
   }

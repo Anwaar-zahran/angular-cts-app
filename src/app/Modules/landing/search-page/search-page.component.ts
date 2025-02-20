@@ -51,7 +51,7 @@ export class SearchPageComponent {
   entities: Partial<Entity>[] = [];
   response: SearchResponse | null = null;
   dtOptions: DataTables.Settings = {};
-  categories: Category[] = [];
+  categories: any[] = [];
   priorities: any[] = [];
   privacies: any[] = [];
   importances: any[] = [];
@@ -147,7 +147,7 @@ export class SearchPageComponent {
   getCategories(): void {
     this.lookupservice.getCategoriesByName(undefined).subscribe(
       (response: any) => {
-        this.categories = response ?.data || [];
+        this.categories = response?.data || [];
 
       },
       (error: any) => {
@@ -322,8 +322,12 @@ export class SearchPageComponent {
     this.ResetForm();
   }
 
-
-
+  getCategoryName(catId: any): string {
+    debugger;
+    const cat = this.categories.find(p => p.id === catId);
+    return cat ? this.getName(cat) : '';
+  }
+  
   async showDetails(row: any) {
     this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
@@ -340,6 +344,20 @@ export class SearchPageComponent {
 
   } catch(error: any) {
     console.error("Error loading data", error);
+  }
+
+  // To get lookup names based on language
+  getName(item: any): string {
+
+    const currentLang = this.translate.currentLang;
+    switch (currentLang) {
+      case 'ar':
+        return item ?.nameAr || item ?.name;
+      case 'fr':
+        return item ?.nameFr || item ?.name;
+      default:
+        return item ?.name;
+    }
   }
 
   toggleSearchForm() {
