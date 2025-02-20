@@ -260,7 +260,7 @@ debugger
     return `${year}/${month}/${day}`;
   }
 
-  showAddress() {
+  showAddressOld() {
 
     //this.showAddressBook = !this.showAddressBook;
     const dialog = this.dialog.open(AddressBookComponent, {
@@ -292,12 +292,12 @@ debugger
         });
 debugger
         console.log('handle the rows')
-        // if (this.rows.length > 0) {
-        //   this.rows = this.rows.map(row => ({
-        //     ...row,
-        //     selectedToUsers: [...this.selectedToUsers] // Ensure selectedToUsers is copied properly
-        //   }));
-        // }
+        if (this.rows.length > 0) {
+          this.rows = this.rows.map(row => ({
+            ...row,
+            selectedToUsers: [...this.selectedToUsers] // Ensure selectedToUsers is copied properly
+          }));
+        }
         // if (this.selectedToUsers.length > 0) {
         //   this.rows = this.selectedToUsers.map(user => ({
         //     ...this.createEmptyRow(), // Create a new row structure
@@ -314,7 +314,52 @@ debugger
       }
     });
   }
-
+  showAddress() {
+    const dialog = this.dialog.open(AddressBookComponent, {
+      width: '80%',
+      data: {}
+    });
+  
+    dialog.afterClosed().subscribe((result: User[]) => {
+      if (result && result.length > 0) {
+        console.log('Address Book result:', result);
+  
+        // Transform selected users
+        this.selectedUsers = result.map(user => ({
+          ...user,
+          selectedUserId: user.id
+        }));
+  
+        this.selectedToUsers = [];
+        
+        this.selectedUsers.forEach(user => {
+          if (Array.isArray(user.userStructure)) {
+            user.userStructure.forEach((u: { user: { firstname: string; lastname: string } }) => {
+              let userName = u.user.firstname + ' ' + u.user.lastname;
+              this.selectedToUsers.push({
+                structureName: user.name,
+                userName: userName
+              });
+            });
+          }
+        });
+  
+        console.log('Updating rows...');
+  
+        // Clear existing rows and add new ones for each selected user
+        this.rows = this.selectedToUsers.map(user => ({
+          ...this.createEmptyRow(),
+          selectedToUsers: [user] // Assigning the user to the row
+        }));
+  
+        console.log('Updated rows:', this.rows);
+        this.cdr.detectChanges();
+      } else {
+        console.log('Address Book dialog was closed without submitting');
+      }
+    });
+  }
+  
   onClose(): void {
     this.dialogRef.close();
   }
@@ -347,7 +392,7 @@ debugger
       isStructure: false, // Default value
       selectedUser: null as { id: number, name: string, structureId: number, isStructure: boolean } | null,
       showValidationError: false,
-      selectedToUsers: [] as StructureUsers[] 
+     selectedToUsers: [] as StructureUsers[] 
     };
   }
   onUserOrPurposeChange(index: number) {
