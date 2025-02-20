@@ -20,6 +20,10 @@ interface User {
   id: number;
   name: string;
 }
+interface StructureUsers {
+  structureName: string,
+  userName: string
+}
 interface TransferRow {
   
   purposeId: number | null; // Allow null
@@ -70,6 +74,7 @@ export class TransferModalComponent implements OnInit {
   documentPrivacyId:any;
   fromStructureId:any;
   parentTransferId:any;
+  selectedToUsers: StructureUsers[] = []
   rows = [
     this.createEmptyRow() // Initialize with one empty row
   ];
@@ -252,7 +257,7 @@ export class TransferModalComponent implements OnInit {
     return `${year}/${month}/${day}`;
   }
 
-  showAddress() {
+  showAddress1() {
 
     //this.showAddressBook = !this.showAddressBook;
     const dialog = this.dialog.open(AddressBookComponent, {
@@ -384,7 +389,51 @@ collectRowData(): TransferRow[] {
   });
 }
 
- 
+showAddress() {
+  const dialog = this.dialog.open(AddressBookComponent, {
+    width: '80%',
+    data: {}
+  });
+
+  dialog.afterClosed().subscribe((result: User[]) => {
+    if (result && result.length > 0) {
+      console.log('Address Book result:', result);
+
+      // Transform selected users
+      this.selectedUsers = result.map(user => ({
+        ...user,
+        selectedUserId: user.id
+      }));
+
+      this.selectedToUsers = [];
+      
+      this.selectedUsers.forEach(user => {
+        if (Array.isArray(user.userStructure)) {
+          user.userStructure.forEach((u: { user: { firstname: string; lastname: string } }) => {
+            let userName = u.user.firstname + ' ' + u.user.lastname;
+            this.selectedToUsers.push({
+              structureName: user.name,
+              userName: userName
+            });
+          });
+        }
+      });
+
+      console.log('Updating rows...');
+
+      // Clear existing rows and add new ones for each selected user
+      this.rows = this.selectedToUsers.map(user => ({
+        ...this.createEmptyRow(),
+        selectedToUsers: [user] // Assigning the user to the row
+      }));
+
+      console.log('Updated rows:', this.rows);
+      this.cdr.detectChanges();
+    } else {
+      console.log('Address Book dialog was closed without submitting');
+    }
+  });
+}
 
 
   
