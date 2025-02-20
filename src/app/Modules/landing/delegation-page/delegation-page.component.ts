@@ -112,8 +112,8 @@ export class DelegationPageComponent implements OnInit {
     this.getPrivacyData();
     this.getUsers();
     this.getListData();
-    
-    this.delegationForm.get('fromDate')?.valueChanges.subscribe(() => {
+
+    this.delegationForm.get('fromDate') ?.valueChanges.subscribe(() => {
       this.updateMinDate();
     });
   }
@@ -131,8 +131,8 @@ export class DelegationPageComponent implements OnInit {
       note: [''],
       startDate: [null],
     }, {
-      validators: this.dateRangeValidator
-    });
+        validators: this.dateRangeValidator
+      });
   }
 
   initDtOptions(): void {
@@ -158,12 +158,12 @@ export class DelegationPageComponent implements OnInit {
         const pagination = $(api.table().container()).find('.dataTables_paginate');
         pagination.find('input.paginate-input').remove();
         const page = $('<span class="d-inline-flex align-items-center mx-2">' + this.translate.instant('COMMON.PAGE') + '<input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> ' + this.translate.instant('COMMON.OF') + ' ' + pageInfo.pages + '</span>');
-         
-        
+
+
         let timeout: any;
         page.find('input').on('keyup', function () {
           clearTimeout(timeout);
-          
+
           timeout = setTimeout(() => {
             const pageNumber = parseInt($(this).val() as string, 10);
             if (pageNumber >= 1 && pageNumber <= pageInfo.pages) {
@@ -171,12 +171,12 @@ export class DelegationPageComponent implements OnInit {
             }
           }, 500);
         });
-  
+
         const previous = pagination.find('.previous');
         const next = pagination.find('.next');
-        page.insertAfter(previous); 
+        page.insertAfter(previous);
         next.insertAfter(page);
-  
+
         pagination.find('a.paginate_button').on('click', function () {
           page.find('input').val(api.page() + 1);
         });
@@ -192,8 +192,8 @@ export class DelegationPageComponent implements OnInit {
   }
 
   dateRangeValidator(group: FormControl): { [key: string]: boolean } | null {
-    const fromDate = group.get('fromDate')?.value;
-    const toDate = group.get('toDate')?.value;
+    const fromDate = group.get('fromDate') ?.value;
+    const toDate = group.get('toDate') ?.value;
 
     if (fromDate && toDate && toDate < fromDate) {
       return { toDateInvalid: true };
@@ -202,22 +202,22 @@ export class DelegationPageComponent implements OnInit {
   }
 
   updateMinDate(): void {
-    const fromDate = this.delegationForm.get('fromDate')?.value;
+    const fromDate = this.delegationForm.get('fromDate') ?.value;
 
     if (!fromDate) {
       this.minToDate = null;
-      this.delegationForm.get('toDate')?.setValue(null);
-      this.delegationForm.get('toDate')?.disable();
+      this.delegationForm.get('toDate') ?.setValue(null);
+      this.delegationForm.get('toDate') ?.disable();
     } else {
       let validDate = new Date(fromDate);
       let newDate = new Date(validDate.setDate(validDate.getDate()));
       this.minToDate = fromDate ? newDate : null;
-      this.delegationForm.get('toDate')?.enable();
+      this.delegationForm.get('toDate') ?.enable();
     }
   }
 
   getListData(): void {
-    
+
     this.delegationService.getDelegations(this.accessToken!).subscribe(
       (response) => {
         this.data = response.data || [];
@@ -233,7 +233,7 @@ export class DelegationPageComponent implements OnInit {
     this.lookupservice.getUsers(this.accessToken!).subscribe(
       (response) => {
         this.contacts = response || [];
-       // console.log('Contacts', this.contacts);
+        // console.log('Contacts', this.contacts);
 
         this.contacts.unshift({ id: 0, fullName: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_NAME') });
 
@@ -243,7 +243,7 @@ export class DelegationPageComponent implements OnInit {
 
         if (this.contacts.length > 0) {
           this.delegationForm.patchValue({
-            userId: this.contacts[0]?.id,
+            userId: this.contacts[0] ?.id,
           });
         }
       },
@@ -254,29 +254,29 @@ export class DelegationPageComponent implements OnInit {
   }
 
   getCategoriesName(categoriesId: any): string {
-   // console.log('categoriesId:', categoriesId);
-  
+    // console.log('categoriesId:', categoriesId);
+
     if (!categoriesId || categoriesId.length === 0) {
       return " ";
     }
-  
-   let categoriesName = categoriesId
+
+    let categoriesName = categoriesId
       .map((id: number) => {
         const category = this.categories.find(cat => cat.id === id);
-        return category ? this.getName(category):'';
+        return category ? this.getName(category) : '';
       }).join(' - ');
 
     return categoriesName;
   }
 
   getPrivacyName(privacyID: number): string {
-    const privacy = this.privacy.find(p => p.id === privacyID);  
-    return privacy ? this.getName(privacy) : '';  
+    const privacy = this.privacy.find(p => p.id === privacyID);
+    return privacy ? this.getName(privacy) : '';
   }
 
   getCategories(): void {
-    this.lookupservice.getCategories(undefined).subscribe(
-      (response:any) => {
+    this.lookupservice.getCategoriesByName(undefined).subscribe(
+      (response: any) => {
         this.categories = response.data || [];
         //console.log('Categories:', this.categories);
       },
@@ -294,11 +294,11 @@ export class DelegationPageComponent implements OnInit {
           //text: "tesssst"
         };
         this.privacy = response || [];
-        
-         // this.placeholder = placeholder;
+
+        // this.placeholder = placeholder;
         this.privacy.unshift(placeholder);
 
-      
+
         //if (this.privacy.length > 0) {
         //  this.delegationForm.patchValue({
         //    privacyId: this.privacy[0] ?.id,
@@ -317,7 +317,7 @@ export class DelegationPageComponent implements OnInit {
 
   formatDate(date: Date | undefined): string {
     if (!date) return '';
-   // console.log('Date:', date);
+    // console.log('Date:', date);
 
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -449,7 +449,7 @@ export class DelegationPageComponent implements OnInit {
       const modalRef = this.modalService.open(ConfirmationmodalComponent);
       this.translate.get('DELEGATION.DELETE_CONFIRMATION').subscribe((msg: string) => {
         modalRef.componentInstance.message = msg;
-         // Pass translated button labels for "Cancel" and "Confirm"
+        // Pass translated button labels for "Cancel" and "Confirm"
         this.translate.get('COMMON.ACTIONS.CANCEL').subscribe((cancelLabel: string) => {
           modalRef.componentInstance.cancelLabel = cancelLabel;
         });
@@ -474,7 +474,7 @@ export class DelegationPageComponent implements OnInit {
             (error: any) => {
               console.error('Error deleting item:', error);
               this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
-                this.toaster.showToaster(error?.message || msg, 'danger');
+                this.toaster.showToaster(error ?.message || msg, 'danger');
               });
             }
           );
@@ -491,7 +491,7 @@ export class DelegationPageComponent implements OnInit {
     const itemData: any = {
       fromDate: this.formatDate(formValues.fromDate),
       toDate: this.formatDate(formValues.toDate),
-      toUser: formValues.userId    
+      toUser: formValues.userId
     };
 
     this.delegationService.searchDelegations(this.accessToken!, itemData).subscribe(
@@ -500,7 +500,7 @@ export class DelegationPageComponent implements OnInit {
         this.isSearch = true;
         //this.clear();
         this.data = response.data || [];
-       
+
       },
       (error: any) => {
         console.error('Error updating:', error);
@@ -520,9 +520,9 @@ export class DelegationPageComponent implements OnInit {
 
   resetDropDowns() {
     this.delegationForm.patchValue({
-      userId: this.contacts.length > 0 ? this.contacts[0]?.id : null,
+      userId: this.contacts.length > 0 ? this.contacts[0] ?.id : null,
       categoryId: this.categories.length > 0 ? [] : [],
-      privacyId: this.privacy.length > 0 ? this.privacy[0]?.id : null,
+      privacyId: this.privacy.length > 0 ? this.privacy[0] ?.id : null,
     });
   }
 
@@ -567,13 +567,14 @@ export class DelegationPageComponent implements OnInit {
     const currentLang = this.translate.currentLang;
     switch (currentLang) {
       case 'ar':
-        return item?.nameAr || item?.name;
+        return item ?.nameAr || item ?.name;
       case 'fr':
-        return item?.nameFr || item?.name;
+        return item ?.nameFr || item ?.name;
       default:
-        return item?.name;
+        return item ?.name;
     }
   }
+
   toggleShowOldCorrespondance() {
     this.showOldCorrespondance = !this.showOldCorrespondance;
   }

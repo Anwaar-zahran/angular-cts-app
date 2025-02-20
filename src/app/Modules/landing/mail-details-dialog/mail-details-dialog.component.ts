@@ -26,6 +26,7 @@ import { LookupsService } from '../../../services/lookups.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { ToasterComponent } from '../../shared/toaster/toaster.component';
 import { DatePipe } from '@angular/common';
+import { MailsService } from '../../../services/mail.service';
 
 interface TreeNode {
   id: string | number;
@@ -83,6 +84,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
   accessToken: string | null = null;
   tabs = [
+    'MY_TRANSFER',
     'ATTRIBUTES',
     'ATTACHMENTS',
     'NOTES',
@@ -117,6 +119,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   privacy: any;
   classification: any;
   notes: any;
+  transfers: any;
   transHistory: any;
   attachments: any;
   // Visual Tracking data (org chart data)
@@ -150,6 +153,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     private cdr: ChangeDetectorRef,
     private renderer: Renderer2,
     private searchService: SearchPageService,
+    private mailService: MailsService,
     private lookupsService: LookupsService,
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<MailDetailsDialogComponent>,
@@ -266,7 +270,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       }
     );
 
-    this.lookupsService.getCategories(undefined).subscribe(
+    this.lookupsService.getCategoriesByName(undefined).subscribe(
       (response) => {
         this.categories = response || [];
       },
@@ -343,7 +347,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
           dialogRef.afterClosed().subscribe(result => {
             console.log('Transfer modal closed', result);
-           // this.dialogRef.close();
+            // this.dialogRef.close();
           });
         }
       },
@@ -476,7 +480,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         notes,
         transHistory,
         attachments,
-        visualTracking
+        visualTracking,
+        myTransfer
       ] = await Promise.all([
         this.getAttributes(docID),
         this.getNonArchAttachments(docID),
@@ -485,7 +490,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.getNotes(docID),
         this.getHistory(docID),
         this.getAttachments(docID),
-        this.getVisualTracking(docID)
+          this.getVisualTracking(docID),
+          this.getTransfer(this.data?.row?.id)
       ]);
 
       this.attributes = attributes;
@@ -506,7 +512,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       debugger;
       if (this.linkedDocs.length > 0) {
         this.mappedArray = this.linkedDocs.map((doc: any) => {
-          const foundItem = this.categories.find((cat: any) => cat.id === doc.categoryId);
+          const foundItem = this.categories?.data.find((cat: any) => cat.id === doc.categoryId);
           return {
             id: doc.id,
             linkedDocumentReferenceNumber: doc.linkedDocumentReferenceNumber,
@@ -514,7 +520,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             statusId: doc.statusId,
             linkedBy: doc.linkedBy,
             createdDate: doc.createdDate,
-            category: foundItem ? foundItem.text : '',
+            category: foundItem ? this.getName(foundItem) : '',
           };
         });
       }
@@ -536,6 +542,21 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       console.error("Error loading data", error);
     }
   }
+    getTransfer(docID: string): any {
+      return new Promise((resolve, reject) => {
+        this.mailService.getMyTransfer(this.accessToken!, docID).subscribe(
+          (response) => {
+            this.transfers = response || [];
+            resolve(response);
+            console.log("Transfer:", response)
+          },
+          (error: any) => {
+            console.error(error);
+            reject(error);
+          }
+        );
+      });
+    }
 
   basicAttributes: any;
   customAttribute: any;

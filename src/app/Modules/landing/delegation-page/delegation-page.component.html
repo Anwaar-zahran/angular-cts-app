@@ -88,20 +88,6 @@
             <label for="ddlPrivacy" class="form-label required">
               {{"DELEGATION.PRIVACY" | translate }}
             </label>
-            <!--<ng-select id="ddlPrivacy"
-                       formControlName="privacyId"
-                       [items]="privacy"
-                       bindValue="id"
-                       [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_PRIVACY' | translate"
-                       class="form-control">
-              <ng-template ng-option-tmp let-item="item">
-                {{ getName(item) }}
-              </ng-template>
-              <ng-template ng-label-tmp let-item="item">
-                {{ getName(item) }}
-              </ng-template>
-            </ng-select>-->
-
             <select  id="ddlPrivacy" formControlName="privacyId"  class="form-control">
               <option [ngValue]="null" hidden disabled>
                 {{ "DELEGATION.PLACEHOLDERS.SELECT_PRIVACY" | translate }}
