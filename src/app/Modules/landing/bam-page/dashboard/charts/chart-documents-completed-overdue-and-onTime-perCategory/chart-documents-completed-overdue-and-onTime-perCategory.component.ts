@@ -58,7 +58,7 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
       .GetDocumentsCompletedOverdueAndOnTimePerCategoryByUser({
         fromDate: this.fromDate,
         toDate: this.toDate,
-        structureId: '1',
+        structureId:  localStorage.getItem('structureId') || "1",
       })
       .subscribe((res: { overDue: any[]; onTime: any[] }) => {
         const categoryNames: string[] = [];

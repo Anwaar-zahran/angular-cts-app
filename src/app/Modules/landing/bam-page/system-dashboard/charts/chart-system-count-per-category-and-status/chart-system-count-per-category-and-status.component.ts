@@ -61,7 +61,7 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
       .GetCountPerCategoryAndStatus({
         fromDate: this.fromDate,
         toDate: this.toDate,
-        structureId: '1',
+        structureId:  localStorage.getItem('structureId') || "1",
       })
       .subscribe((res: any) => {
         // Get unique status IDs for X axis

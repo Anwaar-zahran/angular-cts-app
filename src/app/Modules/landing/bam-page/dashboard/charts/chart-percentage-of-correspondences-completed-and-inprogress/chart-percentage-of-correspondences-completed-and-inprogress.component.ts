@@ -69,7 +69,7 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
       .GetDocumentsCompletedAndInProgressByUser({
         fromDate: this.fromDate,
         toDate: this.toDate,
-        structureId: '1',
+        structureId:  localStorage.getItem('structureId') || "1",
         categoryIds: []
       })
       .subscribe((res: { text: string, count: number }[]) => {

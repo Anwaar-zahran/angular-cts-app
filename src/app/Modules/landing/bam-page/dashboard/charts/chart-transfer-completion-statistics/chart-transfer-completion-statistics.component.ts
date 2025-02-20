@@ -46,7 +46,7 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
       .getTransferCompletionStatistics({
         fromDate: this.fromDate,
         toDate: this.toDate,
-        structureId: '1',
+        structureId:  localStorage.getItem('structureId') || "1",
       })
       .subscribe((res: any) => {
         const averageCreatedByUser = (parseFloat(res?.averageCreatedByUser) || 0) / 10000;
