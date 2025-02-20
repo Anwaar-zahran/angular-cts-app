@@ -67,14 +67,14 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
         this.categories.forEach(cat => {
           const overdueItem = res.overDue.find(item => item.categoryId === cat.id) || { count: 0 };
           const onTimeItem = res.onTime.find(item => item.categoryId === cat.id) || { count: 0 };
-
+ 
           if (overdueItem.count > 0 || onTimeItem.count > 0) {
             categoryNames.push(cat.text);
             overdueData.push(overdueItem.count);
             onTimeData.push(onTimeItem.count);
           }
         });
-
+        
         this.drawChart(categoryNames, overdueData, onTimeData);
       });
   }

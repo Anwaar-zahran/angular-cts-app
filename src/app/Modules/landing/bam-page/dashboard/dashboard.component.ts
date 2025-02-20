@@ -56,6 +56,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private getCategories() {
+    debugger;
     this.lookupsService.getCategories(undefined).subscribe((res: any) => {
        
       this.categories = res;

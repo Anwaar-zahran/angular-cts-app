@@ -12,8 +12,8 @@ export class LookupsService {
   private listUsersUrl = `${environment.iAMUrl}/api/SearchUsersByStructureIds`;
   //private listPrivacies = `${environment.apiBaseUrl}/Privacy/ListPrivacies`;
   private listPrivacies = `${environment.apiBaseUrl}/Privacy/List?Name=`;
-  //private listCategories = `${environment.apiBaseUrl}/Category/ListCategories`;
-  private listCategories = `${environment.apiBaseUrl}/Category/List?Name`;
+ private listCategories = `${environment.apiBaseUrl}/Category/ListCategories`;
+  private listCategoriesByName = `${environment.apiBaseUrl}/Category/List?Name`;
   private listEntities = `${environment.iAMUrl}/api/SearchStructuresWithSearchAttributes`;
   private listSearchUsers = `${environment.iAMUrl}/api/SearchUsers`;
   private listStructuredUsers = `${environment.apiBaseUrl}/User/GetUsersStructuresFromCTS`;

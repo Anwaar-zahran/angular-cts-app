@@ -42,8 +42,9 @@ export class SystemDashboardComponent {
   }
 
   getCategories() {
+    debugger
     this.lookupsService.getCategories(undefined).subscribe((res: any) => {
-      this.categories = res?.data;
+      this.categories = res;
     });
   }
 
