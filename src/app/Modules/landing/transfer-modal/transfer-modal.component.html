@@ -68,7 +68,7 @@
 
         <tr class="col-lg-12" *ngFor="let row of rows; let i = index">
           <td>
-            <ng-select
+            <!-- <ng-select
               id="ddlToUsers{{ i }}"
               name="toUsers{{ i }}"
               [items]="users"
@@ -80,7 +80,18 @@
               <ng-template ng-label-tmp let-item="item">
                 {{ item.structureName }} / {{ item.userName }}
               </ng-template>
-            </ng-select>
+            </ng-select> -->
+            <ng-select
+  [items]="users"
+  bindLabel="name"
+  [(ngModel)]="row.selectedToUsers"
+  (change)="onUserOrPurposeChange(i)"
+  class="form-control"
+>
+  <ng-template ng-label-tmp let-item="item">
+    {{ item.structureName }} / {{ item.userName }}
+  </ng-template>
+</ng-select>
             <div
               *ngIf="row.showValidationError && !row.selectedUser"
               class="text-danger"
