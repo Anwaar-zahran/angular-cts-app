@@ -81,6 +81,7 @@
             "SENT": "مرسل",
             "COMPLETED": "مكتمل"
         },
+        
         "NO_DATA": {
             "NEW": "لا توجد إرشادات جديدة",
             "SENT": "لا توجد إرشادات مرسلة",
@@ -95,7 +96,16 @@
         "TITLE": "بريدي",
         "INBOX": "الوارد",
         "OUTBOX": "الصادر",
-        "DRAFT": "المسودات"
+        "DRAFT": "المسودات",
+        "TABLE": {
+            "HEADERS": {
+                "SUBJECT": "الموضوع",
+                "TRANSFER_DATE": "تاريخ التحويل",
+                "REFERENCE_NB": "رقم المرجع",
+                "ACTIONS": "الإجراءات",
+                "STATUS": "الحالة"
+            }
+        }
     },
   "MAIL_DETAILS": {
     "REPLY_TO": "الرد على",
