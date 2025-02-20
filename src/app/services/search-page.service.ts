@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { SearchFilter } from '../../app/models/searchFilter.model';
 import { environment } from '../../environments/environment';
@@ -251,7 +251,7 @@ export class SearchPageService {
       );
   }
 
- CheckDocumentAttachmnentISLocked(accessToken: string, id: string): Observable<boolean> {
+  CheckDocumentAttachmnentISLocked(accessToken: string, id: string): Observable<boolean> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
@@ -259,12 +259,12 @@ export class SearchPageService {
 
     const params = new HttpParams().set('documentId', id);
     return this.httpClient.get<boolean>(this.DocumentAttachmentLockedURL, { headers, params })
-  .pipe(
-    catchError((error) => {
-      console.error('Error while fetching attachments:', error.message);
-      return of(false); // Return false in case of an error
-    })
-  );
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching attachments:', error.message);
+          return of(false); // Return false in case of an error
+        })
+      );
 
   }
   getVisualTracking(documentId: string): Observable<any> {
@@ -280,6 +280,17 @@ export class SearchPageService {
         })
       );
   }
+
+  getViewerInfo(documentId: number, version: string, structId: number) {
+    const url = `https://java-qatar.d-intalio.com/VIEWER/api/document/${documentId}/version/${version}/details?structId=${structId}`;
+    
+    return this.httpClient.get(url).pipe(
+      catchError((error) => {
+        console.error('Error while fetching visual tracking:', error.message);
+        return throwError(() => new Error('Failed to fetch viewer info'));
+      })
+    );
+  }  
 }
 
 

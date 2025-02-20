@@ -134,6 +134,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   docTypeId: any;
   docTypes: any;
   categories: any;
+  isLocKed:boolean = true;
 
 
   // OrgChart references
@@ -334,6 +335,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     this.searchService.CheckDocumentAttachmnentISLocked(this.accessToken!, this.data.documentId).subscribe(
       (isLocked: boolean) => {
         console.log('Document is locked:', isLocked);
+        this.isLocKed = isLocked;
         if (isLocked) {
           this.toaster.showToaster("There is a file checked out, please make sure to check in or discard checkout.");
         } else {
@@ -526,7 +528,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       }
 
 
-      if (this.attributes.carbonCopy ?.length > 0)
+      if (this.attributes.carbonCopy?.length > 0)
         this.userId = this.attributes.carbonCopy;
       else
         this.userId = [];
@@ -568,10 +570,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.searchService.getDocAttributes(this.accessToken!, docID).subscribe(
         (response: any) => {
           this.attributes = response || [];
-          this.basicAttributes = JSON.parse(response ?.basicAttributes);
-          this.customAttribute = JSON.parse(response ?.customAttributes);
-          this.customAttributes = JSON.parse(response ?.customAttributes);
-          this.customFormData = JSON.parse(response ?.formData);
+          this.basicAttributes = JSON.parse(response?.basicAttributes);
+          this.customAttribute = JSON.parse(response?.customAttributes);
+          this.customAttributes = JSON.parse(response?.customAttributes);
+          this.customFormData = JSON.parse(response?.formData);
 
           this.getFormDataValue();
 
@@ -724,7 +726,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     // Search recursively starting from root
     const originalMailFolder = findOriginalMailFolder(this.TREE_DATA);
     debugger
-    if (originalMailFolder ?.children ?.[0] ?.id) {
+    if (originalMailFolder?.children?.[0]?.id) {
       const firstChild = originalMailFolder.children[0];
       const idParts = firstChild.id.split('_');
       if (idParts.length > 1) {
@@ -751,7 +753,6 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   getViewerUrl(): void {
-    debugger
     //const baseUrl = 'https://java-qatar.d-intalio.com/VIEWER/file?isCustomMode=true';
     const baseUrl = `${environment.viewerUrl}`;
     const token = this.authService.getToken();
@@ -761,18 +762,35 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       return;
     }
 
+    const loggedInUserId = this.authService.getUserTypeId();
+
+    var viewMode = 'edit'
+    if(this.isLocKed){
+      viewMode = 'view'; 
+    }
+
     const params = {
       documentId: this.selectedDocumentId,
       language: 'en',
       token: encodeURIComponent(token),
       version: 'autocheck',
       structId: 1,
-      viewermode: 'view'
+      viewermode: viewMode
     };
-
     const queryString = Object.entries(params)
       .map(([key, value]) => `${key}=${value}`)
       .join('&');
+
+
+    // this.searchService.getViewerInfo(23,'1.1',1).subscribe({
+    //   next:(resp)=>{
+    //     console.log('from search service')
+    //     console.log(resp);
+    //   }
+    // });
+
+    // console.log('--------------------------------------------------------query string ---------------------------------------')
+    // console.log(queryString)
 
     this.documentViewerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${baseUrl}?${queryString}`);
     console.log("Viewer URL:", this.documentViewerUrl);
@@ -800,8 +818,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           id: String(item.id || Math.random()),
           pid: item.parentId ? String(item.parentId) : null,
           category: isFirstNode ? (item.category || '') : (item.category || ''),
-          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`,
-          createdBy: isFirstNode ? (item.createdBy || '') : user ?.fullName || '',
+          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user?.fullName || ''}`,
+          createdBy: isFirstNode ? (item.createdBy || '') : user?.fullName || '',
           date: isFirstNode ? (item.createdDate || '') : (item.transferDate || '')
         };
       });
@@ -895,14 +913,14 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
 
   isEnabled(name: string): boolean {
-    const attribute = this.basicAttributes ?.find((attr: BasicAttribute) => attr.Name === name);
+    const attribute = this.basicAttributes?.find((attr: BasicAttribute) => attr.Name === name);
     return attribute ? attribute.Enabled : false;
   }
 
   controlValues: { [key: string]: string } = {};
 
   getFormDataValue() {
-    this.customAttributes ?.components ?.forEach((component: CustomAttributeComponent) => {
+    this.customAttributes?.components?.forEach((component: CustomAttributeComponent) => {
       const key = component.key;
       if (this.customFormData) {
         const value = this.customFormData[key];
@@ -936,11 +954,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     const currentLang = this.translate.currentLang;
     switch (currentLang) {
       case 'ar':
-        return item ?.nameAr || item ?.name;
+        return item?.nameAr || item?.name;
       case 'fr':
-        return item ?.nameFr || item ?.name;
+        return item?.nameFr || item?.name;
       default:
-        return item ?.name;
+        return item?.name;
     }
   }
 }
