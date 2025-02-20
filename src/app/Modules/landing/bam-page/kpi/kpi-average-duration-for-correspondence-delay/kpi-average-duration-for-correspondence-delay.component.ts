@@ -7,7 +7,7 @@ import { LookupsService } from '../../../../../services/lookups.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { KpiChartAverageDurationForCorrespondenceDelayComponent } from './kpi-chart-average-duration-for-correspondence-delay/kpi-chart-average-duration-for-correspondence-delay.component';
 import { KpiTableAverageDurationForCorrespondenceDelayComponent } from './kpi-table-average-duration-for-correspondence-delay/kpi-table-average-duration-for-correspondence-delay.component';
-
+import { BackButtonComponent } from '../../../../shared/back-button/back-button.component';
 @Component({
   selector: 'app-kpi-average-duration-for-correspondence-delay',
   templateUrl: './kpi-average-duration-for-correspondence-delay.component.html',
@@ -16,7 +16,8 @@ import { KpiTableAverageDurationForCorrespondenceDelayComponent } from './kpi-ta
     CommonModule, FormsModule, NgbModalModule,
     TranslateModule,
     KpiChartAverageDurationForCorrespondenceDelayComponent,
-    KpiTableAverageDurationForCorrespondenceDelayComponent
+    KpiTableAverageDurationForCorrespondenceDelayComponent,
+    BackButtonComponent
   ]
 })
 export class KpiAverageDurationForCorrespondenceDelayComponent implements OnInit {

@@ -305,8 +305,10 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
     }
 
     goToPage(page: number) {
-        this.currentPage = page;
-        this.loadReports();
+        if (page >= 1 && page <= this.totalPages) {
+          this.currentPage = page;
+          this.loadReports();
+        }
     }
 
     onUserSearch(event: { term: string, items: User[] }) {

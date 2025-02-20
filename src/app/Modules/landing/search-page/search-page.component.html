@@ -2,169 +2,176 @@
 
   <!--title-->
   <div class="d-flex justify-content-between mb-3">
-    <h1 class="page-title">{{ 'SEARCH.TITLE' | translate }}</h1>
-  </div>
-
-  <!--form-->
-  <div class="row">
-    <div class="col-sm-6 col-md-4 col-lg-3">
-      <div class="form-group">
-        <label for="sendingEntity" class="form-label">{{ 'SEARCH.FORM.SENDING_ENTITY' | translate }}</label>
-        <ng-select name="sendingEntity" id="ddlSendEntity" [(ngModel)]="searchModel.documentSender" [items]="entities"
-          bindLabel="name" bindValue="id" [placeholder]="'SEARCH.FORM.SELECT_ENTITY' | translate" class="form-control">
-        </ng-select>
-
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3">
-      <div class="form-group">
-        <label for="recEntity" class="form-label">{{ 'SEARCH.FORM.RECEIVING_ENTITY' | translate }}</label>
-        <ng-select name="recEntity" id="ddlRecEntity" [(ngModel)]="searchModel.documentReceiver" [items]="entities"
-          bindLabel="name" bindValue="id" [placeholder]="'SEARCH.FORM.SELECT_ENTITY' | translate" class="form-control">
-        </ng-select>
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3">
-      <div class="form-group">
-        <label for="ddlFromUsers" class="form-label">{{ 'SEARCH.FORM.TRANSFER.FROM_USER' | translate }}</label>
-        <ng-select id="ddlFromUsers" name="fromUser" [(ngModel)]="searchModel.fromUser" [items]="searchUsers"
-          bindLabel="fullName" bindValue="id" [placeholder]="'SEARCH.FORM.SELECT_USER' | translate"
-          class="form-control">
-        </ng-select>
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3">
-      <div class="form-group">
-        <label for="ddlToUsers" class="form-label">{{ 'SEARCH.FORM.TRANSFER.TO_USER' | translate }}</label>
-        <ng-select id="ddlToUsers" name="toUsers" [(ngModel)]="searchModel.toUser" [items]="searchUsers"
-          bindLabel="fullName" bindValue="id" placeholder="Select user" class="form-control">
-        </ng-select>
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3">
-      <div class="form-group">
-        <label for="ddlTransEntity" class="form-label">{{ 'SEARCH.FORM.TRANSFER.FROM_STRUCTURE' | translate }}</label>
-        <ng-select id="ddlTransEntity" name="transFrom" [(ngModel)]="searchModel.fromStructure" [items]="entities"
-          bindLabel="name" bindValue="id" placeholder="Select entity" class="form-control">
-        </ng-select>
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3">
-      <div class="form-group">
-        <label for="ddlTransFromEntity" class="form-label">{{ 'SEARCH.FORM.TRANSFER.TO_STRUCTURE' | translate }}</label>
-        <ng-select id="ddlTransFromEntity" name="transTo" [(ngModel)]="searchModel.toStructure" [items]="entities"
-          bindLabel="name" bindValue="id" placeholder="Select entity" class="form-control">
-        </ng-select>
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3">
-      <!--date-->
-      <div class="form-group">
-        <label for="datepicker" class="form-label">{{ 'SEARCH.FORM.TRANSFER.FROM_DATE' | translate }}</label>
-        <input class="form-control date-picker" matInput [matDatepicker]="picker" placeholder="mm-dd-yyyy"
-          [(ngModel)]="searchModel.fromTransferDate" name="dp1" (click)="picker.open()" />
-        <mat-datepicker #picker></mat-datepicker>
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3">
-      <!--date-->
-      <div class="form-group">
-        <label for="datepicker" class="form-label">{{ 'SEARCH.FORM.TRANSFER.TO_DATE' | translate }}</label>
-        <input class="form-control date-picker" matInput [matDatepicker]="picker1" placeholder="mm-dd-yyyy"
-          [(ngModel)]="searchModel.toTransferDate" name="dp2" (click)="picker1.open()" />
-        <mat-datepicker #picker1></mat-datepicker>
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3">
-      <!--text-->
-      <div class="form-group">
-        <label for="txtKeyword" class="form-label">{{ 'SEARCH.FORM.KEYWORDS' | translate }}</label>
-        <input type="text" id="txtKeyword" name="keyword" class="form-control" [(ngModel)]="searchModel.keyword">
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3">
-      <!--date-->
-      <div class="form-group">
-        <label for="datepicker" class="form-label">{{ 'SEARCH.FORM.DOCUMENT_DATE' | translate }}</label>
-        <input class="form-control date-picker" matInput [matDatepicker]="picker3" placeholder="mm-dd-yyyy"
-          [(ngModel)]="searchModel.DocumentDate" name="dp3" (click)="picker3.open()" />
-        <mat-datepicker #picker3></mat-datepicker>
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="delegationUsers.length > 1">
-      <div class="form-group">
-        <label for="select2Example" class="form-label">{{ 'SEARCH.FORM.SEARCH_INBOX' | translate }}</label>
-        <ng-select [(ngModel)]="searchModel.delegationId" [items]="delegationUsers" bindLabel="fromUser" bindValue="id"
-          class="form-control">
-        </ng-select>
-      </div>
-    </div>
-  </div>
-
-  <!--actions-->
-  <div class="d-flex justify-content-end gap-3 mt-2">
-    <button class="btn btn-secondary btn-lg" (click)="clearForm()">{{ 'SEARCH.BUTTONS.CLEAR' | translate }}</button>
-    <button class="btn btn-primary btn-lg" (click)="onSearch()">
-      <i class="fa fa-search"></i> {{ 'SEARCH.BUTTONS.SEARCH' | translate }}
+    <h1 class="page-title"><app-back-button></app-back-button>{{ 'SEARCH.TITLE' | translate }}</h1>
+    <button class="btn btn-secondary mb-2" (click)="toggleSearchForm()">
+      <i class="fa" [ngClass]="formVisible ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
     </button>
   </div>
-  <hr *ngIf="response" />
-  <p *ngIf="response && response.recordsTotal">
-    {{ 'SEARCH.TABLE.TOTAL_RECORDS' | translate:{ count: response.recordsTotal } }}
-  </p>
 
-  <div class="position-relative">
-    <div class="shadow table-container overflow-x-auto">
-      <table class="table" *ngIf="response && response.data.length > 0" datatable [dtOptions]="dtOptions">
-        <thead>
-          <tr>
-            <th>{{ 'SEARCH.TABLE.HEADERS.CATEGORY' | translate }}</th>
-            <th>{{ 'SEARCH.TABLE.HEADERS.REFERENCE_NUMBER' | translate }}</th>
-            <th>{{ 'SEARCH.TABLE.HEADERS.SUBJECT' | translate }}</th>
-            <th>{{ 'SEARCH.TABLE.HEADERS.CREATED_DATE' | translate }}</th>
-            <!--<th>Sending Entity</th>
-          <th>Receiving Entity</th>
-          <th>Created ByUser</th>
-          <th>Due Date</th>
-          <th>Document Date</th>
-          <th>Priority</th>
-          <th>Importance</th>
-          <th>Privacy</th>-->
-            <th>{{ 'SEARCH.TABLE.HEADERS.STATUS' | translate }}</th>
-            <th>{{ 'SEARCH.TABLE.HEADERS.ACTIONS' | translate }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of response.data">
-            <td>{{ row.categoryText }}</td>
-            <td>{{ row.referenceNumber }}</td>
-            <td>{{ row.subject }}</td>
-            <td>{{ row.createdDate }}</td>
-            <!--<td>{{ row.sendingEntity }}</td>
-          <td>{{ row.receivingEntity }}</td>
-          <td>{{ row.createdByUser }}</td>
-          <td>{{ row.dueDate }}</td>
-          <td>{{ row.documentDate }}</td>
-          <td>{{ row.priorityText }}</td>
-          <td>{{ row.importanceText }}</td>
-          <td>{{ row.privacyText }}</td>-->
-            <td>{{ row.statusText }}</td>
-            <td>
-              <button type="button" class="btn" (click)="showDetails(row)">
-                <i class="fa fa-edit"></i>
-              </button>
-              <!--<button type="button" class="btn" (click)="onDelete(row)">
-              <i class="fa fa-times-circle"></i>
-            </button>-->
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- Message for No Data Found -->
-      <div *ngIf="response && response.data.length === 0" class="text-center noData mt-3">
-        <p>No data found</p>
+  <!-- Form -->
+  <div *ngIf="formVisible" [@expandCollapse]>
+    <div class="row">
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label for="sendingEntity" class="form-label">{{ 'SEARCH.FORM.SENDING_ENTITY' | translate }}</label>
+          <ng-select name="sendingEntity" id="ddlSendEntity" [(ngModel)]="searchModel.documentSender" [items]="entities"
+            bindLabel="name" bindValue="id" [placeholder]="'SEARCH.FORM.SELECT_ENTITY' | translate"
+            class="form-control">
+          </ng-select>
+
+        </div>
       </div>
-      <app-toaster></app-toaster>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label for="recEntity" class="form-label">{{ 'SEARCH.FORM.RECEIVING_ENTITY' | translate }}</label>
+          <ng-select name="recEntity" id="ddlRecEntity" [(ngModel)]="searchModel.documentReceiver" [items]="entities"
+            bindLabel="name" bindValue="id" [placeholder]="'SEARCH.FORM.SELECT_ENTITY' | translate"
+            class="form-control">
+          </ng-select>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label for="ddlFromUsers" class="form-label">{{ 'SEARCH.FORM.TRANSFER.FROM_USER' | translate }}</label>
+          <ng-select id="ddlFromUsers" name="fromUser" [(ngModel)]="searchModel.fromUser" [items]="searchUsers"
+            bindLabel="fullName" bindValue="id" [placeholder]="'SEARCH.FORM.SELECT_USER' | translate"
+            class="form-control">
+          </ng-select>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label for="ddlToUsers" class="form-label">{{ 'SEARCH.FORM.TRANSFER.TO_USER' | translate }}</label>
+          <ng-select id="ddlToUsers" name="toUsers" [(ngModel)]="searchModel.toUser" [items]="searchUsers"
+            bindLabel="fullName" bindValue="id" placeholder="Select user" class="form-control">
+          </ng-select>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label for="ddlTransEntity" class="form-label">{{ 'SEARCH.FORM.TRANSFER.FROM_STRUCTURE' | translate }}</label>
+          <ng-select id="ddlTransEntity" name="transFrom" [(ngModel)]="searchModel.fromStructure" [items]="entities"
+            bindLabel="name" bindValue="id" placeholder="Select entity" class="form-control">
+          </ng-select>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="form-group">
+          <label for="ddlTransFromEntity" class="form-label">{{ 'SEARCH.FORM.TRANSFER.TO_STRUCTURE' | translate
+            }}</label>
+          <ng-select id="ddlTransFromEntity" name="transTo" [(ngModel)]="searchModel.toStructure" [items]="entities"
+            bindLabel="name" bindValue="id" placeholder="Select entity" class="form-control">
+          </ng-select>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <!--date-->
+        <div class="form-group">
+          <label for="datepicker" class="form-label">{{ 'SEARCH.FORM.TRANSFER.FROM_DATE' | translate }}</label>
+          <input class="form-control date-picker" matInput [matDatepicker]="picker" placeholder="mm-dd-yyyy"
+            [(ngModel)]="searchModel.fromTransferDate" name="dp1" (click)="picker.open()" />
+          <mat-datepicker #picker></mat-datepicker>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <!--date-->
+        <div class="form-group">
+          <label for="datepicker" class="form-label">{{ 'SEARCH.FORM.TRANSFER.TO_DATE' | translate }}</label>
+          <input class="form-control date-picker" matInput [matDatepicker]="picker1" placeholder="mm-dd-yyyy"
+            [(ngModel)]="searchModel.toTransferDate" name="dp2" (click)="picker1.open()" />
+          <mat-datepicker #picker1></mat-datepicker>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <!--text-->
+        <div class="form-group">
+          <label for="txtKeyword" class="form-label">{{ 'SEARCH.FORM.KEYWORDS' | translate }}</label>
+          <input type="text" id="txtKeyword" name="keyword" class="form-control" [(ngModel)]="searchModel.keyword">
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <!--date-->
+        <div class="form-group">
+          <label for="datepicker" class="form-label">{{ 'SEARCH.FORM.DOCUMENT_DATE' | translate }}</label>
+          <input class="form-control date-picker" matInput [matDatepicker]="picker3" placeholder="mm-dd-yyyy"
+            [(ngModel)]="searchModel.DocumentDate" name="dp3" (click)="picker3.open()" />
+          <mat-datepicker #picker3></mat-datepicker>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 col-lg-3" *ngIf="delegationUsers.length > 1">
+        <div class="form-group">
+          <label for="select2Example" class="form-label">{{ 'SEARCH.FORM.SEARCH_INBOX' | translate }}</label>
+          <ng-select [(ngModel)]="searchModel.delegationId" [items]="delegationUsers" bindLabel="fromUser"
+            bindValue="id" class="form-control">
+          </ng-select>
+        </div>
+      </div>
     </div>
+
+    <!--actions-->
+    <div class="d-flex justify-content-end gap-3 mt-2">
+      <button class="btn btn-secondary btn-lg" (click)="clearForm()">{{ 'SEARCH.BUTTONS.CLEAR' | translate }}</button>
+      <button class="btn btn-primary btn-lg" (click)="onSearch()">
+        <i class="fa fa-search"></i> {{ 'SEARCH.BUTTONS.SEARCH' | translate }}
+      </button>
+    </div>
+    <hr *ngIf="response" />
+
   </div>
+  <!--<p *ngIf="response && response.recordsTotal">
+    {{ 'SEARCH.TABLE.TOTAL_RECORDS' | translate:{ count: response.recordsTotal } }}
+  </p>-->
+ 
+  <div class="shadow table-container overflow-x-auto">
+    <table class="table" *ngIf="response && response.data.length > 0" datatable [dtOptions]="dtOptions">
+      <thead>
+        <tr>
+          <th>{{ 'SEARCH.TABLE.HEADERS.CATEGORY' | translate }}</th>
+          <th>{{ 'SEARCH.TABLE.HEADERS.REFERENCE_NUMBER' | translate }}</th>
+          <th>{{ 'SEARCH.TABLE.HEADERS.SUBJECT' | translate }}</th>
+          <th>{{ 'SEARCH.TABLE.HEADERS.CREATED_DATE' | translate }}</th>
+          <!--<th>Sending Entity</th>
+        <th>Receiving Entity</th>
+        <th>Created ByUser</th>
+        <th>Due Date</th>
+        <th>Document Date</th>
+        <th>Priority</th>
+        <th>Importance</th>
+        <th>Privacy</th>-->
+          <th>{{ 'SEARCH.TABLE.HEADERS.STATUS' | translate }}</th>
+          <th>{{ 'SEARCH.TABLE.HEADERS.ACTIONS' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of response.data">
+          <td>{{ row.categoryText }}</td>
+          <td>{{ row.referenceNumber }}</td>
+          <td>{{ row.subject }}</td>
+          <td>{{ row.createdDate }}</td>
+          <!--<td>{{ row.sendingEntity }}</td>
+        <td>{{ row.receivingEntity }}</td>
+        <td>{{ row.createdByUser }}</td>
+        <td>{{ row.dueDate }}</td>
+        <td>{{ row.documentDate }}</td>
+        <td>{{ row.priorityText }}</td>
+        <td>{{ row.importanceText }}</td>
+        <td>{{ row.privacyText }}</td>-->
+          <td>{{ row.statusText }}</td>
+          <td>
+            <button type="button" class="btn" (click)="showDetails(row)">
+              <i class="fa fa-eye"></i>
+            </button>
+            <!--<button type="button" class="btn" (click)="onDelete(row)">
+            <i class="fa fa-times-circle"></i>
+          </button>-->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- Message for No Data Found -->
+    <div *ngIf="response && response.data.length === 0" class="text-center noData mt-3">
+      <p>No data found</p>
+    </div>
+    <app-toaster></app-toaster>
+  </div> 
 </div>

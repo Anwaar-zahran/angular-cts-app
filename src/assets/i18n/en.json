@@ -22,7 +22,8 @@
             "CLEAR": "Clear",
             "BACK": "Back",
             "TITLE": "Actions",
-            "APPLY": "Apply"
+            "APPLY": "Apply",
+            "CONFIRM":"Confirm"
         },
         "SELECT": "Select",
         "LOADING": "Loading...",
@@ -30,6 +31,8 @@
             "PLACEHOLDER": "Select date",
             "FORMAT": "MM/DD/YYYY"
         },
+        "PAGE": "Page",
+        "OF": "Of",
         "FROM": "From",
         "TO": "To",
         "TABLE_INFO": "Showing _START_ to _END_ of _TOTAL_ entries",
@@ -97,36 +100,66 @@
             "TRANSFERRED_FROM": "Transferred from: {{user}}"
         }
     },
-    "MAIL_DETAILS": {
-        "REPLY_TO": "Reply To",
-        "SENDING_ENTITY": "Sending entity",
-        "RECEIVING_ENTITY": "Receiving entity",
-        "SUBJECT": "Subject",
-        "REFERENCE": "Reference",
-        "DATE": "Date",
-        "STATUS": "Status",
-        "PRIORITY": "Priority",
-        "CLASSIFICATION": "Classification",
-        "TABS": {
-            "ATTRIBUTES": "Attributes",
-            "ATTACHMENTS": "Attachments",
-            "NOTES": "Notes",
-            "LINKED_CORRESPONDENCE": "Linked correspondence",
-            "NON_ARCHIVED_ATTACHMENT": "Non-Archived Attachment",
-            "VISUAL_TRACKING": "Visual tracking",
-            "TRANSACTION_HISTORY": "Transaction History",
-            "ACTIVITY_LOG": "Activity Log"
-        },
-        "BUTTONS": {
-            "REPLY": "Reply",
-            "TRANSFER": "Transfer",
-            "COMPLETE": "Complete",
-            "START_WORKFLOW": "Start workflow"
-        }
+  "MAIL_DETAILS": {
+    "REPLY_TO": "Reply To",
+    "SENDING_ENTITY": "Sending entity",
+    "RECEIVING_ENTITY": "Receiving entity",
+    "SUBJECT": "Subject",
+    "REFERENCE": "Reference",
+    "DATE": "Date",
+    "STATUS": "Status",
+    "PRIORITY": "Priority",
+    "CLASSIFICATION": "Classification",
+    "IMPORTANCE": "Importance",
+    "CARBONCOPY": "Carbon copy",
+    "PRIVACY": "Privacy",
+    "DUEDATE": "Due date",
+    "CREATEDDATE": "Created date",
+    "CREATED_BY": "Created by",
+    "DOCUMENT_TYPE": "Document type",
+    "KEYWORD": "Keyword",
+    "ExternalReferenceNumber": "External Reference Number",
+    "BODY": "Body",
+    "TABS": {
+      "ATTRIBUTES": "Attributes",
+      "ATTACHMENTS": "Attachments",
+      "NOTES": "Notes",
+      "LINKED_CORRESPONDENCE": "Linked correspondence",
+      "NON_ARCHIVED_ATTACHMENT": "Non-Archived Attachment",
+      "VISUAL_TRACKING": "Visual tracking",
+      "TRANSACTION_HISTORY": "Transfers History",
+      "ACTIVITY_LOG": "Activity Log"
     },
+    "BUTTONS": {
+      "REPLY": "Reply",
+      "TRANSFER": "Transfer",
+      "COMPLETE": "Complete",
+      "START_WORKFLOW": "Start workflow"
+    },
+    "LINKED": {
+      "CATEGORY": "Category",
+      "REFERENCE_NUMBER": "Reference Number"
+    },
+    "ATTACHMENT": {
+      "TYPE": "Type",
+      "QUANTITY": "Quantity",
+      "DESC": "Description"
+    },
+    "HISTORY": {
+      "FROM_USER": "From",
+      "TO": "To",
+      "TRANSFER_DATE": "Transfer date",
+      "TRANSFER_TIME": "Transfer time",
+      "CLOSED_DATE": "Closed Date"
+    },
+    "LOGS": {
+      "USER": "User",
+      "ACTION": "Action"
+    }
+  },
     "LOGIN": {
         "TITLE": "Login",
-        "SYSTEM_TITLE": "Document Management System",
+        "SYSTEM_TITLE": "Correspondence Tracking System",
         "SUBTITLE": "Please enter your credentials to login",
         "USERNAME": "Username",
         "PASSWORD": "Password",
@@ -154,15 +187,17 @@
             "FIT": "Fit"
         }
     },
-    "REPLY_DIALOG": {
-        "TITLE": "Reply",
-        "TO": "To",
-        "CC": "CC",
-        "SUBJECT": "Subject",
-        "MESSAGE": "Message",
-        "ATTACHMENTS": "Attachments",
-        "ADD_ATTACHMENT": "Add Attachment"
-    },
+  "REPLY_DIALOG": {
+    "TITLE": "Reply",
+    "TO": "To",
+    "CC": "CC",
+    "SUBJECT": "Subject",
+    "MESSAGE": "Message",
+    "ATTACHMENTS": "Attachments",
+    "ADD_ATTACHMENT": "Add Attachment",
+    "PURPOSE_REQUIRED":"Purpose is required"
+
+  },
     "TRANSFER_DIALOG": {
         "TITLE": "Transfer",
         "TO": "To",
@@ -195,7 +230,8 @@
         "REQUIRED_FIELD": "This field is required",
         "INVALID_FORMAT": "Invalid format",
         "SERVER_ERROR": "Server error occurred",
-        "NO_PERMISSION": "You don't have permission"
+        "NO_PERMISSION": "You don't have permission",
+         "SOMETHING_WRONG":"Something went wrong"
     },
     "DELEGATION": {
         "TITLE": "Delegations",
@@ -205,8 +241,11 @@
         "TO_DATE": "To",
         "PRIVACY": "Privacy",
         "CATEGORY": "Category",
-        "SHOW_OLD_DOCUMENTS": "Show old documents",
+        "SHOW_OLD_CORRESPONDENCE": "Show old correspondence",
         "CAN_SIGN": "Can sign",
+        "DRAFT_INBOX": "Draft Inbox",
+        "NOTE" : "Notes",
+        "START_DATE":"Start Date",
         "DELETE_CONFIRMATION": "Are you sure you want to delete this delegation?",
         "DELETE_SUCCESS": "Delegation deleted successfully",
         "SAVE_SUCCESS": "Delegation saved successfully",
@@ -221,12 +260,15 @@
             "SEARCH": "Search...",
             "SELECT_MULTIPLE": "Select one or more"
         },
+       "CONFIRMMODALDELEGATION":{"TITLE":"Confirm Deletion"},
         "TABLE": {
             "DELEGATE_TO": "Delegate to",
             "FROM_DATE": "From date",
             "TO_DATE": "To date",
             "CREATED_DATE": "Created date",
             "PRIVACY": "Privacy",
+            "CATEGORY": "Category",
+            "NOTES": "Notes",
             "ACTIONS": "Actions"
         },
         "ERRORS": {
@@ -290,6 +332,7 @@
         "CREATED_DATE": "Created date",
         "SENDING_ENTITY": "Sending entity",
         "RECEIVING_ENTITY": "Receiving entity",
+        "TOTAL_REPORTS": "Total Reports",
         "PLACEHOLDERS": {
             "SELECT_STRUCTURE": "Select structure",
             "SELECT_USER": "Select user",
@@ -312,7 +355,8 @@
     "BAM": {
         "TITLE": "BAM",
         "DASHBOARD": {
-            "TITLE": "User Dashboard",
+            "SYSTEM_DASHBOARD_TITLE": "System Dashboard",
+            "USER_DASHBOARD_TITLE":"User Dashboard",
             "CHARTS": {
                 "COUNT_PER_CATEGORY": "Count per Category and Status",
                 "STATISTICS_PER_DEPARTMENT": "Statistics per Department",
@@ -338,6 +382,19 @@
                         "INFO": "Number of completed transfers per category divided into 2 circles (Only for transfers with due date)"
                     }
                 },
+
+               "STATUS": {
+                "COMPLETED": "Completed",
+                "IN_PROGRESS": "In Progress",
+                "OVERDUE": "Overdue",
+                "ON_TIME": "On Time",
+                "INPROGRESS": "In Progress",
+                "INTERNAL": "Internal",
+                "OUTGOING": "Outgoing",
+                "FOLLOW_UP":"Follow Up",
+                "FOLLOWUP": "Follow Up",
+                "INCOMING":"Incoming"
+                },
                 "LABELS": {
                     "STRUCTURES": "Structures",
                     "CATEGORIES": "Categories",
@@ -352,7 +409,8 @@
                     "ON_TIME": "On-Time",
                     "STATUS": "Status",
                     "CATEGORY": "Category",
-                    "TRANSFERS": "transfers"
+                    "TRANSFERS": "transfers",
+                    "VALUE":"Value"
                 }
             }
         },
@@ -384,7 +442,13 @@
                 "COMPLETED": "Completed",
                 "IN_PROGRESS": "In Progress",
                 "OVERDUE": "Overdue",
-                "ON_TIME": "On Time"
+                "ON_TIME": "On Time",
+                "INPROGRESS": "In Progress",
+                "INTERNAL": "Internal",
+                "OUTGOING": "Outgoing",
+                "FOLLOW_UP":"Follow Up",
+                "FOLLOWUP": "Follow Up",
+                "INCOMING":"Incoming"
             },
             "TRANSFER_COMPLETION_STATISTICS": {
                 "AVERAGE_CREATED_BY_USER": "Average Created By User",
@@ -416,7 +480,8 @@
                 "ON_TIME": "On-Time",
                 "STATUS": "Status",
                 "CATEGORY": "Category",
-                "PERCENTAGE": "Percentage"
+                "PERCENTAGE": "Percentage",
+                "VALUE":"Value"
             }
         },
         "KPI": {
@@ -604,5 +669,10 @@
                 "ACTIONS": "Actions"
             }
         }
+    },
+    "PrivacyOptions":{
+        "Normal":"Normal",
+        "Confidential":"Confidential",
+        "High Confidential":"High Confidential"
     }
 }

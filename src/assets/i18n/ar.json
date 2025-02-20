@@ -22,7 +22,8 @@
             "CLEAR": "مسح",
             "BACK": "رجوع",
             "TITLE": "الإجراءات",
-            "APPLY": "تطبيق"
+            "APPLY": "تطبيق",
+            "CONFIRM":"تاكيد"
         },
         "SELECT": "اختر",
         "LOADING": "جاري التحميل...",
@@ -30,6 +31,8 @@
             "FORMAT": "DD/MM/YYYY",
             "PLACEHOLDER": "اختر التاريخ"
         },
+        "PAGE": "صفحة",
+        "OF": "من",
         "FROM": "من",
         "TO": "إلى",
         "TABLE_INFO": "عرض _START_ إلى _END_ من _TOTAL_ سجل",
@@ -41,22 +44,24 @@
         "CLOSE": "إغلاق",
         "SELECT_DATE_RANGE": "اختر نطاق التاريخ"
     },
-    "LOGIN": {
-        "TITLE": "تسجيل الدخول",
-        "SYSTEM_TITLE": "نظام إدارة الوثائق",
-        "SUBTITLE": "الرجاء إدخال بيانات تسجيل الدخول",
-        "USERNAME": "اسم المستخدم",
-        "PASSWORD": "كلمة المرور",
-        "SUBMIT": "تسجيل الدخول",
-        "REMEMBER_ME": "تذكرني",
-        "FORGOT_PASSWORD": "نسيت كلمة المرور؟",
-        "ERRORS": {
-            "REQUIRED_FIELDS": "اسم المستخدم وكلمة المرور مطلوبان",
-            "REQUIRED_USERNAME": "اسم المستخدم مطلوب",
-            "REQUIRED_PASSWORD": "كلمة المرور مطلوبة",
-            "INVALID_CREDENTIALS": "اسم المستخدم أو كلمة المرور غير صحيحة"
-        }
-    },
+  "LOGIN": {
+    "TITLE": "تسجيل الدخول",
+    "SYSTEM_TITLE": "نظام تتبع المراسلات",
+    "SUBTITLE": "الرجاء إدخال بيانات تسجيل الدخول",
+    "USERNAME": "اسم المستخدم",
+    "PASSWORD": "كلمة المرور",
+    "SUBMIT": "تسجيل الدخول",
+    "REMEMBER_ME": "تذكرني",
+    "UNATHOURIZED": "انت غير مسرح بالدخول الى هذه الصفحة",
+
+    "FORGOT_PASSWORD": "نسيت كلمة المرور؟",
+    "ERRORS": {
+      "REQUIRED_FIELDS": "اسم المستخدم وكلمة المرور مطلوبان",
+      "REQUIRED_USERNAME": "اسم المستخدم مطلوب",
+      "REQUIRED_PASSWORD": "كلمة المرور مطلوبة",
+      "INVALID_CREDENTIALS": "اسم المستخدم أو كلمة المرور غير صحيحة"
+    }
+  },
     "GUIDELINES": {
         "TITLE": "الإرشادات",
         "TABLE": {
@@ -92,33 +97,63 @@
         "OUTBOX": "الصادر",
         "DRAFT": "المسودات"
     },
-    "MAIL_DETAILS": {
-        "REPLY_TO": "الرد على",
-        "SENDING_ENTITY": "الجهة المرسلة",
-        "RECEIVING_ENTITY": "الجهة المستلمة",
-        "SUBJECT": "الموضوع",
-        "REFERENCE": "المرجع",
-        "DATE": "التاريخ",
-        "STATUS": "الحالة",
-        "PRIORITY": "الأولوية",
-        "CLASSIFICATION": "التصنيف",
-        "TABS": {
-            "ATTRIBUTES": "السمات",
-            "ATTACHMENTS": "المرفقات",
-            "NOTES": "الملاحظات",
-            "LINKED_CORRESPONDENCE": "المراسلات المرتبطة",
-            "NON_ARCHIVED_ATTACHMENT": "مرفق غير مؤرشف",
-            "VISUAL_TRACKING": "التتبع المرئي",
-            "TRANSACTION_HISTORY": "سجل المعاملات",
-            "ACTIVITY_LOG": "سجل النشاط"
-        },
-        "BUTTONS": {
-            "REPLY": "رد",
-            "TRANSFER": "تحويل",
-            "COMPLETE": "إكمال",
-            "START_WORKFLOW": "بدء سير العمل"
-        }
+  "MAIL_DETAILS": {
+    "REPLY_TO": "الرد على",
+    "SENDING_ENTITY": "الجهة المرسلة",
+    "RECEIVING_ENTITY": "الجهة المستلمة",
+    "SUBJECT": "الموضوع",
+    "REFERENCE": "المرجع",
+    "DATE": "التاريخ",
+    "STATUS": "الحالة",
+    "PRIORITY": "الأولوية",
+    "CLASSIFICATION": "التصنيف",
+    "IMPORTANCE": "الاهمية",
+    "CARBONCOPY": "نسخة",
+    "PRIVACY": "درجة السرية",
+    "DUEDATE": "تاريخ الاستحقاق",
+    "CREATEDDATE": "تاريخ الإنشاء",
+    "CREATED_BY": "انشأ من قبل",
+    "DOCUMENT_TYPE": "نوع المستند",
+    "KEYWORD": "الكلمة المفتاح",
+    "ExternalReferenceNumber": "الرقم المرجعي الخارجي",
+    "BODY": "محتوى",
+    "TABS": {
+      "ATTRIBUTES": "السمات",
+      "ATTACHMENTS": "المرفقات",
+      "NOTES": "الملاحظات",
+      "LINKED_CORRESPONDENCE": "المراسلات المرتبطة",
+      "NON_ARCHIVED_ATTACHMENT": "مرفق غير مؤرشف",
+      "VISUAL_TRACKING": "التتبع المرئي",
+      "TRANSACTION_HISTORY": " تاريخ الإحالات",
+      "ACTIVITY_LOG": "سجل النشاط"
     },
+    "BUTTONS": {
+      "REPLY": "رد",
+      "TRANSFER": "تحويل",
+      "COMPLETE": "إكمال",
+      "START_WORKFLOW": "بدء سير العمل"
+    },
+    "LINKED": {
+      "CATEGORY": "الفئة",
+      "REFERENCE_NUMBER": "الرقم المرجعي"
+    },
+    "ATTACHMENT": {
+      "TYPE": "النوع",
+      "QUANTITY": "العدد",
+      "DESC": "الوصف"
+    },
+    "HISTORY": {
+      "FROM_USER": "من",
+      "TO": "إلى",
+      "TRANSFER_DATE": "تاريخ التحويل",
+      "TRANSFER_TIME": "وقت التحويل",
+      "CLOSED_DATE": "تاريخ الإغلاق"
+    },
+    "LOGS": {
+      "USER": "المستخدم",
+      "ACTION": "الإجراء"
+    }
+  },
     "VISUAL_TRACKING": {
         "TITLE": "التتبع المرئي",
         "DETAILS": {
@@ -135,15 +170,17 @@
         "REFERENCE": "المرجع",
         "NO_DATA": "لا تتوفر بيانات التتبع"
     },
-    "REPLY_DIALOG": {
-        "TITLE": "رد",
-        "TO": "إلى",
-        "CC": "نسخة إلى",
-        "SUBJECT": "الموضوع",
-        "MESSAGE": "الرسالة",
-        "ATTACHMENTS": "المرفقات",
-        "ADD_ATTACHMENT": "إضافة مرفق"
-    },
+  "REPLY_DIALOG": {
+    "TITLE": "رد",
+    "TO": "إلى",
+    "CC": "نسخة إلى",
+    "SUBJECT": "الموضوع",
+    "MESSAGE": "الرسالة",
+    "ATTACHMENTS": "المرفقات",
+    "ADD_ATTACHMENT": "إضافة مرفق",
+    "PURPOSE_REQUIRED": "الحقل مطلوب"
+
+  },
     "TRANSFER_DIALOG": {
         "TITLE": "تحويل",
         "TO": "إلى",
@@ -178,55 +215,61 @@
         "SERVER_ERROR": "حدث خطأ في الخادم",
         "NO_PERMISSION": "ليس لديك صلاحية"
     },
-    "DELEGATION": {
-        "TITLE": "التفويضات",
-        "FULL_NAME": "الاسم الكامل",
-        "SELECT_NAME": "اختر الاسم",
-        "FROM_DATE": "من",
-        "TO_DATE": "إلى",
-        "PRIVACY": "الخصوصية",
-        "CATEGORY": "الفئة",
-        "SHOW_OLD_DOCUMENTS": "عرض المستندات القديمة",
-        "CAN_SIGN": "صلاحية التوقيع",
-        "DELETE_CONFIRMATION": "هل أنت متأكد من حذف هذا التفويض؟",
-        "DELETE_SUCCESS": "تم حذف التفويض بنجاح",
-        "SAVE_SUCCESS": "تم حفظ التفويض بنجاح",
-        "UPDATE_SUCCESS": "تم تحديث التفويض بنجاح",
-        "PLACEHOLDERS": {
-            "SELECT_USER": "اختر المستخدم",
-            "SELECT_PRIVACY": "اختر مستوى الخصوصية",
-            "SELECT_CATEGORY": "اختر الفئة",
-            "SELECT_NAME": "اختر الاسم",
-            "FROM_DATE": "اختر تاريخ البداية",
-            "TO_DATE": "اختر تاريخ النهاية",
-            "SEARCH": "بحث...",
-            "SELECT_MULTIPLE": "اختر واحد أو أكثر"
-        },
-        "TABLE": {
-            "DELEGATE_TO": "مفوض إلى",
-            "FROM_DATE": "من تاريخ",
-            "TO_DATE": "إلى تاريخ",
-            "CREATED_DATE": "تاريخ الإنشاء",
-            "PRIVACY": "الخصوصية",
-            "ACTIONS": "الإجراءات"
-        },
-        "ERRORS": {
-            "REQUIRED_NAME": "الاسم الكامل مطلوب",
-            "REQUIRED_FROM_DATE": "تاريخ البداية مطلوب",
-            "REQUIRED_TO_DATE": "تاريخ النهاية مطلوب",
-            "REQUIRED_PRIVACY": "الخصوصية مطلوبة",
-            "REQUIRED_CATEGORY": "الفئة مطلوبة",
-            "INVALID_DATE_RANGE": "يجب أن يكون تاريخ النهاية بعد تاريخ البداية",
-            "OVERLAPPING_DELEGATION": "يوجد تفويض متداخل لهذا المستخدم"
-        },
-        "BUTTONS": {
-            "ADD_NEW": "إضافة تفويض جديد",
-            "EDIT": "تعديل التفويض",
-            "DELETE": "حذف التفويض"
-        }
+  "DELEGATION": {
+    "TITLE": "التفويضات",
+    "FULL_NAME": "الاسم الكامل",
+    "SELECT_NAME": "اختر الاسم",
+    "FROM_DATE": "من",
+    "TO_DATE": "إلى",
+    "START_DATE": "تاريخ البداية",
+    "PRIVACY": "الخصوصية",
+    "CATEGORY": "الفئة",
+    "NOTE": "ملاحظات",
+    "SHOW_OLD_DOCUMENTS": "عرض المستندات القديمة",
+    "CAN_SIGN": "صلاحية التوقيع",
+    "DRAFT_INBOX": "مسودة البريد الوارد",
+    "SHOW_OLD_CORRESPONDENCE": "عرض المراسلات القديمة",
+    "DELETE_CONFIRMATION": "هل أنت متأكد من حذف هذا التفويض؟",
+    "DELETE_SUCCESS": "تم حذف التفويض بنجاح",
+    "SAVE_SUCCESS": "تم حفظ التفويض بنجاح",
+    "UPDATE_SUCCESS": "تم تحديث التفويض بنجاح",
+    "PLACEHOLDERS": {
+      "SELECT_USER": "اختر المستخدم",
+      "SELECT_PRIVACY": "اختر مستوى الخصوصية",
+      "SELECT_CATEGORY": "اختر الفئة",
+      "SELECT_NAME": "اختر الاسم",
+      "FROM_DATE": "اختر تاريخ البداية",
+      "TO_DATE": "اختر تاريخ النهاية",
+      "SEARCH": "بحث...",
+      "SELECT_MULTIPLE": "اختر واحد أو أكثر"
     },
+    "CONFIRMMODALDELEGATION": { "TITLE": "تأكيد الحذف" },
+    "TABLE": {
+      "DELEGATE_TO": "مفوض إلى",
+      "FROM_DATE": "من تاريخ",
+      "TO_DATE": "إلى تاريخ",
+      "CREATED_DATE": "تاريخ الإنشاء",
+      "PRIVACY": "الخصوصية",
+      "ACTIONS": "الإجراءات",
+      "CATEGORY": "فئة"
+    },
+    "ERRORS": {
+      "REQUIRED_NAME": "الاسم الكامل مطلوب",
+      "REQUIRED_FROM_DATE": "تاريخ البداية مطلوب",
+      "REQUIRED_TO_DATE": "تاريخ النهاية مطلوب",
+      "REQUIRED_PRIVACY": "الخصوصية مطلوبة",
+      "REQUIRED_CATEGORY": "الفئة مطلوبة",
+      "INVALID_DATE_RANGE": "يجب أن يكون تاريخ النهاية بعد تاريخ البداية",
+      "OVERLAPPING_DELEGATION": "يوجد تفويض متداخل لهذا المستخدم"
+    },
+    "BUTTONS": {
+      "ADD_NEW": "إضافة تفويض جديد",
+      "EDIT": "تعديل التفويض",
+      "DELETE": "حذف التفويض"
+    }
+  },
     "MAIL": {
-        "TITLE": "البريد",
+        "TITLE": "بريد للتوقيع",
         "TABS": {
             "NEW": "جديد",
             "SENT": "مرسل",
@@ -271,6 +314,7 @@
         "CREATED_DATE": "تاريخ الإنشاء",
         "SENDING_ENTITY": "الجهة المرسلة",
         "RECEIVING_ENTITY": "الجهة المستلمة",
+        "TOTAL_REPORTS": "اجمالي التقارير",
         "PLACEHOLDERS": {
             "SELECT_STRUCTURE": "اختر الهيكل",
             "SELECT_USER": "اختر المستخدم",
@@ -293,7 +337,8 @@
     "BAM": {
         "TITLE": "مؤشرات الأداء",
         "DASHBOARD": {
-            "TITLE": "لوحة معلومات المستخدم",
+            "SYSTEM_DASHBOARD_TITLE": "لوحة معلومات النظام",
+            "USER_DASHBOARD_TITLE":"لوحة معلومات المستخدم",
             "CHARTS": {
                 "COUNT_PER_CATEGORY": "العدد حسب الفئة والحالة",
                 "STATISTICS_PER_DEPARTMENT": "الإحصائيات حسب القسم",
@@ -317,6 +362,18 @@
                     "TITLE": "إحصائيات تاريخ الاستحقاق للمراسلات المكتملة",
                     "INFO": "عدد المراسلات المكتملة التي أنشأتها لكل فئة مقسمة إلى دائرتين (فقط للمراسلات ذات تاريخ الاستحقاق)"
                 },
+                "STATUS": {
+                "COMPLETED": "مكتمل",
+                "IN_PROGRESS": "قيد التنفيذ",
+                "OVERDUE": "متأخر",
+                "ON_TIME": "في الوقت المحدد",
+                "INPROGRESS": "قيد التنفيذ",
+                "INTERNAL": "داخلي",
+                "INCOMING": "الوارد",
+                "OUTGOING": "الصادر",
+                "FOLLOW_UP":"المتابعة",
+                "FOLLOWUP":"المتابعة"
+                },
                 "LABELS": {
                     "STRUCTURES": "الهياكل",
                     "CATEGORIES": "الفئات",
@@ -331,7 +388,8 @@
                     "ON_TIME": "في الوقت المحدد",
                     "STATUS": "الحالة",
                     "CATEGORY": "الفئة",
-                    "TRANSFERS": "تحويلات"
+                    "TRANSFERS": "تحويلات",
+                    "VALUE":"القيمة"
                 },
                 "TRANSFERS": {
                     "IN_PROGRESS": {
@@ -373,13 +431,13 @@
                 "COMPLETED": "مكتمل",
                 "IN_PROGRESS": "قيد التنفيذ",
                 "OVERDUE": "متأخر",
-                "ON_TIME": "في الوقت المحدد"
-            },
-            "LABELS": {
-                "PERCENTAGE": "النسبة المئوية",
-                "COUNT": "العدد",
-                "CATEGORY": "الفئة",
-                "STATUS": "الحالة"
+                "ON_TIME": "في الوقت المحدد",
+                "INPROGRESS": "قيد التنفيذ",
+                "INTERNAL": "داخلي",
+                "INCOMING": "الوارد",
+                "OUTGOING": "الصادر",
+                "FOLLOW_UP":"المتابعة",
+                "FOLLOWUP":"المتابعة"
             },
             "TRANSFER_COMPLETION_STATISTICS": {
                 "AVERAGE_CREATED_BY_USER": "متوسط الإنشاء بواسطة المستخدم",
@@ -388,18 +446,15 @@
             "TITLES": {
                 "COUNT_PER_STATUS": "العدد حسب الحالة مجمعة حسب الفئة",
                 "COMPLETED_DOCUMENTS_DUE_DATE": "إحصائيات تاريخ الاستحقاق للمراسلات المكتملة",
-                "IN_PROGRESS_DOCUMENTS_DUE_DATE": "إحصائيات تاريخ الاستحقاق للمراسلات قيد التنفيذ"
+                "IN_PROGRESS_DOCUMENTS_DUE_DATE": "إحصائيات تاريخ الاستحقاق للمراسلات قيد التنفيذ",
+                "STATISTICS_PER_STRUCTURE": "الإحصائيات حسب الهيكل"
             },
             "INFO": {
                 "COUNT_PER_STATUS": "عدد المراسلات لكل فئة مجمعة حسب الحالة",
                 "COMPLETED_DOCUMENTS_DUE_DATE": "عدد المراسلات المكتملة التي أنشأتها لكل فئة مقسمة إلى دائرتين (فقط للمراسلات ذات تاريخ الاستحقاق)",
-                "IN_PROGRESS_DOCUMENTS_DUE_DATE": "عدد المراسلات قيد التنفيذ لكل فئة مقسمة إلى دائرتين (فقط للمراسلات ذات تاريخ الاستحقاق)"
-            },
-            "TITLES": {
-                "STATISTICS_PER_STRUCTURE": "الإحصائيات حسب الهيكل"
-            },
-            "INFO": {
+                "IN_PROGRESS_DOCUMENTS_DUE_DATE": "عدد المراسلات قيد التنفيذ لكل فئة مقسمة إلى دائرتين (فقط للمراسلات ذات تاريخ الاستحقاق)",
                 "STATISTICS_PER_STRUCTURE": "عدد المراسلات لكل هيكل مجمعة حسب الفئة"
+
             },
             "LABELS": {
                 "STRUCTURES": "الهياكل",
@@ -413,9 +468,11 @@
                 "DOCUMENTS": "مستندات",
                 "OVERDUE": "متأخر",
                 "ON_TIME": "في الوقت المحدد",
-                "STATUS": "الحالة",
+                "TRANSFERS": "تحويلات",
+                "PERCENTAGE": "النسبة المئوية",
                 "CATEGORY": "الفئة",
-                "TRANSFERS": "تحويلات"
+                "STATUS": "الحالة",
+                "VALUE":"القيمة"
             }
         },
         "KPI": {
@@ -575,5 +632,14 @@
                 "ACTIONS": "الإجراءات"
             }
         }
-    }
+    },
+  "PrivacyOptions": {
+    "Normal": "عادي",
+    "Confidential": "سري",
+    "High Confidential": "سري جدا"
+  },
+  "REPLY": {
+    "SENT": "تم الإرسال بنجاح",
+    "ERROR": "حدث خطأ"
+  }
 }

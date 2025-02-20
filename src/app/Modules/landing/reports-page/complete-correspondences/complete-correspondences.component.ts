@@ -31,6 +31,7 @@ export class CompleteCorrespondencesComponent implements OnInit {
   selectedStructures: number[] = [];
   structures: Structure[] = [];
   structureError: string = '';
+  expandedRows: Set<any> = new Set();
 
   fromDate: Date | undefined;
   toDate: Date | undefined;
@@ -69,6 +70,7 @@ export class CompleteCorrespondencesComponent implements OnInit {
   priorityOptions: Priority[] = [];
   selectedPrivacyId: number | null = null;
   selectedPriorityId: number | null = null;
+  //selectedPriorityId: any = null;// | null = null;
 
   constructor(
     private router: Router,
@@ -100,7 +102,7 @@ export class CompleteCorrespondencesComponent implements OnInit {
     this.loadStructures();
     this.loadReports();
     this.loadPrivacyOptions();
-    this.loadPriorityOptions();
+   // this.loadPriorityOptions();
     this.loadUsers();
   }
 
@@ -168,7 +170,14 @@ export class CompleteCorrespondencesComponent implements OnInit {
       next: (response: ApiResponse<InprogressCorrespondence[]>) => {
         this.reports = response.data;
         this.totalItems = response.recordsTotal;
+        console.log(response.recordsTotal)
         this.calculatePagination();
+
+        console.log('total reports')
+        console.log(this.totalItems)
+
+        console.log('------------------------------------------')
+        console.log(this.reports)
 
         if (this.isDtInitialized) {
           this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -188,6 +197,18 @@ export class CompleteCorrespondencesComponent implements OnInit {
     });
   }
 
+  toggleRow(row: any): void {
+    if (this.expandedRows.has(row)) {
+      this.expandedRows.delete(row);
+    } else {
+      console.log(row)
+      this.expandedRows.add(row);
+    }
+  }
+
+  isRowExpanded(row: any): boolean {
+    return this.expandedRows.has(row);
+  }
   calculatePagination() {
     this.totalPages = Math.ceil(this.totalItems / this.dtOptions.pageLength);
     this.startIndex = (this.currentPage - 1) * this.dtOptions.pageLength + 1;
@@ -324,8 +345,10 @@ export class CompleteCorrespondencesComponent implements OnInit {
   }
 
   goToPage(page: number) {
-    this.currentPage = page;
-    this.loadReports();
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadReports();
+    }
   }
 
   onUserSearch(event: { term: string, items: User[] }) {
@@ -370,11 +393,25 @@ export class CompleteCorrespondencesComponent implements OnInit {
       }
     });
   }
+  // To get lookup names based on language
+  getName(item: any): string {
+
+    const currentLang = this.translate.currentLang;
+    switch (currentLang) {
+      case 'ar':
+        return item ?.nameAr || item ?.name;
+      case 'fr':
+        return item ?.nameFr || item ?.name;
+      default:
+        return item ?.name;
+    }
+  }
 
   loadPriorityOptions() {
     this.lookupsService.getPriorityOptions().subscribe({
       next: (options) => {
         this.priorityOptions = options;
+        this.selectedPriorityId = null;
       },
       error: (error) => {
         console.error('Error loading priority options:', error);

@@ -12,6 +12,8 @@ import { MailsService } from '../../../services/mail.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { AuthService } from '../../auth/auth.service';
 import { ToasterComponent } from '../../shared/toaster/toaster.component';
+import { TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-reply-to',
   imports: [
@@ -21,7 +23,6 @@ import { ToasterComponent } from '../../shared/toaster/toaster.component';
     MatNativeDateModule, FormsModule, ToasterComponent],
   templateUrl: './reply-to.component.html',
   styleUrl: './reply-to.component.scss',
-  //providers: [ToasterService]
 })
 
 export class ReplyToComponent {
@@ -29,21 +30,23 @@ export class ReplyToComponent {
   replyForm!: FormGroup;
   accessToken: string | null = null;
   to: string | null = null;
-
+  minDate: Date = new Date(); 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private router: Router, private fb: FormBuilder,
     private lookupsService: LookupsService,
     private authService: AuthService, private toaster: ToasterService,
-    private dialogRef: MatDialogRef<ReplyToComponent>, private mailService: MailsService
+    private dialogRef: MatDialogRef<ReplyToComponent>, private mailService: MailsService,
+    private translate: TranslateService
+
   ) { }
 
   ngOnInit(): void {
     this.accessToken = this.authService.getToken();
-    if (!this.accessToken) {
-      this.router.navigate(['/login']);
-      return;
-    }
+    //if (!this.accessToken) {
+    //  this.router.navigate(['/login']);
+    //  return;
+    //}
     this.setupForm();
     this.loadLookupData();
     this.to = this.data.data.fromUser
@@ -73,6 +76,19 @@ export class ReplyToComponent {
     );
   }
 
+  // To get lookup names based on language
+  getName(item: any): string {
+
+    const currentLang = this.translate.currentLang;
+    switch (currentLang) {
+      case 'ar':
+        return item ?.nameAr || item ?.name;
+      case 'fr':
+        return item ?.nameFr || item ?.name;
+      default:
+        return item ?.name;
+    }
+  }
   onSubmit(): void {
     if (this.replyForm.valid) {
       const formValues = this.replyForm.value;
@@ -88,11 +104,17 @@ export class ReplyToComponent {
  
       this.mailService.replyToMail(this.accessToken!, itemData).subscribe(
         (response) => {
-          this.toaster.showToaster(response??"Sent successfully");
+          this.translate.get('REPLY.SENT').subscribe((msg: string) => {
+            this.toaster.showToaster(response??msg);
+          });
+        //  this.toaster.showToaster(response??"Sent successfully");
           this.onClose();
         },
         (error) => {
-          this.toaster.showToaster(error.error.text??"Something went wrong");
+          //this.toaster.showToaster(error.error.text??"Something went wrong");
+          this.translate.get('REPLY.ERROR').subscribe((msg: string) => {
+            this.toaster.showToaster(error.error.text ?? msg);
+          });
         }
       );
       console.log("data", itemData)
@@ -106,7 +128,7 @@ export class ReplyToComponent {
     return `${day}/${month}/${year}`;
   }
 
-  onClose(): void {
-    this.dialogRef.close();
+  onClose(shouldCloseParent: boolean = false): void {
+    this.dialogRef.close({ shouldCloseParent });
   }
 }

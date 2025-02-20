@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, model, OnInit } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, NgModel, FormsModule } from '@angular/forms';
 import { DelegationPageService } from '../../../services/delegation-page.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
@@ -16,12 +16,27 @@ import { User } from '../../../models/user.model';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TranslateService } from '@ngx-translate/core';
+import { trigger, transition, style, animate } from '@angular/animations';
+//import { setTimeout } from 'timers';
 
 @Component({
   selector: 'app-delegation-page',
   templateUrl: './delegation-page.component.html',
   styleUrls: ['./delegation-page.component.scss'],
-  standalone: false
+  standalone: false,
+  animations: [
+    trigger('expandCollapse', [
+      transition(':enter', [
+        style({ height: '0px', opacity: 0 }),
+        animate('300ms ease-out', style({ height: '*', opacity: 1 }))
+      ]),
+      transition(':leave', [
+        style({ height: '*', opacity: 1 }),
+        animate('300ms ease-in', style({ height: '0px', opacity: 0 }))
+      ])
+    ])
+  ],
+  //imports
 })
 export class DelegationPageComponent implements OnInit {
   fromModal: NgbDateStruct | undefined;
@@ -31,22 +46,34 @@ export class DelegationPageComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   data: Delegation[] = [];
   accessToken: string | null = null;
+  minToDate: Date | null = null;
 
   // Lookup data
   categories: Category[] = [];
   contacts: Partial<User>[] = [];
-  privacy: Privacy[] = [];
+  privacy: Partial<Privacy>[] = [];
 
   isEdit = false;
   selectedCategoryId: number | null = null;
   selectedUserId: number | null | undefined = undefined;
-  selectedPrivacyId: number | null = null;
+  //selectedPrivacyId: number | null = null;
+  selectedPrivacyId: any = undefined;// = "";//=null;
   cansign: boolean = false;
   showOldCorrespondance: boolean = false;
   selectedRowId: number | null | undefined = undefined;
+  note: string = '';
+  selectedCategoryName: string[] = [];
 
   // Form group
   delegationForm!: FormGroup;
+  formVisible = true;
+  placeholder: any;
+
+  //col: any = null;
+  //@NgModel({ imports: [FormsModule] })
+  //@NgModule({
+  //  imports: [FormsModule]
+  //})
 
   constructor(
     private fb: FormBuilder,
@@ -85,6 +112,10 @@ export class DelegationPageComponent implements OnInit {
     this.getPrivacyData();
     this.getUsers();
     this.getListData();
+    
+    this.delegationForm.get('fromDate')?.valueChanges.subscribe(() => {
+      this.updateMinDate();
+    });
   }
 
   setupForm(): void {
@@ -93,9 +124,14 @@ export class DelegationPageComponent implements OnInit {
       privacyId: [null, Validators.required],
       categoryId: [null, [Validators.required, this.categoryValidator]],
       fromDate: [null, Validators.required],
-      toDate: [null, Validators.required],
+      toDate: [{ value: null, disabled: true }, Validators.required],
       allowSign: [false],
       showOldCorrespondence: [false],
+      draftInbox: [false],
+      note: [''],
+      startDate: [null],
+    }, {
+      validators: this.dateRangeValidator
     });
   }
 
@@ -113,10 +149,38 @@ export class DelegationPageComponent implements OnInit {
           next: "<i class='text-secondary fa fa-angle-double-right'></i>",
           last: "<i class='text-secondary fa fa-angle-right'></i>",
         },
-        emptyTable: ""
       },
       dom: 'tp',
       ordering: false,
+      drawCallback: (settings: any) => {
+        const api = settings.oInstance.api();
+        const pageInfo = api.page.info();
+        const pagination = $(api.table().container()).find('.dataTables_paginate');
+        pagination.find('input.paginate-input').remove();
+        const page = $('<span class="d-inline-flex align-items-center mx-2">' + this.translate.instant('COMMON.PAGE') + '<input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> ' + this.translate.instant('COMMON.OF') + ' ' + pageInfo.pages + '</span>');
+         
+        
+        let timeout: any;
+        page.find('input').on('keyup', function () {
+          clearTimeout(timeout);
+          
+          timeout = setTimeout(() => {
+            const pageNumber = parseInt($(this).val() as string, 10);
+            if (pageNumber >= 1 && pageNumber <= pageInfo.pages) {
+              api.page(pageNumber - 1).draw('page');
+            }
+          }, 500);
+        });
+  
+        const previous = pagination.find('.previous');
+        const next = pagination.find('.next');
+        page.insertAfter(previous); 
+        next.insertAfter(page);
+  
+        pagination.find('a.paginate_button').on('click', function () {
+          page.find('input').val(api.page() + 1);
+        });
+      }
     };
   }
 
@@ -127,7 +191,33 @@ export class DelegationPageComponent implements OnInit {
     return null;
   }
 
+  dateRangeValidator(group: FormControl): { [key: string]: boolean } | null {
+    const fromDate = group.get('fromDate')?.value;
+    const toDate = group.get('toDate')?.value;
+
+    if (fromDate && toDate && toDate < fromDate) {
+      return { toDateInvalid: true };
+    }
+    return null;
+  }
+
+  updateMinDate(): void {
+    const fromDate = this.delegationForm.get('fromDate')?.value;
+
+    if (!fromDate) {
+      this.minToDate = null;
+      this.delegationForm.get('toDate')?.setValue(null);
+      this.delegationForm.get('toDate')?.disable();
+    } else {
+      let validDate = new Date(fromDate);
+      let newDate = new Date(validDate.setDate(validDate.getDate()));
+      this.minToDate = fromDate ? newDate : null;
+      this.delegationForm.get('toDate')?.enable();
+    }
+  }
+
   getListData(): void {
+    
     this.delegationService.getDelegations(this.accessToken!).subscribe(
       (response) => {
         this.data = response.data || [];
@@ -136,20 +226,21 @@ export class DelegationPageComponent implements OnInit {
         console.error(error);
       }
     );
+
   }
 
   getUsers(): void {
     this.lookupservice.getUsers(this.accessToken!).subscribe(
       (response) => {
         this.contacts = response || [];
-        console.log('Contacts', this.contacts);
+       // console.log('Contacts', this.contacts);
 
         this.contacts.unshift({ id: 0, fullName: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_NAME') });
 
-        let currentExistUser = this.authService.getCurrentUserFullName();     
+        let currentExistUser = this.authService.getCurrentUserFullName();
         console.log('currentUser:', currentExistUser);
         this.contacts = this.contacts.filter(contact => contact.fullName !== currentExistUser);
-        
+
         if (this.contacts.length > 0) {
           this.delegationForm.patchValue({
             userId: this.contacts[0]?.id,
@@ -162,28 +253,60 @@ export class DelegationPageComponent implements OnInit {
     );
   }
 
+  getCategoriesName(categoriesId: any): string {
+   // console.log('categoriesId:', categoriesId);
+  
+    if (!categoriesId || categoriesId.length === 0) {
+      return " ";
+    }
+  
+   let categoriesName = categoriesId
+      .map((id: number) => {
+        const category = this.categories.find(cat => cat.id === id);
+        return category ? this.getName(category):'';
+      }).join(' - ');
+
+    return categoriesName;
+  }
+
+  getPrivacyName(privacyID: number): string {
+    const privacy = this.privacy.find(p => p.id === privacyID);  
+    return privacy ? this.getName(privacy) : '';  
+  }
+
   getCategories(): void {
     this.lookupservice.getCategories(undefined).subscribe(
-      (response) => {
-        this.categories = response || [];
+      (response:any) => {
+        this.categories = response.data || [];
+        //console.log('Categories:', this.categories);
       },
       (error: any) => {
         console.error(error);
       }
     );
   }
-
   getPrivacyData(): void {
     this.lookupservice.getPrivacy(this.accessToken!).subscribe(
       (response) => {
+        const placeholder = {
+          id: 0,
+          name: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_PRIVACY')
+          //text: "tesssst"
+        };
         this.privacy = response || [];
-        this.privacy.unshift({ id: 0, text: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_PRIVACY') });
+        
+         // this.placeholder = placeholder;
+        this.privacy.unshift(placeholder);
 
-        if (this.privacy.length > 0) {
-          this.delegationForm.patchValue({
-            privacyId: this.privacy[0]?.id,
-          });
-        }
+      
+        //if (this.privacy.length > 0) {
+        //  this.delegationForm.patchValue({
+        //    privacyId: this.privacy[0] ?.id,
+        //  });
+        //}
+
+        this.selectedPrivacyId = null;
+
       },
       (error: any) => {
         console.error(error);
@@ -191,8 +314,11 @@ export class DelegationPageComponent implements OnInit {
     );
   }
 
+
   formatDate(date: Date | undefined): string {
     if (!date) return '';
+   // console.log('Date:', date);
+
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear().toString();
@@ -204,7 +330,8 @@ export class DelegationPageComponent implements OnInit {
       this.isEdit = true;
       this.selectedRowId = item.id;
       this.selectedUserId = item.toUserValueText.id;
-
+      this.showOldCorrespondance = true;
+      debugger;
       if (this.contacts && this.contacts.length > 0) {
         this.delegationForm.patchValue({
           userId: this.selectedUserId,
@@ -214,8 +341,15 @@ export class DelegationPageComponent implements OnInit {
           toDate: this.convertToNgbDateStruct(item.toDate),
           allowSign: item.allowSign,
           showOldCorrespondence: item.showOldCorrespondecne,
+          draftInbox: item.draftInbox,
+          note: item.note,
+          startDate: this.convertToNgbDateStruct(item.startDate),
         });
 
+        //this.selectedPrivacyId = item.privacyId;
+        this.note = item.note;
+        //console.log('note:', item.note);
+        //console.log('note:', this.note);
         // Convert fromDate and toDate to NgbDateStruct if they exist
         if (item.fromDate) {
           const [day, month, year] = item.fromDate.split('/');
@@ -226,6 +360,13 @@ export class DelegationPageComponent implements OnInit {
           const [day, month, year] = item.toDate.split('/');
           this.tomodel = { year: +year, month: +month, day: +day };
         }
+
+        if (item.startDate) {
+          const [day, month, year] = item.toDate.split('/');
+          this.tomodel = { year: +year, month: +month, day: +day };
+        }
+
+        //console.log('Item data: FROM EDDDIT ', item);
       }
     }
   }
@@ -238,15 +379,22 @@ export class DelegationPageComponent implements OnInit {
         fromDate: this.formatDate(formValues.fromDate),
         toDate: this.formatDate(formValues.toDate),
         categoryIds: formValues.categoryId,
+        //privacyId: formValues.privacyId?.id,
         privacyId: formValues.privacyId,
+        //privacyId: this.selectedPrivacyId,
         allowSign: formValues.allowSign || false,
         showOldCorrespondecne: formValues.showOldCorrespondence || false,
+        draftInbox: formValues.draftInbox || false,
+        note: formValues.note || '',
+        startDate: this.formatDate(formValues.startDate),
         toUser: formValues.userId,
         privacyName: '',
         createdDate: '',
         toUserValueText: { text: null, parentName: null },
       };
 
+      this.note = itemData.note;
+      console.log('note:', this.note);
       console.log('Item data:', itemData);
 
       if (this.isEdit) {
@@ -266,7 +414,8 @@ export class DelegationPageComponent implements OnInit {
           (error: any) => {
             console.error('Error updating:', error);
             this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
-              this.toaster.showToaster(error?.message || msg);
+              // this.toaster.showToaster(error?.message || msg);
+              this.toaster.showToaster(msg, 'danger');
             });
           }
         );
@@ -276,21 +425,21 @@ export class DelegationPageComponent implements OnInit {
             this.isEdit = false;
             this.clear();
             this.getListData();
-            this.translate.get('DELEGATION.ADD_SUCCESS').subscribe((msg: string) => {
+            this.translate.get('DELEGATION.SAVE_SUCCESS').subscribe((msg: string) => {
               this.toaster.showToaster(msg);
             });
           },
           (error: any) => {
             console.error('Error adding:', error);
             this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
-              this.toaster.showToaster(error?.message || msg);
+              this.toaster.showToaster(msg, 'danger');
             });
           }
         );
       }
     } else {
       this.translate.get('ERRORS.REQUIRED_FIELDS').subscribe((msg: string) => {
-        this.toaster.showToaster(msg);
+        this.toaster.showToaster(msg, 'danger');
       });
     }
   }
@@ -300,6 +449,16 @@ export class DelegationPageComponent implements OnInit {
       const modalRef = this.modalService.open(ConfirmationmodalComponent);
       this.translate.get('DELEGATION.DELETE_CONFIRMATION').subscribe((msg: string) => {
         modalRef.componentInstance.message = msg;
+         // Pass translated button labels for "Cancel" and "Confirm"
+        this.translate.get('COMMON.ACTIONS.CANCEL').subscribe((cancelLabel: string) => {
+          modalRef.componentInstance.cancelLabel = cancelLabel;
+        });
+        this.translate.get('COMMON.ACTIONS.CONFIRM').subscribe((confirmLabel: string) => {
+          modalRef.componentInstance.confirmLabel = confirmLabel;
+        });
+        this.translate.get('DELEGATION.CONFIRMMODALDELEGATION.TITLE').subscribe((ConfirmTitle: string) => {
+          modalRef.componentInstance.ConfirmTitle = ConfirmTitle;
+        });
       });
 
       modalRef.componentInstance.confirmed.subscribe(() => {
@@ -315,13 +474,42 @@ export class DelegationPageComponent implements OnInit {
             (error: any) => {
               console.error('Error deleting item:', error);
               this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
-                this.toaster.showToaster(error?.message || msg);
+                this.toaster.showToaster(error?.message || msg, 'danger');
               });
             }
           );
         }
       });
     }
+  }
+
+  isSearch: boolean = false;
+
+  onSearch(): void {
+    const formValues = this.delegationForm.value;
+
+    const itemData: any = {
+      fromDate: this.formatDate(formValues.fromDate),
+      toDate: this.formatDate(formValues.toDate),
+      toUser: formValues.userId    
+    };
+
+    this.delegationService.searchDelegations(this.accessToken!, itemData).subscribe(
+      (response: any) => {
+        this.isEdit = false;
+        this.isSearch = true;
+        //this.clear();
+        this.data = response.data || [];
+       
+      },
+      (error: any) => {
+        console.error('Error updating:', error);
+        this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
+          this.toaster.showToaster(error ?.message || msg);
+        });
+      }
+    );
+
   }
 
   convertToNgbDateStruct(dateStr: string): Date | null {
@@ -340,7 +528,10 @@ export class DelegationPageComponent implements OnInit {
 
   clear(): void {
     this.delegationForm.reset();
+    this.showOldCorrespondance = false;
     this.resetDropDowns();
+    this.selectedPrivacyId = null;
+
     const today = new Date();
     this.fromModal = {
       year: today.getFullYear(),
@@ -352,9 +543,38 @@ export class DelegationPageComponent implements OnInit {
       month: today.getMonth() + 1,
       day: today.getDate(),
     };
+    if (this.isSearch)
+      this.getListData();
+  }
+
+  cancel(): void {
+    this.isEdit = false;
+    this.showOldCorrespondance = false;
+    this.clear();
   }
 
   preventPaste(event: ClipboardEvent): void {
     event.preventDefault();
+  }
+
+  toggleSearchForm() {
+    this.formVisible = !this.formVisible;
+  }
+
+  // To get lookup names based on language
+  getName(item: any): string {
+
+    const currentLang = this.translate.currentLang;
+    switch (currentLang) {
+      case 'ar':
+        return item?.nameAr || item?.name;
+      case 'fr':
+        return item?.nameFr || item?.name;
+      default:
+        return item?.name;
+    }
+  }
+  toggleShowOldCorrespondance() {
+    this.showOldCorrespondance = !this.showOldCorrespondance;
   }
 }

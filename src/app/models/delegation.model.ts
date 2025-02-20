@@ -11,6 +11,9 @@ export interface Delegation {
   allowSign: boolean;
   showOldCorrespondecne: boolean;
   toUserValueText: toUserValue;
+  draftInbox: boolean;
+  note: string;
+  startDate:string;
 }
 
 export interface toUserValue {
