@@ -1,4 +1,5 @@
-<div class="panel panel-default borderTop-1">
+
+     <div class="card"><div class="panel panel-default borderTop-1">
   <!-- Title Section -->
   <div class="panel-heading">
     <div class="row">
@@ -14,28 +15,28 @@
 
   <div class="panel-body">
     <!-- Table -->
-    <div class="table-container overflow-x-auto">
-      <table id="grdAveragePerStructureItems" class="table dataTable" role="grid">
-        <thead>
-          <tr role="row">
-            <th class="min-max-width-50-250">{{ 'BAM.KPI.AVERAGE_DURATION.STRUCTURE' | translate }}</th>
-            <th class="min-max-width-50-250">{{ 'BAM.KPI.AVERAGE_DURATION.AVERAGE_DAYS' | translate }}</th>
-            <th class="min-max-width-50-250">{{ 'BAM.KPI.AVERAGE_DURATION.COMPARE_TO_TOTAL' | translate }}</th>
-          <th class="min-max-width-50-250">{{ 'BAM.KPI.AVERAGE_DURATION.YEARLY_GRAPH' | translate }}</th>
+<div class="table-container overflow-x-auto">
+  <table id="grdAveragePerStructureItems" class="table dataTable" role="grid">
+    <thead>
+      <tr role="row">
+        <th class="min-max-width-50-250">{{ 'BAM.KPI.AVERAGE_DURATION.STRUCTURE' | translate }}</th>
+        <th class="min-max-width-50-250">{{ 'BAM.KPI.AVERAGE_DURATION.AVERAGE_DAYS' | translate }}</th>
+        <th class="min-max-width-50-250">{{ 'BAM.KPI.AVERAGE_DURATION.COMPARE_TO_TOTAL' | translate }}</th>
+        <th class="min-max-width-50-250">{{ 'BAM.KPI.AVERAGE_DURATION.YEARLY_GRAPH' | translate }}</th>
          
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of data" role="row">
-            <td class="min-max-width-50-250" title="{{item.structureName}}">
-              <span style="color:var(--secondary-color);text-decoration: underline;cursor: pointer;"
-                class="drawuserstructure"
-                (click)="drawStructureUserTable('AverageDurationForCorrespondenceCompletion', item.average, year, item.userId, item.structureId)">
-                {{item.structureName}}
-              </span>
-            </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of data" role="row">
+        <td class="min-max-width-50-250" title="{{item.structureName}}">
+          <span style="color:var(--secondary-color);text-decoration: underline;cursor: pointer;"
+          class="drawuserstructure"
+          (click)="drawStructureUserTable('AverageDurationForCorrespondenceCompletion', item.average, year, item.userId, item.structureId)">
+          {{item.structureName}}
+        </span>
+        </td>
             <td class="min-max-width-50-250" title="{{item.average}}">{{item.average.toFixed(2)}}</td>
-            <td class="min-max-width-50-250" title="{{item.average - totalAverage}}">
+        <td class="min-max-width-50-250" title="{{item.average - totalAverage}}">
               {{(item.average - totalAverage).toFixed(2)}}
             </td>
             <!--
@@ -45,11 +46,11 @@
               class="yearlygraph pointer">
               <em class="fa fa-line-chart"></em>
             </span>
-          </td>
+        </td>
           -->
-          </tr>
-        </tbody>
-      </table>
+      </tr>
+    </tbody>
+  </table>
 
       <!-- Only show pagination if there's data -->
       <div class="d-flex justify-content-center align-items-center mt-3" *ngIf="data && data.length > 0">
@@ -79,3 +80,6 @@
     </div>
   </div>
 </div>
+</div>
+
+  <app-average-per-user *ngIf="selectedUser" [user]="selectedUser"></app-average-per-user>

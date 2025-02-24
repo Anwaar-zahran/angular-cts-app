@@ -1,0 +1,61 @@
+<div class="card">
+  <div class="card-title">
+    <h3>Average per user</h3>
+    <span>(Structure <span class="text-secondary">Intalio</span>)</span>
+  </div>
+  <div class="table-container overflow-x-auto">
+    <table class="table table-text light-text" datatable [dtOptions]="dtOptions">
+      <thead>
+        <tr>
+          <th>Registered By</th>
+          <th>Average Days</th>
+          <th>Compare to Structure Average</th>
+          <th>Compare to Total Average</th>
+          <th>Yearly graph</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of data">
+          <td>{{ row.registeredBy }}</td>
+          <td>{{ row.averageDays }}</td>
+          <td>{{ row.compareToStructureAverage }}</td>
+          <td>{{ row.compareToTotalAverage }}</td>
+          <td>
+            <button type="button" class="btn btn-transparent">
+              <i class="fa fa-line-chart"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="card" *ngIf="isCardVisible">
+  <div class="card-title">
+  <button class="btn btn-transparent float-right">
+    <i class="fas fa-times text-danger" (click)="hideCard()"></i>
+  </button>
+    <h3>Performance per structure</h3>
+    <span>(Structure <span class="text-secondary">Intalio</span>)</span>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-4 text-center">
+      <h4 class="mb-3">Best performance</h4>
+      <i class="far fa-user text-secondary"></i><br />
+      <p class="text-secondary my-3 bold">1</p>
+      <p>User1</p>
+    </div>
+    <div class="col-md-4 text-center">
+      <h4 class="mb-3">Best performance</h4>
+      <i class="fa fa-percentage"></i><br />
+      <p class="my-3 bold">2.27</p>
+    </div>
+    <div class="col-md-4 text-center">
+      <h4 class="mb-3">Best performance</h4>
+      <i class="far fa-user text-danger"></i><br />
+      <p class="text-danger my-3 bold">1</p>
+      <p>User1</p>
+    </div>
+  </div>
+</div>
