@@ -4,5 +4,10 @@
     "secure": false, 
     "changeOrigin": true, 
     "logLevel": "debug" 
+  },
+  "/api": {
+    "target": "https://java-qatar.d-intalio.com",
+    "secure": false,
+    "changeOrigin": true
   }
 }

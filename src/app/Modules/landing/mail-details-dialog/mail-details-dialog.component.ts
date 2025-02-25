@@ -15,15 +15,17 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { environment } from '../../../../environments/environment';
 import { AttachmentsApiResponce } from '../../../models/attachments.model';
 import { DocAttributesApiResponse } from '../../../models/searchDocAttributes.model';
+import { CustomAttributeComponent } from '../../../models/custom.attributes.model';
 import { SearchPageService } from '../../../services/search-page.service';
 import { AuthService } from '../../auth/auth.service';
 import { ReplyToComponent } from '../reply-to/reply-to.component';
 import { TransferModalComponent } from '../transfer-modal/transfer-modal.component';
-// Import OrgChart from @balkangraph/orgchart.js
-import OrgChart from '@balkangraph/orgchart.js';
+
 import { LookupsService } from '../../../services/lookups.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { ToasterComponent } from '../../shared/toaster/toaster.component';
+import { DatePipe } from '@angular/common';
+import { MailsService } from '../../../services/mail.service';
 
 interface TreeNode {
   id: string | number;
@@ -40,6 +42,18 @@ interface FlatTreeNode {
   expanded?: boolean;
 }
 
+interface BasicAttribute {
+  Name: string;
+  Enabled: boolean;
+  DefaultValue?: string;
+  Type?: string;
+  UseCurrentStructure?: string;
+  DisableField?: boolean;
+  MultipleReceivingEntity?: boolean;
+  BroadcastReceivingEntity?: boolean;
+  RelatedToPriority?: boolean;
+}
+declare var OrgChart: any;
 @Component({
   selector: 'app-mail-details-dialog',
   imports: [
@@ -54,6 +68,7 @@ interface FlatTreeNode {
     ToasterComponent,
 
   ],
+  providers: [DatePipe],
   templateUrl: './mail-details-dialog.component.html',
   styleUrls: ['./mail-details-dialog.component.scss']
 
@@ -62,9 +77,13 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   @ViewChild('chartContainer', { static: false }) chartContainer!: ElementRef;
   @ViewChild('tabsContainer', { static: false }) tabsContainer!: ElementRef;
+  closeDialog() {
 
+    this.dialogRef.close(); // Ensure it only closes the dialog
+  }
   accessToken: string | null = null;
   tabs = [
+    'MY_TRANSFER',
     'ATTRIBUTES',
     'ATTACHMENTS',
     'NOTES',
@@ -79,7 +98,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   activeTabIndex: number = 0;
   selectedNode: any = null;
 
-  dtOptions: DataTables.Settings = {};
+  dtOptions: any = {};
 
   treeControl: FlatTreeControl<FlatTreeNode>;
   treeFlattener: MatTreeFlattener<TreeNode, FlatTreeNode>;
@@ -99,42 +118,49 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   privacy: any;
   classification: any;
   notes: any;
+  transfers: any;
   transHistory: any;
   attachments: any;
   // Visual Tracking data (org chart data)
   visualTracking: any;
   classId: any;
-  ImpoeranceId: any;
+  importanceId: any;
   privacyId: any;
   priorityId: any;
   priority: any;
   carbonUsers: any;
-  userId: any;
+  userId: any[] = [];
   docTypeId: any;
   docTypes: any;
+  categories: any;
+  isLocKed: boolean = true;
 
 
   // OrgChart references
   private orgChart: any = null;
   private chartInitialized: boolean = false;
+  visualTrackingTabIndex: number = 6;
 
   // Lookup data
   structures: any[] = [];
   users: any[] = [];
+  mappedArray: any;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { row: any, id: string,documentId: string, referenceNumber: string, fromSearch: boolean, showActionButtons: boolean },
+    @Inject(MAT_DIALOG_DATA) public data: { row: any, id: string, documentId: string, referenceNumber: string, fromSearch: boolean, showActionButtons: boolean },
     private authService: AuthService,
     private router: Router,
     private sanitizer: DomSanitizer,
     private cdr: ChangeDetectorRef,
     private renderer: Renderer2,
     private searchService: SearchPageService,
+    private mailService: MailsService,
     private lookupsService: LookupsService,
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<MailDetailsDialogComponent>,
     private translate: TranslateService,
-    private toaster: ToasterService
+    private toaster: ToasterService,
+    public datePipe: DatePipe
   ) {
     // Initialize Angular Material tree for attachments
     this.treeFlattener = new MatTreeFlattener(
@@ -153,20 +179,33 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     this.dataSource.data = this.TREE_DATA;
     console.log("TREE_DATA:", this.TREE_DATA);
     console.log("dataSource:", this.dataSource);
+
+    // Override the OrgChart's network request function before any initialization
+    if (typeof OrgChart !== 'undefined') {
+      OrgChart.prototype._ajax = function (url: string, method: string, data: any, callback: Function): void {
+        // Simulate successful response without making network call
+        if (callback) {
+          setTimeout(() => {
+            callback({ status: 200, response: JSON.stringify({ result: 'success' }) });
+          }, 0);
+        }
+      };
+      OrgChart.OFFLINE = true;
+    }
   }
 
   ngOnInit(): void {
     console.log('Dialog opened with ID:', this.data.id, 'and Reference Number:', this.data.referenceNumber);
     this.accessToken = this.authService.getToken();
-    if (!this.accessToken) {
-      this.router.navigate(['/login']);
-      return;
-    }
+    //if (!this.accessToken) {
+    //  debugger
+    //  this.router.navigate(['/login']);
+    //  return;
+    //}
     this.initDtOptions();
     this.loadLookupData();
     this.fetchDetails(this.data.id);
-    console.log("rowwww", this.data.row);
-
+    console.log("row", this.data.row);
 
   }
 
@@ -192,6 +231,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     this.lookupsService.getImportance(this.accessToken!).subscribe(
       (response) => {
         this.importance = response;
+        console.log(this.importance)
       },
       (error) => {
         console.error('Error loading users:', error);
@@ -215,6 +255,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         console.error('Error loading users:', error);
       }
     );
+
     this.lookupsService.getPrivacy(this.accessToken!).subscribe(
       (response) => {
         this.privacy = response;
@@ -235,11 +276,20 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
     this.lookupsService.getCarbonUsers(this.accessToken!).subscribe(
       (response) => {
-        debugger;
+
         this.carbonUsers = response;
       },
       (error) => {
         console.error('Error loading users:', error);
+      }
+    );
+
+    this.lookupsService.getCategoriesByName(undefined).subscribe(
+      (response) => {
+        this.categories = response || [];
+      },
+      (error: any) => {
+        console.error(error);
       }
     );
   }
@@ -247,31 +297,57 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   initDtOptions(): void {
     this.dtOptions = {
       pageLength: 10,
-      search: false,
-      order: [],
       pagingType: 'full_numbers',
       paging: true,
       searching: false,
-      displayStart: 0,
       autoWidth: false,
       language: {
         paginate: {
           first: "<i class='text-secondary fa fa-angle-left'></i>",
           previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
           next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-          last: "<i class='text-secondary fa fa-angle-right'></i>"
-        }
+          last: "<i class='text-secondary fa fa-angle-right'></i>",
+        },
       },
-      dom: "tp",
-      ordering: false
+      dom: 'tp',
+      ordering: false,
+      drawCallback: (settings: any) => {
+        const api = settings.oInstance.api();
+        const pageInfo = api.page.info();
+        const pagination = $(api.table().container()).find('.dataTables_paginate');
+        pagination.find('input.paginate-input').remove();
+        const page = $('<span class="d-inline-flex align-items-center mx-2">' + this.translate.instant('COMMON.PAGE') + '<input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> ' + this.translate.instant('COMMON.OF') + ' ' + pageInfo.pages + '</span>');
+
+
+        let timeout: any;
+        page.find('input').on('keyup', function () {
+          clearTimeout(timeout);
+
+          timeout = setTimeout(() => {
+            const pageNumber = parseInt($(this).val() as string, 10);
+            if (pageNumber >= 1 && pageNumber <= pageInfo.pages) {
+              api.page(pageNumber - 1).draw('page');
+            }
+          }, 500);
+        });
+
+        const previous = pagination.find('.previous');
+        const next = pagination.find('.next');
+        page.insertAfter(previous);
+        next.insertAfter(page);
+
+        pagination.find('a.paginate_button').on('click', function () {
+          page.find('input').val(api.page() + 1);
+        });
+      }
     };
   }
 
   showModalTransfer() {
-    debugger
     this.searchService.CheckDocumentAttachmnentISLocked(this.accessToken!, this.data.documentId).subscribe(
       (isLocked: boolean) => {
         console.log('Document is locked:', isLocked);
+        this.isLocKed = isLocked;
         if (isLocked) {
           this.toaster.showToaster("There is a file checked out, please make sure to check in or discard checkout.");
         } else {
@@ -282,11 +358,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             height: '90%',
             data: this.data//{ this.data }///* pass any required data here */
           });
-      
+
           dialogRef.afterClosed().subscribe(result => {
             console.log('Transfer modal closed', result);
-            this.dialogRef.close();
-      
+            // this.dialogRef.close();
           });
         }
       },
@@ -294,8 +369,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         console.error('Error checking document lock:', error);
       }
     );
-    debugger
-   
+
+
   }
 
   showModalReply() {
@@ -307,7 +382,9 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('Transfer modal closed', result);
-      this.dialogRef.close();
+      if (result && result.shouldCloseParent) {
+        this.dialogRef.close();
+      }
 
     });
   }
@@ -370,11 +447,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.cdr.detectChanges();
       }
     }
-    // If the Visual Tracking tab is active (index 5) and org chart data is ready, initialize OrgChart
-    if (this.activeTabIndex === 5 && this.visualTracking && !this.chartInitialized) {
-      this.initOrgChart();
-      this.chartInitialized = true;
-    }
+
   }
 
   scrollLeft(): void {
@@ -394,10 +467,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   setActiveTab(index: number): void {
+
     this.activeTabIndex = index;
 
     // If switching to Visual Tracking tab (index 5)
-    if (index === 5 && this.visualTracking) {
+    if (this.visualTracking && this.activeTabIndex === this.visualTrackingTabIndex && !this.chartInitialized) {
       this.chartInitialized = false; // Reset initialization flag
       // Short delay to ensure container is visible
       setTimeout(() => {
@@ -416,7 +490,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         notes,
         transHistory,
         attachments,
-        visualTracking
+        visualTracking,
+        myTransfer
       ] = await Promise.all([
         this.getAttributes(docID),
         this.getNonArchAttachments(docID),
@@ -425,7 +500,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.getNotes(docID),
         this.getHistory(docID),
         this.getAttachments(docID),
-        this.getVisualTracking(docID)
+        this.getVisualTracking(docID),
+        this.getTransfer(this.data?.row?.id)
       ]);
 
       this.attributes = attributes;
@@ -438,15 +514,32 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.attachments = attachments;
       this.visualTracking = visualTracking;
       this.classId = this.attributes.classificationId ?? '';
-      this.ImpoeranceId = this.attributes.importanceId ?? '';
+      this.importanceId = this.attributes.importanceId ?? '';
       this.privacyId = this.attributes.privacyId ?? '';
       this.priorityId = this.attributes.priorityId ?? '';
       this.docTypeId = this.attributes.documentTypeId ?? '';
 
+
+      if (this.linkedDocs.length > 0) {
+        this.mappedArray = this.linkedDocs.map((doc: any) => {
+          const foundItem = this.categories?.data.find((cat: any) => cat.id === doc.categoryId);
+          return {
+            id: doc.id,
+            linkedDocumentReferenceNumber: doc.linkedDocumentReferenceNumber,
+            categoryId: doc.categoryId,
+            statusId: doc.statusId,
+            linkedBy: doc.linkedBy,
+            createdDate: doc.createdDate,
+            category: foundItem ? this.getName(foundItem) : '',
+          };
+        });
+      }
+
+
       if (this.attributes.carbonCopy?.length > 0)
-        this.userId = this.attributes.carbonCopy[0];
+        this.userId = this.attributes.carbonCopy;
       else
-        this.userId = '';
+        this.userId = [];
 
       // Build attachments tree if available
       if (this.attachments && Array.isArray(this.attachments)) {
@@ -459,14 +552,43 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       console.error("Error loading data", error);
     }
   }
+  getTransfer(docID: string): any {
+    return new Promise((resolve, reject) => {
+      this.mailService.getMyTransfer(this.accessToken!, docID).subscribe(
+        (response) => {
+          this.transfers = response || [];
+          resolve(response);
+          console.log("Transfer:", response)
+        },
+        (error: any) => {
+          console.error(error);
+          reject(error);
+        }
+      );
+    });
+  }
+
+  basicAttributes: any;
+  customAttribute: any;
+  customFormData: any;
+  customAttributes: { components: CustomAttributeComponent[] } = { components: [] };
 
   getAttributes(docID: string): Promise<DocAttributesApiResponse> {
     return new Promise((resolve, reject) => {
       this.searchService.getDocAttributes(this.accessToken!, docID).subscribe(
         (response: any) => {
           this.attributes = response || [];
+          this.basicAttributes = JSON.parse(response?.basicAttributes);
+          this.customAttribute = JSON.parse(response?.customAttributes);
+          this.customAttributes = JSON.parse(response?.customAttributes);
+          this.customFormData = JSON.parse(response?.formData);
+
+          this.getFormDataValue();
 
           console.log("Attributes:", this.attributes);
+          console.log("BasicAttributes:", this.basicAttributes);
+          console.log("CustomAttributes:", this.customAttribute);
+          console.log("customFormData:", this.customFormData);
           resolve(response);
         },
         (error: any) => {
@@ -512,7 +634,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getActivityLogByDocId(this.accessToken!, docID).subscribe(
         (response) => {
-          debugger;
+
           this.activityLogs = response.data || [];
           resolve(response);
         },
@@ -590,8 +712,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       );
     });
   }
+
+
   tryFetchOriginalDocument(): void {
-    debugger;
+
 
     // Recursive function to search for folder_originalMail
     const findOriginalMailFolder = (nodes: any[]): any => {
@@ -609,7 +733,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
     // Search recursively starting from root
     const originalMailFolder = findOriginalMailFolder(this.TREE_DATA);
-    debugger
+
     if (originalMailFolder?.children?.[0]?.id) {
       const firstChild = originalMailFolder.children[0];
       const idParts = firstChild.id.split('_');
@@ -637,7 +761,6 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   getViewerUrl(): void {
-    debugger
     //const baseUrl = 'https://java-qatar.d-intalio.com/VIEWER/file?isCustomMode=true';
     const baseUrl = `${environment.viewerUrl}`;
     const token = this.authService.getToken();
@@ -647,25 +770,42 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       return;
     }
 
+    const loggedInUserId = this.authService.getUserTypeId();
+
+    var viewMode = 'edit'
+    if (this.isLocKed) {
+      viewMode = 'view';
+    }
+
     const params = {
       documentId: this.selectedDocumentId,
       language: 'en',
       token: encodeURIComponent(token),
       version: 'autocheck',
       structId: 1,
-      viewermode: 'view'
+      viewermode: viewMode
     };
-
     const queryString = Object.entries(params)
       .map(([key, value]) => `${key}=${value}`)
       .join('&');
+
+
+    this.searchService.getViewerInfo(23,'1.1',1).subscribe({
+      next:(resp)=>{
+        console.log('from search service')
+        console.log(resp);
+      }
+    });
+
+    console.log('--------------------------------------------------------query string ---------------------------------------')
+    console.log(queryString)
 
     this.documentViewerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${baseUrl}?${queryString}`);
     console.log("Viewer URL:", this.documentViewerUrl);
   }
 
   initOrgChart(): void {
-    debugger
+
     if (!this.chartContainer || !this.visualTracking || !Array.isArray(this.visualTracking)) {
       console.error('Missing required data for OrgChart initialization');
       return;
@@ -756,7 +896,15 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             { type: 'textbox', label: 'Created By/User', binding: 'createdBy', readOnly: true },
             { type: 'textbox', label: 'Date', binding: 'date', readOnly: true }
           ]
-        }
+        },
+        offline: true,
+        licenseKey: 'none',
+        enableServerLayout: false,
+        useServerLayout: false,
+        lazyLoading: false,
+        mixedHierarchyNodesSeparation: 0,
+        assistantSeparation: 0,
+        partnerNodeSeparation: 0
       };
 
       // Destroy existing instance if it exists
@@ -779,6 +927,32 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     }
   }
 
+
+  isEnabled(name: string): boolean {
+    const attribute = this.basicAttributes?.find((attr: BasicAttribute) => attr.Name === name);
+    return attribute ? attribute.Enabled : false;
+  }
+
+  controlValues: { [key: string]: string } = {};
+
+  getFormDataValue() {
+    this.customAttributes?.components?.forEach((component: CustomAttributeComponent) => {
+      const key = component.key;
+      if (this.customFormData) {
+        const value = this.customFormData[key];
+        if (value && typeof value === 'object' && Object.keys(value).length === 0) {
+          this.controlValues[key] = "";
+        }
+        else {
+          this.controlValues[key] = value || component.defaultValue || "";
+        }
+      }
+      else
+        this.controlValues[key] = component.defaultValue;
+    });
+  }
+
+
   ngOnDestroy() {
     if (this.orgChart) {
       try {
@@ -790,4 +964,17 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     }
   }
 
+  // To get lookup names based on language
+  getName(item: any): string {
+
+    const currentLang = this.translate.currentLang;
+    switch (currentLang) {
+      case 'ar':
+        return item?.nameAr || item?.name;
+      case 'fr':
+        return item?.nameFr || item?.name;
+      default:
+        return item?.name;
+    }
+  }
 }

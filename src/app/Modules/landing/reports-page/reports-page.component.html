@@ -1,10 +1,10 @@
 <div class="body-content">
-    <h1 class="page-title">{{ 'REPORTS.TITLE' | translate }}</h1>
+    <h1 class="page-title"><app-back-button></app-back-button>{{ 'REPORTS.TITLE' | translate }}</h1>
     <div class="cards reports d-flex flex-wrap justify-content-center">
         <a *ngFor="let card of reportscards" [routerLink]="card.link" class="card"
             [ngStyle]="{'background-color': card.backgroundColor}">
             <div class="icon">
-                <img [src]="card.imgSrc" alt="" />
+                <img [src]="card.imgSrc" alt="" [ngStyle]="{'width': card.width ? card.width : ''}" />
             </div>
             <div class="title">
                 <h2>{{ card.translationKey | translate }}</h2>

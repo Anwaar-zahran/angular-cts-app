@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 @Injectable({
@@ -9,10 +9,12 @@ import { environment } from '../../environments/environment';
 export class MailsService {
   private replyToURL = `${environment.apiBaseUrl}/Transfer/Reply`;
   private transferURL = `${environment.apiBaseUrl}/Transfer/Transfer`;
+  private CorrsondanceViewURL = `${environment.apiBaseUrl}/Transfer/View`;
+  private myTransferURL = `${environment.apiBaseUrl}/Transfer/GetTransferInfoById`;
 
   constructor(private httpClient: HttpClient) { }
 
-  transferMail(accessToken: string,  model: any[]): Observable<any> {
+  transferMail(accessToken: string, model: any[]): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json', // Only one Content-Type header is needed
@@ -21,9 +23,9 @@ export class MailsService {
 
     let params = new HttpParams();
     params = params.set('maintainTransfer', 'false').set('withSign', 'false');
-  
+
     const url = `${this.transferURL}?${params.toString()}`;
-  
+
     // Ensure numbers are sent correctly
     const body = model.map(item => ({
       ...item,
@@ -34,7 +36,7 @@ export class MailsService {
     }));
 
     return this.httpClient.post(url, JSON.stringify(body), { headers }).pipe(
-      catchError((error) => { 
+      catchError((error) => {
         console.error('Error while transferring mail', error.message);
         throw error;
       })
@@ -46,7 +48,7 @@ export class MailsService {
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json', // Only one Content-Type header is needed
     });
-    debugger;
+
 
     //Transfer / Reply ? id = 80 & transferId=35 & purposeId=1 & dueDate & instruction & structureId & delegationId & structureReceivers[]=1 &
     //  transferToType=2 & withSign=false & SignatureTemplateId & documentId=80
@@ -73,4 +75,41 @@ export class MailsService {
       })
     );
   }
+
+  markCorrespondanceAsRead(accessToken: string, documentID: number): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Accept': 'application/json' // Only Accept header is needed, remove Content-Type
+    });
+
+    const formData = new FormData();
+    formData.append('Id', documentID.toString()); // Ensure API expects 'Id' as the correct key
+
+    return this.httpClient.post(`${this.CorrsondanceViewURL}`, formData, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error while marking correspondence as read', error.message);
+        return throwError(() => error); // Proper error handling
+      })
+    );
+  }
+
+  getMyTransfer(accessToken: string, id: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+    });
+
+    const params = new URLSearchParams();
+    params.set('id', id);
+
+    const urlWithParams = `${this.myTransferURL}?${params.toString()}`;
+
+    return this.httpClient.get(urlWithParams, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching My Transfer', error.message);
+          throw error;
+        })
+      );
+  }
+
 }

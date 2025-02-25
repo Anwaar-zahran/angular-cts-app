@@ -7,7 +7,7 @@ import { ChartAverageDurationForCorrespondenceCompletionComponent } from './char
 import { TableStructureAverageDurationForCorrespondenceCompletionComponent } from './table-structure-average-duration-for-correspondence-completion/table-structure-average-duration-for-correspondence-completion.component';
 import { LookupsService } from '../../../../../services/lookups.service';
 import { TranslateModule } from '@ngx-translate/core';
-
+import { BackButtonComponent } from '../../../../shared/back-button/back-button.component';
 
 @Component({
   selector: 'app-kpi-average-duration-for-correspondence-completion',
@@ -17,7 +17,8 @@ import { TranslateModule } from '@ngx-translate/core';
     CommonModule, FormsModule, NgbModalModule,
     TranslateModule,
     ChartAverageDurationForCorrespondenceCompletionComponent,
-    TableStructureAverageDurationForCorrespondenceCompletionComponent
+    TableStructureAverageDurationForCorrespondenceCompletionComponent,
+    BackButtonComponent
   ]
 })
 export class KpiAverageDurationForCorrespondenceCompletionComponent implements OnInit {

@@ -55,7 +55,7 @@ export class AuthService {
   getToken(): string | null {
     const token = localStorage.getItem('access_token');
     const expiry = JSON.parse(localStorage.getItem('expiry') || '0');
-
+    
     if (token && expiry && new Date().getTime() < expiry) {
       return token;
     } else {
@@ -75,6 +75,28 @@ export class AuthService {
     if (token && token.split('.').length === 3) {
       const decodedToken = this.jwtHelper.decodeToken(token);
       return decodedToken.Username || '';
+    }
+    return '';
+  }
+
+  getCurrentUserFullName(): string {
+    const token = localStorage.getItem('access_token');
+    if (token && token.split('.').length === 3) {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      console.log(decodedToken);
+      console.log(decodedToken.FirstName +' '+ decodedToken.LastName);
+      return decodedToken.FirstName + ' '+decodedToken.LastName || '';
+    }
+    return '';
+  }
+
+  getUserTypeId(): string {
+    const token = localStorage.getItem('access_token');
+    if (token && token.split('.').length === 3) {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      console.log(decodedToken);
+      console.log('user id from auth'+ decodedToken.Id);
+      return decodedToken.Id || '';
     }
     return '';
   }

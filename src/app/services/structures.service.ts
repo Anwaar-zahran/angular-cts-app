@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Structure } from '../models/structure.model';
 import { environment } from '../../environments/environment';
+import { CurrentUserStructures } from '../models/current-user-structures';
 
 @Injectable({
     providedIn: 'root'
 })
 export class StructuresService {
-    private baseUrl = `${environment.iAMUrl}/api`;
+    private baseUrl = `${environment.iAMUrl}/Api`;
 
     constructor(private http: HttpClient) { }
 
@@ -28,4 +29,10 @@ export class StructuresService {
             }
         );
     }
+
+    getStructureById(id: string | undefined): Observable<CurrentUserStructures> {
+        console.log('id:', id);
+        return this.http.get<CurrentUserStructures>(`${this.baseUrl}/GetUser?id=${id}`);
+    }
+    
 } 

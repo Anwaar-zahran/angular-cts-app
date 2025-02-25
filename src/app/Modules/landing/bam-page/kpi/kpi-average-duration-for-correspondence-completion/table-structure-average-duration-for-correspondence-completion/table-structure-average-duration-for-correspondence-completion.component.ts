@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTablesModule } from 'angular-datatables';
 import { DataTableDirective } from 'angular-datatables';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { AveragePerUserComponent } from '../../average-per-user/average-per-user.component';
 
 @Component({
   selector: 'app-table-structure-average-duration-for-correspondence-completion',
@@ -17,7 +18,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     DataTablesModule,
     NgbModule,
     FormsModule,
-    TranslateModule
+    TranslateModule,
+    AveragePerUserComponent
   ]
 })
 export class TableStructureAverageDurationForCorrespondenceCompletionComponent implements OnInit {
@@ -39,6 +41,8 @@ export class TableStructureAverageDurationForCorrespondenceCompletionComponent i
   // Datatable properties
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
+
+  selectedUser: any = null;
 
   constructor(
     private kpiService: KpiService,
@@ -105,10 +109,15 @@ export class TableStructureAverageDurationForCorrespondenceCompletionComponent i
       });
   }
 
-  drawStructureUserTable(type: string, average: number, year: number, userId: number | null, structureId: number) {
-    // Implement the logic to draw the structure user table
-    console.log(`Drawing table for ${type} with average ${average}, year ${year}, userId ${userId}, structureId ${structureId}`);
-  }
+drawStructureUserTable(type: string, average: number, year: number, userId: number | null, structureId: number) {
+   // Implement the logic to draw the structure user table
+   console.log(`Drawing table for ${type} with average ${average}, year ${year}, userId ${userId}, structureId ${structureId}`);
+   
+   const selectedUser = this.data.find(item => item.structureId === structureId && item.userId === userId);
+    if (selectedUser) {
+      this.selectedUser = selectedUser;
+    }
+}
 
   openStructureChart(type: string, average: number, year: number, userId: number | null, structureId: number) {
     // Implement the logic to open the structure chart
@@ -136,7 +145,9 @@ export class TableStructureAverageDurationForCorrespondenceCompletionComponent i
   }
 
   goToPage(page: number) {
-    this.currentPage = page;
-    this.loadData();
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadData();
+    }
   }
 }

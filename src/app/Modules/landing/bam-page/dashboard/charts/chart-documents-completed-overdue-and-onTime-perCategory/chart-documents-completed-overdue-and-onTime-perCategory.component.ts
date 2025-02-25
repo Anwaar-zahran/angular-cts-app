@@ -5,7 +5,8 @@ import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chart-documents-completed-overdue-and-onTime-perCategory',
@@ -26,6 +27,7 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
+  private languageSubscription! : Subscription
 
   constructor(
     private chartsService: ChartsService,
@@ -34,6 +36,10 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
   ) { }
 
   ngOnInit() {
+
+    this.languageSubscription = this.translate.onLangChange.subscribe((event:LangChangeEvent) =>{
+      this.loadChartData()
+    });
     // Only load chart data when categories are available
     if (this.categories && this.categories.length > 0) {
       this.loadChartData();
@@ -52,7 +58,7 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
       .GetDocumentsCompletedOverdueAndOnTimePerCategoryByUser({
         fromDate: this.fromDate,
         toDate: this.toDate,
-        structureId: '1',
+        structureId:  localStorage.getItem('structureId') || "1",
       })
       .subscribe((res: { overDue: any[]; onTime: any[] }) => {
         const categoryNames: string[] = [];
@@ -84,7 +90,14 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
       },
       colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
       xAxis: {
-        categories: categories,
+        categories:  [
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.IN_PROGRESS"),
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.COMPLETED"),
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
+        ],
         title: {
           text: this.translate.instant('BAM.CHARTS.LABELS.CATEGORY')
         }
@@ -109,13 +122,13 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
       },
       series: [
         {
-          name: 'Overdue',
+          name: this.translate.instant('BAM.CHARTS.LABELS.OVERDUE'),
           type: 'column',
           data: overdueData,
           color: '#8D0034'
         },
         {
-          name: 'On-Time',
+          name: this.translate.instant('BAM.CHARTS.LABELS.ON_TIME'),
           type: 'column',
           data: onTimeData,
           color: '#00695E'

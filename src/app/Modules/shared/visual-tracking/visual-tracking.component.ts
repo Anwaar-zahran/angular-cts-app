@@ -34,10 +34,23 @@ export class VisualTrackingComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: { documentId: string, referenceNumber: string }
   ) {
     console.log("Data:", this.data);
+
+    // Override the OrgChart's network request function before any initialization
+    if (typeof OrgChart !== 'undefined') {
+      OrgChart.prototype._ajax = function (url: string, method: string, data: any, callback: Function): void {
+        // Simulate successful response without making network call
+        if (callback) {
+          setTimeout(() => {
+            callback({ status: 200, response: JSON.stringify({ result: 'success' }) });
+          }, 0);
+        }
+      };
+      OrgChart.OFFLINE = true;
+    }
   }
 
   ngOnInit() {
-    debugger;
+
     this.loadLookupData();
     if (this.data.documentId) {
       this.getVisualTracking(this.data.documentId);
@@ -177,7 +190,15 @@ export class VisualTrackingComponent implements OnInit, OnDestroy {
             { type: 'textbox', label: this.translateService.instant('VISUAL_TRACKING.DETAILS.CREATED_BY_USER'), binding: 'createdBy', readOnly: true },
             { type: 'textbox', label: this.translateService.instant('VISUAL_TRACKING.DETAILS.DATE'), binding: 'date', readOnly: true }
           ]
-        }
+        },
+        offline: true,
+        licenseKey: 'none',
+        enableServerLayout: false,
+        useServerLayout: false,
+        lazyLoading: false,
+        mixedHierarchyNodesSeparation: 0,
+        assistantSeparation: 0,
+        partnerNodeSeparation: 0
       };
 
       // Destroy existing instance if it exists

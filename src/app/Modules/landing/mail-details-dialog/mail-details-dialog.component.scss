@@ -30,6 +30,7 @@ mat-dialog-close {
     position: relative;
     width: 100%;
     overflow: hidden;
+    min-height: 45px;
 
     &:lang(ar) {
         flex-direction: row-reverse;
@@ -270,4 +271,24 @@ mat-dialog-content .tab-content strong {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.tab-content.flex-1 .dataTables_paginate.paging_full_numbers {
+    bottom: 0;
+}
+
+.details-dialog-content .mat-mdc-dialog-container .mat-mdc-dialog-content {
+    max-height: unset;
+}
+
+
+.form label.form-label {
+    width: 50%;
+    color: #a4a4a4;
+    font-weight: 500;
+}
+
+span.form-label {
+  width: 50%;
+  display: inline-block;
 }

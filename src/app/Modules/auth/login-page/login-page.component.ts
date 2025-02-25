@@ -43,6 +43,7 @@ export class LoginPageComponent implements OnInit {
 
     this.authService.login(this.username, this.password).pipe(delay(500)).subscribe(
       (response) => {
+        localStorage.removeItem('structureId');
         this.authService.storeToken(response);
         this.errorMsg = "";
         this.route.navigate(["/landing"]);

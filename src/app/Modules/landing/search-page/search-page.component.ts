@@ -15,12 +15,27 @@ import { SearchResponse } from '../../../models/searchresponse.model';
 import { AttachmentsApiResponce } from '../../../models/attachments.model';
 import { MatDialog } from '@angular/material/dialog';
 import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-dialog.component';
+import { trigger, transition, style, animate } from '@angular/animations';
+import { TranslateService } from '@ngx-translate/core';
+import { Category } from '../../../models/category.model';
 
 @Component({
   selector: 'app-search-page',
   templateUrl: './search-page.component.html',
   styleUrl: './search-page.component.scss',
-  standalone: false
+  standalone: false,
+  animations: [
+    trigger('expandCollapse', [
+      transition(':enter', [
+        style({ height: '0px', opacity: 0 }),
+        animate('300ms ease-out', style({ height: '*', opacity: 1 }))
+      ]),
+      transition(':leave', [
+        style({ height: '*', opacity: 1 }),
+        animate('300ms ease-in', style({ height: '0px', opacity: 0 }))
+      ])
+    ])
+  ]
 })
 export class SearchPageComponent {
   regmodel: NgbDateStruct | undefined;
@@ -52,13 +67,16 @@ export class SearchPageComponent {
   visualTracking: any[] = [];
 
   loading: boolean = true; // Loading state
+  formVisible = true;
+
   constructor(
     private searchService: SearchPageService,
     private router: Router,
     private lookupservice: LookupsService,
     private authService: AuthService,
     private toaster: ToasterService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private translate: TranslateService
   ) { }
 
   ngOnInit() {
@@ -127,9 +145,9 @@ export class SearchPageComponent {
   }
 
   getCategories(): void {
-    this.lookupservice.getCategories(undefined).subscribe(
-      (response) => {
-        this.categories = response || [];
+    this.lookupservice.getCategoriesByName(undefined).subscribe(
+      (response: any) => {
+        this.categories = response?.data || [];
 
       },
       (error: any) => {
@@ -192,8 +210,6 @@ export class SearchPageComponent {
     return { year: +year, month: +month, day: +day };
   }
 
-
-
   initDtOptions(): void {
     this.dtOptions = {
       pageLength: 10,
@@ -211,6 +227,35 @@ export class SearchPageComponent {
       },
       dom: 'tp',
       ordering: false,
+      drawCallback: (settings: any) => {
+        const api = settings.oInstance.api();
+        const pageInfo = api.page.info();
+        const pagination = $(api.table().container()).find('.dataTables_paginate');
+        pagination.find('input.paginate-input').remove();
+        const page = $('<span class="d-inline-flex align-items-center mx-2">' + this.translate.instant('COMMON.PAGE') + '<input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> ' + this.translate.instant('COMMON.OF') + ' ' + pageInfo.pages + '</span>');
+
+
+        let timeout: any;
+        page.find('input').on('keyup', function () {
+          clearTimeout(timeout);
+
+          timeout = setTimeout(() => {
+            const pageNumber = parseInt($(this).val() as string, 10);
+            if (pageNumber >= 1 && pageNumber <= pageInfo.pages) {
+              api.page(pageNumber - 1).draw('page');
+            }
+          }, 500);
+        });
+
+        const previous = pagination.find('.previous');
+        const next = pagination.find('.next');
+        page.insertAfter(previous);
+        next.insertAfter(page);
+
+        pagination.find('a.paginate_button').on('click', function () {
+          page.find('input').val(api.page() + 1);
+        });
+      }
     };
   }
 
@@ -255,7 +300,7 @@ export class SearchPageComponent {
       },
         (error: any) => {
           console.error('Error getting search result:', error);
-          this.toaster.showToaster(error?.message || 'Something went wrong');
+          this.toaster.showToaster(error ?.message || 'Something went wrong');
         });
     });
 
@@ -277,8 +322,12 @@ export class SearchPageComponent {
     this.ResetForm();
   }
 
-
-
+  getCategoryName(catId: any): string {
+    debugger;
+    const cat = this.categories.find(p => p.id === catId);
+    return cat ? this.getName(cat) : '';
+  }
+  
   async showDetails(row: any) {
     this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
@@ -295,5 +344,23 @@ export class SearchPageComponent {
 
   } catch(error: any) {
     console.error("Error loading data", error);
+  }
+
+  // To get lookup names based on language
+  getName(item: any): string {
+
+    const currentLang = this.translate.currentLang;
+    switch (currentLang) {
+      case 'ar':
+        return item ?.nameAr || item ?.name;
+      case 'fr':
+        return item ?.nameFr || item ?.name;
+      default:
+        return item ?.name;
+    }
+  }
+
+  toggleSearchForm() {
+    this.formVisible = !this.formVisible;
   }
 }

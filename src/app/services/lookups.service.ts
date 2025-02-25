@@ -44,6 +44,7 @@ export class LookupsService {
     return of(privacyOptions);
   }
 
+
   getCarbonUsers(accessToken: string): Observable<any> {
 
     const headers = new HttpHeaders({

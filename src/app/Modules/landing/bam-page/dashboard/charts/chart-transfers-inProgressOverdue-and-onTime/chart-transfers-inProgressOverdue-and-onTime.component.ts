@@ -5,7 +5,8 @@ import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chart-transfers-inProgressOverdue-and-onTime',
@@ -24,6 +25,7 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
+  private languageSubscription!: Subscription;
 
   constructor(
     private chartsService: ChartsService,
@@ -32,6 +34,10 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
   ) { }
 
   ngOnInit() {
+
+    this.languageSubscription = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.loadChartData();
+    });
     // Only load chart data when categories are available
     if (this.categories && this.categories.length > 0) {
       this.loadChartData();
@@ -50,7 +56,7 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
       .GetTransfersInProgressOverdueAndOnTimePerCategoryByUser({
         fromDate: this.fromDate,
         toDate: this.toDate,
-        structureId: '1',
+        structureId: localStorage.getItem('structureId') || "1",
       })
       .subscribe((res: { overDue: any[]; onTime: any[] }) => {
         // Fetch category names
@@ -61,14 +67,14 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
         this.categories.forEach(cat => {
           const overdueItem = res.overDue.find(item => item.categoryId === cat.id) || { count: 0 };
           const onTimeItem = res.onTime.find(item => item.categoryId === cat.id) || { count: 0 };
-
+ 
           if (overdueItem.count > 0 || onTimeItem.count > 0) {
             categoryNames.push(cat.text);
             overdueData.push(overdueItem.count);
             onTimeData.push(onTimeItem.count);
           }
         });
-
+        
         this.drawChart(categoryNames, overdueData, onTimeData);
       });
   }
@@ -108,13 +114,13 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
       },
       series: [
         {
-          name: 'Overdue',
+          name: this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.OVERDUE"),
           type: 'column',
           data: overdueData,
           color: '#8D0034' // Red
         },
         {
-          name: 'On-Time',
+          name: this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.ON_TIME"),
           type: 'column',
           data: onTimeData,
           color: '#00695E' // Green
