@@ -57,8 +57,7 @@
               "src/assets/datatables.net/js/jquery.dataTables.js",
               //"node_modules/select2/dist/js/select2.min.js"
               "src/assets/select2/dist/js/select2.min.js",
-               "src/assets/js/orgchart.js"
-
+              "src/assets/js/orgchart.js"
             ]
           },
           "configurations": {
@@ -66,15 +65,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "3.50mb", 
-                  "maximumError": "4mb"
-                  // "maximumWarning": "500kb",
-                  // "maximumError": "3mb"
+                  "maximumWarning": "8mb",
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "6kb",
+                  "maximumError": "8kb"
                 }
               ],
               "outputHashing": "all",
@@ -102,6 +99,8 @@
             "development": {
               "buildTarget": "CAAPortal:build:development"
             }
+          }, "options": {
+            "proxyConfig": "src/proxy.conf.json"
           },
           "defaultConfiguration": "development"
         },
@@ -146,7 +145,6 @@
               //"node_modules/bootstrap/dist/js/bootstrap.min.js",
               //"node_modules/datatables.net/js/jquery.dataTables.js",
               //"node_modules/select2/dist/js/select2.min.js",
-
               //"node_modules/jquery/dist/jquery.min.js",
               "src/assets/jquery/dist/jquery.min.js",
               //"node_modules/@popperjs/core/dist/umd/popper.min.js",

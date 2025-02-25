@@ -283,7 +283,7 @@ export class SearchPageService {
 
   getViewerInfo(documentId: number, version: string, structId: number) {
     const url = `https://java-qatar.d-intalio.com/VIEWER/api/document/${documentId}/version/${version}/details?structId=${structId}`;
-    
+    debugger
     return this.httpClient.get(url).pipe(
       catchError((error) => {
         console.error('Error while fetching visual tracking:', error.message);

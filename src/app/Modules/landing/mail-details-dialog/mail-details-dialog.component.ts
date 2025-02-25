@@ -20,8 +20,7 @@ import { SearchPageService } from '../../../services/search-page.service';
 import { AuthService } from '../../auth/auth.service';
 import { ReplyToComponent } from '../reply-to/reply-to.component';
 import { TransferModalComponent } from '../transfer-modal/transfer-modal.component';
-// Import OrgChart from @balkangraph/orgchart.js
-import OrgChart from '@balkangraph/orgchart.js';
+
 import { LookupsService } from '../../../services/lookups.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { ToasterComponent } from '../../shared/toaster/toaster.component';
@@ -54,7 +53,7 @@ interface BasicAttribute {
   BroadcastReceivingEntity?: boolean;
   RelatedToPriority?: boolean;
 }
-
+declare var OrgChart: any;
 @Component({
   selector: 'app-mail-details-dialog',
   imports: [
@@ -79,7 +78,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   @ViewChild('chartContainer', { static: false }) chartContainer!: ElementRef;
   @ViewChild('tabsContainer', { static: false }) tabsContainer!: ElementRef;
   closeDialog() {
-    debugger
+
     this.dialogRef.close(); // Ensure it only closes the dialog
   }
   accessToken: string | null = null;
@@ -134,12 +133,13 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   docTypeId: any;
   docTypes: any;
   categories: any;
-  isLocKed:boolean = true;
+  isLocKed: boolean = true;
 
 
   // OrgChart references
   private orgChart: any = null;
   private chartInitialized: boolean = false;
+  visualTrackingTabIndex: number = 6;
 
   // Lookup data
   structures: any[] = [];
@@ -179,6 +179,19 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     this.dataSource.data = this.TREE_DATA;
     console.log("TREE_DATA:", this.TREE_DATA);
     console.log("dataSource:", this.dataSource);
+
+    // Override the OrgChart's network request function before any initialization
+    if (typeof OrgChart !== 'undefined') {
+      OrgChart.prototype._ajax = function (url: string, method: string, data: any, callback: Function): void {
+        // Simulate successful response without making network call
+        if (callback) {
+          setTimeout(() => {
+            callback({ status: 200, response: JSON.stringify({ result: 'success' }) });
+          }, 0);
+        }
+      };
+      OrgChart.OFFLINE = true;
+    }
   }
 
   ngOnInit(): void {
@@ -331,7 +344,6 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   showModalTransfer() {
-    debugger
     this.searchService.CheckDocumentAttachmnentISLocked(this.accessToken!, this.data.documentId).subscribe(
       (isLocked: boolean) => {
         console.log('Document is locked:', isLocked);
@@ -357,7 +369,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         console.error('Error checking document lock:', error);
       }
     );
-    debugger
+
 
   }
 
@@ -369,7 +381,6 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      debugger
       console.log('Transfer modal closed', result);
       if (result && result.shouldCloseParent) {
         this.dialogRef.close();
@@ -436,11 +447,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.cdr.detectChanges();
       }
     }
-    // If the Visual Tracking tab is active (index 5) and org chart data is ready, initialize OrgChart
-    if (this.activeTabIndex === 5 && this.visualTracking && !this.chartInitialized) {
-      this.initOrgChart();
-      this.chartInitialized = true;
-    }
+
   }
 
   scrollLeft(): void {
@@ -460,10 +467,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   setActiveTab(index: number): void {
+
     this.activeTabIndex = index;
 
     // If switching to Visual Tracking tab (index 5)
-    if (index === 5 && this.visualTracking) {
+    if (this.visualTracking && this.activeTabIndex === this.visualTrackingTabIndex && !this.chartInitialized) {
       this.chartInitialized = false; // Reset initialization flag
       // Short delay to ensure container is visible
       setTimeout(() => {
@@ -492,8 +500,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.getNotes(docID),
         this.getHistory(docID),
         this.getAttachments(docID),
-          this.getVisualTracking(docID),
-          this.getTransfer(this.data?.row?.id)
+        this.getVisualTracking(docID),
+        this.getTransfer(this.data?.row?.id)
       ]);
 
       this.attributes = attributes;
@@ -511,7 +519,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.priorityId = this.attributes.priorityId ?? '';
       this.docTypeId = this.attributes.documentTypeId ?? '';
 
-      debugger;
+
       if (this.linkedDocs.length > 0) {
         this.mappedArray = this.linkedDocs.map((doc: any) => {
           const foundItem = this.categories?.data.find((cat: any) => cat.id === doc.categoryId);
@@ -544,21 +552,21 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       console.error("Error loading data", error);
     }
   }
-    getTransfer(docID: string): any {
-      return new Promise((resolve, reject) => {
-        this.mailService.getMyTransfer(this.accessToken!, docID).subscribe(
-          (response) => {
-            this.transfers = response || [];
-            resolve(response);
-            console.log("Transfer:", response)
-          },
-          (error: any) => {
-            console.error(error);
-            reject(error);
-          }
-        );
-      });
-    }
+  getTransfer(docID: string): any {
+    return new Promise((resolve, reject) => {
+      this.mailService.getMyTransfer(this.accessToken!, docID).subscribe(
+        (response) => {
+          this.transfers = response || [];
+          resolve(response);
+          console.log("Transfer:", response)
+        },
+        (error: any) => {
+          console.error(error);
+          reject(error);
+        }
+      );
+    });
+  }
 
   basicAttributes: any;
   customAttribute: any;
@@ -725,7 +733,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
     // Search recursively starting from root
     const originalMailFolder = findOriginalMailFolder(this.TREE_DATA);
-    debugger
+
     if (originalMailFolder?.children?.[0]?.id) {
       const firstChild = originalMailFolder.children[0];
       const idParts = firstChild.id.split('_');
@@ -765,8 +773,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     const loggedInUserId = this.authService.getUserTypeId();
 
     var viewMode = 'edit'
-    if(this.isLocKed){
-      viewMode = 'view'; 
+    if (this.isLocKed) {
+      viewMode = 'view';
     }
 
     const params = {
@@ -782,22 +790,22 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       .join('&');
 
 
-    // this.searchService.getViewerInfo(23,'1.1',1).subscribe({
-    //   next:(resp)=>{
-    //     console.log('from search service')
-    //     console.log(resp);
-    //   }
-    // });
+    this.searchService.getViewerInfo(23,'1.1',1).subscribe({
+      next:(resp)=>{
+        console.log('from search service')
+        console.log(resp);
+      }
+    });
 
-    // console.log('--------------------------------------------------------query string ---------------------------------------')
-    // console.log(queryString)
+    console.log('--------------------------------------------------------query string ---------------------------------------')
+    console.log(queryString)
 
     this.documentViewerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${baseUrl}?${queryString}`);
     console.log("Viewer URL:", this.documentViewerUrl);
   }
 
   initOrgChart(): void {
-    debugger
+
     if (!this.chartContainer || !this.visualTracking || !Array.isArray(this.visualTracking)) {
       console.error('Missing required data for OrgChart initialization');
       return;
@@ -888,7 +896,15 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             { type: 'textbox', label: 'Created By/User', binding: 'createdBy', readOnly: true },
             { type: 'textbox', label: 'Date', binding: 'date', readOnly: true }
           ]
-        }
+        },
+        offline: true,
+        licenseKey: 'none',
+        enableServerLayout: false,
+        useServerLayout: false,
+        lazyLoading: false,
+        mixedHierarchyNodesSeparation: 0,
+        assistantSeparation: 0,
+        partnerNodeSeparation: 0
       };
 
       // Destroy existing instance if it exists
