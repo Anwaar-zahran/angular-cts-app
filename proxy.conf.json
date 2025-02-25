@@ -1,8 +1,8 @@
 {
   "/CTS/Delegation/List": {
     "target": "https://cts-qatar.d-intalio.com",
-    "secure": false, // Set to false if the API uses http or has an invalid SSL certificate
-    "changeOrigin": true, // Adjusts the origin header for the target server
-    "logLevel": "debug" // Optional: Logs proxy activity for debugging
+    "secure": false, 
+    "changeOrigin": true, 
+    "logLevel": "debug" 
   }
 }

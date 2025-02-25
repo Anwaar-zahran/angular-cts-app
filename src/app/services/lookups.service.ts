@@ -10,20 +10,27 @@ import { Priority } from '../models/priority.model';
 })
 export class LookupsService {
   private listUsersUrl = `${environment.iAMUrl}/api/SearchUsersByStructureIds`;
-  private listPrivacies = `${environment.apiBaseUrl}/Privacy/ListPrivacies`;
+  //private listPrivacies = `${environment.apiBaseUrl}/Privacy/ListPrivacies`;
+  private listPrivacies = `${environment.apiBaseUrl}/Privacy/List?Name=`;
   private listCategories = `${environment.apiBaseUrl}/Category/ListCategories`;
+  //private listCategories = `${environment.apiBaseUrl}/Category/List?Name`;
+  private listCategoriesByName = `${environment.apiBaseUrl}/Category/List?Name`;
   private listEntities = `${environment.iAMUrl}/api/SearchStructuresWithSearchAttributes`;
   private listSearchUsers = `${environment.iAMUrl}/api/SearchUsers`;
   private listStructuredUsers = `${environment.apiBaseUrl}/User/GetUsersStructuresFromCTS`;
   private listDelegateToUsers = `${environment.apiBaseUrl}/CTS/Delegation/ListDelegationToUser`;
-  private listImportance = `${environment.apiBaseUrl}/Importance/ListImportances`;
+ // private listImportance = `${environment.apiBaseUrl}/Importance/ListImportances`;
+  private listImportance = `${environment.apiBaseUrl}/Importance/List?Name=`;
   private listStatus = `${environment.apiBaseUrl}/Status/ListStatuses`;
-  private listPriorities = `${environment.apiBaseUrl}/Priority/ListPriorities`;
+ // private listPriorities = `${environment.apiBaseUrl}/Priority/ListPriorities`;
+  private listPriorities = `${environment.apiBaseUrl}/Priority/List?Name=`;
   private listYears = `${environment.apiBaseUrl}/Dashboard/GetAvailableYears`;
   private listPurposes = `${environment.apiBaseUrl}/CTS/Purpose/ListUserPurposes`;
-  private listClassification = `${environment.apiBaseUrl}/Classification/List`;
+  //private listClassification = `${environment.apiBaseUrl}/Classification/List`;
+  private listClassification = `${environment.apiBaseUrl}/Classification/List?Name=`;
   private listDocumentType = `${environment.apiBaseUrl}/DocumentType/List`;
-  private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List`;
+  //private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List`;
+  private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List?Name=`;
 
   constructor(private http: HttpClient) { }
 
@@ -36,6 +43,7 @@ export class LookupsService {
     ];
     return of(privacyOptions);
   }
+
   getCarbonUsers(accessToken: string): Observable<any> {
 
     const headers = new HttpHeaders({
@@ -59,7 +67,7 @@ export class LookupsService {
   }
 
   getPriorityOptions(): Observable<Priority[]> {
-    return this.http.get<Priority[]>(`${environment.apiBaseUrl}/Priority/ListPriorities`);
+    return this.http.get<Priority[]>(`${environment.apiBaseUrl}/Priority/List?Name=`);
   }
 
   getUsers(accessToken: string): Observable<any> {
@@ -154,6 +162,7 @@ export class LookupsService {
         })
       );
   }
+
   getCategories(delegationId: string | undefined): Observable<{ id: number, text: string }[]> {
     let params = new HttpParams();
     if (delegationId !== undefined) {
@@ -161,6 +170,21 @@ export class LookupsService {
     }
 
     return this.http.get<{ id: number, text: string }[]>(this.listCategories, { params })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching categories data', error.message);
+          throw error;
+        })
+      );
+  }
+
+  getCategoriesByName(delegationId: string | undefined): Observable<{ id: number, text: string }[]> {
+    let params = new HttpParams();
+    if (delegationId !== undefined) {
+      params = params.set('delegationId', delegationId);
+    }
+
+    return this.http.get<{ id: number, text: string }[]>(this.listCategoriesByName, { params })
       .pipe(
         catchError((error) => {
           console.error('Error while fetching categories data', error.message);
@@ -194,7 +218,8 @@ export class LookupsService {
     let params = new HttpParams();
 
     params = params.set('text', '');
-    params = params.set('language', 'en');
+    const lang = localStorage.getItem("language")||'en';
+    params = params.set('language', lang);
 
     return this.http.get(this.listSearchUsers, { headers, params })
       .pipe(
@@ -278,6 +303,7 @@ export class LookupsService {
         })
       );
   }
+
   getPrioritiesWithDays(accessToken: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
@@ -292,8 +318,7 @@ export class LookupsService {
         })
       );
   }
-
-
+  
   getYears(): Observable<any> {
     return this.http.get(this.listYears)
       .pipe(
