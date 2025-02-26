@@ -7,6 +7,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTablesModule } from 'angular-datatables';
 import { DataTableDirective } from 'angular-datatables';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { KpiTableUserAverageDurationForCorrespondenceDelayComponent } from '../kpi-table-user-average-duration-for-correspondence-delay/kpi-table-user-average-duration-for-correspondence-delay.component';
+import { KpiChartStructureAverageDurationForCorrespondenceDelayComponent } from '../kpi-chart-structure-average-duration-for-correspondence-delay/kpi-chart-structure-average-duration-for-correspondence-delay.component';
+import { CardsVisibility } from '../../../../../../models/cards-visibility';
 
 @Component({
   selector: 'app-kpi-table-average-duration-for-correspondence-delay',
@@ -17,7 +20,9 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     DataTablesModule,
     NgbModule,
     FormsModule,
-    TranslateModule
+    TranslateModule,
+    KpiTableUserAverageDurationForCorrespondenceDelayComponent,
+    KpiChartStructureAverageDurationForCorrespondenceDelayComponent
   ]
 })
 export class KpiTableAverageDurationForCorrespondenceDelayComponent implements OnInit {
@@ -40,6 +45,24 @@ export class KpiTableAverageDurationForCorrespondenceDelayComponent implements O
   // Datatable properties
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
+
+  selectedUser: any = null;
+
+  // i use this variable in the showUserPerStructure to update the function 'because in the another component i detect the chnages only'
+  // in case i hide the table and click again on the structure name will change the value of the componentLey and the changes will updated on the another component
+  componentKey: number = 0;
+
+  selectedStrutureId: number | null = null
+  selectedYear: number | null = null;
+  selectedAverage!: number;
+  isPerformanceCardVisible: boolean = true;
+  isAveragePerUserVisible: boolean = true;
+
+
+  isChartVisible: boolean = true;
+  selectedChartStrutureId: number | null = null
+  selectedChartYear: number | null = null;
+
 
   constructor(
     private kpiService: KpiService,
@@ -81,8 +104,8 @@ export class KpiTableAverageDurationForCorrespondenceDelayComponent implements O
         const entity = this.entities.find(e => e.id === item.structureId);
         return {
           ...item,
-          structureName: entity ? entity.name : 'Unknown Structure', // Add structure name from entities
-          structureId: item.structureId // Keep original structureId
+          structureName: entity ? entity.name : this.translateService.instant('BAM.COMMON.UNKNOWN_STRUCTURE'),
+          structureId: item.structureId
         };
       });
       this.totalItems = response.recordsTotal;
@@ -102,11 +125,20 @@ export class KpiTableAverageDurationForCorrespondenceDelayComponent implements O
   drawStructureUserTable(type: string, average: number, year: number, userId: number | null, structureId: number) {
     // Implement the logic to draw the structure user table
     console.log(`Drawing table for ${type} with average ${average}, year ${year}, userId ${userId}, structureId ${structureId}`);
+
+    const selectedUser = this.data.find(item => item.structureId === structureId && item.userId === userId);
+    if (selectedUser) {
+      this.selectedUser = selectedUser;
+    }
   }
 
   openStructureChart(type: string, average: number, year: number, userId: number | null, structureId: number) {
     // Implement the logic to open the structure chart
     console.log(`Opening chart for ${type} with average ${average}, year ${year}, userId ${userId}, structureId ${structureId}`);
+
+    this.selectedChartStrutureId = structureId;
+    this.selectedChartYear = year;
+    this.isChartVisible = true;
   }
 
   calculatePagination() {
@@ -134,5 +166,29 @@ export class KpiTableAverageDurationForCorrespondenceDelayComponent implements O
       this.currentPage = page;
       this.loadData();
     }
+  }
+
+  showUserPerStructure(structureId: number, year: number, average: number) {
+    this.selectedStrutureId = structureId;
+    this.selectedYear = year;
+    this.selectedAverage = average;
+    this.componentKey++;
+
+    this.isAveragePerUserVisible = true;
+    this.isPerformanceCardVisible = true;
+
+  }
+
+  onChartVisibilityChanged(isVisible: boolean) {
+    this.isChartVisible = isVisible;
+    console.log("Chart visibility changed:", isVisible);
+  }
+
+  onCardsVisibilityChanged(isCardsVisible: CardsVisibility) {
+    this.isPerformanceCardVisible = isCardsVisible.isPerformanceCardVisible
+    this.isAveragePerUserVisible = isCardsVisible.isAverageDurationCardVisible
+    console.log('chnagggggggggggggggggggggggggggggessssssssssss')
+    console.log(this.isAveragePerUserVisible)
+    console.log(this.isPerformanceCardVisible)
   }
 }

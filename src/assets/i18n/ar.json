@@ -517,8 +517,11 @@
                 "COMPARE_TO_TOTAL": "مقارنة بالمتوسط الإجمالي",
                 "YEARLY_GRAPH": "الرسم البياني السنوي",
                 "AVERAGE_PER_YEAR": "المتوسط في السنة",
+                "AVERAGE_PER_USER":"المتوسط لكل مستخدم",
                 "TOTAL_AVERAGE": "المتوسط الإجمالي: {{days}} يوم",
-                "ALL_CATEGORIES": "جميع الفئات"
+                "ALL_CATEGORIES": "جميع الفئات",
+                "REGISTERED_BY": "مسجلة من قبل",
+                "COMPARE_TO_STRUCTURE_TOTAL_AVERAGE":"بالمقارنة بالمتوسط ​​الإجمالي للإدارة"
             },
             "DELAY_DURATION": {
                 "TITLE": "متوسط مدة تأخير المراسلات",
@@ -538,6 +541,12 @@
                     "AVERAGE_DAYS": "المتوسط (أيام)",
                     "ALL_CATEGORIES": "جميع الفئات"
                 }
+            },
+            "PERFORMANCE":{
+                "PERFORMANCE_PER_STRUCTURE":"الأداء لكل إدارة",
+                "BEST_PERFORMANCE":"أفضل أداء",
+                "AVERAGE":"متوسط",
+                "WORST_PERFORMANCE":"أسوأ أداء"
             },
             "TRANSFER_DURATION": {
                 "TITLE": "متوسط مدة إكمال التحويل",
