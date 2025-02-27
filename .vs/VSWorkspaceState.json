@@ -5,12 +5,12 @@
     "\\src\\app",
     "\\src\\app\\Modules",
     "\\src\\app\\Modules\\auth",
+    "\\src\\app\\Modules\\landing",
+    "\\src\\app\\Modules\\landing\\mail-details-dialog",
     "\\src\\assets",
     "\\src\\assets\\datatables.net",
-    "\\src\\assets\\datatables.net-dt",
-    "\\src\\assets\\datatables.net-dt\\js",
-    "\\src\\assets\\datatables.net\\js"
+    "\\src\\assets\\datatables.net-dt"
   ],
-  "SelectedNode": "\\package-lock.json",
+  "SelectedNode": "\\src\\app\\Modules\\landing\\mail-details-dialog\\mail-details-dialog.component.ts",
   "PreviewInSolutionExplorer": false
 }

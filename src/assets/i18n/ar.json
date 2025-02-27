@@ -159,7 +159,8 @@
     "ATTACHMENT": {
       "TYPE": "النوع",
       "QUANTITY": "العدد",
-      "DESC": "الوصف"
+      "DESC": "الوصف",
+      "OriginalDoc": "المستند الأصلي"
     },
     "HISTORY": {
       "FROM_USER": "من",
