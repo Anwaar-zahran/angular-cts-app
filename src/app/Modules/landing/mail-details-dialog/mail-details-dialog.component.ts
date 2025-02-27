@@ -772,6 +772,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
     const loggedInUserId = this.authService.getUserTypeId();
 
+    const currentLang = this.translate.currentLang;
+
     var viewMode = 'edit'
     if (this.isLocKed) {
       viewMode = 'view';
@@ -779,7 +781,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
     const params = {
       documentId: this.selectedDocumentId,
-      language: 'en',
+      language: currentLang,
       token: encodeURIComponent(token),
       version: 'autocheck',
       structId: 1,

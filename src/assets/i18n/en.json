@@ -176,7 +176,8 @@
       "REQUIRED_FIELDS": "Username and password are required",
       "REQUIRED_USERNAME": "Username is required",
       "REQUIRED_PASSWORD": "Password is required",
-      "INVALID_CREDENTIALS": "Invalid username or password"
+      "INVALID_CREDENTIALS": "Invalid username or password",
+      "SOMETHING_WRONG": "Something went wrong"
     }
   },
   "VISUAL_TRACKING": {
@@ -244,6 +245,7 @@
   },
   "ERRORS": {
     "REQUIRED_FIELD": "This field is required",
+    "REQUIRED_FIELDS": "Fields are required",
     "INVALID_FORMAT": "Invalid format",
     "SERVER_ERROR": "Server error occurred",
     "NO_PERMISSION": "You don't have permission",
@@ -295,7 +297,9 @@
       "REQUIRED_PRIVACY": "Privacy is required",
       "REQUIRED_CATEGORY": "Category is required",
       "INVALID_DATE_RANGE": "To date must be after From date",
-      "OVERLAPPING_DELEGATION": "There is an overlapping delegation for this user"
+      "OVERLAPPING_DELEGATION": "There is an overlapping delegation for this user",
+      "SOMETHING_WRONG": "Something went wrong",
+      "REQUIRED_FIELDS":"Required Fields"
     },
     "BUTTONS": {
       "ADD_NEW": "Add New Delegation",
