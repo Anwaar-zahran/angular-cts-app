@@ -2,7 +2,7 @@
   "/CTS/Delegation/List": {
     "target": "https://cts-qatar.d-intalio.com",
     "secure": false, 
-    "changeOrigin": true,
+    "changeOrigin": true, 
     "logLevel": "debug" 
   }
 }

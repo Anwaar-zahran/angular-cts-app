@@ -13,6 +13,7 @@ export class LookupsService {
   //private listPrivacies = `${environment.apiBaseUrl}/Privacy/ListPrivacies`;
   private listPrivacies = `${environment.apiBaseUrl}/Privacy/List?Name=`;
   private listCategories = `${environment.apiBaseUrl}/Category/ListCategories`;
+  //private listCategories = `${environment.apiBaseUrl}/Category/List?Name`;
   private listCategoriesByName = `${environment.apiBaseUrl}/Category/List?Name`;
   private listEntities = `${environment.iAMUrl}/api/SearchStructuresWithSearchAttributes`;
   private listSearchUsers = `${environment.iAMUrl}/api/SearchUsers`;
@@ -42,6 +43,7 @@ export class LookupsService {
     ];
     return of(privacyOptions);
   }
+
 
   getCarbonUsers(accessToken: string): Observable<any> {
 
@@ -191,6 +193,7 @@ export class LookupsService {
         })
       );
   }
+
   getEntities(): Observable<any> {
 
 
