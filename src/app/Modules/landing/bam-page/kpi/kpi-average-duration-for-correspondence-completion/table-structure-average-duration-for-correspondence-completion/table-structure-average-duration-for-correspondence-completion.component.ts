@@ -8,6 +8,9 @@ import { DataTablesModule } from 'angular-datatables';
 import { DataTableDirective } from 'angular-datatables';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AveragePerUserComponent } from '../../average-per-user/average-per-user.component';
+import { TableUserAverageDurationForCorrespondenceCompletionComponent } from '../table-user-average-duration-for-correspondence-completion/table-user-average-duration-for-correspondence-completion.component';
+import { ChartStructureAverageDurationForCorrespondenceCompletionComponent } from "../chart-structure-average-duration-for-correspondence-completion/chart-structure-average-duration-for-correspondence-completion.component";
+import { CardsVisibility } from '../../../../../../models/cards-visibility';
 
 @Component({
   selector: 'app-table-structure-average-duration-for-correspondence-completion',
@@ -19,8 +22,9 @@ import { AveragePerUserComponent } from '../../average-per-user/average-per-user
     NgbModule,
     FormsModule,
     TranslateModule,
-    AveragePerUserComponent
-  ]
+    TableUserAverageDurationForCorrespondenceCompletionComponent,
+    ChartStructureAverageDurationForCorrespondenceCompletionComponent
+]
 })
 export class TableStructureAverageDurationForCorrespondenceCompletionComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })
@@ -43,6 +47,21 @@ export class TableStructureAverageDurationForCorrespondenceCompletionComponent i
   dtTrigger: Subject<any> = new Subject<any>();
 
   selectedUser: any = null;
+
+  // i use this variable in the showUserPerStructure to update the function 'because in the another component i detect the chnages only'
+  // in case i hide the table and click again on the structure name will change the value of the componentLey and the changes will updated on the another component
+  componentKey: number = 0;
+
+  selectedStrutureId: number | null = null
+  selectedYear: number | null = null;
+  selectedAverage!: number;
+  isPerformanceCardVisible: boolean = true;
+  isAveragePerUserVisible: boolean = true;
+
+
+  isChartVisible: boolean = true;
+  selectedChartStrutureId: number | null = null
+  selectedChartYear: number | null = null;
 
   constructor(
     private kpiService: KpiService,
@@ -122,6 +141,10 @@ drawStructureUserTable(type: string, average: number, year: number, userId: numb
   openStructureChart(type: string, average: number, year: number, userId: number | null, structureId: number) {
     // Implement the logic to open the structure chart
     console.log(`Opening chart for ${type} with average ${average}, year ${year}, userId ${userId}, structureId ${structureId}`);
+
+    this.selectedChartStrutureId = structureId;
+    this.selectedChartYear = year;
+    this.isChartVisible = true;
   }
 
   calculatePagination() {
@@ -149,5 +172,28 @@ drawStructureUserTable(type: string, average: number, year: number, userId: numb
       this.currentPage = page;
       this.loadData();
     }
+  }
+
+  showUserPerStructure(structureId: number, year: number, average:number){
+    this.selectedStrutureId = structureId;
+    this.selectedYear = year;
+    this.selectedAverage = average;
+    this.componentKey++;
+
+    this.isAveragePerUserVisible = true;
+    this.isPerformanceCardVisible = true;
+  }
+
+  onChartVisibilityChanged(isVisible: boolean) {
+    this.isChartVisible = isVisible;
+    console.log("Chart visibility changed:", isVisible);
+  }
+
+  onCardsVisibilityChanged(isCardsVisible: CardsVisibility) {
+    this.isPerformanceCardVisible = isCardsVisible.isPerformanceCardVisible
+    this.isAveragePerUserVisible = isCardsVisible.isAverageDurationCardVisible
+    console.log('chnagggggggggggggggggggggggggggggessssssssssss')
+    console.log(this.isAveragePerUserVisible)
+    console.log(this.isPerformanceCardVisible)
   }
 }

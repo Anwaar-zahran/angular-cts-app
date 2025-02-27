@@ -1,92 +1,193 @@
-<div class="panel panel-default borderTop-1">
-  <!-- Title Section -->
-  <div class="panel-heading">
-    <div class="row">
-      <div class="col-sm-10 pull-left">
-        {{ 'BAM.KPI.TRANSFER_DURATION.TABLE.AVERAGE_PER_STRUCTURE' | translate }}
+<div class="card">
+  <div class="panel panel-default borderTop-1">
+    <!-- Title Section -->
+    <div class="panel-heading">
+      <div class="row">
+        <div class="col-sm-10 pull-left">
+          {{ "BAM.KPI.AVERAGE_DURATION.AVERAGE_PER_STRUCTURE" | translate }}
+        </div>
       </div>
-
+      <span id="spanTransferAverageCompletionTime" class="spanDate">
+        <span style="color: #444"
+          >({{ "BAM.KPI.AVERAGE_DURATION.YEAR" | translate }}
+          <span class="text-secondary">{{ year }}</span
+          >)</span
+        >
+      </span>
     </div>
-    <span id="spanTransferAverageCompletionTime" class="spanDate">
-      <span style="color: #444">({{ 'BAM.KPI.TRANSFER_DURATION.YEAR' | translate }} {{year}})</span>
-    </span>
-  </div>
 
-  <div class="panel-body">
-    <!-- Table -->
-    <div class="table-container overflow-x-auto">
-      <table id="grdAveragePerStructureItems" class="table dataTable no-footer" role="grid">
-        <thead>
-          <tr role="row">
-            <th class="min-max-width-50-250">{{ 'BAM.KPI.TRANSFER_DURATION.TABLE.STRUCTURE' | translate }}</th>
-            <th class="min-max-width-50-250">{{ 'BAM.KPI.TRANSFER_DURATION.TABLE.AVERAGE_DAYS' | translate }}</th>
-            <th class="min-max-width-50-250">{{ 'BAM.KPI.TRANSFER_DURATION.TABLE.COMPARE_TO_TOTAL' | translate }}</th>
-            <!--
-          <th class="min-max-width-50-250">Yearly graph</th>
-          -->
-          </tr>
-        </thead>
+    <div class="panel-body">
+      <!-- Table -->
+      <div class="table-container overflow-x-auto">
+        <table
+          id="grdAveragePerStructureItems"
+          class="table dataTable no-footer"
+          role="grid"
+        >
+          <thead>
+            <tr role="row">
+              <th class="min-max-width-50-250">
+                {{ "BAM.KPI.TRANSFER_DURATION.TABLE.STRUCTURE" | translate }}
+              </th>
+              <th class="min-max-width-50-250">
+                {{ "BAM.KPI.TRANSFER_DURATION.TABLE.AVERAGE_DAYS" | translate }}
+              </th>
+              <th class="min-max-width-50-250">
+                {{
+                  "BAM.KPI.TRANSFER_DURATION.TABLE.COMPARE_TO_TOTAL" | translate
+                }}
+              </th>
+              <th class="min-max-width-50-250">
+                {{ "BAM.KPI.AVERAGE_DURATION.YEARLY_GRAPH" | translate }}
+              </th>
+            </tr>
+          </thead>
 
-        <tbody>
-          <tr *ngFor="let item of data" role="row">
-            <td class="min-max-width-50-250" title="{{item.structureName}}">
-              <span style="color:var(--secondary-color);text-decoration: underline;cursor: pointer;"
-                class="drawuserstructure"
-                (click)="drawStructureUserTable('AverageDurationForCorrespondenceCompletion', item.average.toFixed(2), year, item.userId, item.structureId)">
-                {{item.structureName}}
-              </span>
-            </td>
-            <td class="min-max-width-50-250" title="{{item.average.toFixed(2)}}">{{item.average.toFixed(2)}}</td>
-            <td class="min-max-width-50-250" title="{{(item.average - totalAverage).toFixed(2)}}">
-              {{(item.average - totalAverage).toFixed(2)}}
-            </td>
-            <!--
-          <td class="min-max-width-50-250">
-            <span
-              (click)="openStructureChart('AverageDurationForCorrespondenceCompletion', item.average.toFixed(2), year, item.userId, item.structureId)"
-              class="yearlygraph pointer">
-              <em class="fa fa-line-chart"></em>
-            </span>
-          </td>
-          -->
-          </tr>
-        </tbody>
-      </table>
+          <tbody>
+            <tr *ngFor="let item of data" role="row">
+              <td class="min-max-width-50-250" title="{{ item.structureName }}">
+                <span
+                  style="
+                    color: var(--secondary-color);
+                    text-decoration: underline;
+                    cursor: pointer;
+                  "
+                  class="drawuserstructure"
+                  (click)="
+                    showUserPerStructure(item.structureId, year, item.average)
+                  "
+                >
+                  {{ item.structureName }}
+                </span>
+              </td>
+              <td
+                class="min-max-width-50-250"
+                title="{{ item.average.toFixed(2) }}"
+              >
+                {{ item.average.toFixed(2) }}
+              </td>
+              <td
+                class="min-max-width-50-250"
+                title="{{ (item.average - totalAverage).toFixed(2) }}"
+              >
+                {{ (item.average - totalAverage).toFixed(2) }}
+              </td>
 
+              <td class="min-max-width-50-250">
+                <span
+                  (click)="
+                    openStructureChart(
+                      'AverageDurationForCorrespondenceCompletion',
+                      item.average.toFixed(2),
+                      year,
+                      item.userId,
+                      item.structureId
+                    )
+                  "
+                  class="yearlygraph pointer"
+                >
+                  <em class="fa fa-line-chart"></em>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      <!-- Only show pagination if there's data -->
-      <div class="d-flex justify-content-center align-items-center mt-3" *ngIf="data && data.length > 0">
-        <!--<div>
+        <!-- Only show pagination if there's data -->
+        <div
+          class="d-flex justify-content-center align-items-center mt-3"
+          *ngIf="data && data.length > 0"
+        >
+          <!--<div>
           Showing {{startIndex}} to {{endIndex}} of {{totalItems}} entries
         </div>-->
-        <div class="dataTables_paginate paging_full_numbers">
-          <a class="paginate_button first" [class.disabled]="currentPage === 1" (click)="goToPage(1)"
-            [attr.aria-label]="'BAM.COMMON.PAGINATION.FIRST' | translate">
-            <i class='text-secondary fa fa-angle-left'></i>
-          </a>
+          <div class="dataTables_paginate paging_full_numbers">
+            <a
+              class="paginate_button first"
+              [class.disabled]="currentPage === 1"
+              (click)="goToPage(1)"
+              [attr.aria-label]="'BAM.COMMON.PAGINATION.FIRST' | translate"
+            >
+              <i class="text-secondary fa fa-angle-left"></i>
+            </a>
 
-          <a class="paginate_button previous" [class.disabled]="currentPage === 1" (click)="previousPage()"
-            [attr.aria-label]="'BAM.COMMON.PAGINATION.PREVIOUS' | translate">
-            <i class='text-secondary fa fa-angle-double-left'></i>
-          </a>
+            <a
+              class="paginate_button previous"
+              [class.disabled]="currentPage === 1"
+              (click)="previousPage()"
+              [attr.aria-label]="'BAM.COMMON.PAGINATION.PREVIOUS' | translate"
+            >
+              <i class="text-secondary fa fa-angle-double-left"></i>
+            </a>
 
-          <span class="d-inline-flex align-items-center mx-2">{{ 'COMMON.PAGE' | translate }}  
-            <input type="number" class="paginate-input form-control form-control-sm mx-2" [(ngModel)]="currentPage" (ngModelChange)="goToPage(currentPage)"
-            [min]="1" [max]="totalPages" />
-              {{ 'COMMON.OF' | translate }} {{totalPages}}</span>
+            <span class="d-inline-flex align-items-center mx-2"
+              >{{ "COMMON.PAGE" | translate }}
+              <input
+                type="number"
+                class="paginate-input form-control form-control-sm mx-2"
+                [(ngModel)]="currentPage"
+                (ngModelChange)="goToPage(currentPage)"
+                [min]="1"
+                [max]="totalPages"
+              />
+              {{ "COMMON.OF" | translate }} {{ totalPages }}</span
+            >
 
-          <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()"
-            [attr.aria-label]="'BAM.COMMON.PAGINATION.NEXT' | translate">
-            <i class='text-secondary fa fa-angle-double-right'></i>
-          </a>
+            <a
+              class="paginate_button next"
+              [class.disabled]="currentPage === totalPages"
+              (click)="nextPage()"
+              [attr.aria-label]="'BAM.COMMON.PAGINATION.NEXT' | translate"
+            >
+              <i class="text-secondary fa fa-angle-double-right"></i>
+            </a>
 
-          <a class="paginate_button last" [class.disabled]="currentPage === totalPages" (click)="goToPage(totalPages)"
-            [attr.aria-label]="'BAM.COMMON.PAGINATION.LAST' | translate">
-            <i class='text-secondary fa fa-angle-right'></i>
-          </a>
-
+            <a
+              class="paginate_button last"
+              [class.disabled]="currentPage === totalPages"
+              (click)="goToPage(totalPages)"
+              [attr.aria-label]="'BAM.COMMON.PAGINATION.LAST' | translate"
+            >
+              <i class="text-secondary fa fa-angle-right"></i>
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<app-kpi-chart-structure-average-duration-for-transfer-completion
+*ngIf="
+this.selectedChartStrutureId &&
+this.selectedChartYear &&
+this.isChartVisible
+"
+[structureId]="this.selectedChartStrutureId"
+[year]="this.selectedChartYear"
+(chartVisibilityChanged)="onChartVisibilityChanged($event)"
+[isChartCardVisible]="this.isChartVisible"
+>
+</app-kpi-chart-structure-average-duration-for-transfer-completion>
+
+<app-kpi-table-user-average-duration-for-transfer-completion
+
+*ngIf="this.selectedStrutureId && this.selectedYear"
+[structureId]="this.selectedStrutureId"
+[year]="this.year"
+[average]="this.selectedAverage"
+[key]="this.componentKey"
+
+>
+
+</app-kpi-table-user-average-duration-for-transfer-completion>
+
+
+<!--
+  this for the app table user 'enhnace the fetching way instead of component key'
+
+  [isPerformanceCardVisible] ="this.isPerformanceCardVisible"
+  [isAverageDurationCardVisible] ="this.isAveragePerUserVisible"
+  (CardVisibilityChanged)="onCardsVisibilityChanged($event)"
+
+-->

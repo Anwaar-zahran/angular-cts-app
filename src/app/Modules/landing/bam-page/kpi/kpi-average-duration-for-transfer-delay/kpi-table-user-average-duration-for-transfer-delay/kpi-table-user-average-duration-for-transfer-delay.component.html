@@ -1,0 +1,163 @@
+<!-- Average Duration Card -->
+<div class="card" *ngIf="isAverageDurationCardVisible">
+    <div class="card-title">
+      <button
+        class="btn btn-transparent float-right"
+        (click)="hideAverageDurationCard()"
+      >
+        <i class="fas fa-times text-danger"></i>
+      </button>
+    </div>
+  
+    <div class="panel panel-default borderTop-1">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-sm-10 pull-left">
+            {{ "BAM.KPI.AVERAGE_DURATION.AVERAGE_PER_USER" | translate }}
+          </div>
+        </div>
+        <span id="spanTransferAverageCompletionTime" class="spanDate">
+          <span style="color: #444">
+            ({{ "BAM.KPI.AVERAGE_DURATION.STRUCTURE" | translate }}
+            <span class="text-secondary">{{ structureName }}</span
+            >)
+          </span>
+        </span>
+      </div>
+  
+      <div class="panel-body">
+        <div class="table-container overflow-x-auto">
+          <table
+            id="grdAveragePerStructureItems"
+            class="table dataTable"
+            role="grid"
+          >
+            <thead>
+              <tr role="row">
+                <th class="min-max-width-50-250">
+                  {{ "BAM.KPI.AVERAGE_DURATION.REGISTERED_BY" | translate }}
+                </th>
+                <th class="min-max-width-50-250">
+                  {{ "BAM.KPI.AVERAGE_DURATION.AVERAGE_DAYS" | translate }}
+                </th>
+                <th class="min-max-width-50-250">
+                  {{
+                    "BAM.KPI.AVERAGE_DURATION.COMPARE_TO_STRUCTURE_TOTAL_AVERAGE"
+                      | translate
+                  }}
+                </th>
+                <th class="min-max-width-50-250">
+                  {{ "BAM.KPI.AVERAGE_DURATION.COMPARE_TO_TOTAL" | translate }}
+                </th>
+                <th class="min-max-width-50-250">
+                  {{ "BAM.KPI.AVERAGE_DURATION.YEARLY_GRAPH" | translate }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="userPerStructure.length > 0; else noData">
+                <tr *ngFor="let item of userPerStructure" role="row">
+                  <td class="min-max-width-50-250" title="{{ item.userName }}">
+                    <span
+                      class="drawuserstructure"
+                      style="
+                        color: var(--secondary-color);
+                        text-decoration: underline;
+                        cursor: pointer;
+                      "
+                    >
+                      {{ item.userName }}
+                    </span>
+                  </td>
+                  <td class="min-max-width-50-250" title="{{ item.average }}">
+                    {{ item.average.toFixed(2) }}
+                  </td>
+                  <td
+                    class="min-max-width-50-250"
+                    title="{{ item.average - item.average }}"
+                  >
+                    {{ item.average.toFixed(2) }}
+                  </td>
+                  <td
+                    class="min-max-width-50-250"
+                    title="{{ item.average - item.average }}"
+                  >
+                    {{ item.average.toFixed(2) }}
+                  </td>
+                  <td class="min-max-width-50-250">
+                    <span class="yearlygraph pointer">
+                      <em class="fa fa-line-chart"></em>
+                    </span>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #noData>
+    <tr>
+      <td colspan="5" class="text-center">No data available in table</td>
+    </tr>
+  </ng-template>
+  
+  <!-- Performance Card -->
+  <div class="card" *ngIf="isPerformanceCardVisible && userPerStructure.length > 1">
+    <div class="card-title">
+      <button
+        class="btn btn-transparent float-right"
+        (click)="hidePerformanceCard()"
+      >
+        <i class="fas fa-times text-danger"></i>
+      </button>
+    </div>
+  
+    <div class="panel-heading">
+      <div class="row">
+        <div class="col-sm-10 pull-left">
+          {{ "BAM.KPI.PERFORMANCE.PERFORMANCE_PER_STRUCTURE" | translate }}
+        </div>
+      </div>
+      <span id="spanTransferAverageCompletionTime" class="spanDate">
+        <span style="color: #444">
+          ({{ "BAM.KPI.AVERAGE_DURATION.STRUCTURE" | translate }}
+          <span class="text-secondary">{{ structureName }}</span
+          >)
+        </span>
+      </span>
+    </div>
+  
+    <div class="row mt-4">
+      <div class="col-md-4 text-center">
+        <h4 class="mb-3">
+          {{ "BAM.KPI.PERFORMANCE.BEST_PERFORMANCE" | translate }}
+        </h4>
+        <i class="far fa-user text-success"></i><br />
+        <p class="text-success my-3 bold">
+          {{ this.bestPerformanceUSer?.average?.toFixed(2) }}
+        </p>
+        <p class="text-success">{{ this.bestPerformanceUSer?.userName }}</p>
+      </div>
+      <div class="col-md-4 text-center">
+        <h4 class="mb-3">{{ "BAM.KPI.PERFORMANCE.AVERAGE" | translate }}</h4>
+        <p style="font-size: 80px; direction: ltr">
+          <i class="fa fa-angle-left"></i> <i class="fa fa-angle-right"></i>
+        </p>
+        <p class="my-3 bold">{{this.average.toFixed(2)}} </p>
+      </div>
+      <div class="col-md-4 text-center">
+        <h4 class="mb-3">
+          {{ "BAM.KPI.PERFORMANCE.WORST_PERFORMANCE" | translate }}
+        </h4>
+        <i class="far fa-user text-danger"></i><br />
+        <p class="text-danger my-3 bold">
+          {{ this.worstPerformanceUser?.average?.toFixed(2) }}
+        </p>
+        <p class="text-danger">{{ this.worstPerformanceUser?.userName }}</p>
+      </div>
+    </div>
+  </div>
+  

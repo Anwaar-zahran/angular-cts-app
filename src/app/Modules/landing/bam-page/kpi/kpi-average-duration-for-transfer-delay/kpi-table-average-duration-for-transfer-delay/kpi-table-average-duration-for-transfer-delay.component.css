@@ -19,3 +19,7 @@ a.paginate_button {
     border-radius: 9px;
     color: var(--secondary-color) !important;
 }
+
+.pointer {
+    cursor: pointer; /* This ensures the cursor changes to a pointer */
+}

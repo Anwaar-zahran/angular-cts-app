@@ -512,8 +512,11 @@
         "COMPARE_TO_TOTAL": "Compare to Total Average",
         "YEARLY_GRAPH": "Yearly Graph",
         "AVERAGE_PER_YEAR": "Average per Year",
+        "AVERAGE_PER_USER": "Average per User",
         "TOTAL_AVERAGE": "Total Average: {{days}} days",
-        "ALL_CATEGORIES": "All Categories"
+        "ALL_CATEGORIES": "All Categories",
+        "REGISTERED_BY": "Registered By",
+        "COMPARE_TO_STRUCTURE_TOTAL_AVERAGE":"Compare to structure total average"
       },
       "DELAY_DURATION": {
         "TITLE": "Average duration for correspondence delay",
@@ -534,6 +537,12 @@
           "ALL_CATEGORIES": "All categories"
         }
       },
+      "PERFORMANCE":{
+          "PERFORMANCE_PER_STRUCTURE":"Performance per structure",
+          "BEST_PERFORMANCE":"Best performance",
+          "AVERAGE":"Average",
+          "WORST_PERFORMANCE":"Worst performance"
+        },
       "TRANSFER_DURATION": {
         "TITLE": "Average duration for transfer completion",
         "SELECT_YEAR": "Select Year",
