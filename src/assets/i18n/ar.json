@@ -59,7 +59,8 @@
       "REQUIRED_FIELDS": "اسم المستخدم وكلمة المرور مطلوبان",
       "REQUIRED_USERNAME": "اسم المستخدم مطلوب",
       "REQUIRED_PASSWORD": "كلمة المرور مطلوبة",
-      "INVALID_CREDENTIALS": "اسم المستخدم أو كلمة المرور غير صحيحة"
+      "INVALID_CREDENTIALS": "اسم المستخدم أو كلمة المرور غير صحيحة",
+      "SOMETHING_WRONG": "حدث خطأ ما"
     }
   },
     "GUIDELINES": {
@@ -239,9 +240,11 @@
     },
     "ERRORS": {
         "REQUIRED_FIELD": "هذا الحقل مطلوب",
+        "REQUIRED_FIELDS": "هذه الحقول مطلوبة",
         "INVALID_FORMAT": "صيغة غير صحيحة",
         "SERVER_ERROR": "حدث خطأ في الخادم",
-        "NO_PERMISSION": "ليس لديك صلاحية"
+        "NO_PERMISSION": "ليس لديك صلاحية",
+        "SOMETHING_WRONG":"حدث خطأ ما"
     },
   "DELEGATION": {
     "TITLE": "التفويضات",

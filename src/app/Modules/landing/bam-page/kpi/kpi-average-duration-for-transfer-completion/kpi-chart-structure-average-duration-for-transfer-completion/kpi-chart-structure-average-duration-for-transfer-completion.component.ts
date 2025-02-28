@@ -18,7 +18,7 @@ import { forkJoin, Subscription } from 'rxjs';
   templateUrl: './kpi-chart-structure-average-duration-for-transfer-completion.component.html',
   styleUrl: './kpi-chart-structure-average-duration-for-transfer-completion.component.scss'
 })
-export class KpiChartStructureAverageDurationForTransferCompletionComponent {
+export class KpiChartStructureAverageDurationForTransferCompletionComponent implements OnInit, OnChanges {
 
 
   @Input() year!: number;
