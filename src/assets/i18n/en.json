@@ -149,7 +149,9 @@
     "ATTACHMENT": {
       "TYPE": "Type",
       "QUANTITY": "Quantity",
-      "DESC": "Description"
+      "DESC": "Description",
+      "OriginalDoc": "Original Document"
+
     },
     "HISTORY": {
       "FROM_USER": "From",

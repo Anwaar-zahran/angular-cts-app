@@ -37,9 +37,8 @@
           </button>
         </div>
 
-        <!-- My Transfer Tab -->
         <div class="tab-content flex-1">
-
+          <!-- My Transfer Tab -->
           <div [ngClass]="{'tab-pane': true, 'fade': true, 'show active': activeTabIndex === 0}">
             <div class="p-3">
               <form class="form">
@@ -74,7 +73,7 @@
 
                   <hr />
                   <!--<i ref="icnOpenedDate" class="fa fa-envelope-open margin-0-5 light-blue font-18" [title]="'Opened date: ' + (transfers?.openedDate || '')"></i>
-  -->
+          -->
                   <div class="col-sm-12">
                     <div class="form-group mb-1">
                       <label class="form-label">{{ 'MAIL_DETAILS.FROMSTRUCTURE' | translate }} :</label>
@@ -93,14 +92,14 @@
                   <div class="col-sm-12">
                     <div class="form-group mb-1">
                       <label class="form-label">{{ 'MAIL_DETAILS.PURPOSE' | translate }} :</label>
-                      <span class="form-label">{{ transfers?.purpose || '' }}</span>
+                      <span class="form-label">{{ selectedTransPurposeText || '' }}</span>
 
                     </div>
                   </div>
                   <div class="col-sm-12">
                     <div class="form-group mb-1">
                       <label class="form-label">{{ 'MAIL_DETAILS.PRIORITY' | translate }} :</label>
-                      <span class="form-label">{{ transfers?.priority || '' }}</span>
+                      <span class="form-label">{{ selectedTransPriorityText || '' }}</span>
 
                     </div>
                   </div>
@@ -158,9 +157,11 @@
                   <div class="col-md-6" *ngIf="isEnabled('CarbonCopy')">
                     <div class="form-group">
                       <label class="form-label">{{ 'MAIL_DETAILS.CARBONCOPY' | translate }}</label>
-                      <ng-select id="ddlUsers" [(ngModel)]="userId" name="ddlUsers" [multiple]="true" [items]="carbonUsers || []"
+                      <!--<ng-select id="ddlUsers" [(ngModel)]="userId" name="ddlUsers" [multiple]="true" [items]="carbonUsers || []"
                                  bindLabel="name" bindValue="id" placeholder="" class="form-control" [disabled]="true">
-                      </ng-select>
+                      </ng-select>-->
+                      <input type="text" class="form-control" class="form-control" [(ngModel)]="selectedCarbonText" id="ddlUsers" name="ddlUsers" [disabled]="true" />
+
                     </div>
                   </div>
                   <div class="col-sm-12" *ngIf="isEnabled('Subject')">
@@ -173,7 +174,7 @@
                   <div class="col-md-6" *ngIf="isEnabled('Privacy')">
                     <div class="form-group">
                       <label class="form-label">{{ 'MAIL_DETAILS.PRIVACY' | translate }}</label>
-                      <ng-select id="ddlPrivacy" [(ngModel)]="privacyId" name="ddlPrivacy" [items]="privacy || []"
+                      <!--<ng-select id="ddlPrivacy" [(ngModel)]="privacyId" name="ddlPrivacy" [items]="privacy || []"
                                  bindValue="id" placeholder="" class="form-control" [disabled]="true">
                         <ng-template ng-option-tmp let-item="item">
                           {{ getName(item) }}
@@ -181,22 +182,25 @@
                         <ng-template ng-label-tmp let-item="item">
                           {{ getName(item) }}
                         </ng-template>
-                      </ng-select>
+                      </ng-select>-->
+                      <input type="text"  class="form-control" [(ngModel)]="selectedPrivacyText" id="ddlPrivacy" name="ddlPrivacy" [disabled]="true"/>
                     </div>
                   </div>
                   <div class="col-md-6" *ngIf="isEnabled('Priority')">
                     <div class="form-group">
                       <label class="form-label">{{ 'MAIL_DETAILS.PRIORITY' | translate }}</label>
-                      <ng-select id="ddlPriority" [(ngModel)]="priorityId" name="ddlPriority" [items]="priority || []"
+                      <!--<ng-select id="ddlPriority" [(ngModel)]="priorityId" name="ddlPriority" [items]="priority || []"
                                  bindValue="id" placeholder="" class="form-control" [disabled]="true">
 
                         <ng-template ng-option-tmp let-item="item">
-                          {{ getName(item) }}
-                        </ng-template>
-                        <ng-template ng-label-tmp let-item="item">
-                          {{ getName(item) }}
-                        </ng-template>
-                      </ng-select>
+      {{ getName(item) }}
+    </ng-template>
+    <ng-template ng-label-tmp let-item="item">
+      {{ getName(item) }}
+    </ng-template>
+  </ng-select>-->
+                      <input type="text" class="form-control" [(ngModel)]="selectedPriorityText" id="ddlPriority" name="ddlPriority" [disabled]="true" />
+
                     </div>
                   </div>
                   <div class="col-md-6" *ngIf="isEnabled('DueDate')">
@@ -222,46 +226,52 @@
                   <div class="col-md-6" *ngIf="isEnabled('Importance')">
                     <div class="form-group">
                       <label class="form-label">{{ 'MAIL_DETAILS.IMPORTANCE' | translate }}</label>
-                      <ng-select id="ddlImp" [(ngModel)]="importanceId" name="ddlImp" [items]="importance || []"
-                                 bindValue="id" placeholder="" class="form-control" [disabled]="true">
-                        <ng-template ng-option-tmp let-item="item">
-                          {{ getName(item) }}
-                        </ng-template>
-                        <ng-template ng-label-tmp let-item="item">
-                          {{ getName(item) }}
-                        </ng-template>
-                      </ng-select>
+                      <!--<ng-select id="ddlImp" [(ngModel)]="importanceId" name="ddlImp" [items]="importance || []"
+             bindValue="id" placeholder="" class="form-control" [disabled]="true">
+    <ng-template ng-option-tmp let-item="item">
+      {{ getName(item) }}
+    </ng-template>
+    <ng-template ng-label-tmp let-item="item">
+      {{ getName(item) }}
+    </ng-template>
+  </ng-select>-->
+                      <input type="text" class="form-control" [(ngModel)]="selectedImportanceText" id="ddlImp" name="ddlImp" [disabled]="true" />
+
                     </div>
                   </div>
                   <div class="col-md-6" *ngIf="isEnabled('Classification')">
                     <div class="form-group">
                       <label class="form-label">{{ 'MAIL_DETAILS.CLASSIFICATION' | translate }}</label>
-                      <ng-select id="ddlClass" [(ngModel)]="classId" name="ddlClass" [items]="classification || []"
-                                 bindValue="id" placeholder="" class="form-control" [disabled]="true">
-                        <ng-template ng-option-tmp let-item="item">
-                          {{ getName(item) }}
-                        </ng-template>
-                        <ng-template ng-label-tmp let-item="item">
-                          {{ getName(item) }}
-                        </ng-template>
-                      </ng-select>
+                      <!--<ng-select id="ddlClass" [(ngModel)]="classId" name="ddlClass" [items]="classification || []"
+             bindValue="id" placeholder="" class="form-control" [disabled]="true">
+    <ng-template ng-option-tmp let-item="item">
+      {{ getName(item) }}
+    </ng-template>
+    <ng-template ng-label-tmp let-item="item">
+      {{ getName(item) }}
+    </ng-template>
+  </ng-select>-->
+                      <input type="text" class="form-control" [(ngModel)]="selectedClassText" id="ddlClass" name="ddlClass" [disabled]="true" />
+
                     </div>
                   </div>
                   <div class="col-md-6" *ngIf="isEnabled('DocumentType')">
                     <div class="form-group">
                       <label class="form-label">{{ 'MAIL_DETAILS.DOCUMENT_TYPE' | translate }}</label>
                       <!--<input class="form-control" type="text" [value]="attributes?.documentType?.text"
-                      [disabled]="true" />-->
-                      <ng-select id="ddlDocTypes" [(ngModel)]="docTypeId" name="ddlDocTypes" [items]="docTypes || []"
-                                 bindValue="id" placeholder="" class="form-control" [disabled]="true">
+  [disabled]="true" />-->
+                      <!--<ng-select id="ddlDocTypes" [(ngModel)]="docTypeId" name="ddlDocTypes" [items]="docTypes || []"
+             bindValue="id" placeholder="" class="form-control" [disabled]="true">
 
-                        <ng-template ng-option-tmp let-item="item">
-                          {{ getName(item) }}
-                        </ng-template>
-                        <ng-template ng-label-tmp let-item="item">
-                          {{ getName(item) }}
-                        </ng-template>
-                      </ng-select>
+    <ng-template ng-option-tmp let-item="item">
+      {{ getName(item) }}
+    </ng-template>
+    <ng-template ng-label-tmp let-item="item">
+      {{ getName(item) }}
+    </ng-template>
+  </ng-select>-->
+                      <input type="text" class="form-control" [(ngModel)]="selectedDocTypeText" id="ddlDocTypes" name="ddlDocTypes" [disabled]="true" />
+
                     </div>
                   </div>
                   <div class="col-sm-12" *ngIf="isEnabled('Body')">

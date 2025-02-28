@@ -65,6 +65,7 @@ export class TransferModalComponent implements OnInit {
   regmodel: NgbDateStruct | undefined;
   fromModal: NgbDateStruct | undefined;
   tomodel: NgbDateStruct | undefined;
+  minDate: Date = new Date();
   txtInstruction: any;
   selectedUsers: any[] = [];
   showAddressBook: boolean = false;
