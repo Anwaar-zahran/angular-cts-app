@@ -282,9 +282,13 @@ export class TransferModalComponent implements OnInit {
     });
   }
 
-  onClose(): void {
-    this.dialogRef.close();
+  // onClose(): void {
+  //   this.dialogRef.close();
+  // }
+  onClose(shouldCloseParent: boolean = false): void {
+    this.dialogRef.close({ shouldCloseParent });
   }
+
 
   openDatepicker(index: number) {
     const pickersArray = this.pickerRefs.toArray();
@@ -350,7 +354,7 @@ Transfer(): void {
       if (result.length > 0) {
         const message = result[0].updated ? "Sent successfully" : result[0].message;
         this.toaster.showToaster(message);
-        this.onClose();
+        this.onClose(true);
       }
     },
     (error) => {

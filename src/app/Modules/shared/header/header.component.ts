@@ -20,7 +20,6 @@ export class HeaderComponent implements OnInit {
   currentLang: string;
   userInfo = { name: "Fatima AliAhmad", Job: "Frontend Developer", ID: 1234, image: null }
   showMenu: boolean = true;
-
   MainnavItems = [
     { link: 'MyMail', icon: 'assets/images/icons/email.svg', title: 'LANDING.CARDS.MY_MAIL' },
     { link: 'Guidelines', icon: 'assets/images/icons/Union.svg', title: 'LANDING.CARDS.GUIDELINES' },
@@ -149,11 +148,16 @@ export class HeaderComponent implements OnInit {
         if (CurrentUserStructures) {
         CurrentUserStructures.active = true;
         }
+       let oldStructureId: string = localStorage.getItem('structureId') || '1';
+       let token: string = localStorage.getItem("access_token")||''
+       this.structuresService.UpdateLoggedInStrucure(structureId?.toString(), oldStructureId,token)
+        .subscribe({
+          next: (response) => console.log('Structure updated successfully:', response),
+          error: (error) => console.error('Error updating structure:', error)
+        });
         localStorage.setItem('structureId', structureId.toString());
               // Navigate to the landing page WITHOUT manually calling reloadData()
-      // this.route.navigate(['/landing']);
       this.route.navigate(['/landing']).then(() => {
-         // this.updateActiveStructure();
        });
       })
      

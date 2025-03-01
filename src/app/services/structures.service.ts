@@ -10,7 +10,7 @@ import { CurrentUserStructures } from '../models/current-user-structures';
 })
 export class StructuresService {
     private baseUrl = `${environment.iAMUrl}/Api`;
-
+    private apiBaseUrl = `${environment.apiBaseUrl}`;
     constructor(private http: HttpClient) { }
 
     searchStructures(searchText: string = ''): Observable<Structure[]> {
@@ -34,5 +34,16 @@ export class StructuresService {
         console.log('id:', id);
         return this.http.get<CurrentUserStructures>(`${this.baseUrl}/GetUser?id=${id}`);
     }
+    UpdateLoggedInStrucure(structureId: string | undefined,oldStrutureId: string | undefined,accessToken: string): Observable<string> {
+       debugger
+       const headers = new HttpHeaders({
+        'Authorization': `Bearer ${accessToken}`
+      });
+        console.log('structureId:', structureId);
+        console.log('oldStrutureId:', oldStrutureId);
+        const url = `${this.apiBaseUrl}/CTS/Structure/UpdateLoggedInStrucure?structureId=${structureId}&oldStrutureId=${oldStrutureId}`;
+        return this.http.post<string>(url, null, { headers }); // Provide `null` as the bodyreturn this.http.post<string>(`${this.apiBaseUrl}/CTS/Structure/UpdateLoggedInStrucure??structureId=${structureId}&oldStrutureId=${oldStrutureId}`);
+    }
+    
     
 } 

@@ -109,7 +109,7 @@ export class ReplyToComponent {
             this.toaster.showToaster(response ?? msg);
           });
           //  this.toaster.showToaster(response??"Sent successfully");
-          this.onClose();
+          this.onClose(true);
         },
         (error) => {
           //this.toaster.showToaster(error.error.text??"Something went wrong");

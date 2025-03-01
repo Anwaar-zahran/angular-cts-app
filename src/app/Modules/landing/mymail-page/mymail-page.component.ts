@@ -162,7 +162,7 @@ debugger
     const formData = new FormData();
     formData.append('length', '1000');
     formData.append('structureId', this.structureId);
-    // formData.append('NodeId', '34');
+    //formData.append('NodeId', '34');
 
 
     const callApi = (url: string) => {
