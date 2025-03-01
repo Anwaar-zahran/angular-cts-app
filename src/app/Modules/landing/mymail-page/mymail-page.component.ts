@@ -97,7 +97,7 @@ export class MymailPageComponent implements OnInit {
           pagination.find('input.paginate-input').remove();
 
           const page = $('<span class="d-inline-flex align-items-center mx-2">' + this.translate.instant('COMMON.PAGE') + '<input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> ' + this.translate.instant('COMMON.OF') + ' ' + pageInfo.pages + '</span>');
-            
+
           let timeout: any;
           page.find('input').on('keyup', function () {
             clearTimeout(timeout);
@@ -148,8 +148,8 @@ export class MymailPageComponent implements OnInit {
   }
 
   loadData() {
-    const payload = this.accessToken ?.split('.')[1] || '';
-debugger
+    const payload = this.accessToken?.split('.')[1] || '';
+    debugger
     const decodedPayload = this.base64UrlDecode(payload);
     const parsedPayload = JSON.parse(decodedPayload);
     this.structureId = localStorage.getItem('structureId') || parsedPayload.StructureId;
@@ -203,7 +203,7 @@ debugger
   showMailDetailsOld(item: ApiResponseItem, showActionbtns: boolean) {
     debugger
     const currentName = this.authService.getDisplayName();
-    this.mailService.markCorrespondanceAsRead(this.accessToken!,item.id).subscribe({ next: () => { }, error: (err) => console.error(err) });
+    this.mailService.markCorrespondanceAsRead(this.accessToken!, item.id).subscribe({ next: () => { }, error: (err) => console.error(err) });
     const dialogRef = this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
       width: '90%',
@@ -214,7 +214,7 @@ debugger
         referenceNumber: item.ref,
         row: item.row,
         fromSearch: false,
-        showActionButtons: (showActionbtns && (!item.row ?.isLocked || (item.row ?.isLocked && item.row ?.lockedBy == currentName)))
+        showActionButtons: (showActionbtns && (!item.row?.isLocked || (item.row?.isLocked && item.row?.lockedBy == currentName)) && item.row.purposeId != 10)
 
       }
     });
@@ -229,7 +229,7 @@ debugger
   showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
     debugger;
     const currentName = this.authService.getDisplayName();
-    
+
     // Mark correspondence as read
     this.mailService.markCorrespondanceAsRead(this.accessToken!, item.id).subscribe({
       next: () => {
@@ -238,7 +238,7 @@ debugger
       },
       error: (err) => console.error('Error marking as read:', err)
     });
-  
+
     // Open the dialog
     const dialogRef = this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
@@ -250,16 +250,16 @@ debugger
         referenceNumber: item.ref,
         row: item.row,
         fromSearch: false,
-        showActionButtons: (showActionbtns && (!item.row?.isLocked || (item.row?.isLocked && item.row?.lockedBy == currentName)))
+        showActionButtons: (showActionbtns && (!item.row?.isLocked || (item.row?.isLocked && item.row?.lockedBy == currentName)) && item.row.purposeId != 10)
       }
     });
-  
+
     // Refresh the item when dialog closes
     dialogRef.afterClosed().subscribe(result => {
       console.log('Mail details closed', result);
-  
-     // if (result === 'updated') { 
-        this.loadData(); // Call API again to refresh only the necessary data
+
+      // if (result === 'updated') { 
+      this.loadData(); // Call API again to refresh only the necessary data
       //}
 
     });
@@ -279,7 +279,7 @@ debugger
   sortOrder: { [key: string]: 'asc' | 'desc' } = { date: 'asc', ref: 'asc' };
 
   sortBy(criteria: string) {
-    const activeTab = document.querySelector('.nav-link.active') ?.getAttribute('data-bs-target');
+    const activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
 
     if (!activeTab) {
       return;
@@ -302,10 +302,10 @@ debugger
 
   compare(a: any, b: any, criteria: string): number {
     if (criteria === 'date') {
-      return new Date(a ?.date || 0).getTime() - new Date(b ?.date || 0).getTime();
+      return new Date(a?.date || 0).getTime() - new Date(b?.date || 0).getTime();
     }
     if (criteria === 'ref') {
-      return (a ?.ref || '').localeCompare(b ?.ref || '');
+      return (a?.ref || '').localeCompare(b?.ref || '');
     }
     return 0;
   }

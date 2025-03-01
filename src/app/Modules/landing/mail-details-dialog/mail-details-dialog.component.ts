@@ -359,7 +359,6 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       }
     };
   }
-
   showModalTransfer() {
     this.searchService.CheckDocumentAttachmnentISLocked(this.accessToken!, this.data.documentId).subscribe(
       (isLocked: boolean) => {
@@ -377,7 +376,6 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           });
 
           dialogRef.afterClosed().subscribe(result => {
-            debugger;
             console.log('Transfer modal closed', result);
             if (result && result.shouldCloseParent) {
               this.dialogRef.close();
