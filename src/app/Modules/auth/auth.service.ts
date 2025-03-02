@@ -14,8 +14,10 @@ import { environment } from '../../../environments/environment';
 export class AuthService {
   // private iAMURL = "http://localhost:8090/connect/token";   //to be read from config
   private iAMURL = `${environment.iAMUrl}/connect/token`;   //to be read from config
-  private clientId = "648074f6-1030-413d-b700-9814626361ab";//"5d2c8fa5-9f58-430c-bcf2-5f4366d425dc";   //to be read from config
-  private clientSecret = "2a1731ec-1c3f-45ec-9a75-81034df06f89";//"d85a0d00-a065-4d8e-b001-f39d69951555";   //to be read from config
+  //private clientId = "648074f6-1030-413d-b700-9814626361ab";//"5d2c8fa5-9f58-430c-bcf2-5f4366d425dc";   //to be read from config
+  //private clientSecret = "2a1731ec-1c3f-45ec-9a75-81034df06f89";//"d85a0d00-a065-4d8e-b001-f39d69951555";   //to be read from config
+  private clientId = "5d2c8fa5-9f58-430c-bcf2-5f4366d425dc";   //to be read from config
+  private clientSecret = "d85a0d00-a065-4d8e-b001-f39d69951555";   //to be read from config
   private scope = 'openid IdentityServerApi offline_access';
   private aud = 'IdentityServerApi offline_access';
   private grantType = 'password';
