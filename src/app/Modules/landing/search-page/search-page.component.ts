@@ -395,7 +395,7 @@ export class SearchPageComponent {
   }
 
   getCategoryName(catId: any): string {
-    debugger;
+   // debugger;
     const cat = this.categories.find(p => p.id === catId);
     return cat ? this.getName(cat) : '';
   }

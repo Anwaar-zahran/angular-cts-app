@@ -249,7 +249,7 @@ export class MymailPageComponent implements OnInit {
         documentId: item.documentId,
         referenceNumber: item.ref,
         row: item.row,
-        fromSearch: false,
+        fromSearch: true,
         showActionButtons: (showActionbtns && (!item.row?.isLocked || (item.row?.isLocked && item.row?.lockedBy == currentName)) && item.row.purposeId != 10)
       }
     });

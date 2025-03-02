@@ -522,7 +522,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.getVisualTracking(docID),
         this.getTransfer(this.data ?.row ?.id)
       ]);
-      debugger;
+       
       this.attributes = attributes;
       this.nonArchAttachments = nonArchAttachments?.data;
       this.linkedDocs = linkedDocs?.data;
@@ -539,7 +539,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.docTypeId = this.attributes.documentTypeId ?? '';
 
 
-      if (this.linkedDocs.length > 0) {
+      if (this.linkedDocs?.length > 0) {
         this.mappedArray = this.linkedDocs.map((doc: any) => {
           const foundItem = this.categories ?.data.find((cat: any) => cat.id === doc.categoryId);
           return {
@@ -598,7 +598,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   getItemName(filterText: string, source: any, byId: boolean) {
-    const item = byId ? source.find((i: any) => i.id == filterText) : source.find((i: any) => i.name == filterText);
+    const item = byId ? source?.find((i: any) => i.id == filterText) : source?.find((i: any) => i.name == filterText);
     return this.getName(item);
   }
 
@@ -639,7 +639,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           console.log("BasicAttributes:", this.basicAttributes);
           console.log("CustomAttributes:", this.customAttribute);
           console.log("customFormData:", this.customFormData);
-         // resolve(response);
+          resolve(response);
         },
         (error: any) => {
           console.error(error);
@@ -654,12 +654,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getNotes(this.accessToken!, docID).subscribe(
         (response) => {
-          debugger;
+           
           this.notes = response.data || [];
           resolve(response);
         },
         (error: any) => {
-          debugger;
+           
           console.error(error);
           reject(error);
         }
@@ -671,12 +671,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getActivityLog(this.accessToken!, docID).subscribe(
         (response) => {
-          debugger;
+           
           this.activityLogs = response || [];
           resolve(response);
         },
         (error: any) => {
-          debugger;
+           
           console.error(error);
           reject(error);
         }
@@ -688,7 +688,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getActivityLogByDocId(this.accessToken!, docID).subscribe(
         (response) => {
-          debugger;
+           
           this.activityLogs = response.data || [];
           resolve(response);
         },
@@ -704,12 +704,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getLinkedCorrespondence(this.accessToken!, docID).subscribe(
         (response) => {
-          debugger;
+           
           this.linkedDocs = response.data || [];
           resolve(response);
         },
         (error: any) => {
-          debugger;
+           
           console.error(error);
           reject(error);
         }
@@ -721,12 +721,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getNonArchivedAttachment(this.accessToken!, docID).subscribe(
         (response) => {
-          debugger;
+           
           this.nonArchAttachments = response.data || [];
           resolve(response);
         },
         (error: any) => {
-          debugger;
+           
           console.error(error);
           reject(error);
         }
@@ -738,7 +738,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getTransHistory(this.accessToken!, docID).subscribe(
         (response: any) => {
-          debugger;
+           
           this.transHistory = response.data || [];
           resolve(response);
         },
@@ -754,7 +754,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getAttachments(this.accessToken!, docID).subscribe(
         (response: any) => {
-          debugger;
+           
           this.attachments = response || [];
           this.TREE_DATA = this.transformAttachmentsToTree(this.attachments);
           this.dataSource.data = this.TREE_DATA;
@@ -766,7 +766,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           resolve(response);
         },
         (error: any) => {
-          debugger;
+           
           console.error(error);
           reject(error);
         }
@@ -1000,7 +1000,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   controlValues: { [key: string]: string } = {};
 
   getFormDataValue() {
-    debugger;
+     
     this.customAttributes ?.components ?.forEach((component: CustomAttributeComponent) => {
       const key = component.key;
       if (this.customFormData) {

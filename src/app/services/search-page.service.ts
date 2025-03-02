@@ -74,12 +74,12 @@ export class SearchPageService {
     });
 
     const start = 0;
-    const length = 10000;
+    const length = 15;
 
     const params = new URLSearchParams();
-    params.set('id', id);
     params.set('start', start.toString());
     params.set('length', length.toString());
+    params.set('id', id);
 
     const urlWithParams = `${this.activityLogURL}?${params.toString()}`;
 
