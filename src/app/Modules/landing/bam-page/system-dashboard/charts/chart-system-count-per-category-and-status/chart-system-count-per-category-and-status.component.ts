@@ -51,9 +51,9 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
 
   ngOnChanges() {
     // Reload chart data whenever categories input changes and is not empty
-    if (this.categories && this.categories.length > 0) {
-      this.loadChartData();
-    }
+
+    this.loadChartData();
+
   }
 
   private loadChartData() {
@@ -61,7 +61,7 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
       .GetCountPerCategoryAndStatus({
         fromDate: this.fromDate,
         toDate: this.toDate,
-        structureId:  localStorage.getItem('structureId') || "1",
+        structureId: localStorage.getItem('structureId') || "1",
       })
       .subscribe((res: any) => {
         // Get unique status IDs for X axis
@@ -78,13 +78,11 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
               const item = res.find((r: any) => r.categoryId === category.id && r.statusId === statusId);
               return item ? item.count : 0;
             });
-          
-            debugger;
-            
+
             // Only include categories that have at least one non-zero value
             if (data.some(count => count > 0)) {
               return {
-                name:  this.translateService.instant(`BAM.DASHBOARD.CHARTS.STATUS.${category.text?.toUpperCase().replace(/\s+/g, '_')}`),
+                name: this.translateService.instant(`BAM.DASHBOARD.CHARTS.STATUS.${category.text?.toUpperCase().replace(/\s+/g, '_')}`),
                 type: 'column',
                 data: data
               };
@@ -93,65 +91,67 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
           })
           .filter((series): series is NonNullable<typeof series> => series !== null);
 
-        this.chartOptions = {
-          chart: {
-            type: 'column',
-          },
-          title: {
-            text: '',
-          },
-          colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
-          xAxis: {
-            categories: [
-              this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
-              this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
-              this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
-              this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
-            ],
-            title: {
-              text: this.translateService.instant("BAM.DASHBOARD.CHARTS.LABELS.CATEGORY")
-            },
-            crosshair: true,
-          },
-          yAxis: {
-            min: 0,
-            title: {
-              text: this.translateService.instant('BAM.CHARTS.LABELS.COUNT')
-            },
-            stackLabels: {
-              enabled: true,
-              style: {
-                fontWeight: 'bold',
-                color: (Highcharts!.defaultOptions!.title!.style && Highcharts!.defaultOptions!.title!.style!.color) || 'gray'
-              }
-            }
-          },
-          tooltip: {
-            headerFormat: this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING") + '<b>{point.x}</b><br/>',
-            pointFormat: '{series.name}: {point.y} <br/>' +
-              this.translateService.instant('BAM.CHARTS.LABELS.TOTAL') + ': {point.stackTotal}',
-            formatter: function () {
-              if (this.y === 0) return false;
-              return `${this.series.name}: ${this.y}<br/>${this.series.chart.tooltip.options.pointFormat}`;
-            }
-          },
-          plotOptions: {
-            column: {
-              stacking: 'normal',
-              dataLabels: {
-                enabled: true,
-                formatter: function () {
-                  return this.y === 0 ? '' : this.y; // Hide zero labels
-                }
-              }
-            }
-          },
-          series: seriesData as Highcharts.SeriesOptionsType[]
-        };
-        console.log('ssssssssss')
-        console.log(seriesData)
+        this.renderChart(seriesData);
       });
-       
+  }
+
+  private renderChart(seriesData: any[]) {
+
+    this.chartOptions = {
+      chart: {
+        type: 'column',
+      },
+      title: {
+        text: '',
+      },
+      colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
+      xAxis: {
+        categories: [
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
+        ],
+        title: {
+          text: this.translateService.instant("BAM.DASHBOARD.CHARTS.LABELS.CATEGORY")
+        },
+        crosshair: true,
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: this.translateService.instant('BAM.CHARTS.LABELS.COUNT')
+        },
+        stackLabels: {
+          enabled: true,
+          style: {
+            fontWeight: 'bold',
+            color: (Highcharts!.defaultOptions!.title!.style && Highcharts!.defaultOptions!.title!.style!.color) || 'gray'
+          }
+        }
+      },
+      tooltip: {
+        headerFormat: this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING") + '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y} <br/>' +
+          this.translateService.instant('BAM.CHARTS.LABELS.TOTAL') + ': {point.stackTotal}',
+        formatter: function () {
+          if (this.y === 0) return false;
+          return `${this.series.name}: ${this.y}<br/>${this.series.chart.tooltip.options.pointFormat}`;
+        }
+      },
+      plotOptions: {
+        column: {
+          stacking: 'normal',
+          dataLabels: {
+            enabled: true,
+            formatter: function () {
+              return this.y === 0 ? '' : this.y; // Hide zero labels
+            }
+          }
+        }
+      },
+      series: seriesData as Highcharts.SeriesOptionsType[]
+    };
   }
 
   toggleModal() {
@@ -164,6 +164,8 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
   }
 
   applyFilter() {
+    this.chartOptions = undefined;
+
     // Update the actual date variables only when the form is submitted
     this.fromDate = this.tempFromDate;
     this.toDate = this.tempToDate;

@@ -140,6 +140,7 @@ export class ChartSystemDocumentsCompletedOverdueAndOnTimePerCategoryComponent i
   }
 
   applyFilter() {
+    this.chartOptions = undefined;
     this.fromDate = this.tempFromDate;
     this.toDate = this.tempToDate;
     this.loadChartData();

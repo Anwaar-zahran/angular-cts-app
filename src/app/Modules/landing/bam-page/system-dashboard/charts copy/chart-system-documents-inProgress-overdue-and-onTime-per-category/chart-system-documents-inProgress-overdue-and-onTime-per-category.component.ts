@@ -5,7 +5,8 @@ import { ChartsService } from '../../../../../../services/charts.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
+  private languageSubscription!: Subscription;
 
   constructor(
     private chartsService: ChartsService,
@@ -41,6 +43,10 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
   }
 
   ngOnChanges() {
+
+    this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.loadChartData();
+    });
     // Reload chart data whenever categories input changes and is not empty
     if (this.categories && this.categories.length > 0) {
       this.loadChartData();
@@ -84,7 +90,14 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
       },
       colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
       xAxis: {
-        categories: categories,
+        categories: [
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.COMPLETED"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INPROGRESS"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
+        ],
         title: {
           text: this.translateService.instant('BAM.CHARTS.LABELS.CATEGORIES')
         }
@@ -134,6 +147,7 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
   }
 
   applyFilter() {
+    this.chartOptions = undefined;
     this.fromDate = this.tempFromDate;
     this.toDate = this.tempToDate;
     this.loadChartData();

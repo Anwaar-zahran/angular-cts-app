@@ -7,10 +7,9 @@
     "\\src\\app\\Modules\\auth",
     "\\src\\app\\Modules\\landing",
     "\\src\\app\\Modules\\landing\\mail-details-dialog",
-    "\\src\\assets",
-    "\\src\\assets\\datatables.net",
-    "\\src\\assets\\datatables.net-dt"
+    "\\src\\app\\Modules\\landing\\reply-to",
+    "\\src\\app\\Modules\\landing\\transfer-modal",
+    "\\src\\assets"
   ],
-  "SelectedNode": "\\src\\app\\Modules\\landing\\mail-details-dialog\\mail-details-dialog.component.ts",
   "PreviewInSolutionExplorer": false
 }

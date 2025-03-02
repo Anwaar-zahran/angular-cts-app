@@ -45,8 +45,8 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
   ngOnChanges() {
 
     this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-          this.loadChartData();
-        });
+      this.loadChartData();
+    });
     // Reload chart data whenever categories input changes and is not empty
     if (this.categories && this.categories.length > 0) {
       this.loadChartData();
@@ -147,6 +147,7 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
   }
 
   applyFilter() {
+    this.chartOptions = undefined;
     this.fromDate = this.tempFromDate;
     this.toDate = this.tempToDate;
     this.loadChartData();

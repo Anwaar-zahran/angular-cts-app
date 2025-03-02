@@ -24,7 +24,7 @@ export class ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent i
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
-  private languageSubscription!:Subscription;
+  private languageSubscription!: Subscription;
 
   constructor(
     private chartsService: ChartsService,
@@ -35,8 +35,8 @@ export class ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent i
   ngOnInit() {
 
     this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-          this.loadChartData();
-        });
+      this.loadChartData();
+    });
     // Only load chart data when categories are available
     if (this.categories && this.categories.length > 0) {
       this.loadChartData();
@@ -142,6 +142,7 @@ export class ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent i
   }
 
   applyFilter() {
+    this.chartOptions = undefined;
     this.fromDate = this.tempFromDate;
     this.toDate = this.tempToDate;
     this.loadChartData();
