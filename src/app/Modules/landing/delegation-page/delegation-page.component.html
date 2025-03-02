@@ -59,7 +59,7 @@
               (click)="picker.open()"
               (paste)="preventPaste($event)"
               (dateChange)="updateMinDate()"
-              [min]="today"
+              [min]="today"  [readonly]="true"
             />
             <mat-datepicker #picker></mat-datepicker>
             <div
@@ -87,7 +87,7 @@
               name="dp2"
               (click)="picker1.open()"
               (paste)="preventPaste($event)"
-              [min]="minToDate"
+              [min]="minToDate"  [readonly]="true"
             />
             <mat-datepicker #picker1></mat-datepicker>
             <div
@@ -203,7 +203,7 @@
                   [matDatepicker]="picker2"
                   [placeholder]="'COMMON.DATE.FORMAT' | translate"
                   formControlName="startDate"
-                  name="dp2"
+                  name="dp2"  [readonly]="true"
                   (click)="picker2.open()"
                   (paste)="preventPaste($event)"
                 />
