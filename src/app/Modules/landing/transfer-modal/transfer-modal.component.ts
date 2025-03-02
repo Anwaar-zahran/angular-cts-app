@@ -83,7 +83,7 @@ export class TransferModalComponent implements OnInit {
 
   @ViewChildren('rowForm') rowForms: QueryList<NgForm> | null = null;
 
-  selectedPurposeId: any;
+  selectedPurposeId: number | null = null;
   selectedDueDate: any;
   selectedPriorityId: any;
   isCCed: any;
@@ -302,15 +302,17 @@ export class TransferModalComponent implements OnInit {
   ngAfterViewInit() {
     // Ensures the ViewChildren data is available after initialization
   }
+
   removeRow(index: number) {
     if (this.rows.length > 1) {
       this.rows.splice(index, 1);
     }
   }
+
   createEmptyRow() {
     return {
       selectedUserId: null,
-      selectedPurposeId: null,
+      selectedPurposeId: null as number | null,
       selectedPriorityId: this.priorities.length > 0 ? this.priorities[0].id : null,
       selectedDueDate: null as Date | null,
       txtInstruction: '',
@@ -322,19 +324,39 @@ export class TransferModalComponent implements OnInit {
       showValidationError: false
     };
   }
+
   onUserOrPurposeChange(index: number) {
     // Add a new row when user is selected, only if it's the last row
+    debugger;
     if (this.rows[index].selectedPurposeId == 10) {
       this.rows = this.rows.map((row, i) =>
         i === index ? { ...row, isCCed: true } : row
       );
     }
+    else {
+      this.rows = this.rows.map((row, i) =>
+        i === index ? { ...row, isCCed: false } : row
+      );
+    }
+
     if (index === this.rows.length - 1) {
+
       this.rows.push(this.createEmptyRow());
     }
   }
 
+  onCCedClick(event: MouseEvent, index: number): void {
+    debugger;
+    const isChecked = (event.target as HTMLInputElement).checked;
+    const row = this.rows[index];
+    row.isCCed = isChecked;
+    if (isChecked) {
+      this.rows[index].selectedPurposeId = 10;
 
+    }
+    else
+      row.selectedPurposeId = null;
+  }
   Transfer(): void {
     if (this.isTransferring) {
       return;
@@ -456,6 +478,9 @@ export class TransferModalComponent implements OnInit {
     });
   }
 
+  preventPaste(event: ClipboardEvent): void {
+    event.preventDefault();
+  }
 
 
 }
