@@ -439,7 +439,7 @@
                     </tr>
                   </tbody>
                 </table>
-                <div *ngIf="!linkedDocs?.length" class="text-center mt-3">
+                <div *ngIf="linkedDocs?.length===0" class="text-center mt-3">
                   <p>{{ 'COMMON.NO_DATA' | translate }}</p>
                 </div>
               </div>

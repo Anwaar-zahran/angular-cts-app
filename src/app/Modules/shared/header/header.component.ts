@@ -128,7 +128,8 @@ export class HeaderComponent implements OnInit {
   }
   
   onStructureChange(structureId: number) {
-    if(structureId){
+    if (structureId) {
+      debugger;
       const modalRef = this.modalService.open(ConfirmationmodalComponent);
    //Are you sure to change the structure
       this.translateService.get('HEADER.CONFIRMMODAL.MESSAGE').subscribe((msg: string) => {
@@ -142,13 +143,15 @@ export class HeaderComponent implements OnInit {
         });
       });
       modalRef.componentInstance.confirmed.subscribe(()=>{
-        let CurrentUserStructures = this.structuresItems.find(structure => structure.StructureId === structureId);
+        //let CurrentUserStructures = this.structuresItems.find(structure => structure.StructureId === structureId);
+        let CurrentUserStructures = this.structuresItems.find(structure => structure.active ==true);
+        let newUserStructures = this.structuresItems.find(structure => structure.StructureId === structureId);
         this.structuresItems.forEach(structure => structure.active = false);
        // let currentUserStructure = this.structuresItems.find(structure => structure.StructureId === structureId);
-        if (CurrentUserStructures) {
-        CurrentUserStructures.active = true;
+        if (newUserStructures) {
+          newUserStructures.active = true;
         }
-       let oldStructureId: string = localStorage.getItem('structureId') || '1';
+        let oldStructureId: string = localStorage.getItem('structureId') || CurrentUserStructures?.StructureId.toString()||'1';
        let token: string = localStorage.getItem("access_token")||''
        this.structuresService.UpdateLoggedInStrucure(structureId?.toString(), oldStructureId,token)
         .subscribe({
