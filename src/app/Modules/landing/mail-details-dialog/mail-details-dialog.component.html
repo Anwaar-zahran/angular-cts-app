@@ -72,8 +72,7 @@
                   </div>
 
                   <hr />
-                  <!--<i ref="icnOpenedDate" class="fa fa-envelope-open margin-0-5 light-blue font-18" [title]="'Opened date: ' + (transfers?.openedDate || '')"></i>
-          -->
+                  <!--<i ref="icnOpenedDate" class="fa fa-envelope-open margin-0-5 light-blue font-18" [title]="'Opened date: ' + (transfers?.openedDate || '')"></i>     -->
                   <div class="col-sm-12">
                     <div class="form-group mb-1">
                       <label class="form-label">{{ 'MAIL_DETAILS.FROMSTRUCTURE' | translate }} :</label>
@@ -439,7 +438,7 @@
                     </tr>
                   </tbody>
                 </table>
-                <div *ngIf="!linkedDocs?.length" class="text-center mt-3">
+                <div *ngIf="linkedDocs?.length===0" class="text-center mt-3">
                   <p>{{ 'COMMON.NO_DATA' | translate }}</p>
                 </div>
               </div>

@@ -8,6 +8,10 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class ChartsService {
+  httpPostHeader = {
+    'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'x-requested-with': 'XMLHttpRequest'
+  };
   private baseUrl = environment.apiBaseUrl;
   constructor(private http: HttpClient) { }
 
@@ -80,71 +84,84 @@ export class ChartsService {
 
 
   GetCountPerCategoryAndStatus
-    ({ fromDate, toDate, structureId }: { fromDate: string, toDate: string, structureId: string }): Observable<{ overDue: any[], onTime: { categoryId: number, count: number }[] }> {
+    ({ fromDate, toDate, structureId }: { fromDate: string, toDate: string, structureId: string | undefined }): Observable<any> {
+
+
     const params = new HttpParams()
-      .set('fromDate', fromDate)
-      .set('toDate', toDate)
-      .set('structureId', structureId);
-    return this.http.post<{ overDue: any[], onTime: { categoryId: number, count: number }[] }>(`${this.baseUrl}/Dashboard/GetCountPerCategoryAndStatus`, { params });
+      .set('FromDate', fromDate)
+      .set('ToDate', toDate)
+      .set('StructureIds', structureId || '');
+
+    return this.http.post<any>(
+      `${this.baseUrl}/Dashboard/GetCountPerCategoryAndStatus`,
+      params.toString(),
+      { headers: this.httpPostHeader }
+    );
   }
 
-  GetStatisticsPerDepartment({ fromDate, toDate, structureIds }: { fromDate: string, toDate: string, structureIds?: string[] | null }): Observable<{ overDue: any[], onTime: { categoryId: number, count: number }[] }> {
-    let params = new HttpParams()
-      .set('fromDate', fromDate)
-      .set('toDate', toDate);
+  GetStatisticsPerDepartment({ fromDate, toDate, structureIds }: { fromDate: string, toDate: string, structureIds?: string[] | undefined }): Observable<any> {
+    const params = new HttpParams()
+      .set('FromDate', fromDate)
+      .set('ToDate', toDate)
+      .set('StructureIds', structureIds?.join(',') || '');
 
-    if (structureIds && structureIds.length > 0) {
-      params = params.set('structureIds', structureIds.join(','));
-    }
-
-    return this.http.post<{ overDue: any[], onTime: { categoryId: number, count: number }[] }>(`${this.baseUrl}/Dashboard/GetStatisticsPerDepartment`, { params });
+    return this.http.post<any>(
+      `${this.baseUrl}/Dashboard/GetStatisticsPerDepartment`,
+      params.toString(),
+      { headers: this.httpPostHeader }
+    );
   }
 
-  GetDocumentsInProgressOverdueAndOnTimePerCategory({ fromDate, toDate, structureIds }: { fromDate: string, toDate: string, structureIds?: string[] | null }): Observable<{ overDue: any[], onTime: { categoryId: number, count: number }[] }> {
-    let params = new HttpParams()
-      .set('fromDate', fromDate)
-      .set('toDate', toDate);
+  GetDocumentsInProgressOverdueAndOnTimePerCategory({ fromDate, toDate, structureIds }: { fromDate: string, toDate: string, structureIds?: string[] | undefined }): Observable<any> {
+    const params = new HttpParams()
+      .set('FromDate', fromDate)
+      .set('ToDate', toDate)
+      .set('StructureIds', structureIds?.join(',') || '');
 
-    if (structureIds && structureIds.length > 0) {
-      params = params.set('structureIds', structureIds.join(','));
-    }
-    return this.http.post<{ overDue: any[], onTime: { categoryId: number, count: number }[] }>(`${this.baseUrl}/Dashboard/GetDocumentsInProgressOverdueAndOnTimePerCategory`, { params });
+    return this.http.post<any>(
+      `${this.baseUrl}/Dashboard/GetDocumentsInProgressOverdueAndOnTimePerCategory`,
+      params.toString(),
+      { headers: this.httpPostHeader }
+    );
   }
 
-  GetDocumentsCompletedOverdueAndOnTimePerCategory
-    ({ fromDate, toDate, structureIds }: { fromDate: string, toDate: string, structureIds?: string[] | null }): Observable<{ overDue: any[], onTime: { categoryId: number, count: number }[] }> {
-    let params = new HttpParams()
-      .set('fromDate', fromDate)
-      .set('toDate', toDate);
+  GetDocumentsCompletedOverdueAndOnTimePerCategory({ fromDate, toDate, structureIds }: { fromDate: string, toDate: string, structureIds?: string[] | undefined }): Observable<any> {
+    const params = new HttpParams()
+      .set('FromDate', fromDate)
+      .set('ToDate', toDate)
+      .set('StructureIds', structureIds?.join(',') || '');
 
-    if (structureIds && structureIds.length > 0) {
-      params = params.set('structureIds', structureIds.join(','));
-    }
-    return this.http.post<{ overDue: any[], onTime: { categoryId: number, count: number }[] }>(`${this.baseUrl}/Dashboard/GetDocumentsCompletedOverdueAndOnTimePerCategory`, { params });
+    return this.http.post<any>(
+      `${this.baseUrl}/Dashboard/GetDocumentsCompletedOverdueAndOnTimePerCategory`,
+      params.toString(),
+      { headers: this.httpPostHeader }
+    );
   }
 
-  GetTransfersInProgressOverdueAndOnTimePerCategory
-    ({ fromDate, toDate, structureIds }: { fromDate: string, toDate: string, structureIds?: string[] | null }): Observable<{ overDue: any[], onTime: { categoryId: number, count: number }[] }> {
-    let params = new HttpParams()
-      .set('fromDate', fromDate)
-      .set('toDate', toDate);
+  GetTransfersInProgressOverdueAndOnTimePerCategory({ fromDate, toDate, structureIds }: { fromDate: string, toDate: string, structureIds?: string[] | undefined }): Observable<any> {
+    const params = new HttpParams()
+      .set('FromDate', fromDate)
+      .set('ToDate', toDate)
+      .set('StructureIds', structureIds?.join(',') || '');
 
-    if (structureIds && structureIds.length > 0) {
-      params = params.set('structureIds', structureIds.join(','));
-    }
-    return this.http.post<{ overDue: any[], onTime: { categoryId: number, count: number }[] }>(`${this.baseUrl}/Dashboard/GetTransfersInProgressOverdueAndOnTimePerCategory`, { params });
+    return this.http.post<any>(
+      `${this.baseUrl}/Dashboard/GetTransfersInProgressOverdueAndOnTimePerCategory`,
+      params.toString(),
+      { headers: this.httpPostHeader }
+    );
   }
 
-  GetTransfersCompletedOverdueAndOnTimePerCategory
-    ({ fromDate, toDate, structureIds }: { fromDate: string, toDate: string, structureIds?: string[] | null }): Observable<{ overDue: any[], onTime: { categoryId: number, count: number }[] }> {
-    let params = new HttpParams()
-      .set('fromDate', fromDate)
-      .set('toDate', toDate)
+  GetTransfersCompletedOverdueAndOnTimePerCategory({ fromDate, toDate, structureIds }: { fromDate: string, toDate: string, structureIds?: string[] | undefined }): Observable<any> {
+    const params = new HttpParams()
+      .set('FromDate', fromDate)
+      .set('ToDate', toDate)
+      .set('StructureIds', structureIds?.join(',') || '');
 
-    if (structureIds && structureIds.length > 0) {
-      params = params.set('structureIds', structureIds.join(','));
-    }
-    return this.http.post<{ overDue: any[], onTime: { categoryId: number, count: number }[] }>(`${this.baseUrl}/Dashboard/GetTransfersCompletedOverdueAndOnTimePerCategory`, { params });
+    return this.http.post<any>(
+      `${this.baseUrl}/Dashboard/GetTransfersCompletedOverdueAndOnTimePerCategory`,
+      params.toString(),
+      { headers: this.httpPostHeader }
+    );
   }
 
 }

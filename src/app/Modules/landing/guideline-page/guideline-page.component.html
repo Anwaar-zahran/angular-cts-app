@@ -8,8 +8,10 @@
                 <i class="fa fa-sort"></i> {{ 'COMMON.SORT_BY' | translate }}
             </button>
             <ul class="dropdown-menu">
-                <li><button class="dropdown-item" (click)="sortBy('date')">{{ 'COMMON.TRANSFER_DATE' | translate }}</button></li>
-                <li><button class="dropdown-item" (click)="sortBy('ref')">{{ 'COMMON.REFERENCE_NB' | translate }}</button></li>
+                <li><button class="dropdown-item" (click)="sortBy('date')">{{ 'COMMON.TRANSFER_DATE' | translate
+                        }}</button></li>
+                <li><button class="dropdown-item" (click)="sortBy('ref')">{{ 'COMMON.REFERENCE_NB' | translate
+                        }}</button></li>
             </ul>
         </div>
     </div>
@@ -48,7 +50,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of newItems">
+                    <tr *ngFor="let item of newItems; trackBy: trackByFn">
                         <td>
                             <p (click)="showMailDetails(item,true)" class="text-primary bold">{{ item.subject }}</p>
                             <p (click)="showMailDetails(item,true)" class="text-secondary">{{ item.details }}</p>
@@ -89,7 +91,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of sentItems">
+                    <tr *ngFor="let item of sentItems; trackBy: trackByFn">
                         <td>
                             <p (click)="showMailDetails(item,false)" class="text-primary bold">{{ item.subject }}</p>
                             <p (click)="showMailDetails(item,false)" class="text-secondary">{{ item.details }}</p>
@@ -131,7 +133,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of completedItems">
+                    <tr *ngFor="let item of completedItems; trackBy: trackByFn">
                         <td>
                             <p (click)="showMailDetails(item,false)" class="text-primary bold">{{ item.subject }}</p>
                             <p (click)="showMailDetails(item,false)" class="text-secondary">{{ item.details }}</p>

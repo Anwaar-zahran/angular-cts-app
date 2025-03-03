@@ -217,7 +217,7 @@ export class MailPageComponent implements OnInit {
         documentId: item.documentId,
         referenceNumber: item.ref,
         row: item.row,
-        fromSearch: false,
+        fromSearch: true,
         showActionButtons: (showActionbtns && (!item.row?.isLocked || (item.row?.isLocked && item.row?.lockedBy == currentName)) && item.row.purposeId != 10)
       }
     });
@@ -309,6 +309,11 @@ export class MailPageComponent implements OnInit {
     }
     return 0;
   }
+
+  trackByFn(index: number, item: any): number {
+    return item.id;
+  }
+
 
 }
 

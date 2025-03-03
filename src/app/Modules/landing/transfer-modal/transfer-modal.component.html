@@ -70,7 +70,8 @@
           </td>
           <td>
             <input class="form-control date-picker" matInput [matDatepicker]="picker" [(ngModel)]="row.selectedDueDate"
-              [min]="minDate" placeholder="mm-dd-yyyy" name="dp3{{i}}" (click)="openDatepicker(i)" />
+              [min]="minDate" placeholder="mm-dd-yyyy" name="dp3{{i}}" (click)="openDatepicker(i)"
+                   (paste)="preventPaste($event)"  [readonly]="true" />
             <mat-datepicker #picker></mat-datepicker>
           </td>
           <td>
@@ -85,8 +86,8 @@
           </td>
           <td>
             <div class="form-check justify-content-center">
-              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isCCed" id="chbxCCed{{i}}"
-                name="ckISCced{{i}}">
+              <input class="form-check-input" type="checkbox"  [(ngModel)]="row.isCCed" id="chbxCCed{{i}}"
+                name="ckISCced{{i}}" (click)="onCCedClick($event, i)">
             </div>
           </td>
           <td>

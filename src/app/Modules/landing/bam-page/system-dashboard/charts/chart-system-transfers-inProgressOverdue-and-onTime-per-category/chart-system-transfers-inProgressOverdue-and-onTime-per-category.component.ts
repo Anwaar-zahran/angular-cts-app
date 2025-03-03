@@ -134,7 +134,7 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
           type: 'column',
           data: onTimeData,
           color: '#00695E'
-        } 
+        }
       ]
     };
   }
@@ -148,6 +148,7 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
   }
 
   applyFilter() {
+    this.chartOptions = undefined;
     this.fromDate = this.tempFromDate;
     this.toDate = this.tempToDate;
     this.loadChartData();

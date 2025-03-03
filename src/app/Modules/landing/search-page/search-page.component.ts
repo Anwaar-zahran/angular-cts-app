@@ -46,9 +46,14 @@ export class SearchPageComponent {
 
   searchModel: SearchFilter = new SearchFilter();
 
-  searchUsers: Partial<User>[] = [];
+  searchFromUsers: Partial<User>[] = [];
+  searchToUsers: Partial<User>[] = [];
   delegationUsers: Partial<DelegationToUsers>[] = [];
   entities: Partial<Entity>[] = [];
+  sendingEntities: Partial<Entity>[] = [];
+  recEntities: Partial<Entity>[] = [];
+  transferFromEntities: Partial<Entity>[] = [];
+  transferToEntities: Partial<Entity>[] = [];
   response: SearchResponse | null = null;
   dtOptions: DataTables.Settings = {};
   categories: any[] = [];
@@ -91,8 +96,13 @@ export class SearchPageComponent {
     }
     this.initDtOptions();
 
-    this.getEntites();
-    this.getUsers();
+    //this.getEntites('');
+    this.getSendingEntites('');
+    this.getReceivingEntites('');
+    this.getFromUsers('');
+    this.getToUsers('');
+    this.getTransferFromEntites('');
+    this.getTransferToEntities('');
     this.getDelegationUsers();
     this.getCategories();
     this.getImportance();
@@ -100,16 +110,16 @@ export class SearchPageComponent {
     this.getStatuses();
     this.getPrivacies();
   }
-
-  getEntites(): void {
-    this.lookupservice.getEntities().subscribe(
+    
+  getSendingEntites(searchText: string): void {
+    this.lookupservice.getSearchableEntities(searchText).subscribe(
       (response) => {
-        this.entities = response || [];
-        this.entities.unshift({ id: 0, name: 'Select Entity' });
-        this.searchModel.documentReceiver = "0";
+        this.sendingEntities = response || [];
+        this.sendingEntities.unshift({ id: 0, name: 'Select Entity' });
+        //this.searchModel.documentReceiver = "0";
         this.searchModel.documentSender = "0";
-        this.searchModel.toStructure = "0";
-        this.searchModel.fromStructure = "0";
+        //this.searchModel.toStructure = "0";
+        //this.searchModel.fromStructure = "0";
       },
       (error: any) => {
         console.error(error);
@@ -117,14 +127,76 @@ export class SearchPageComponent {
     );
   }
 
-  getUsers(): void {
-    this.lookupservice.getSearchUsers(this.accessToken!).subscribe(
+  getReceivingEntites(searchText: string): void {
+    this.lookupservice.getSearchableEntities(searchText).subscribe(
       (response) => {
-        this.searchUsers = response || [];
-        this.searchUsers.unshift({ id: 0, fullName: 'Select User' });
+        this.recEntities = response || [];
+        this.recEntities.unshift({ id: 0, name: 'Select Entity' });
+        this.searchModel.documentReceiver = "0";
+        //this.searchModel.documentSender = "0";
+        //this.searchModel.toStructure = "0";
+        //this.searchModel.fromStructure = "0";
+      },
+      (error: any) => {
+        console.error(error);
+      }
+    );
+  }
+
+  getTransferFromEntites(searchText: string): void {
+    this.lookupservice.getSearchableEntities(searchText).subscribe(
+      (response) => {
+        this.transferFromEntities = response || [];
+        this.transferFromEntities.unshift({ id: 0, name: 'Select Entity' });
+        //this.searchModel.documentReceiver = "0";
+        //this.searchModel.documentSender = "0";
+        //this.searchModel.toStructure = "0";
+        this.searchModel.fromStructure = "0";
+      },
+      (error: any) => {
+        console.error(error);
+      }
+    );
+  }
+  getTransferToEntities(searchText: string): void {
+    this.lookupservice.getSearchableEntities(searchText).subscribe(
+      (response) => {
+        this.transferToEntities = response || [];
+        this.transferToEntities.unshift({ id: 0, name: 'Select Entity' });
+        //this.searchModel.documentReceiver = "0";
+        //this.searchModel.documentSender = "0";
+        this.searchModel.toStructure = "0";
+        //this.searchModel.fromStructure = "0";
+      },
+      (error: any) => {
+        console.error(error);
+      }
+    );
+  }
+
+  getFromUsers(searchText:string): void {
+    this.lookupservice.getSearchUsers(this.accessToken!, searchText).subscribe(
+      (response) => {
+        this.searchFromUsers = response || [];
+        this.searchFromUsers.unshift({ id: 0, fullName: 'Select User' });
+        this.searchModel.delegationId = "0";
+        //this.searchModel.toUser = "0";
+        this.searchModel.fromUser = "0";
+      },
+      (error: any) => {
+        console.error(error);
+      }
+    );
+  }
+
+  getToUsers(searchText: string): void {
+    this.lookupservice.getSearchUsers(this.accessToken!, searchText).subscribe(
+      (response) => {
+        this.searchToUsers = response || [];
+        this.searchToUsers.unshift({ id: 0, fullName: 'Select User' });
         this.searchModel.delegationId = "0";
         this.searchModel.toUser = "0";
-        this.searchModel.fromUser = "0";
+        //this.searchModel.fromUser = "0";
       },
       (error: any) => {
         console.error(error);
@@ -323,7 +395,7 @@ export class SearchPageComponent {
   }
 
   getCategoryName(catId: any): string {
-    debugger;
+   // debugger;
     const cat = this.categories.find(p => p.id === catId);
     return cat ? this.getName(cat) : '';
   }
@@ -359,6 +431,74 @@ export class SearchPageComponent {
         return item ?.name;
     }
   }
+
+  onSearchSendingEntites(event: { term: string; items: any[] }): void {
+    const query = event.term;
+    if (query.length > 2) {
+      this.loading = true;
+      this.getSendingEntites(query);
+    }
+    else {
+      this.loading = true;
+      this.getSendingEntites('');
+
+    }
+  }
+
+  onSearchReceivingEntites(event: { term: string; items: any[] }): void {
+    const query = event.term;
+    if (query.length > 2) {
+      this.loading = true;
+      this.getReceivingEntites(query);
+    }
+    else {
+      this.loading = true;
+      this.getReceivingEntites('');
+
+    }
+  }
+
+  onSearchTransferFromEntites(event: { term: string; items: any[] }): void {
+    const query = event.term;
+    if (query.length > 2) {
+      this.loading = true;
+      this.getTransferFromEntites(query);
+    }
+    else {
+      this.loading = true;
+      this.getTransferFromEntites('');
+
+    }
+  }
+
+  onSearchTransferToEntites(event: { term: string; items: any[] }): void {
+    const query = event.term;
+    if (query.length > 2) {
+      this.loading = true;
+      this.getTransferToEntities(query);
+    }
+    else {
+      this.loading = true;
+      this.getTransferToEntities('');
+
+    }
+  }
+
+  onSearchUsers(event: { term: string; items: any[] }, fromUsersFilter:boolean): void {
+    const query = event.term;
+    if (query.length > 2) {
+      this.loading = true;
+      if (fromUsersFilter)
+        this.getFromUsers(query);
+      else
+        this.getToUsers(query);
+    } else {
+      this.loading = true;
+      this.getFromUsers('');
+      this.getToUsers('');
+    }
+  }
+
 
   toggleSearchForm() {
     this.formVisible = !this.formVisible;

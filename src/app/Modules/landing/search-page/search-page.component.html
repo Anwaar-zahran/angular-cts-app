@@ -14,9 +14,9 @@
       <div class="col-sm-6 col-md-4 col-lg-3">
         <div class="form-group">
           <label for="sendingEntity" class="form-label">{{ 'SEARCH.FORM.SENDING_ENTITY' | translate }}</label>
-          <ng-select name="sendingEntity" id="ddlSendEntity" [(ngModel)]="searchModel.documentSender" [items]="entities"
+          <ng-select name="sendingEntity" id="ddlSendEntity" [(ngModel)]="searchModel.documentSender" [items]="sendingEntities"
             bindLabel="name" bindValue="id" [placeholder]="'SEARCH.FORM.SELECT_ENTITY' | translate"
-            class="form-control">
+            class="form-control"   (search)="onSearchSendingEntites($event)" (open)="getSendingEntites('')">
           </ng-select>
 
         </div>
@@ -24,34 +24,36 @@
       <div class="col-sm-6 col-md-4 col-lg-3">
         <div class="form-group">
           <label for="recEntity" class="form-label">{{ 'SEARCH.FORM.RECEIVING_ENTITY' | translate }}</label>
-          <ng-select name="recEntity" id="ddlRecEntity" [(ngModel)]="searchModel.documentReceiver" [items]="entities"
-            bindLabel="name" bindValue="id" [placeholder]="'SEARCH.FORM.SELECT_ENTITY' | translate"
-            class="form-control">
+          <ng-select name="recEntity" id="ddlRecEntity" [(ngModel)]="searchModel.documentReceiver" [items]="recEntities"
+            bindLabel="name" bindValue="id" [placeholder]="'SEARCH.FORM.SELECT_ENTITY' | translate" 
+            class="form-control"   (search)="onSearchReceivingEntites($event)" (open)="getReceivingEntites('')">
           </ng-select>
         </div>
       </div>
       <div class="col-sm-6 col-md-4 col-lg-3">
         <div class="form-group">
           <label for="ddlFromUsers" class="form-label">{{ 'SEARCH.FORM.TRANSFER.FROM_USER' | translate }}</label>
-          <ng-select id="ddlFromUsers" name="fromUser" [(ngModel)]="searchModel.fromUser" [items]="searchUsers"
+          <ng-select id="ddlFromUsers" name="fromUser" [(ngModel)]="searchModel.fromUser" [items]="searchFromUsers"
             bindLabel="fullName" bindValue="id" [placeholder]="'SEARCH.FORM.SELECT_USER' | translate"
-            class="form-control">
+            class="form-control" (search)="onSearchUsers($event,true)" (open)="getFromUsers('')">
           </ng-select>
         </div>
       </div>
       <div class="col-sm-6 col-md-4 col-lg-3">
         <div class="form-group">
           <label for="ddlToUsers" class="form-label">{{ 'SEARCH.FORM.TRANSFER.TO_USER' | translate }}</label>
-          <ng-select id="ddlToUsers" name="toUsers" [(ngModel)]="searchModel.toUser" [items]="searchUsers"
-            bindLabel="fullName" bindValue="id" [placeholder]="'SEARCH.FORM.SELECT_USER' | translate" class="form-control">
+          <ng-select id="ddlToUsers" name="toUsers" [(ngModel)]="searchModel.toUser" [items]="searchToUsers"
+            bindLabel="fullName" bindValue="id" [placeholder]="'SEARCH.FORM.SELECT_USER' | translate" class="form-control"
+                     (search)="onSearchUsers($event,false)" (open)="getToUsers('')">
           </ng-select>
         </div>
       </div>
       <div class="col-sm-6 col-md-4 col-lg-3">
         <div class="form-group">
           <label for="ddlTransEntity" class="form-label">{{ 'SEARCH.FORM.TRANSFER.FROM_STRUCTURE' | translate }}</label>
-          <ng-select id="ddlTransEntity" name="transFrom" [(ngModel)]="searchModel.fromStructure" [items]="entities"
-            bindLabel="name" bindValue="id" [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE' | translate" class="form-control">
+          <ng-select id="ddlTransEntity" name="transFrom" [(ngModel)]="searchModel.fromStructure" [items]="transferFromEntities"
+            bindLabel="name" bindValue="id" [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE' | translate"
+                     (search)="onSearchTransferFromEntites($event)" class="form-control" (open)="getTransferFromEntites('')">
           </ng-select>
         </div>
       </div>
@@ -59,8 +61,9 @@
         <div class="form-group">
           <label for="ddlTransFromEntity" class="form-label">{{ 'SEARCH.FORM.TRANSFER.TO_STRUCTURE' | translate
             }}</label>
-          <ng-select id="ddlTransFromEntity" name="transTo" [(ngModel)]="searchModel.toStructure" [items]="entities"
-            bindLabel="name" bindValue="id" [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE' | translate" class="form-control">
+          <ng-select id="ddlTransFromEntity" name="transTo" [(ngModel)]="searchModel.toStructure" [items]="transferToEntities"
+            bindLabel="name" bindValue="id" [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE' | translate"
+                     (search)="onSearchTransferToEntites($event)" class="form-control" (open)="getTransferToEntities('')">
           </ng-select>
         </div>
       </div>

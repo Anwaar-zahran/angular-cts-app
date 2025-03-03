@@ -195,8 +195,6 @@ export class LookupsService {
   }
 
   getEntities(): Observable<any> {
-
-
     const formData = new FormData();
     formData.append('attributes[]', JSON.stringify("NameAr"));
     formData.append('attributes[]', JSON.stringify("NameFr"));
@@ -210,7 +208,22 @@ export class LookupsService {
       );
   }
 
-  getSearchUsers(accessToken: string): Observable<any> {
+  getSearchableEntities(text: string): Observable<any> {
+    const formData = new FormData();
+    formData.append('text', text);
+    formData.append('attributes[]', JSON.stringify("NameAr"));
+    formData.append('attributes[]', JSON.stringify("NameFr"));
+
+    return this.http.post(this.listEntities, formData)
+      .pipe(
+        catchError((error) => {
+          console.error('Error while entities data', error.message);
+          throw error;
+        })
+      );
+  }
+
+  getSearchUsers(accessToken: string, text:string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json'
@@ -218,7 +231,7 @@ export class LookupsService {
 
     let params = new HttpParams();
 
-    params = params.set('text', '');
+    params = params.set('text', text);
     const lang = localStorage.getItem("language")||'en';
     params = params.set('language', lang);
 

@@ -380,7 +380,6 @@ export class DelegationPageComponent implements OnInit {
       this.isEdit = true;
       this.selectedRowId = item.id;
       this.selectedUserId = item.toUserValueText.id;
-      this.showOldCorrespondance = true;
       debugger;
       if (this.contacts && this.contacts.length > 0) {
         this.delegationForm.patchValue({
@@ -395,6 +394,8 @@ export class DelegationPageComponent implements OnInit {
           note: item.note,
           startDate: this.convertToNgbDateStruct(item.startDate),
         });
+
+        this.showOldCorrespondance = item.showOldCorrespondecne;
 
         //this.selectedPrivacyId = item.privacyId;
         this.note = item.note;
