@@ -57,7 +57,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    console.log('HeaderComponent ngOnInit');
     this.authService.CurrentUser.subscribe(user => {
       this.userName = user;
     });
@@ -68,7 +68,7 @@ export class HeaderComponent implements OnInit {
     this.loadStructures();
   }
 
- 
+
 
   onLogout(event: Event) {
     event.preventDefault();
@@ -90,51 +90,61 @@ export class HeaderComponent implements OnInit {
     return this.languages.find(lang => lang.code === this.currentLang)?.name || 'English';
   }
 
-  
-  private loadStructures(){
+
+  private loadStructures() {
     let userTypeId = this.authService.getUserTypeId();
     console.log('User Type Id:', userTypeId);
-    if(!userTypeId){
+    if (!userTypeId) {
       return;
     }
-  
-    this.structuresService.getStructureById(userTypeId).subscribe({
-      next: (response:CurrentUserStructures) => {
 
-        console.log('Response:', response);
-        const structures = response.structures;
-  
-        localStorage.setItem('currentUser', response.fullName);
-        const savedStructureId = localStorage.getItem('structureId');
-        structures.forEach((structure) => {
-  
-          this.structuresItems.push({ 
-            name: structure.name,
-            active: savedStructureId 
-            ? structure.id === Number(savedStructureId)
-            : structure.id === response.defaultStructureId,
-            StructureId: structure.id 
-          });
+    this.structuresService.getLoggedInStructure().subscribe({
+      next: (loggedInStructureId: number) => {
+        this.structuresService.getStructureById(userTypeId).subscribe({
+          next: (response: CurrentUserStructures) => {
+
+            console.log('Response:', response);
+            const structures = response.structures;
+
+            localStorage.setItem('currentUser', response.fullName);
+            const localStorageStructureId = localStorage.getItem('structureId');
+
+            structures.forEach((structure) => {
+
+              this.structuresItems.push({
+                name: structure.name,
+                active: structure.id === loggedInStructureId,
+                StructureId: structure.id
+              });
+            });
+
+
+            if (localStorageStructureId != loggedInStructureId.toString()) {
+              localStorage.setItem('structureId', loggedInStructureId.toString());
+              window.location.reload();
+            }
+
+          },
+          error: (error) => {
+            console.log('Error fetching structure:', error.message);
+          },
+          complete: () => {
+            console.log('Request completed.');
+          }
         });
-
-      },
-      error: (error) => {
-        console.log('Error fetching structure:', error.message);
-      },
-      complete: () => {
-        console.log('Request completed.');
       }
     });
+
+
   }
-  
+
   onStructureChange(structureId: number) {
     if (structureId) {
       debugger;
       const modalRef = this.modalService.open(ConfirmationmodalComponent);
-   //Are you sure to change the structure
+
       this.translateService.get('HEADER.CONFIRMMODAL.MESSAGE').subscribe((msg: string) => {
         modalRef.componentInstance.message = msg;
-        // Pass translated button labels for "Cancel" and "Confirm"
         this.translateService.get('COMMON.ACTIONS.CANCEL').subscribe((cancelLabel: string) => {
           modalRef.componentInstance.cancelLabel = cancelLabel;
         });
@@ -142,42 +152,42 @@ export class HeaderComponent implements OnInit {
           modalRef.componentInstance.confirmLabel = confirmLabel;
         });
       });
-      modalRef.componentInstance.confirmed.subscribe(()=>{
-        //let CurrentUserStructures = this.structuresItems.find(structure => structure.StructureId === structureId);
-        let CurrentUserStructures = this.structuresItems.find(structure => structure.active ==true);
-        let newUserStructures = this.structuresItems.find(structure => structure.StructureId === structureId);
-        this.structuresItems.forEach(structure => structure.active = false);
-       // let currentUserStructure = this.structuresItems.find(structure => structure.StructureId === structureId);
-        if (newUserStructures) {
-          newUserStructures.active = true;
-        }
-        let oldStructureId: string = localStorage.getItem('structureId') || CurrentUserStructures?.StructureId.toString()||'1';
-       let token: string = localStorage.getItem("access_token")||''
-       this.structuresService.UpdateLoggedInStrucure(structureId?.toString(), oldStructureId,token)
-        .subscribe({
-          next: (response) => console.log('Structure updated successfully:', response),
-          error: (error) => console.error('Error updating structure:', error)
-        });
-        localStorage.setItem('structureId', structureId.toString());
-              // Navigate to the landing page WITHOUT manually calling reloadData()
-      this.route.navigate(['/landing']).then(() => {
-       });
-      })
-     
-    }
-  }
-  updateActiveStructure() {
-    debugger
-    const savedStructureId = localStorage.getItem('structureId');
-  
-    if (savedStructureId) {
-      const savedId = Number(savedStructureId);
-  
-      // Update the active structure based on stored value
-      this.structuresItems.forEach(structure => {
-        structure.active = structure.StructureId === savedId;
+
+      modalRef.componentInstance.confirmed.subscribe(() => {
+        this.updateStructure(structureId, true);
       });
     }
-  } 
-  
+  }
+
+  private updateStructure(structureId: number, shouldRedirectToLanding: boolean) {
+    debugger
+    let CurrentUserStructures = this.structuresItems.find(structure => structure.active == true);
+    let newUserStructures = this.structuresItems.find(structure => structure.StructureId === structureId);
+
+    this.structuresItems.forEach(structure => structure.active = false);
+
+    if (newUserStructures) {
+      newUserStructures.active = true;
+    }
+
+    let oldStructureId: string = localStorage.getItem('structureId') || CurrentUserStructures?.StructureId.toString() || '1';
+
+
+    this.updateActiveStructure(structureId, oldStructureId, shouldRedirectToLanding);
+  }
+
+  updateActiveStructure(structureId: number, oldStructureId: string, shouldRedirectToLanding: boolean) {
+    let token: string = localStorage.getItem("access_token") || '';
+    this.structuresService.UpdateLoggedInStrucure(structureId.toString(), oldStructureId, token)
+      .subscribe({
+        next: (response) => {
+          localStorage.setItem('structureId', structureId.toString());
+          if (shouldRedirectToLanding) {
+            this.route.navigate(['/landing']);
+          }
+        },
+        error: (error) => console.error('Error updating structure:', error)
+      });
+  }
+
 }

@@ -34,16 +34,20 @@ export class StructuresService {
         console.log('id:', id);
         return this.http.get<CurrentUserStructures>(`${this.baseUrl}/GetUser?id=${id}`);
     }
-    UpdateLoggedInStrucure(structureId: string | undefined,oldStrutureId: string | undefined,accessToken: string): Observable<string> {
-       debugger
-       const headers = new HttpHeaders({
-        'Authorization': `Bearer ${accessToken}`
-      });
+    UpdateLoggedInStrucure(structureId: string | undefined, oldStrutureId: string | undefined, accessToken: string): Observable<string> {
+        debugger
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${accessToken}`
+        });
         console.log('structureId:', structureId);
         console.log('oldStrutureId:', oldStrutureId);
         const url = `${this.apiBaseUrl}/CTS/Structure/UpdateLoggedInStrucure?structureId=${structureId}&oldStrutureId=${oldStrutureId}`;
         return this.http.post<string>(url, null, { headers }); // Provide `null` as the bodyreturn this.http.post<string>(`${this.apiBaseUrl}/CTS/Structure/UpdateLoggedInStrucure??structureId=${structureId}&oldStrutureId=${oldStrutureId}`);
     }
-    
-    
+
+    getLoggedInStructure(): Observable<number> {
+        return this.http.get<number>(`${this.apiBaseUrl}/CTS/Structure/GetLoggedInStrucure`);
+    }
+
+
 } 

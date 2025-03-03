@@ -1,6 +1,6 @@
 <div class="body-content">
     <div class="cards d-flex flex-wrap justify-content-center align-items-stretch">
-        <a *ngFor="let card of Homecards" [href]="card.link" class="card"
+        <a *ngFor="let card of Homecards" [routerLink]="card.link" class="card"
             [ngStyle]="{'background-color': card.backgroundColor}">
             <div class="icon">
                 <img [src]="card.imgSrc" alt="" />

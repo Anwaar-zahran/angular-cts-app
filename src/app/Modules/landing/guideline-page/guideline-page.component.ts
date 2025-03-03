@@ -304,5 +304,8 @@ export class GuidelinePageComponent implements OnInit {
     return 0;
   }
 
+  trackByFn(index: number, item: any): number {
+    return item.id;
+  }
 }
 
