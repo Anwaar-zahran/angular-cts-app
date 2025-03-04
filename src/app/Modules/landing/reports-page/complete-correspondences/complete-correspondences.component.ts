@@ -292,7 +292,7 @@ export class CompleteCorrespondencesComponent implements OnInit {
       priorityId: this.selectedPriorityId ? this.selectedPriorityId : null
     };
 
-    this.reportsService.listInProgressCorrespondences(params).subscribe({
+    this.reportsService.listCompletedCorrespondences(params).subscribe({
       next: (response) => {
         this.reports = response.data;
         this.totalItems = response.recordsTotal;

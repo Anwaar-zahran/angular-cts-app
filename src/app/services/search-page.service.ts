@@ -240,7 +240,9 @@ export class SearchPageService {
       'Content-Type': 'application/json',
     });
 
-    const params = new HttpParams().set('documentId', id);
+    const params = new HttpParams()
+    .set('documentId', id)
+    .set('ctsTranferId',1)
 
     return this.httpClient.get<AttachmentsApiResponce[]>(this.attachmentsURL, { headers, params })
       .pipe(
@@ -282,6 +284,7 @@ export class SearchPageService {
   }
 
   getViewerInfo(documentId: number, version: string, structId: number) {
+    console.log(documentId)
     const url = `https://java-qatar.d-intalio.com/VIEWER/api/document/${documentId}/version/${version}/details?structId=${structId}`;
     debugger
     return this.httpClient.get(url).pipe(
