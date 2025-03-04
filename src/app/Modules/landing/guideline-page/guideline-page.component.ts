@@ -92,7 +92,7 @@ export class GuidelinePageComponent implements OnInit {
           }
         },
         dom: "t",
-        ordering: false
+        ordering: true
       };
     });
   }

@@ -93,7 +93,7 @@ purposeId:string="8";
           }
         },
         dom: "t",
-        ordering: false
+        ordering: true
       };
     });
   }
