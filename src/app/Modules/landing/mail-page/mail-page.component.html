@@ -1,16 +1,6 @@
 <div class="body-content">
     <div class="d-flex justify-content-between">
         <h1 class="page-title"><app-back-button></app-back-button>{{ 'MAIL.TITLE' | translate }}</h1>
-        <!-- Sort Dropdown -->
-        <!-- <div class="dropdown">
-            <button class="btn btn-link" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa fa-sort"></i> {{ 'COMMON.SORT_BY' | translate }}
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#" (click)="sortBy('date')">{{ 'COMMON.TRANSFER_DATE' | translate }}</a></li>
-                <li><a class="dropdown-item" href="#" (click)="sortBy('ref')">{{ 'COMMON.REFERENCE_NB' | translate }}</a></li>
-            </ul>
-        </div> -->
         <div class="dropdown">
             <button class="btn btn-link" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-sort"></i> {{ 'COMMON.SORT_BY' | translate }}
@@ -28,13 +18,13 @@
 
     <!-- Tabs -->
     <div class="nav nav-tabs mt-3" role="tablist">
-        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-new" type="button" role="tab">
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-new" type="button" role="tab" (click)="loadInboxData()">
             <i class="fa fa-plus-circle"></i>{{ 'MAIL.TABS.NEW' | translate }}
         </button>
-        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-sent" type="button" role="tab">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-sent" type="button" role="tab"  (click)="loadSentData()">
             <i class="fa fa-paper-plane"></i>{{ 'MAIL.TABS.SENT' | translate }}
         </button>
-        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-completed" type="button" role="tab">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-completed" type="button" role="tab" (click)="loadCompletedData()">
             <i class="fa fa-check-circle"></i>{{ 'MAIL.TABS.COMPLETED' | translate }}
         </button>
     </div>
@@ -167,5 +157,38 @@
                 </tbody>
             </table>
         </div>
+        <div
+        class="d-flex justify-content-between align-items-center"
+        *ngIf="newItems && newItems.length > 0"
+      >
+      
+        <div class="d-flex justify-content-between align-items-center" *ngIf="(activeTab === 'new' && newItems.length > 0) || (activeTab === 'sent' && sentItems.length > 0) || (activeTab === 'completed' && completedItems.length > 0)">
+          <div class="dataTables_paginate paging_full_numbers">
+            <a class="paginate_button first" [class.disabled]="currentPage === 1" (click)="goToPage(1)">
+              <i class="text-secondary fa fa-angle-left"></i>
+            </a>
+        
+            <a class="paginate_button previous" [class.disabled]="currentPage === 1" (click)="previousPage()">
+              <i class="text-secondary fa fa-angle-double-left"></i>
+            </a>
+        
+            <span class="d-inline-flex align-items-center mx-2">
+              {{ "COMMON.PAGE" | translate }}
+              <input type="number" class="paginate-input form-control form-control-sm mx-2" [(ngModel)]="currentPage" (ngModelChange)="goToPage(currentPage)" [min]="1" [max]="totalPages" />
+              {{ "COMMON.OF" | translate }} {{ totalPages }}
+            </span>
+        
+            <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()">
+              <i class="text-secondary fa fa-angle-double-right"></i>
+            </a>
+        
+            <a class="paginate_button last" [class.disabled]="currentPage === totalPages" (click)="goToPage(totalPages)">
+              <i class="text-secondary fa fa-angle-right"></i>
+            </a>
+          </div>
+        </div>
+        
+      </div>
+    
     </div>
 </div>
