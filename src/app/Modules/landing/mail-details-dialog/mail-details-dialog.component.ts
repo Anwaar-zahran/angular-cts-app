@@ -754,7 +754,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getAttachments(this.accessToken!, docID).subscribe(
         (response: any) => {
-           
+           debugger;
           this.attachments = response || [];
           this.TREE_DATA = this.transformAttachmentsToTree(this.attachments);
           this.dataSource.data = this.TREE_DATA;
@@ -776,7 +776,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
 
   tryFetchOriginalDocument(): void {
-
+debugger
 
     // Recursive function to search for folder_originalMail
     const findOriginalMailFolder = (nodes: any[]): any => {
@@ -823,6 +823,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   getViewerUrl(): void {
+    debugger;
     //const baseUrl = 'https://java-qatar.d-intalio.com/VIEWER/file?isCustomMode=true';
     const baseUrl = `${environment.viewerUrl}`;
     const token = this.authService.getToken();

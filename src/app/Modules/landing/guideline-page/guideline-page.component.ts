@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
@@ -8,20 +8,8 @@ import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-
 import { AuthService } from '../../auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MailsService } from '../../../services/mail.service';
-interface ApiResponseItem {
-  id: number;
-  documentId: number;
-  ref: string;
-  categoryId: number;
-  referenceNumber: string;
-  transferDate: string;
-  status: number;
-  fromUser: string;
-  subject: string;
-  isRead: boolean;
-  isOverDue: boolean;
-  row: any;
-}
+import { DataTableDirective } from 'angular-datatables';
+import { ApiResponseItem } from '../../../models/ApiResponseItem.model';
 
 @Component({
   selector: 'app-guideline-page',
@@ -39,7 +27,25 @@ export class GuidelinePageComponent implements OnInit {
   completedItems: any[] = [];
 
   loading: boolean = true;
-
+  // Pagination
+  currentPage: number = 1;
+  totalPages: number = 1;
+  totalItems: number = 0;
+  startIndex: number = 0;
+  endIndex: number = 0;
+  pages: number[] = [];
+  purposeId:string="9";
+    activeTab: 'new' | 'sent' | 'completed' = 'new';
+    itemsPerPage: number =  this.dtOptions.pageLength || 10;
+    currentPageMap = {
+      new: 1,
+      sent: 1,
+      completed: 1
+    };
+    @ViewChild(DataTableDirective, { static: false })
+      dtElement!: DataTableDirective;
+    
+      isDtInitialized: boolean = false;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -53,58 +59,45 @@ export class GuidelinePageComponent implements OnInit {
 
   ngOnInit() {
     this.initDtOptions();
-    this.fetchData();
+    this.loadInboxData();
   }
+  calculatePagination() {
+    this.totalPages = Math.ceil(this.totalItems / this.dtOptions.pageLength);
+    this.startIndex = (this.currentPage - 1) * this.dtOptions.pageLength + 1;
+    this.endIndex = Math.min(this.startIndex + this.dtOptions.pageLength - 1, this.totalItems);
 
+    this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
   initDtOptions() {
-    this.dtOptions = {
-      pageLength: 10,
-      pagingType: 'full_numbers',
-      paging: true,
-      searching: false,
-      autoWidth: false,
-      language: {
-        paginate: {
-          first: "<i class='text-secondary fa fa-angle-left'></i>",
-          previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-          next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-          last: "<i class='text-secondary fa fa-angle-right'></i>",
+    this.translate.get('COMMON').subscribe(translations => {
+      this.dtOptions = {
+        pageLength: 10,
+        search: false,
+        order: [],
+        pagingType: 'full_numbers',
+        paging: false,
+        searching: false,
+        displayStart: 0,
+        autoWidth: false,
+        language: {
+          emptyTable: "",
+          zeroRecords: "",
+          info: "",
+          infoEmpty: "",
+          paginate: {
+            first: "<i class='text-secondary fa fa-angle-left'></i>",
+            previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
+            next: "<i class='text-secondary fa fa-angle-double-right'></i>",
+            last: "<i class='text-secondary fa fa-angle-right'></i>",
+          }
         },
-      },
-      dom: 'tp',
-      ordering: true,
-      drawCallback: (settings: any) => {
-        const api = settings.oInstance.api();
-        const pageInfo = api.page.info();
-        const pagination = $(api.table().container()).find('.dataTables_paginate');
-        pagination.find('input.paginate-input').remove();
-        const page = $('<span class="d-inline-flex align-items-center mx-2">' + this.translate.instant('COMMON.PAGE') + '<input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> ' + this.translate.instant('COMMON.OF') + ' ' + pageInfo.pages + '</span>');
-
-
-        let timeout: any;
-        page.find('input').on('keyup', function () {
-          clearTimeout(timeout);
-
-          timeout = setTimeout(() => {
-            const pageNumber = parseInt($(this).val() as string, 10);
-            if (pageNumber >= 1 && pageNumber <= pageInfo.pages) {
-              api.page(pageNumber - 1).draw('page');
-            }
-          }, 500);
-        });
-
-        const previous = pagination.find('.previous');
-        const next = pagination.find('.next');
-        page.insertAfter(previous);
-        next.insertAfter(page);
-
-        pagination.find('a.paginate_button').on('click', function () {
-          page.find('input').val(api.page() + 1);
-        });
-      }
-    };
+        dom: "t",
+        ordering: false
+      };
+    });
   }
 
+ 
   base64UrlDecode(str: string): string {
     // Replace non-URL safe characters and pad with `=`
     str = str.replace(/-/g, '+').replace(/_/g, '/');
@@ -114,114 +107,7 @@ export class GuidelinePageComponent implements OnInit {
     }
     return decodeURIComponent(escape(window.atob(str))); // Decode base64
   }
-
-  fetchData() {
-    //if (!this.accessToken) {
-    //  console.error('Access token not found');
-
-    //  this.router.navigate(['/login']);
-    //  return;
-    //}
-    debugger
-    const payload = this.accessToken?.split('.')[1] || '';
-    const decodedPayload = this.base64UrlDecode(payload);
-    const parsedPayload = JSON.parse(decodedPayload);
-    this.structureId = localStorage.getItem('structureId') || parsedPayload.StructureId;
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.accessToken}`,
-    });
-
-    const formData = new FormData();
-    formData.append('length', '1000');
-    formData.append('structureId', this.structureId);
-    formData.append('PurposeId', '9');
-
-    const callApi = (url: string) => {
-      return this.http.post<any>(url, formData, { headers }).toPromise();
-    };
-    // Fetch all data concurrently
-    Promise.all([
-      callApi(`${environment.apiBaseUrl}/Transfer/ListSent`),
-      callApi(`${environment.apiBaseUrl}/Transfer/ListCompleted`),
-      callApi(`${environment.apiBaseUrl}/Transfer/ListInbox`)
-    ])
-      .then(([sentResponse, completedResponse, inboxResponse]) => {
-        debugger
-        console.log('Sent Response:', sentResponse);
-        console.log('Completed Response:', completedResponse);
-        console.log('Inbox Response:', inboxResponse);
-        // Map the API data to respective items
-        this.sentItems = sentResponse.data.map((item: ApiResponseItem) => ({
-          subject: item.subject,
-          details: this.translate.instant('GUIDELINES.DETAILS.TRANSFERRED_FROM', { user: item.fromUser }),
-          date: item.transferDate,
-          ref: item.referenceNumber,
-          isRead: item.isRead,
-          isOverDue: item.isOverDue,
-          id: item.id,
-          documentId: item.documentId,
-          row: item
-        })) || [];
-        this.completedItems = completedResponse.data.map((item: ApiResponseItem) => ({
-          subject: item.subject,
-          details: this.translate.instant('GUIDELINES.DETAILS.TRANSFERRED_FROM', { user: item.fromUser }),
-          date: item.transferDate,
-          ref: item.referenceNumber,
-          isRead: item.isRead,
-          isOverDue: item.isOverDue,
-          id: item.id,
-          documentId: item.documentId,
-          row: item
-        })) || [];
-        this.newItems = inboxResponse.data.map((item: ApiResponseItem) => ({
-          subject: item.subject,
-          details: this.translate.instant('GUIDELINES.DETAILS.TRANSFERRED_FROM', { user: item.fromUser }),
-          date: item.transferDate,
-          ref: item.referenceNumber,
-          isRead: item.isRead,
-          isOverDue: item.isOverDue,
-          id: item.id,
-          documentId: item.documentId,
-          row: item
-        })) || [];
-        console.log('newItems:', this.newItems);
-        console.log('Completed:', this.completedItems);
-        console.log('sentItems:', this.sentItems);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      }).finally(() => {
-        this.loading = false;
-      });
-  }
-
   active = 1;
-
-  showMailDetailsOld(item: ApiResponseItem, showActionbtns: boolean) {
-
-    const currentName = this.authService.getDisplayName();
-
-    const dialogRef = this.dialog.open(MailDetailsDialogComponent, {
-      disableClose: true,
-      width: '90%',
-      height: '90%',
-      data: {
-        id: item.row.documentId,
-        documentId: item.documentId,
-        referenceNumber: item.ref,
-        row: item.row,
-        fromSearch: true,
-        showActionButtons: (showActionbtns && (!item.row?.isLocked || (item.row?.isLocked && item.row?.lockedBy == currentName)) && item.row.purposeId != 10)
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('Mail details closed', result);
-      window.location.reload();
-      //this.fetchData();
-      //this.router.navigate([this.router.url]);
-    });
-  }
   showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
     debugger;
     const currentName = this.authService.getDisplayName();
@@ -253,11 +139,7 @@ export class GuidelinePageComponent implements OnInit {
     // Refresh the item when dialog closes
     dialogRef.afterClosed().subscribe(result => {
       console.log('Mail details closed', result);
-
-      // if (result === 'updated') { 
-      this.fetchData(); // Call API again to refresh only the necessary data
-      //}
-
+      this.setActiveTab(this.activeTab); // Call API again to refresh only the necessary data
     });
   }
   showVisualTracking(item: ApiResponseItem) {
@@ -306,6 +188,119 @@ export class GuidelinePageComponent implements OnInit {
 
   trackByFn(index: number, item: any): number {
     return item.id;
+  }
+  
+    private mapApiResponse(item: ApiResponseItem) {
+      return {
+        subject: item.subject,
+        details: this.translate.instant('MYMAIL.DETAILS.TRANSFERRED_FROM', { user: item.fromUser }),
+        date: item.transferDate,
+        ref: item.referenceNumber,
+        isRead: item.isRead,
+        isOverDue: item.isOverDue,
+        id: item.id,
+        documentId: item.documentId,
+        row: item
+      };
+    }
+    previousPage() {
+      if (this.currentPageMap[this.activeTab] > 1) {
+        this.goToPage(this.currentPageMap[this.activeTab] - 1);
+      }
+    }
+  
+    nextPage() {
+      if (this.currentPageMap[this.activeTab] < this.totalPages) {
+        this.goToPage(this.currentPageMap[this.activeTab] + 1);
+      }
+    }
+  
+    goToPage(page: number) {
+      debugger;
+      if (page >= 1 && page <= this.totalPages) {
+        this.currentPageMap[this.activeTab] = page;
+        this.setActiveTab(this.activeTab);
+      }
+    }
+  
+   setActiveTab(tab: 'new' | 'sent' | 'completed',) {
+    debugger
+    if (this.activeTab !== tab) {
+      // Reset pagination ONLY when switching tabs
+      this.currentPageMap[tab] = 1;
+    }
+    this.activeTab = tab;
+   const currentPageforTab = this.currentPageMap[this.activeTab];
+    if (tab === 'new') {
+      this.loadInboxData(currentPageforTab);
+    } else if (tab === 'sent') {
+      this.loadSentData(currentPageforTab);
+    } else {
+      this.loadCompletedData(currentPageforTab);
+    }
+  }
+  private getStructureId(): string {
+    const payload = this.accessToken?.split('.')[1] || '';
+    const decodedPayload = this.base64UrlDecode(payload);
+    const parsedPayload = JSON.parse(decodedPayload);
+    return localStorage.getItem('structureId') || parsedPayload.StructureId;
+  }
+  loadInboxData(page:number=1) {
+    debugger;
+    this.activeTab="new";
+    this.loading = true;
+    this.currentPage=page
+    this.structureId = this.getStructureId();
+   
+    this.mailService.fetchData('/Transfer/ListInbox', this.structureId, page, this.itemsPerPage, this.accessToken!,this.purposeId)
+      .subscribe(
+        (response) => {
+          this.newItems = response.data.map(this.mapApiResponse.bind(this)) || [];
+         // this.totalPages = Math.ceil(response.recordsTotal / this.itemsPerPage);
+         this.totalItems = response.recordsTotal;
+          this.calculatePagination()
+        },
+        (error) => console.error('Error fetching inbox:', error),
+        () => (this.loading = false)
+      );
+  }
+  loadSentData(page:number=1) {
+    
+    debugger;
+    this.activeTab='sent';
+    this.currentPage=page;
+   // if (this.sentItems.length > 0) return; // Prevent duplicate calls
+    this.loading = true;
+    this.structureId = this.getStructureId();
+  
+    this.mailService.fetchData('/Transfer/ListSent', this.structureId, page, this.itemsPerPage, this.accessToken!,this.purposeId)
+      .subscribe(
+        (response) => {
+          this.sentItems = response.data.map(this.mapApiResponse.bind(this)) || [];
+          this.totalItems = response.recordsTotal;
+          this.calculatePagination();
+        },
+        (error) => console.error('Error fetching sent mails:', error),
+        () => (this.loading = false)
+      );
+  }
+  loadCompletedData(page:number=1) {
+    this.activeTab='completed';
+   // if (this.completedItems.length > 0) return; // Prevent duplicate calls
+    this.loading = true;
+    this.currentPage=page;
+    this.structureId = this.getStructureId();
+  
+    this.mailService.fetchData('/Transfer/ListCompleted', this.structureId, page, this.itemsPerPage, this.accessToken!,this.purposeId)
+      .subscribe(
+        (response) => {
+          this.completedItems = response.data.map(this.mapApiResponse.bind(this)) || [];
+          this.totalItems = response.recordsTotal;
+          this.calculatePagination();
+        },
+        (error) => console.error('Error fetching completed mails:', error),
+        () => (this.loading = false)
+      );
   }
 }
 

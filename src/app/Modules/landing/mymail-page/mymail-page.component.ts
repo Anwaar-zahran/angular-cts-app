@@ -208,7 +208,7 @@ pages: number[] = [];
       console.log('Mail details closed', result);
 
       // if (result === 'updated') { 
-      this.loadInboxData(); // Call API again to refresh only the necessary data
+        this.setActiveTab(this.activeTab); // Call API again to refresh only the necessary data
       //}
 
     });
