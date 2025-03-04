@@ -108,7 +108,7 @@ pages: number[] = [];
           }
         },
         dom: "t",
-        ordering: false
+        ordering: true
       };
     });
   }
