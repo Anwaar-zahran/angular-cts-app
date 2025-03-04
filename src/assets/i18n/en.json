@@ -434,7 +434,8 @@
           "STATUS": "Status",
           "CATEGORY": "Category",
           "TRANSFERS": "transfers",
-          "VALUE": "Value"
+          "VALUE": "Value",
+          "PERCENTAGE":"Percentage"
         }
       }
     },
@@ -456,6 +457,7 @@
       "TRANSFERS_COMPLETED_INFO": "Number of completed transfers sent to you grouped by category divided into 2 circles (Only for transfers with due date)",
       "TRANSFERS_IN_PROGRESS": "Due Date Statistics for In Progress Transfers",
       "TRANSFERS_IN_PROGRESS_INFO": "Number of in progress transfers sent to you grouped by category divided into 2 circles (Only for transfers with due date)",
+      "PERCENTAGE":"Percentage",
       "FILTER": {
         "TITLE": "Select Date Range",
         "FROM_DATE": "From Date",

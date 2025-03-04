@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ToasterService } from '../../../services/toaster.service';
 import { StructuresService } from '../../../services/structures.service';
 import { jwtDecode } from 'jwt-decode';
@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit {
 
   structuresItems2: CurrentUserStructures[] = [];
   structuresItems: DisplayStructure[] = [];
+  structure!:string;
 
   languages = [
     { code: 'en', name: 'English', dir: 'ltr' },
@@ -54,6 +55,7 @@ export class HeaderComponent implements OnInit {
 
   ) {
     this.currentLang = this.translateService.currentLang || 'en';
+    this.structure =  this.translateService.instant("BAM.DASHBOARD.CHARTS.LABELS.STRUCTURES")
   }
 
   ngOnInit(): void {

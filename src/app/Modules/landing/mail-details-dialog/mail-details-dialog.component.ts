@@ -143,6 +143,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   selectedClassText: string = '';
   selectedCarbonText: string = '';
   selectedImportanceText: string = '';
+  ctsTransferId!:number
+  ctsDocumentId!:number
 
   // OrgChart references
   private orgChart: any = null;
@@ -210,10 +212,13 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     //  this.router.navigate(['/login']);
     //  return;
     //}
+    this.ctsTransferId = this.data.row.id;
+    this.ctsDocumentId = Number(this.data.id);
     this.initDtOptions();
     this.loadLookupData();
     this.fetchDetails(this.data.id);
     console.log("row", this.data.row);
+    console.log("row", this.data.row.id);
 
   }
 
@@ -751,6 +756,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   getAttachments(docID: string): Promise<AttachmentsApiResponce> {
+    // this.ctsDocumentId = Number(docID);
+    console.log('from attachement service'+this.ctsDocumentId)
     return new Promise((resolve, reject) => {
       this.searchService.getAttachments(this.accessToken!, docID).subscribe(
         (response: any) => {
@@ -847,19 +854,21 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       token: encodeURIComponent(token),
       version: 'autocheck',
       structId: 1,
-      viewermode: viewMode
+      viewermode: viewMode,
+      ctsTransferId:this.ctsTransferId,
+      ctsDocumentId:this.ctsDocumentId
     };
     const queryString = Object.entries(params)
       .map(([key, value]) => `${key}=${value}`)
       .join('&');
 
 
-    this.searchService.getViewerInfo(23, '1.1', 1).subscribe({
-      next: (resp) => {
-        console.log('from search service')
-        console.log(resp);
-      }
-    });
+    // this.searchService.getViewerInfo(23, '1.1', 1).subscribe({
+    //   next: (resp) => {
+    //     console.log('from search service')
+    //     console.log(resp);
+    //   }
+    // });
 
     console.log('--------------------------------------------------------query string ---------------------------------------')
     console.log(queryString)
