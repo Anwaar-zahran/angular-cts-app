@@ -36,6 +36,7 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
   fromDate: Date | undefined; // or set to a specific date like { year: 2023, month: 1, day: 1 }
   //fromDate: NgbDateStruct | undefined;
   toDate: Date | undefined;
+  minToDate:Date | null = null;
 
   selectedUsers: number[] = [];
   users: User[] = [];
@@ -281,7 +282,6 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
     });
 
     console.log('Search Parameters:', params); // Debugging line
-debugger
     this.reportsService.listInProgressCorrespondences(params).subscribe({
       next: (response) => {
         
@@ -431,6 +431,19 @@ debugger
         return item ?.nameFr || item ?.name;
       default:
         return item ?.name;
+    }
+  }
+
+  preventTyping(event: KeyboardEvent): void{
+    if(!(event.ctrlKey && event.key === 'v') && !(['Backspace','Delete','ArrowLeft','ArrowRight','Tab']).includes(event.key)){
+      event.preventDefault();
+    }
+  }
+  onFormDateChange():void{
+    if(this.fromDate){
+      this.minToDate = new Date(this.fromDate);
+    }else{
+      this.minToDate = null;
     }
   }
 }

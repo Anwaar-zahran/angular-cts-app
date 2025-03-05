@@ -33,6 +33,7 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
     fromDate: Date | undefined;
     //formatDate?: (date: NgbDateStruct | undefined) => string; // Use '?' to make it optional
     toDate: Date | undefined;
+    minToDate: Date | null = null;
 
     selectedUsers: number[] = [];
     users: User[] = [];
@@ -306,8 +307,8 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
 
     goToPage(page: number) {
         if (page >= 1 && page <= this.totalPages) {
-          this.currentPage = page;
-          this.loadReports();
+            this.currentPage = page;
+            this.loadReports();
         }
     }
 
@@ -343,5 +344,19 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
         this.rerender.unsubscribe();
         this.userSearchSubject.complete();
         this.structureSearchSubject.complete();
+    }
+
+    preventTyping(event: KeyboardEvent): void {
+        if (!(event.ctrlKey && event.key === 'v') && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(event.key)) {
+            event.preventDefault();
+        }
+    }
+
+    onFromDateChange(): void {
+        if (this.fromDate) {
+            this.minToDate = new Date(this.fromDate)
+        }else{
+            this.minToDate = null;
+        }
     }
 } 

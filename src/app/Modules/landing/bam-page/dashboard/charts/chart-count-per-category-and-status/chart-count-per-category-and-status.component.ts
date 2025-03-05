@@ -162,7 +162,7 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
             pointFormat: `{series.name}: {point.y}<br/>${totalLabel}: {point.stackTotal}`,
             formatter: function () {
               if (this.y === 0) return false; // Hide tooltip for zero values
-              return `${this.series.name}: ${this.y}%<br/>${totalLabel}: ${totalFirstElements}`;
+              return `${this.series.name}: ${this.y?.toFixed(2)}%<br/>${totalLabel}: ${totalFirstElements}`;
             }
           },
           plotOptions: {
@@ -171,7 +171,7 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
               dataLabels: {
                 enabled: true,
                 formatter: function () {
-                  return this.y === 0 ? '' : this.y+'%'; // Hide zero labels
+                  return this.y === 0 ? '' : this.y?.toFixed(2)+'%'; // Hide zero labels
                 }
               }
             }

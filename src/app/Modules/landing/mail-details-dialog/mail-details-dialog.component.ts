@@ -883,12 +883,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   initOrgChart(): void {
-    debugger
     if (!this.chartContainer || !this.visualTracking || !Array.isArray(this.visualTracking)) {
       console.error('Missing required data for OrgChart initialization');
       return;
     }
-
     const element = this.chartContainer.nativeElement;
 
     // Transform data using built-in fields
@@ -929,10 +927,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         template: "myTemplate",
         nodes: orgChartData,
         nodeBinding: {
-          field_0: "category",
-          field_1: "title",
-          field_2: "createdBy",
-          field_3: "date"
+          field_0: 'category',
+          field_1: 'title',
+          field_2: 'createdBy',
+          field_3: 'date',
         },
         enableSearch: false,
         enableDragDrop: false,
@@ -959,7 +957,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           expandAll: false
         },
         nodeMenu: {
-          details: { text: "Details" }
+          details: { text: this.translate.instant('VISUAL_TRACKING.DETAILS.TITLE') }
         },
         editForm: {
           readOnly: true,
@@ -969,10 +967,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             pdf: null
           },
           elements: [
-            { type: 'textbox', label: 'Category', binding: 'category', readOnly: true },
-            { type: 'textbox', label: 'Title/Structure', binding: 'title', readOnly: true },
-            { type: 'textbox', label: 'Created By/User', binding: 'createdBy', readOnly: true },
-            { type: 'textbox', label: 'Date', binding: 'date', readOnly: true }
+            { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.CATEGORY'), binding: 'category', readOnly: true },
+            { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.TITLE_STRUCTURE'), binding: 'title', readOnly: true },
+            { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.CREATED_BY_USER'), binding: 'createdBy', readOnly: true },
+            { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.DATE'), binding: 'date', readOnly: true }
           ]
         },
         offline: true,

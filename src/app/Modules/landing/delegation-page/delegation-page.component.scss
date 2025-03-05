@@ -14,13 +14,40 @@
     margin-right: 3px;
 }
 
+.custom-ng-select .ng-select-container {
+    height: 38px; /* Match button height */
+    border-radius: 5px;
+  }
+  
+  .custom-btn {
+    height: 38px; /* Match ng-select height */
+    width: 38px;
+    border-radius: 5px;
+    background-color: #33AAE1;
+    border: none;
+    color: white;
+    font-size: 14px;
+  }
+  
+  .custom-btn i {
+    font-size: 14px; /* Icon size */
+  }
+
+  .form-group.d-flex.align-items-center {
+    align-items: flex-end !important; /* Ensures vertical alignment at the bottom */
+  }
+  
+  .custom-btn {
+    height: 38px; /* Match the height of ng-select */
+    width: 38px; /* Square button to match ng-select height */
+    padding: 0;
+  }
 .custom-select {
   position: relative;
   display: inline-block;
   width: 100%; /* Adjust as needed */
 }
-
-.custom-select select {
+  .custom-select select {
   appearance: none; /* Remove default arrow */
   -webkit-appearance: none;
   -moz-appearance: none;

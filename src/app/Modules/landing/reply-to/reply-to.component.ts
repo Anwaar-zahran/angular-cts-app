@@ -135,5 +135,13 @@ export class ReplyToComponent {
   onClose(shouldCloseParent: boolean = false): void {
     this.dialogRef.close({ shouldCloseParent });
   }
+  
+  preventPaste(event:ClipboardEvent){
+    event.preventDefault();
+  }
+
+  preventInput(event: KeyboardEvent): void {
+    event.preventDefault();
+  }
 
 }

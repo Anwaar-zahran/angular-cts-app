@@ -337,6 +337,7 @@
   "REPORTS": {
     "TITLE": "Reports",
     "IN_PROGRESS_REPORT": "In Progress Report",
+    "IN_PROGRESS_TRANSFERS": "In Progress Transfers",
     "COMPLETED_TRANSFERS": "Completed Transfers",
     "IN_PROGRESS_CORRESPONDENCES": "In Progress Correspondences",
     "COMPLETED_CORRESPONDENCES": "Completed Correspondences",
