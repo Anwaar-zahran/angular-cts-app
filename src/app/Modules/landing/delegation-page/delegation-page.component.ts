@@ -119,7 +119,8 @@ export class DelegationPageComponent implements OnInit {
 
     this.getCategories();
     this.getPrivacyData();
-    this.getUsers();
+    //this.getUsers();
+    this.getFromUsers('');
     this.getListData();
 
     this.delegationForm.get('fromDate')?.valueChanges.subscribe(() => {
@@ -280,29 +281,29 @@ export class DelegationPageComponent implements OnInit {
 
   }
 
-  getUsers(): void {
-    this.lookupservice.getUsers(this.accessToken!).subscribe(
-      (response) => {
-        this.contacts = response || [];
-        // console.log('Contacts', this.contacts);
+  //getUsers(): void {
+  //  this.lookupservice.getUsers(this.accessToken!).subscribe(
+  //    (response) => {
+  //      this.contacts = response || [];
+  //      // console.log('Contacts', this.contacts);
 
-        this.contacts.unshift({ id: 0, fullName: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_NAME') });
+  //      this.contacts.unshift({ id: 0, fullName: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_NAME') });
 
-        let currentExistUser = this.authService.getCurrentUserFullName();
-        console.log('currentUser:', currentExistUser);
-        this.contacts = this.contacts.filter(contact => contact.fullName !== currentExistUser);
+  //      let currentExistUser = this.authService.getCurrentUserFullName();
+  //      console.log('currentUser:', currentExistUser);
+  //      this.contacts = this.contacts.filter(contact => contact.fullName !== currentExistUser);
 
-        if (this.contacts.length > 0) {
-          this.delegationForm.patchValue({
-            userId: this.contacts[0]?.id,
-          });
-        }
-      },
-      (error: any) => {
-        console.error(error);
-      }
-    );
-  }
+  //      if (this.contacts.length > 0) {
+  //        this.delegationForm.patchValue({
+  //          userId: this.contacts[0]?.id,
+  //        });
+  //      }
+  //    },
+  //    (error: any) => {
+  //      console.error(error);
+  //    }
+  //  );
+  //}
 
   getCategoriesName(categoriesId: any): string {
     // console.log('categoriesId:', categoriesId);
@@ -630,6 +631,40 @@ export class DelegationPageComponent implements OnInit {
 
   toggleShowOldCorrespondance() {
     this.showOldCorrespondance = !this.showOldCorrespondance;
+  }
+  onSearchUsers(event: { term: string; items: any[] }): void {
+    const query = event.term;
+    if (query.length > 2) {
+      //this.loading = true;
+      this.getFromUsers(query);
+    }else {
+      //this.loading = true;
+      this.getFromUsers('');
+    }
+  }
+  getFromUsers(searchText: string): void {
+    
+    this.lookupservice.getUsersWithSearch(this.accessToken!, searchText).subscribe(
+      (response) => {
+        this.contacts = response || [];
+        // console.log('Contacts', this.contacts);
+
+        this.contacts.unshift({ id: 0, fullName: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_NAME') });
+
+        let currentExistUser = this.authService.getCurrentUserFullName();
+        console.log('currentUser:', currentExistUser);
+        this.contacts = this.contacts.filter(contact => contact.fullName !== currentExistUser);
+
+        if (this.contacts.length > 0) {
+          this.delegationForm.patchValue({
+            userId: this.contacts[0]?.id,
+          });
+        }
+      },
+      (error: any) => {
+        console.error(error);
+      }
+    );
   }
 
   selectAllCategories(): void {

@@ -92,6 +92,27 @@ export class LookupsService {
         })
       );
   }
+  getUsersWithSearch(accessToken: string,textToSearch:string): Observable<any> {
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`
+    });
+
+    const formData = new FormData();
+    formData.append('ids[]', JSON.stringify(1));
+    formData.append('text', textToSearch);
+    formData.append('language', '');
+    formData.append('showOnlyActiveUsers', 'true');
+
+
+    return this.http.post(this.listUsersUrl, formData, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching users', error.message);
+          throw error;
+        })
+      );
+  }
 
   getPrivacy(accessToken: string): Observable<any> {
 
