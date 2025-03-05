@@ -138,14 +138,14 @@
     "BODY": "محتوى",
     "TABS": {
       "MY_TRANSFER": "إحالتي",
-      "ATTRIBUTES": "السمات",
+      "ATTRIBUTES": "خصائص",
       "ATTACHMENTS": "المرفقات",
       "NOTES": "الملاحظات",
       "LINKED_CORRESPONDENCE": "المراسلات المرتبطة",
       "NON_ARCHIVED_ATTACHMENT": "مرفق غير مؤرشف",
       "VISUAL_TRACKING": "التتبع المرئي",
       "TRANSACTION_HISTORY": " تاريخ الإحالات",
-      "ACTIVITY_LOG": "سجل النشاط"
+      "ACTIVITY_LOG": "سجل النشاطات"
     },
     "BUTTONS": {
       "REPLY": "رد",

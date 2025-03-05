@@ -67,43 +67,41 @@
       <!-- Privacy Select -->
       <div class="col-md-3">
         <div class="form-group">
-          <label class="form-label">{{ "REPORTS.PRIVACY" | translate }}</label>
-          <select
-            [(ngModel)]="selectedPrivacyId"
-            class="form-control"
-            id="ddlPrivacy"
-            name="ddlPrivacy"
-          >
-            <option [ngValue]="null" disabled>
-              {{ "REPORTS.PLACEHOLDERS.SELECT_PRIVACY" | translate }}
-            </option>
-            <option *ngFor="let item of privacyOptions" [ngValue]="item.id">
-              {{ getName(item) }}
-            </option>
-          </select>
+
+          <label class="form-label">{{ 'REPORTS.PRIVACY' | translate }}</label>
+          <div class="custom-select">
+
+            <select [(ngModel)]="selectedPrivacyId" class="form-control" id="ddlPrivacy" name="ddlPrivacy">
+              <option [ngValue]="null" disabled>
+                {{ "REPORTS.PLACEHOLDERS.SELECT_PRIVACY" | translate }}
+              </option>
+              <option *ngFor="let item of privacyOptions" [ngValue]="item.id">
+                {{ getName(item) }}
+              </option>
+            </select>
+          </div>
+          </div>
+        
         </div>
-      </div>
 
       <!-- Priority Select -->
       <div class="col-md-3">
         <div class="form-group">
-          <label class="form-label">{{ "REPORTS.PRIORITY" | translate }}</label>
 
-          <select
-            [(ngModel)]="selectedPriorityId"
-            class="form-control"
-            id="ddlPriority"
-            name="ddlPriority"
-          >
-            <option [ngValue]="null" disabled>
-              {{ "REPORTS.PLACEHOLDERS.SELECT_PRIORITY" | translate }}
-            </option>
-            <option *ngFor="let item of priorityOptions" [ngValue]="item.id">
-              {{ getName(item) }}
-            </option>
-          </select>
+          <label class="form-label">{{ 'REPORTS.PRIORITY' | translate }}</label>
+          <div class="custom-select">
+
+            <select [(ngModel)]="selectedPriorityId" class="form-control" id="ddlPriority" name="ddlPriority">
+              <option [ngValue]="null" disabled>
+                {{ "REPORTS.PLACEHOLDERS.SELECT_PRIORITY" | translate }}
+              </option>
+              <option *ngFor="let item of priorityOptions" [ngValue]="item.id">
+                {{ getName(item) }}
+              </option>
+            </select>
+            </div>
+          </div>
         </div>
-      </div>
       <!-- Date Controls -->
       <div class="col-md-3">
         <div class="form-group">
