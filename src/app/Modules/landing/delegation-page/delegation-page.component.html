@@ -30,7 +30,8 @@
               bindValue="id"
               [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_NAME' | translate"
               class="form-control"
-            >
+             (search)="onSearchUsers($event)"
+             (open)="getFromUsers('')">
             </ng-select>
             <div
               *ngIf="
