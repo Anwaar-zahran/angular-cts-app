@@ -1,15 +1,21 @@
 <div class="modal-header">
-  <h2 id="modalSendToReceivingEntityTitle" class="modal-title"> {{"REPLY_DIALOG.TITLE" | translate }}</h2>
-  <button type="button" class="btn btn-transparent" (click)="onClose()"><i class="fa fa-times"></i></button>
+  <h2 id="modalSendToReceivingEntityTitle" class="modal-title">
+    {{ "REPLY_DIALOG.TITLE" | translate }}
+  </h2>
+  <button type="button" class="btn btn-transparent" (click)="onClose()">
+    <i class="fa fa-times"></i>
+  </button>
 </div>
 <mat-dialog-content>
   <form [formGroup]="replyForm">
-    <input id="hdSendDeligationId" type="hidden" value="">
+    <input id="hdSendDeligationId" type="hidden" value="" />
     <div class="row">
       <div class="col-sm-6 col-xs-12" id="customAttributeSenderContainer">
         <div class="form-group">
           <label class="control-label">
-            <label for="ddlPurpose" class="form-label required"> {{"REPLY_DIALOG.TO" | translate }}</label>
+            <label for="ddlPurpose" class="form-label required">
+              {{ "REPLY_DIALOG.TO" | translate }}</label
+            >
           </label>
           <input class="form-control" [value]="to" disabled />
         </div>
@@ -19,9 +25,17 @@
       <div class="col-md-6" id="sendPurposeContainer">
         <div class="form-group">
           <!--<label for="ddlPurpose" class="form-label required">Purpose</label>-->
-          <label for="ddlPurpose" class="form-label required"> {{"REPLY_DIALOG.PURPOSE" | translate }}</label>
-          <ng-select id="ddlPurpose" formControlName="purpose" [items]="purposes || []" bindValue="id"
-                     placeholder="" class="form-control">
+          <label for="ddlPurpose" class="form-label required">
+            {{ "REPLY_DIALOG.PURPOSE" | translate }}</label
+          >
+          <ng-select
+            id="ddlPurpose"
+            formControlName="purpose"
+            [items]="purposes || []"
+            bindValue="id"
+            placeholder=""
+            class="form-control"
+          >
             <ng-template ng-option-tmp let-item="item">
               {{ getName(item) }}
             </ng-template>
@@ -29,29 +43,53 @@
               {{ getName(item) }}
             </ng-template>
           </ng-select>
-          <div *ngIf="replyForm.controls['purpose'].invalid && replyForm.controls['purpose'].touched"
-               class="error-msg">
-            {{ 'REPLY_DIALOG.PURPOSE_REQUIRED'  | translate }}
+          <div
+            *ngIf="
+              replyForm.controls['purpose'].invalid &&
+              replyForm.controls['purpose'].touched
+            "
+            class="error-msg"
+          >
+            {{ "REPLY_DIALOG.PURPOSE_REQUIRED" | translate }}
             <!--Purpose is required-->
           </div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
-          <label for="datepicker1" class="form-label">{{ 'MAIL_DETAILS.DUEDATE' | translate }}</label>
+          <label for="datepicker1" class="form-label">{{
+            "MAIL_DETAILS.DUEDATE" | translate
+          }}</label>
           <!--<label for="datepicker1" class="form-label">Due Date</label>-->
-          <input class="form-control date-picker" matInput [matDatepicker]="picker" placeholder="dd-mm-yyyy"
-                 formControlName="dueDate" name="dp1" (click)="picker.open()" [min]="minDate" />
+          <input
+            class="form-control date-picker"
+            matInput
+            [matDatepicker]="picker"
+            placeholder="dd-mm-yyyy"
+            formControlName="dueDate"
+            (paste)="preventPaste($event)"
+            (keydown)="preventInput($event)" 
+            name="dp1"
+            (click)="picker.open()"
+            [min]="minDate"
+          />
           <mat-datepicker #picker></mat-datepicker>
-
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-xs-12">
         <div class="form-group">
-          <label class="control-label">{{ 'REPLY_DIALOG.INSTRUCTIONS' | translate }}</label>
-          <textarea class="form-control" tabindex="52" rows="5" formControlName="txtArea" id="txtAreaInstruction">
+          <label class="control-label">{{
+            "REPLY_DIALOG.INSTRUCTIONS" | translate
+          }}</label>
+          <textarea
+            class="form-control"
+            tabindex="52"
+            rows="5"
+            formControlName="txtArea"
+            id="txtAreaInstruction"
+          >
           </textarea>
         </div>
       </div>
@@ -59,16 +97,16 @@
   </form>
   <small class="required">
     <!--<span class="text-danger">*</span>Required Fields-->
-    <span class="text-danger">*</span> {{ 'REPLY_DIALOG.REQUIRED' | translate }}
+    <span class="text-danger">*</span> {{ "REPLY_DIALOG.REQUIRED" | translate }}
   </small>
 </mat-dialog-content>
 <app-toaster></app-toaster>
 
 <div class="modal-footer">
-  <button type="button" class="btn btn-secondary" (click)="onClose()"> {{ 'REPLY_DIALOG.BUTTONS.CLOSE' | translate }}</button>
-  <button type="button" class="btn btn-primary" (click)="onSubmit()">
-    <i class="fa fa-save"></i>  {{ 'REPLY_DIALOG.BUTTONS.SEND' | translate }}
+  <button type="button" class="btn btn-secondary" (click)="onClose()">
+    {{ "REPLY_DIALOG.BUTTONS.CLOSE" | translate }}
   </button>
-
-
+  <button type="button" class="btn btn-primary" (click)="onSubmit()">
+    <i class="fa fa-save"></i> {{ "REPLY_DIALOG.BUTTONS.SEND" | translate }}
+  </button>
 </div>

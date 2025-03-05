@@ -112,6 +112,8 @@
             [(ngModel)]="fromDate"
             name="dp1"
             (click)="picker1.open()"
+            (keydown)="preventTyping($event)"
+            (ngModelChange)="onFromDateChange()"
           />
           <mat-datepicker #picker1></mat-datepicker>
         </div>
@@ -128,6 +130,8 @@
             [(ngModel)]="toDate"
             name="dp2"
             (click)="picker2.open()"
+            (keydown)="preventTyping($event)"
+            [min]="minToDate"
           />
           <mat-datepicker #picker2></mat-datepicker>
         </div>

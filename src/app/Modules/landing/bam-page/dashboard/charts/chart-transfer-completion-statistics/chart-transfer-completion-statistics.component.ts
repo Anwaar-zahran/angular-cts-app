@@ -8,6 +8,7 @@ import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-transla
 import { Subscription } from 'rxjs';
 
 
+
 @Component({
   selector: 'app-chart-transfer-completion-statistics',
   templateUrl: './chart-transfer-completion-statistics.component.html',
@@ -18,13 +19,21 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
 
+  // @Input() fromDate: Date | undefined;
+  // @Input() toDate: Date | undefined;
+
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
 
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
-  private languageSubscription!: Subscription;
+
+  // tempFromDate: Date | undefined;
+  // tempToDate: Date | undefined;
+  // isModalOpen: boolean = false;
+
+  languageSubscription!: Subscription;
 
   constructor(private chartsService: ChartsService, private translate: TranslateService) { }
 
@@ -44,8 +53,8 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
   private loadChartData() {
     this.chartsService
       .getTransferCompletionStatistics({
-        fromDate: this.fromDate,
-        toDate: this.toDate,
+        fromDate: this.fromDate? this.formatDate(this.fromDate) : '',
+        toDate: this.toDate? this.formatDate(this.toDate): '',
         structureId:  localStorage.getItem('structureId') || "1",
       })
       .subscribe((res: any) => {
@@ -122,6 +131,29 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
     this.loadChartData(); // Reload chart data with new dates
     this.toggleModal(); // Close the modal after applying the filter
   }
+
+  formatDate(date: Date | undefined | string): string {
+    if (!date) return '';
+
+    let parsedDate: Date;
+
+    if (typeof date === 'string') {
+        parsedDate = new Date(date);
+        if (isNaN(parsedDate.getTime())) {
+            return ''; // Return empty string if the date is invalid
+        }
+    } else {
+        parsedDate = date;
+    }
+
+    const day = parsedDate.getDate().toString().padStart(2, '0');
+    const month = (parsedDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = parsedDate.getFullYear().toString();
+
+    return `${day}/${month}/${year}`;
+}
+
+
 
 
 }

@@ -59,7 +59,8 @@
               (click)="picker.open()"
               (paste)="preventPaste($event)"
               (dateChange)="updateMinDate()"
-              [min]="today"  [readonly]="true"
+              [min]="today"
+              [readonly]="true"
             />
             <mat-datepicker #picker></mat-datepicker>
             <div
@@ -87,7 +88,8 @@
               name="dp2"
               (click)="picker1.open()"
               (paste)="preventPaste($event)"
-              [min]="minToDate"  [readonly]="true"
+              [min]="minToDate"
+              [readonly]="true"
             />
             <mat-datepicker #picker1></mat-datepicker>
             <div
@@ -133,46 +135,59 @@
         </div>
         <!-- Categories -->
         <div class="col-md-6">
-          <div class="form-group">
-            <label for="ddlCategories" class="form-label required">
-              {{ "DELEGATION.CATEGORY" | translate }}
-            </label>
-            <ng-select
-              id="ddlCategories"
-              [items]="categories || []"
-              bindLabel="name"
-              bindValue="id"
-              [multiple]="true"
-              [clearable]="true"
-              [closeOnSelect]="!isCtrlPressed"
-              [formControlName]="'categoryId'"
-              (change)="onCategorySelect($event)"
-              class="form-control"
-            >
-              <ng-template ng-label-tmp let-item="item">
-                <span class="selected-item">
-                  {{ getName(item) }}
-                  <span
-                    class="remove-icon pointer"
-                    (click)="removeCategory(item, $event)"
-                    >×</span
-                  >
-                </span>
-              </ng-template>
+          <div class="form-group d-flex align-items-center">
+            <div class="flex-grow-1">
+              <label for="ddlCategories" class="form-label required">
+                {{ "DELEGATION.CATEGORY" | translate }}
+              </label>
+              <ng-select
+                id="ddlCategories"
+                [items]="categories || []"
+                bindLabel="name"
+                bindValue="id"
+                [multiple]="true"
+                [clearable]="true"
+                [closeOnSelect]="!isCtrlPressed"
+                [formControlName]="'categoryId'"
+                (change)="onCategorySelect($event)"
+                class="form-control custom-ng-select"
+              >
+                <ng-template ng-label-tmp let-item="item">
+                  <span class="selected-item">
+                    {{ getName(item) }}
+                    <span
+                      class="remove-icon pointer"
+                      (click)="removeCategory(item, $event)"
+                      >×</span
+                    >
+                  </span>
+                </ng-template>
 
-              <ng-template ng-option-tmp let-item="item">
-                {{ getName(item) }}
-              </ng-template>
-            </ng-select>
-            <div
-              *ngIf="
-                delegationForm.controls['categoryId'].invalid &&
-                delegationForm.controls['categoryId'].touched
-              "
-              class="error-msg"
-            >
-              {{ "DELEGATION.ERRORS.REQUIRED_CATEGORY" | translate }}
+                <ng-template ng-option-tmp let-item="item">
+                  {{ getName(item) }}
+                </ng-template>
+              </ng-select>
             </div>
+
+            <div class="ms-2">
+              <button
+                type="button"
+                class="btn d-flex align-items-center justify-content-center custom-btn"
+                (click)="selectAllCategories()"
+              >
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <div
+            *ngIf="
+              delegationForm.controls['categoryId'].invalid &&
+              delegationForm.controls['categoryId'].touched
+            "
+            class="error-msg"
+          >
+            {{ "DELEGATION.ERRORS.REQUIRED_CATEGORY" | translate }}
           </div>
         </div>
 
@@ -203,7 +218,8 @@
                   [matDatepicker]="picker2"
                   [placeholder]="'COMMON.DATE.FORMAT' | translate"
                   formControlName="startDate"
-                  name="dp2"  [readonly]="true"
+                  name="dp2"
+                  [readonly]="true"
                   (click)="picker2.open()"
                   (paste)="preventPaste($event)"
                 />
@@ -270,12 +286,11 @@
           {{ "COMMON.ACTIONS.CANCEL" | translate }}
         </button>
         <button
-        [disabled]="delegationForm.invalid"
+          [disabled]="delegationForm.invalid"
           type="button"
           class="btn btn-primary btn-lg"
           (click)="onSave()"
         >
-
           <!-- <i class="fa fa-save"></i> {{ "COMMON.ACTIONS.SAVE" | translate }} -->
           <i class="fa fa-save"></i>
           {{
@@ -295,10 +310,11 @@
         <ng-template #clearText>
           <button
             type="button"
-            *ngIf="!delegationForm.pristine"
+            *ngIf="!delegationForm.pristine || isAllCategoriesSelecte"
             class="btn btn-secondary btn-lg"
             (click)="clear()"
           >
+            <i class="fa-solid fa-circle-xmark"></i>
             {{ "COMMON.ACTIONS.CLEAR" | translate }}
           </button>
         </ng-template>

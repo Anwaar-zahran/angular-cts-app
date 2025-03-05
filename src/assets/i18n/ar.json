@@ -330,6 +330,7 @@
     "REPORTS": {
         "TITLE": "التقارير",
         "IN_PROGRESS_REPORT": "تقرير قيد التنفيذ",
+        "IN_PROGRESS_TRANSFERS": "التحويلات قيد التنفيذ",
         "COMPLETED_TRANSFERS": "التحويلات المكتملة",
         "IN_PROGRESS_CORRESPONDENCES": "المراسلات قيد التنفيذ",
         "COMPLETED_CORRESPONDENCES": "المراسلات المكتملة",

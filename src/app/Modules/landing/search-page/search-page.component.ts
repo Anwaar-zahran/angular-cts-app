@@ -73,6 +73,7 @@ export class SearchPageComponent {
 
   loading: boolean = true; // Loading state
   formVisible = true;
+  minToDate: Date | null = null;
 
   constructor(
     private searchService: SearchPageService,
@@ -331,13 +332,28 @@ export class SearchPageComponent {
     };
   }
 
-  formatDate(date: NgbDateStruct | undefined): string {
+  formatDate(date: NgbDateStruct | Date | string): string {
     if (!date) return '';
-    const month = date.month.toString().padStart(2, '0');
-    const day = date.day.toString().padStart(2, '0');
-    const year = date.year.toString();
+  
+    let parsedDate: Date;
+  
+    if (typeof date === 'string') {
+      parsedDate = new Date(date);
+    } else if ('year' in date) {
+      parsedDate = new Date(date.year, date.month - 1, date.day);
+    } else {
+      parsedDate = date;
+    }
+  
+    if (isNaN(parsedDate.getTime())) return '';
+  
+    const day = parsedDate.getDate().toString().padStart(2, '0');
+    const month = (parsedDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = parsedDate.getFullYear().toString();
+  
     return `${year}/${month}/${day}`;
   }
+  
 
   onSearch() {
     console.log(this.searchModel);
@@ -376,6 +392,18 @@ export class SearchPageComponent {
         });
     });
 
+  }
+
+
+
+  
+  isValidNgbDateStruct(value: NgbDateStruct): boolean {
+    return (
+      value &&
+      typeof value.year === "number" &&
+      typeof value.month === "number" &&
+      typeof value.day === "number"
+    );
   }
 
   ResetForm() {
@@ -501,5 +529,23 @@ export class SearchPageComponent {
 
   toggleSearchForm() {
     this.formVisible = !this.formVisible;
+  }
+
+  // onFromDateChange():void{
+  //   if(this.searchModel.fromDate){
+  //     this.minToDate = new Date(this.searchModel.fromDate)
+  //   }else{
+  //     this.minToDate = null ;
+  //   }
+
+  //   console.log(this.minToDate)
+
+  // }
+
+  preventTyping(event :KeyboardEvent):void{
+    console.log('clickkkked')
+    if(!(event.ctrlKey && event.key ==='v')&& !(['Delete','Backspace','Tap','ArrowLeft',"ArrowRight"].includes(event.key))){
+      event.preventDefault();
+    }
   }
 }

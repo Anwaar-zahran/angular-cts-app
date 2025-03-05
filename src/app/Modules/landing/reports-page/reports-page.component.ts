@@ -19,7 +19,7 @@ export class ReportsPageComponent {
       backgroundColor: '#DEF5FF',
       imgSrc: 'assets/images/icons/refresh.png',
       title: 'In Progress Report',
-      translationKey: 'REPORTS.IN_PROGRESS_REPORT',
+      translationKey: 'REPORTS.IN_PROGRESS_TRANSFERS',
       link: '/reports/inprogress-transfers',
     },
     {

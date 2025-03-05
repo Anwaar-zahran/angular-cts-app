@@ -63,6 +63,7 @@ export class DelegationPageComponent implements OnInit {
 
   selectedCategoryName:string[] = [];
   selectedCategories: any[] = [];
+  isAllCategoriesSelecte: boolean = false;
   isCtrlPressed = false;
 
 
@@ -328,7 +329,7 @@ export class DelegationPageComponent implements OnInit {
     this.lookupservice.getCategoriesByName(undefined).subscribe(
       (response: any) => {
         this.categories = response.data || [];
-        //console.log('Categories:', this.categories);
+        console.log('Categories:', this.categories);
       },
       (error: any) => {
         console.error(error);
@@ -580,6 +581,7 @@ export class DelegationPageComponent implements OnInit {
   clear(): void {
     this.delegationForm.reset();
     this.showOldCorrespondance = false;
+    this.isAllCategoriesSelecte = false;
     this.resetDropDowns();
     this.selectedPrivacyId = null;
 
@@ -629,4 +631,17 @@ export class DelegationPageComponent implements OnInit {
   toggleShowOldCorrespondance() {
     this.showOldCorrespondance = !this.showOldCorrespondance;
   }
+
+  selectAllCategories(): void {
+    if (this.categories && this.categories.length > 0) {
+      this.delegationForm.controls['categoryId'].setValue(
+        this.categories.map((category) => category.id)
+      );
+      this.isAllCategoriesSelecte = true;
+      console.log(this.categories)
+      this.selectedCategories = this.categories;
+      console.log(this.selectedCategories)
+    }
+  }
+  
 }
