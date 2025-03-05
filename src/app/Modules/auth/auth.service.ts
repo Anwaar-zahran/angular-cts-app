@@ -16,8 +16,8 @@ export class AuthService {
   private iAMURL = `${environment.iAMUrl}/connect/token`;   //to be read from config
   //private clientId = "648074f6-1030-413d-b700-9814626361ab";//"5d2c8fa5-9f58-430c-bcf2-5f4366d425dc";   //to be read from config
   //private clientSecret = "2a1731ec-1c3f-45ec-9a75-81034df06f89";//"d85a0d00-a065-4d8e-b001-f39d69951555";   //to be read from config
-  private clientId = "5d2c8fa5-9f58-430c-bcf2-5f4366d425dc";   //to be read from config
-  private clientSecret = "d85a0d00-a065-4d8e-b001-f39d69951555";   //to be read from config
+  private clientId = environment.clientId;   // Now from environment
+  private clientSecret = environment.clientSecret;   // Now from environment
   private scope = 'openid IdentityServerApi offline_access';
   private aud = 'IdentityServerApi offline_access';
   private grantType = 'password';
@@ -46,6 +46,7 @@ export class AuthService {
   }
 
   storeToken(response: any): void {
+    debugger
     localStorage.setItem('access_token', response.access_token);
     const expiryTime = new Date().getTime() + response.expires_in * 1000;
     localStorage.setItem('expiry', JSON.stringify(expiryTime));
@@ -57,7 +58,7 @@ export class AuthService {
   getToken(): string | null {
     const token = localStorage.getItem('access_token');
     const expiry = JSON.parse(localStorage.getItem('expiry') || '0');
-    
+
     if (token && expiry && new Date().getTime() < expiry) {
       return token;
     } else {
@@ -86,8 +87,8 @@ export class AuthService {
     if (token && token.split('.').length === 3) {
       const decodedToken = this.jwtHelper.decodeToken(token);
       console.log(decodedToken);
-      console.log(decodedToken.FirstName +' '+ decodedToken.LastName);
-      return decodedToken.FirstName + ' '+decodedToken.LastName || '';
+      console.log(decodedToken.FirstName + ' ' + decodedToken.LastName);
+      return decodedToken.FirstName + ' ' + decodedToken.LastName || '';
     }
     return '';
   }
@@ -97,7 +98,7 @@ export class AuthService {
     if (token && token.split('.').length === 3) {
       const decodedToken = this.jwtHelper.decodeToken(token);
       console.log(decodedToken);
-      console.log('user id from auth'+ decodedToken.Id);
+      console.log('user id from auth' + decodedToken.Id);
       return decodedToken.Id || '';
     }
     return '';

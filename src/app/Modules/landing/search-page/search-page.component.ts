@@ -110,7 +110,7 @@ export class SearchPageComponent {
     this.getStatuses();
     this.getPrivacies();
   }
-    
+
   getSendingEntites(searchText: string): void {
     this.lookupservice.getSearchableEntities(searchText).subscribe(
       (response) => {
@@ -174,7 +174,7 @@ export class SearchPageComponent {
     );
   }
 
-  getFromUsers(searchText:string): void {
+  getFromUsers(searchText: string): void {
     this.lookupservice.getSearchUsers(this.accessToken!, searchText).subscribe(
       (response) => {
         this.searchFromUsers = response || [];
@@ -372,7 +372,7 @@ export class SearchPageComponent {
       },
         (error: any) => {
           console.error('Error getting search result:', error);
-          this.toaster.showToaster(error ?.message || 'Something went wrong');
+          this.toaster.showToaster(error?.message || 'Something went wrong');
         });
     });
 
@@ -395,11 +395,10 @@ export class SearchPageComponent {
   }
 
   getCategoryName(catId: any): string {
-   // debugger;
     const cat = this.categories.find(p => p.id === catId);
     return cat ? this.getName(cat) : '';
   }
-  
+
   async showDetails(row: any) {
     this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
@@ -412,7 +411,7 @@ export class SearchPageComponent {
         row: row,
         fromSearch: false
       }
-    });
+    }).componentInstance.showMyTransferTab = false; // Set showMyTransferTab to false
 
   } catch(error: any) {
     console.error("Error loading data", error);
@@ -424,11 +423,11 @@ export class SearchPageComponent {
     const currentLang = this.translate.currentLang;
     switch (currentLang) {
       case 'ar':
-        return item ?.nameAr || item ?.name;
+        return item?.nameAr || item?.name;
       case 'fr':
-        return item ?.nameFr || item ?.name;
+        return item?.nameFr || item?.name;
       default:
-        return item ?.name;
+        return item?.name;
     }
   }
 
@@ -484,7 +483,7 @@ export class SearchPageComponent {
     }
   }
 
-  onSearchUsers(event: { term: string; items: any[] }, fromUsersFilter:boolean): void {
+  onSearchUsers(event: { term: string; items: any[] }, fromUsersFilter: boolean): void {
     const query = event.term;
     if (query.length > 2) {
       this.loading = true;

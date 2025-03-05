@@ -32,7 +32,12 @@ export class AuthInterceptor implements HttpInterceptor {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`
-        }
+        },
+        withCredentials: false  // Prevent cookies from being sent
+      });
+    } else {
+      request = request.clone({
+        withCredentials: false  // Prevent cookies from being sent even for non-authenticated requests
       });
     }
 
@@ -54,8 +59,8 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private handleUnauthorized() {
-  //  this.authService.logout();
-  //  this.router.navigate(['/login']);
+    //  this.authService.logout();
+    //  this.router.navigate(['/login']);
 
     console.log('Unauthorized: Triggering toaster notification');
     //this.toaster.showToaster("You are not authorized to view this page");
@@ -63,6 +68,6 @@ export class AuthInterceptor implements HttpInterceptor {
       this.toaster.showToaster(msg);
     });
     setTimeout(() => {
-    }, 5000); 
+    }, 5000);
   }
 }

@@ -241,8 +241,8 @@ export class SearchPageService {
     });
 
     const params = new HttpParams()
-    .set('documentId', id)
-    .set('ctsTranferId',1)
+      .set('documentId', id)
+      .set('ctsTranferId', 1)
 
     return this.httpClient.get<AttachmentsApiResponce[]>(this.attachmentsURL, { headers, params })
       .pipe(
@@ -282,18 +282,6 @@ export class SearchPageService {
         })
       );
   }
-
-  getViewerInfo(documentId: number, version: string, structId: number) {
-    console.log(documentId)
-    const url = `https://java-qatar.d-intalio.com/VIEWER/api/document/${documentId}/version/${version}/details?structId=${structId}`;
-    debugger
-    return this.httpClient.get(url).pipe(
-      catchError((error) => {
-        console.error('Error while fetching visual tracking:', error.message);
-        return throwError(() => new Error('Failed to fetch viewer info'));
-      })
-    );
-  }  
 }
 
 

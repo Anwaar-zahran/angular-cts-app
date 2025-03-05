@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -74,6 +74,7 @@ declare var OrgChart: any;
 
 })
 export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnDestroy {
+  @Input() showMyTransferTab: boolean = true;
 
   @ViewChild('chartContainer', { static: false }) chartContainer!: ElementRef;
   @ViewChild('tabsContainer', { static: false }) tabsContainer!: ElementRef;
@@ -143,13 +144,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   selectedClassText: string = '';
   selectedCarbonText: string = '';
   selectedImportanceText: string = '';
-  ctsTransferId!:number
-  ctsDocumentId!:number
+  ctsTransferId!: number
+  ctsDocumentId!: number
 
   // OrgChart references
   private orgChart: any = null;
   private chartInitialized: boolean = false;
-  visualTrackingTabIndex: number = 6;
 
   // Lookup data
   structures: any[] = [];
@@ -220,6 +220,9 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     console.log("row", this.data.row);
     console.log("row", this.data.row.id);
 
+    if (!this.showMyTransferTab) {
+      this.tabs = this.tabs.filter(tab => tab !== 'MY_TRANSFER');
+    }
   }
 
   loadLookupData(): void {
@@ -365,6 +368,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     };
   }
   showModalTransfer() {
+    if (!this.showMyTransferTab) {
+      this.toaster.showToaster("Transfer functionality is not available in this context.");
+      return;
+    }
+
     this.searchService.CheckDocumentAttachmnentISLocked(this.accessToken!, this.data.documentId).subscribe(
       (isLocked: boolean) => {
         console.log('Document is locked:', isLocked);
@@ -392,8 +400,6 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         console.error('Error checking document lock:', error);
       }
     );
-
-
   }
 
   showModalReply() {
@@ -491,11 +497,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   setActiveTab(index: number): void {
-
     this.activeTabIndex = index;
 
-    // If switching to Visual Tracking tab (index 5)
-    if (this.visualTracking && this.activeTabIndex === this.visualTrackingTabIndex && !this.chartInitialized) {
+    // If switching to Visual Tracking tab
+    if (this.visualTracking &&
+      this.activeTabIndex === this.tabs.indexOf('VISUAL_TRACKING') &&
+      !this.chartInitialized) {
       this.chartInitialized = false; // Reset initialization flag
       // Short delay to ensure container is visible
       setTimeout(() => {
@@ -505,18 +512,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   async fetchDetails(docID: string): Promise<void> {
+    debugger
     try {
-      const [
-        attributes,
-        nonArchAttachments,
-        linkedDocs,
-        activityLogs,
-        notes,
-        transHistory,
-        attachments,
-        visualTracking,
-        myTransfer
-      ] = await Promise.all([
+      // Create an array of promises for all data fetching operations
+      const promises = [
         this.getAttributes(docID),
         this.getNonArchAttachments(docID),
         this.getLinkedDocuments(docID),
@@ -524,29 +523,38 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.getNotes(docID),
         this.getHistory(docID),
         this.getAttachments(docID),
-        this.getVisualTracking(docID),
-        this.getTransfer(this.data ?.row ?.id)
-      ]);
-       
-      this.attributes = attributes;
-      this.nonArchAttachments = nonArchAttachments?.data;
-      this.linkedDocs = linkedDocs?.data;
-      this.activityLogs = this.data.fromSearch ? activityLogs : activityLogs?.data;
+        this.getVisualTracking(docID)
+      ];
 
-      this.notes = notes.data;
-      this.transHistory = transHistory?.data;
-      this.attachments = attachments;
-      this.visualTracking = visualTracking;
+      if (this.showMyTransferTab && this.data?.row?.id) {
+        promises.push(this.getTransfer(this.data.row.id));
+      }
+
+      const results = await Promise.all(promises);
+
+      this.attributes = results[0];
+      this.nonArchAttachments = results[1]?.data;
+      this.linkedDocs = results[2]?.data;
+      this.activityLogs = this.data.fromSearch ? results[3] : results[3]?.data;
+      this.notes = results[4].data;
+      this.transHistory = results[5]?.data;
+      this.attachments = results[6];
+      this.visualTracking = results[7];
+
+      // Only assign transfers if MY_TRANSFER tab is visible
+      if (this.showMyTransferTab && results.length > 8) {
+        this.transfers = results[8];
+      }
+
       this.classId = this.attributes.classificationId ?? '';
       this.importanceId = this.attributes.importanceId ?? '';
       this.privacyId = this.attributes.privacyId ?? '';
       this.priorityId = this.attributes.priorityId ?? '';
       this.docTypeId = this.attributes.documentTypeId ?? '';
 
-
       if (this.linkedDocs?.length > 0) {
         this.mappedArray = this.linkedDocs.map((doc: any) => {
-          const foundItem = this.categories ?.data.find((cat: any) => cat.id === doc.categoryId);
+          const foundItem = this.categories?.data.find((cat: any) => cat.id === doc.categoryId);
           return {
             id: doc.id,
             linkedDocumentReferenceNumber: doc.linkedDocumentReferenceNumber,
@@ -560,7 +568,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       }
 
 
-      if (this.attributes.carbonCopy ?.length > 0)
+      if (this.attributes.carbonCopy?.length > 0)
         this.selectedCarbonText = this.attributes.carbonCopies.map((carbon: any) => carbon.text).join(', ');
       //else
       //  this.userId = [];
@@ -584,11 +592,13 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.selectedDocTypeText = this.getItemName(this.docTypeId, this.docTypes, true);
       }
 
-      if (this.transfers ?.purpose)
-        this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.purposes, false);
+      if (this.showMyTransferTab) {
+        if (this.transfers?.purpose)
+          this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.purposes, false);
 
-      if (this.transfers ?.priorityId)
-        this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.priority, true);
+        if (this.transfers?.priorityId)
+          this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.priority, true);
+      }
 
       // Build attachments tree if available
       if (this.attachments && Array.isArray(this.attachments)) {
@@ -633,10 +643,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.searchService.getDocAttributes(this.accessToken!, docID).subscribe(
         (response: any) => {
           this.attributes = response || [];
-          this.basicAttributes = JSON.parse(response ?.basicAttributes);
-          this.customAttribute = JSON.parse(response ?.customAttributes);
-          this.customAttributes = JSON.parse(response ?.customAttributes);
-          this.customFormData = JSON.parse(response ?.formData);
+          this.basicAttributes = JSON.parse(response?.basicAttributes);
+          this.customAttribute = JSON.parse(response?.customAttributes);
+          this.customAttributes = JSON.parse(response?.customAttributes);
+          this.customFormData = JSON.parse(response?.formData);
 
           this.getFormDataValue();
 
@@ -659,12 +669,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getNotes(this.accessToken!, docID).subscribe(
         (response) => {
-           
+
           this.notes = response.data || [];
           resolve(response);
         },
         (error: any) => {
-           
+
           console.error(error);
           reject(error);
         }
@@ -676,12 +686,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getActivityLog(this.accessToken!, docID).subscribe(
         (response) => {
-           
+
           this.activityLogs = response || [];
           resolve(response);
         },
         (error: any) => {
-           
+
           console.error(error);
           reject(error);
         }
@@ -693,7 +703,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getActivityLogByDocId(this.accessToken!, docID).subscribe(
         (response) => {
-           
+
           this.activityLogs = response.data || [];
           resolve(response);
         },
@@ -709,12 +719,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getLinkedCorrespondence(this.accessToken!, docID).subscribe(
         (response) => {
-           
+
           this.linkedDocs = response.data || [];
           resolve(response);
         },
         (error: any) => {
-           
+
           console.error(error);
           reject(error);
         }
@@ -726,12 +736,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getNonArchivedAttachment(this.accessToken!, docID).subscribe(
         (response) => {
-           
+
           this.nonArchAttachments = response.data || [];
           resolve(response);
         },
         (error: any) => {
-           
+
           console.error(error);
           reject(error);
         }
@@ -743,7 +753,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getTransHistory(this.accessToken!, docID).subscribe(
         (response: any) => {
-           
+
           this.transHistory = response.data || [];
           resolve(response);
         },
@@ -757,11 +767,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   getAttachments(docID: string): Promise<AttachmentsApiResponce> {
     // this.ctsDocumentId = Number(docID);
-    console.log('from attachement service'+this.ctsDocumentId)
+    console.log('from attachement service' + this.ctsDocumentId)
     return new Promise((resolve, reject) => {
       this.searchService.getAttachments(this.accessToken!, docID).subscribe(
         (response: any) => {
-           debugger;
+          debugger;
           this.attachments = response || [];
           this.TREE_DATA = this.transformAttachmentsToTree(this.attachments);
           this.dataSource.data = this.TREE_DATA;
@@ -773,7 +783,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           resolve(response);
         },
         (error: any) => {
-           
+
           console.error(error);
           reject(error);
         }
@@ -783,12 +793,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
 
   tryFetchOriginalDocument(): void {
-debugger
+    debugger
 
     // Recursive function to search for folder_originalMail
     const findOriginalMailFolder = (nodes: any[]): any => {
       for (const node of nodes) {
-        if (node.id === 'folder_originalMail' && node.name === 'Original document') {
+        if (node.id.toLowerCase() === 'folder_originalmail' && node.name.toLowerCase() === 'original document') {
           return node;
         }
         if (node.children && node.children.length > 0) {
@@ -802,7 +812,7 @@ debugger
     // Search recursively starting from root
     const originalMailFolder = findOriginalMailFolder(this.TREE_DATA);
 
-    if (originalMailFolder ?.children ?.[0] ?.id) {
+    if (originalMailFolder?.children?.[0]?.id) {
       const firstChild = originalMailFolder.children[0];
       const idParts = firstChild.id.split('_');
       if (idParts.length > 1) {
@@ -815,7 +825,7 @@ debugger
   getVisualTracking(docID: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.searchService.getVisualTracking(docID).subscribe(
-       
+
         (response) => {
           this.visualTracking = response || [];
           console.log("Visual Tracking Data:", this.visualTracking);
@@ -856,20 +866,14 @@ debugger
       version: 'autocheck',
       structId: 1,
       viewermode: viewMode,
-      ctsTransferId:this.ctsTransferId,
-      ctsDocumentId:this.ctsDocumentId
+      ctsTransferId: this.ctsTransferId,
+      ctsDocumentId: this.ctsDocumentId
     };
     const queryString = Object.entries(params)
       .map(([key, value]) => `${key}=${value}`)
       .join('&');
 
 
-    // this.searchService.getViewerInfo(23, '1.1', 1).subscribe({
-    //   next: (resp) => {
-    //     console.log('from search service')
-    //     console.log(resp);
-    //   }
-    // });
 
     console.log('--------------------------------------------------------query string ---------------------------------------')
     console.log(queryString)
@@ -879,7 +883,7 @@ debugger
   }
 
   initOrgChart(): void {
-
+    debugger
     if (!this.chartContainer || !this.visualTracking || !Array.isArray(this.visualTracking)) {
       console.error('Missing required data for OrgChart initialization');
       return;
@@ -900,8 +904,8 @@ debugger
           id: String(item.id || Math.random()),
           pid: item.parentId ? String(item.parentId) : null,
           category: isFirstNode ? (item.category || '') : (item.category || ''),
-          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`,
-          createdBy: isFirstNode ? (item.createdBy || '') : user ?.fullName || '',
+          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user?.fullName || ''}`,
+          createdBy: isFirstNode ? (item.createdBy || '') : user?.fullName || '',
           date: isFirstNode ? (item.createdDate || '') : (item.transferDate || '')
         };
       });
@@ -1003,15 +1007,15 @@ debugger
 
 
   isEnabled(name: string): boolean {
-    const attribute = this.basicAttributes ?.find((attr: BasicAttribute) => attr.Name === name);
+    const attribute = this.basicAttributes?.find((attr: BasicAttribute) => attr.Name === name);
     return attribute ? attribute.Enabled : false;
   }
 
   controlValues: { [key: string]: string } = {};
 
   getFormDataValue() {
-     
-    this.customAttributes ?.components ?.forEach((component: CustomAttributeComponent) => {
+
+    this.customAttributes?.components?.forEach((component: CustomAttributeComponent) => {
       const key = component.key;
       if (this.customFormData) {
         const value = this.customFormData[key];
@@ -1045,11 +1049,11 @@ debugger
 
     switch (this.currentLang) {
       case 'ar':
-        return item ?.nameAr || item ?.name;
+        return item?.nameAr || item?.name;
       case 'fr':
-        return item ?.nameFr || item ?.name;
+        return item?.nameFr || item?.name;
       default:
-        return item ?.name;
+        return item?.name;
     }
   }
 }
