@@ -107,18 +107,18 @@
             <label for="ddlPrivacy" class="form-label required">
               {{ "DELEGATION.PRIVACY" | translate }}
             </label>
-            <select
-              id="ddlPrivacy"
-              formControlName="privacyId"
-              class="form-control"
-            >
-              <option [ngValue]="null" hidden disabled>
-                {{ "DELEGATION.PLACEHOLDERS.SELECT_PRIVACY" | translate }}
-              </option>
-              <option *ngFor="let item of privacy" [ngValue]="item.id">
-                {{ getName(item) }}
-              </option>
-            </select>
+            <div class="custom-select">
+              <select id="ddlPrivacy"
+                      formControlName="privacyId"
+                      class="form-control">
+                <option [ngValue]="null" hidden disabled>
+                  {{ "DELEGATION.PLACEHOLDERS.SELECT_PRIVACY" | translate }}
+                </option>
+                <option *ngFor="let item of privacy" [ngValue]="item.id">
+                  {{ getName(item) }}
+                </option>
+              </select>
+            </div>
 
             <div
               *ngIf="
