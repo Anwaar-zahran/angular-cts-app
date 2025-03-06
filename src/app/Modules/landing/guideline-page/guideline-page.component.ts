@@ -154,7 +154,7 @@ export class GuidelinePageComponent implements OnInit {
     });
   }
   sortOrder: { [key: string]: 'asc' | 'desc' } = { date: 'asc', ref: 'asc' };
-  sortBy(criteria: string) {
+  sortByRef(criteria: string) {
     const activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
 
     if (!activeTab) {
@@ -174,6 +174,52 @@ export class GuidelinePageComponent implements OnInit {
 
     const newSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
     table.order([columnIndex, newSortOrder]).draw();
+  }
+
+  sortByTransfer(criteria: string) {
+    this.sortOrder[criteria] = this.sortOrder[criteria] === 'asc' ? 'desc' : 'asc';
+    const direction = this.sortOrder[criteria];
+
+    const activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
+    if (!activeTab) return;
+
+    let dataArray: any[] = [];
+    if (activeTab === '#nav-new') {
+      dataArray = this.newItems;
+    } else if (activeTab === '#nav-sent') {
+      dataArray = this.sentItems;
+    } else if (activeTab === '#nav-completed') {
+      dataArray = this.completedItems;
+    }
+
+    if (criteria === 'date') {
+      dataArray.sort((a, b) => {
+        const partsA = a.date.split('/');
+        const partsB = b.date.split('/');
+
+        const dateA = new Date(
+          parseInt(partsA[2]),
+          parseInt(partsA[1]) - 1,
+          parseInt(partsA[0])
+        );
+
+        const dateB = new Date(
+          parseInt(partsB[2]),
+          parseInt(partsB[1]) - 1,
+          parseInt(partsB[0])
+        );
+
+        return direction === 'asc' ?
+          dateA.getTime() - dateB.getTime() :
+          dateB.getTime() - dateA.getTime();
+      });
+    } else if (criteria === 'ref') {
+      dataArray.sort((a, b) => {
+        return direction === 'asc' ?
+          a.ref.localeCompare(b.ref) :
+          b.ref.localeCompare(a.ref);
+      });
+    }
   }
 
   compare(a: any, b: any, criteria: string): number {

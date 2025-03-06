@@ -455,4 +455,8 @@ export class CompleteCorrespondencesComponent implements OnInit {
       this.minToDate = null;
     }
   }
+
+  transformCategoryName(categoryName: string): string {
+    return "REPORTS.CATEGORIES." + (categoryName ? categoryName.toUpperCase().replace(/\s+/g, "_") : "UNKNOWN");
+}
 }

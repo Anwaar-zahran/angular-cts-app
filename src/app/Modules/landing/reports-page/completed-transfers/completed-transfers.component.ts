@@ -33,7 +33,7 @@ export class CompletedTransfersComponent implements OnInit {
 
   fromDate: Date | undefined;
   toDate: Date | undefined;
-  minToDate:Date | null = null;
+  minToDate: Date | null = null;
 
   selectedUsers: number[] = [];
   users: User[] = [];
@@ -357,18 +357,22 @@ export class CompletedTransfersComponent implements OnInit {
     this.structureSearchSubject.complete();
   }
 
-  preventTyping(event: KeyboardEvent): void{
-    if(!(event.ctrlKey && event.key === 'v') && !(['Backspace','Delete','ArrowLeft','ArrowRight','Tab']).includes(event.key)){
+  preventTyping(event: KeyboardEvent): void {
+    if (!(event.ctrlKey && event.key === 'v') && !(['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab']).includes(event.key)) {
       event.preventDefault();
     }
   }
 
-  onFromDateChange():void{
-    if(this.fromDate){
+  onFromDateChange(): void {
+    if (this.fromDate) {
       this.minToDate = new Date(this.fromDate);
-    }else{
+    } else {
       this.minToDate = null;
     }
+  }
+
+  transformCategoryName(categoryName: string): string {
+    return "REPORTS.CATEGORIES." + (categoryName ? categoryName.toUpperCase().replace(/\s+/g, "_") : "UNKNOWN");
   }
 
 }

@@ -2,55 +2,103 @@
   <div class="panel-heading">
     <div class="row">
       <div class="col-sm-10 pull-left">
-        {{ 'BAM.CHARTS.TRANSFERS_COMPLETED' | translate }}
+        {{ "BAM.CHARTS.TRANSFERS_COMPLETED" | translate }}
         <i class="fa fa-info-circle font-15 classInfoDivIcon"></i>
-        <div class="font-13 classInfoDiv" style="opacity: 0;">
-          {{ 'BAM.CHARTS.TRANSFERS_COMPLETED_INFO' | translate }}
+        <div class="font-13 classInfoDiv" style="opacity: 0">
+          {{ "BAM.CHARTS.TRANSFERS_COMPLETED_INFO" | translate }}
         </div>
       </div>
       <div class="col-sm-2 pull-right">
-        <button id="btnOpenSearchTransferAverageCompletionTimeModal" type="button" tabindex="3" (click)="toggleModal()"
-          class="btn btn-warning pull-right btn-searchIcon" title="Search"><i class="fa fa-filter"></i></button>
+        <button
+          id="btnOpenSearchTransferAverageCompletionTimeModal"
+          type="button"
+          tabindex="3"
+          (click)="toggleModal()"
+          class="btn btn-warning pull-right btn-searchIcon"
+          title="Search"
+        >
+          <i class="fa fa-filter"></i>
+        </button>
       </div>
     </div>
-    <span id="spanTransferAverageCompletionTime" class="spanDate" [attr.todatevalue]="toDate"
-      [attr.fromdatevalue]="fromDate"><span style="color: #444">(</span><span style="color: #444">{{ 'COMMON.FROM' |
-        translate }}</span>
-      {{fromDate}}
-      <span style="color: #444">{{ 'COMMON.TO' | translate }}
-      </span>{{toDate}}<span style="color: #444"> )</span></span>
+    <span
+      id="spanTransferAverageCompletionTime"
+      class="spanDate"
+      [attr.todatevalue]="toDate"
+      [attr.fromdatevalue]="fromDate"
+      ><span style="color: #444">(</span
+      ><span style="color: #444">{{ "COMMON.FROM" | translate }}</span>
+      {{ fromDate }}
+      <span style="color: #444">{{ "COMMON.TO" | translate }} </span>{{ toDate
+      }}<span style="color: #444"> )</span></span
+    >
   </div>
 
   <div class="panel-body">
     <div>
-      <highcharts-chart [Highcharts]="Highcharts" [options]="chartOptions"
-        style="width: 100%; height: 400px; display: block;"></highcharts-chart>
+      <highcharts-chart
+        [Highcharts]="Highcharts"
+        [options]="chartOptions"
+        style="width: 100%; height: 400px; display: block"
+      ></highcharts-chart>
     </div>
   </div>
 </div>
 
 <!-- Modal Structure -->
-<div *ngIf="isModalOpen" class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
+<div
+  *ngIf="isModalOpen"
+  class="modal fade show"
+  style="display: block"
+  tabindex="-1"
+  role="dialog"
+>
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">{{ 'BAM.CHARTS.FILTER.TITLE' | translate }}</h5>
-        <button type="button" class="close" (click)="toggleModal()" aria-label="Close">
+        <h5 class="modal-title">{{ "BAM.CHARTS.FILTER.TITLE" | translate }}</h5>
+        <button
+          type="button"
+          class="close"
+          (click)="toggleModal()"
+          aria-label="Close"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <form (ngSubmit)="applyFilter()">
           <div class="form-group">
-            <label for="fromDate">{{ 'BAM.CHARTS.FILTER.FROM_DATE' | translate }}</label>
-            <input type="date" id="fromDate" [(ngModel)]="tempFromDate" name="tempFromDate" class="form-control"
-              required>
+            <label for="fromDate">{{
+              "BAM.CHARTS.FILTER.FROM_DATE" | translate
+            }}</label>
+            <input
+              type="date"
+              id="fromDate"
+              [(ngModel)]="tempFromDate"
+              name="tempFromDate"
+              class="form-control"
+              required
+              (ngModelChange)="onFromDateChange()"
+            />
           </div>
           <div class="form-group">
-            <label for="toDate">{{ 'BAM.CHARTS.FILTER.TO_DATE' | translate }}</label>
-            <input type="date" id="toDate" [(ngModel)]="tempToDate" name="tempToDate" class="form-control" required>
+            <label for="toDate">{{
+              "BAM.CHARTS.FILTER.TO_DATE" | translate
+            }}</label>
+            <input
+              type="date"
+              id="toDate"
+              [(ngModel)]="tempToDate"
+              name="tempToDate"
+              class="form-control"
+              required
+              [min]="minToDate"
+            />
           </div>
-          <button type="submit" class="btn btn-primary">{{ 'BAM.CHARTS.FILTER.APPLY' | translate }}</button>
+          <button type="submit" class="btn btn-primary">
+            {{ "BAM.CHARTS.FILTER.APPLY" | translate }}
+          </button>
         </form>
       </div>
     </div>

@@ -154,7 +154,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of reports">
-          <td>{{ item.categoryName }}</td>
+          <td>{{ transformCategoryName(item.categoryName) | translate }}</td>
           <td>{{ item.referenceNumber }}</td>
           <td>{{ item.subject }}</td>
           <td>{{ joinStructureAndUser(item.fromStructure, item.fromUser) }}</td>

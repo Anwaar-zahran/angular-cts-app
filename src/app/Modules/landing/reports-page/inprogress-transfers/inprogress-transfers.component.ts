@@ -355,8 +355,13 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
     onFromDateChange(): void {
         if (this.fromDate) {
             this.minToDate = new Date(this.fromDate)
-        }else{
+        } else {
             this.minToDate = null;
         }
     }
+
+    transformCategoryName(categoryName: string): string {
+        return "REPORTS.CATEGORIES." + (categoryName ? categoryName.toUpperCase().replace(/\s+/g, "_") : "UNKNOWN");
+    }
+
 } 

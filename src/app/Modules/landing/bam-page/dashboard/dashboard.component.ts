@@ -40,9 +40,7 @@ export class DashboardComponent implements OnInit {
 
   fromDate: string = Helpers.formatDateToYYYYMMDD(new Date(new Date().setMonth(new Date().getMonth() - 1)));
   toDate: string = Helpers.formatDateToYYYYMMDD(new Date());
-  // fromDate: Date | undefined;
-  // toDate: Date | undefined;
-  // minToDate: Date | null = null;
+  minToDate: string | null = null;
   
 
   tempFromDate: string = this.fromDate;
@@ -93,14 +91,19 @@ export class DashboardComponent implements OnInit {
     this.toggleModal();
   }
 
-  // onFromDateChange() {
-  //   if (this.fromDate) {
-  //     this.minToDate = new Date(this.fromDate);
-  //     this.minToDate.setDate(this.minToDate.getDate() + 1); // Ensure `toDate` is after `fromDate`
-  //   } else {
-  //     this.minToDate = null; // Reset restriction if no `fromDate`
-  //   }
-  // }
+
+  onFromDateChange() {
+    console.log(this.tempFromDate);
+    if (this.tempFromDate) {
+      let fromDate = new Date(this.tempFromDate);
+      fromDate.setDate(fromDate.getDate());
+      
+      this.minToDate = fromDate.toISOString().split('T')[0];
+    } else {
+      this.minToDate = null;
+    }
+  }
+  
 
   preventTyping(event: KeyboardEvent): void {
     if ((event.key === 'v' && event.ctrlKey) && (['Backspace', 'Delete', 'Tap', 'ArrowLeft', 'ArrowRight'])) {

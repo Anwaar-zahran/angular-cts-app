@@ -19,6 +19,8 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
   @Input() categories: { id: number, text: string }[] = [];
+  minToDate: string | null = null;
+
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
@@ -150,6 +152,18 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
     this.toDate = this.tempToDate;
     this.loadChartData();
     this.toggleModal();
+  }
+
+  onFromDateChange() {
+    console.log(this.tempFromDate);
+    if (this.tempFromDate) {
+      let fromDate = new Date(this.tempFromDate);
+      fromDate.setDate(fromDate.getDate());
+      
+      this.minToDate = fromDate.toISOString().split('T')[0];
+    } else {
+      this.minToDate = null;
+    }
   }
 
 }

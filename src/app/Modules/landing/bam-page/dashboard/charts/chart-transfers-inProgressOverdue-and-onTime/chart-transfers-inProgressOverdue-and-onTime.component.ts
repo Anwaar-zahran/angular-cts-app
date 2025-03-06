@@ -22,6 +22,9 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
   @Input() categories: { id: number, text: string }[] = [];
+  
+  minToDate: string | null = null;
+
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
@@ -143,4 +146,17 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
     this.loadChartData();
     this.toggleModal();
   }
+
+  onFromDateChange() {
+    console.log(this.tempFromDate);
+    if (this.tempFromDate) {
+      let fromDate = new Date(this.tempFromDate);
+      fromDate.setDate(fromDate.getDate());
+      
+      this.minToDate = fromDate.toISOString().split('T')[0];
+    } else {
+      this.minToDate = null;
+    }
+  }
+  
 }

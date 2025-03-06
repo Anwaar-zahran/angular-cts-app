@@ -840,7 +840,6 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   getViewerUrl(): void {
-    debugger;
     //const baseUrl = 'https://java-qatar.d-intalio.com/VIEWER/file?isCustomMode=true';
     const baseUrl = `${environment.viewerUrl}`;
     const token = this.authService.getToken();
@@ -855,6 +854,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     const currentLang = this.translate.currentLang;
 
     var viewMode = 'edit'
+    
     if (this.isLocKed) {
       viewMode = 'view';
     }
@@ -898,10 +898,18 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         const user = this.users.find(u => u.id === item.userId) || { name: '' };
 
         const isFirstNode = index === 0;
+        const categoryKey = item.category.toUpperCase().replace(/\s+/g, "_");
+        let categoryTranslation = this.translate.instant(`VISUAL_TRACKING.DETAILS.CATEGORY.${categoryKey}`) || item.category;
+
+        if(categoryTranslation.startsWith('VISUAL_TRACKING')){
+          categoryTranslation = item.category;
+        }
+        console.log('category')
+        console.log(categoryTranslation);
         return {
           id: String(item.id || Math.random()),
           pid: item.parentId ? String(item.parentId) : null,
-          category: isFirstNode ? (item.category || '') : (item.category || ''),
+          category: isFirstNode ? categoryTranslation : categoryTranslation,                                 //(item.category || '') : (item.category || ''),
           title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user?.fullName || ''}`,
           createdBy: isFirstNode ? (item.createdBy || '') : user?.fullName || '',
           date: isFirstNode ? (item.createdDate || '') : (item.transferDate || '')
@@ -967,7 +975,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             pdf: null
           },
           elements: [
-            { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.CATEGORY'), binding: 'category', readOnly: true },
+            { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.CATEGORY.TITLE'), binding: 'category', readOnly: true },
             { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.TITLE_STRUCTURE'), binding: 'title', readOnly: true },
             { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.CREATED_BY_USER'), binding: 'createdBy', readOnly: true },
             { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.DATE'), binding: 'date', readOnly: true }
