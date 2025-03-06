@@ -34,7 +34,8 @@ export class SearchPageService {
     const payload = accessToken.split('.')[1]; // Get the payload (2nd part)
     const decodedPayload = this.base64UrlDecode(payload);
     const parsedPayload = JSON.parse(decodedPayload);
-    const structureId = parsedPayload.StructureId; // Adjust based on your token's payload
+    //const structureId = parsedPayload.StructureId; // Adjust based on your token's payload
+    const structureId = localStorage.getItem('structureId') || parsedPayload.StructureId;
     const draw = 0;
     const start = 0;
     const length = 10000;

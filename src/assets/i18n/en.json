@@ -150,7 +150,8 @@
       "TYPE": "Type",
       "QUANTITY": "Quantity",
       "DESC": "Description",
-      "OriginalDoc": "Original Document"
+      "OriginalDoc": "Original Document",
+      "Documents": "Documents"
 
     },
     "HISTORY": {
@@ -389,6 +390,8 @@
         "DOCUMENTS_COMPLETED": "Documents Completed (Overdue and On Time)",
         "TRANSFERS_IN_PROGRESS": "Transfers In Progress (Overdue and On Time)",
         "TRANSFERS_COMPLETED": "Transfers Completed (Overdue and On Time)",
+        "NO_DATA_FOUND": "No Data Found",
+
         "STATISTICS_PER_STRUCTURE": {
           "TITLE": "Statistics per structure",
           "INFO": "Number of correspondences for each structure grouped by category"
@@ -436,7 +439,7 @@
           "CATEGORY": "Category",
           "TRANSFERS": "transfers",
           "VALUE": "Value",
-          "PERCENTAGE":"Percentage"
+          "PERCENTAGE": "Percentage"
         }
       }
     },
