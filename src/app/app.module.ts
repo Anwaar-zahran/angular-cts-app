@@ -1,4 +1,4 @@
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -34,11 +34,6 @@ import { LoaderComponent } from './Modules/shared/loader/loader.component';
 declare var $: any;
 if (typeof $ !== 'undefined') {
   $.fn.dataTable.ext.errMode = 'none';
-}
-
-// Factory to provide LOCALE_ID dynamically
-export function localeIdFactory(languageService: LanguageService): string {
-  return languageService.getCurrentLang();
 }
 
 export function tokenGetter() {
@@ -92,11 +87,6 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   providers: [
     LanguageService,
-    {
-      provide: LOCALE_ID,
-      useFactory: localeIdFactory,
-      deps: [LanguageService],
-    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
