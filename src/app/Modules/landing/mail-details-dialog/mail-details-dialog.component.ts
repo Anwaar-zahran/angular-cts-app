@@ -328,10 +328,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       autoWidth: false,
       language: {
         paginate: {
-          first: "<i class='text-secondary fa fa-angle-left'></i>",
-          previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-          next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-          last: "<i class='text-secondary fa fa-angle-right'></i>",
+          first: "<i class='text-secondary fa fa-angle-double-left'></i>",
+          previous: "<i class='text-secondary fa fa-angle-left'></i>",
+          next: "<i class='text-secondary fa fa-angle-right'></i>",
+          last: "<i class='text-secondary fa fa-angle-double-right'></i>",
         },
       },
       dom: 'tp',
