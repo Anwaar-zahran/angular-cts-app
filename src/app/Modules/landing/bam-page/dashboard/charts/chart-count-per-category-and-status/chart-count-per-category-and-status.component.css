@@ -1,0 +1,10 @@
+.classInfoDiv {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0s 0.3s;
+}
+
+.col-sm-10.pull-left:hover .classInfoDiv {
+  opacity: 1;
+  visibility: visible;
+}

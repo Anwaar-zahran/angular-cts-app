@@ -278,6 +278,7 @@
     "DELETE_SUCCESS": "تم حذف التفويض بنجاح",
     "SAVE_SUCCESS": "تم حفظ التفويض بنجاح",
     "UPDATE_SUCCESS": "تم تحديث التفويض بنجاح",
+    "Duplicate_Error": "تم تفويض المستخدم بالفعل",
     "PLACEHOLDERS": {
       "SELECT_USER": "اختر المستخدم",
       "SELECT_PRIVACY": "اختر مستوى الخصوصية",
@@ -406,7 +407,8 @@
             "TRANSFERS_IN_PROGRESS": "التحويلات قيد التنفيذ (متأخرة وفي الوقت المحدد)",
             "TRANSFERS_COMPLETED": "التحويلات المكتملة (متأخرة وفي الوقت المحدد)",
             "NO_DATA_FOUND": "لا يوجد بيانات",
-
+            "STATUS_CAREGORY": "العدد حسب الحالة مجمعة حسب الفئة",
+            "STATUS_CAREGORY_INFO": "عدد المراسلات التي أنشأتها مجمعة حسب الفئة والحالة",
             "STATISTICS_PER_STRUCTURE": {
               "TITLE": "الإحصائيات حسب الهيكل",
               "INFO": "عدد المراسلات لكل هيكل مجمعة حسب الفئة"
