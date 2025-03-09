@@ -7,12 +7,14 @@ import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
 import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 @Component({
   selector: 'app-chart-system-statistics-per-department',
   templateUrl: './chart-system-statistics-per-department.component.html',
   styleUrls: ['./chart-system-statistics-per-department.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule,MatTooltipModule]
 })
 export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnChanges {
 
@@ -20,6 +22,7 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
   minToDate : string | null = null;
+  info!:string;
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
@@ -27,6 +30,7 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
   tempFromDate: string = this.fromDate;
   tempToDate: string = this.toDate;
   isModalOpen: boolean = false;
+  isDataAvailable:boolean = false;
   entities: { id: number, name: string }[] = [];
   private languageSubscription!: Subscription;
 
@@ -39,6 +43,7 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
   ngOnInit() {
 
     this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.info = this.translateService.instant("BAM.CHARTS.INFO.STATISTICS_PER_STRUCTURE")
       this.loadChartData();
     });
     this.lookupsService.getEntities().subscribe((res: any) => {
@@ -98,6 +103,9 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
 
         console.log('series new data ')
         console.log(seriesData)
+        if(seriesData.length > 0){
+          this.isDataAvailable = true;
+        }
         const translateService = this.translateService;
 
         this.chartOptions = {

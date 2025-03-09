@@ -7,12 +7,14 @@ import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
 import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 @Component({
   selector: 'app-chart-system-count-per-category-and-status',
   templateUrl: './chart-system-count-per-category-and-status.component.html',
   styleUrls: ['./chart-system-count-per-category-and-status.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule,MatTooltipModule]
 })
 export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
 
@@ -20,9 +22,11 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
   minToDate: string | null = null;
+  info!:string;
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
+  isDataAvailable:boolean = false;
 
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
@@ -38,6 +42,7 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
 
   ngOnInit() {
     this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.info = this.translateService.instant("BAM.CHARTS.INFO.COUNT_PER_STATUS")
       this.loadChartData();
     });
     // Only load chart data when categories are available
@@ -91,6 +96,10 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
             return null;
           })
           .filter((series): series is NonNullable<typeof series> => series !== null);
+          
+          if(seriesData.length > 0){
+            this.isDataAvailable = true;
+          }
 
         this.renderChart(seriesData);
       });

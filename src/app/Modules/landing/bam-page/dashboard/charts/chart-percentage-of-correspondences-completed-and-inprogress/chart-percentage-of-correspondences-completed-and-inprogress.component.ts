@@ -6,29 +6,33 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 
 @Component({
   selector: 'app-chart-percentage-of-correspondences-completed-and-inprogress',
   templateUrl: './chart-percentage-of-correspondences-completed-and-inprogress.component.html',
   styleUrls: ['./chart-percentage-of-correspondences-completed-and-inprogress.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule,MatTooltipModule]
 })
 export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent implements OnInit, OnChanges, OnDestroy {
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
+  info!: string;
 
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
   @Input() categories: { id: number, text: string }[] = [];
   minToDate: string | null = null;
+  isDataAvailable: boolean = false;
 
 
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
-  private languageSubscription! : Subscription;
+  private languageSubscription!: Subscription;
 
   constructor(
     private chartsService: ChartsService,
@@ -37,11 +41,12 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
 
   ngOnInit() {
 
-    this.languageSubscription = this.translate.onLangChange.subscribe((event:LangChangeEvent) =>{
-          this.loadChartData();
-        })
+    this.languageSubscription = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.info = this.translate.instant("BAM.CHARTS.COMPLETION_VS_PROGRESS_INFO")
+      this.loadChartData();
+    })
 
-        
+
     // Only load chart data when categories are available
     if (this.categories && this.categories.length > 0) {
       this.loadChartData();
@@ -71,21 +76,28 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
       .GetDocumentsCompletedAndInProgressByUser({
         fromDate: this.fromDate,
         toDate: this.toDate,
-        structureId:  localStorage.getItem('structureId') || "1",
+        structureId: localStorage.getItem('structureId') || "1",
         categoryIds: []
       })
       .subscribe((res: { text: string, count: number }[]) => {
         this.translate.get(['', 'Status.InProgress', 'Status.Completed']).subscribe(translations => {
-          
-          const chartData = res.map(item => {
-            const translatedText = this.translate.instant(`BAM.DASHBOARD.CHARTS.STATUS.${item.text.toUpperCase()}`);
-            console.log(translatedText)
-            return {
-              name: translatedText,
-              y: item.count
-            };
-          });
-  
+
+          const chartData = res
+            .filter(item => item.count > 0)
+            .map(item => {
+              const translatedText = this.translate.instant(`BAM.DASHBOARD.CHARTS.STATUS.${item.text.toUpperCase()}`);
+              console.log(translatedText)
+
+              return {
+                name: translatedText,
+                y: item.count
+              };
+            });
+
+          if (chartData.length > 0) {
+            this.isDataAvailable = true;
+          }
+
           this.chartOptions = {
             chart: {
               type: 'pie',
@@ -127,8 +139,8 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
         });
       });
   }
-  
-  
+
+
 
   toggleModal() {
     this.isModalOpen = !this.isModalOpen;
@@ -152,7 +164,7 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
     if (this.tempFromDate) {
       let fromDate = new Date(this.tempFromDate);
       fromDate.setDate(fromDate.getDate());
-      
+
       this.minToDate = fromDate.toISOString().split('T')[0];
     } else {
       this.minToDate = null;

@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -13,12 +14,12 @@ import { Subscription } from 'rxjs';
   selector: 'app-chart-transfer-completion-statistics',
   templateUrl: './chart-transfer-completion-statistics.component.html',
   styleUrls: ['./chart-transfer-completion-statistics.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule,MatTooltipModule]
 })
 export class ChartTransferCompletionStatisticsComponent implements OnInit, OnChanges {
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
-
+  info!:string
   // @Input() fromDate: Date | undefined;
   // @Input() toDate: Date | undefined;
 
@@ -29,6 +30,7 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
+  isDataAvailable: boolean = false;
 
   // tempFromDate: Date | undefined;
   // tempToDate: Date | undefined;
@@ -41,6 +43,7 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
   ngOnInit() {
 
     this.languageSubscription = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.info = this.translate.instant("BAM.CHARTS.TRANSFER_COMPLETION_INFO")
       this.loadChartData();
     });
 
@@ -62,6 +65,9 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
         const averageCreatedByUser = (parseFloat(res?.averageCreatedByUser) || 0) / 10000;
         const averageTransfers = (parseFloat(res?.averageTransfers) || 0) / 10000;
   
+        if(averageCreatedByUser > 0 || averageTransfers > 0){
+          this.isDataAvailable = true
+        }
         const isRTL = document.dir === 'rtl';
   
         this.chartOptions = {
@@ -122,7 +128,7 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
             {
               name: this.translate.instant('BAM.CHARTS.TRANSFER_COMPLETION_STATISTICS.AVERAGE_CREATED_BY_USER'),
               type: 'column',
-              data: [averageCreatedByUser || 0, averageTransfers || 0],
+              data: [averageCreatedByUser , averageTransfers],
             },
           ],
           legend: {
