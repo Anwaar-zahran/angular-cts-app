@@ -73,7 +73,7 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
         categoryIds: []
       })
       .subscribe((res: { text: string, count: number }[]) => {
-        this.translate.get(['BAM.CHARTS.COMPLETION_VS_PROGRESS', 'Status.InProgress', 'Status.Completed']).subscribe(translations => {
+        this.translate.get(['', 'Status.InProgress', 'Status.Completed']).subscribe(translations => {
           
           const chartData = res.map(item => {
             const translatedText = this.translate.instant(`BAM.DASHBOARD.CHARTS.STATUS.${item.text.toUpperCase()}`);
