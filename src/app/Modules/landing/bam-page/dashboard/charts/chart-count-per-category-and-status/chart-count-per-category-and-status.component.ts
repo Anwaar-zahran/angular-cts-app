@@ -7,20 +7,23 @@ import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
 import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 @Component({
   selector: 'app-chart-count-per-category-and-status',
   templateUrl: './chart-count-per-category-and-status.component.html',
   styleUrls: ['./chart-count-per-category-and-status.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule,MatTooltipModule]
 })
 export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestroy {
   @Input() categories: { id: number, text: string }[] = [];
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
   minToDate: string | null = null;
+  info!:string;
 
-
+  isDataAvailable:boolean = false;
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
 
@@ -48,6 +51,7 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
   ngOnInit() {
 
     this.languageSubscription = this.translate.onLangChange.subscribe((event:LangChangeEvent)=>{
+      this.info = this.translate.instant("BAM.CHARTS.INFO.COUNT_PER_STATUS")
       this.loadChartData();
     });
     // Only load chart data when categories are available
@@ -119,7 +123,9 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
           .filter((series): series is NonNullable<typeof series> => series !== null);
         console.log('serrrrrrrrrrrrrr')
         console.log(seriesData); // Debugging: Check the data
-
+        if(seriesData.length > 0){
+          this.isDataAvailable = true;
+        }
         this.chartOptions = {
           chart: {
             type: 'column',

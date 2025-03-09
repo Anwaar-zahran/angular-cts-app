@@ -7,17 +7,20 @@ import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
 import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 @Component({
   selector: 'app-chart-transfers-inProgressOverdue-and-onTime',
   templateUrl: './chart-transfers-inProgressOverdue-and-onTime.component.html',
   styleUrls: ['./chart-transfers-inProgressOverdue-and-onTime.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule,MatTooltipModule]
 })
 export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit, OnChanges {
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
+  info!:string;
 
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
@@ -28,6 +31,7 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
+  isDataAvailable: boolean = false;
   private languageSubscription!: Subscription;
 
   constructor(
@@ -39,6 +43,7 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
   ngOnInit() {
 
     this.languageSubscription = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.info = this.translate.instant("BAM.CHARTS.TRANSFERS_IN_PROGRESS_INFO")
       this.loadChartData();
     });
     // Only load chart data when categories are available
@@ -71,11 +76,17 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
           const overdueItem = res.overDue.find(item => item.categoryId === cat.id) || { count: 0 };
           const onTimeItem = res.onTime.find(item => item.categoryId === cat.id) || { count: 0 };
  
-          if (overdueItem.count > 0 || onTimeItem.count > 0) {
+          if (onTimeItem.count > 0) {
+            categoryNames.push(cat.text);
+            onTimeData.push(onTimeItem.count);
+            this.isDataAvailable = true;
+          }
+          if(overdueItem.count > 0){
             categoryNames.push(cat.text);
             overdueData.push(overdueItem.count);
-            onTimeData.push(onTimeItem.count);
+            this.isDataAvailable = true;
           }
+
         });
         
         this.drawChart(categoryNames, overdueData, onTimeData);

@@ -7,18 +7,21 @@ import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
 import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 
 @Component({
   selector: 'app-chart-system-documents-inProgress-overdue-and-onTime-per-category',
   templateUrl: './chart-system-documents-inProgress-overdue-and-onTime-per-category.component.html',
   styleUrls: ['./chart-system-documents-inProgress-overdue-and-onTime-per-category.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule,MatTooltipModule]
 })
 export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent implements OnInit {
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
+  info!:string;
 
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
@@ -37,6 +40,12 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
   ) { }
 
   ngOnInit() {
+
+    this.translateService.get("BAM.CHARTS.DUE_DATE_IN_PROGRESS_INFO").subscribe((translatedText: string) => {
+      this.info = translatedText;
+    });
+  
+
     // Only load chart data when categories are available
     if (this.categories && this.categories.length > 0) {
       this.loadChartData();
@@ -70,10 +79,13 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
           const overdueItem = res.overDue.find(item => item.categoryId === cat.id) || { count: 0 };
           const onTimeItem = res.onTime.find(item => item.categoryId === cat.id) || { count: 0 };
 
-          if (overdueItem.count > 0 || onTimeItem.count > 0) {
+          if (onTimeItem.count > 0) {
+            categoryNames.push(cat.text);
+            onTimeData.push(onTimeItem.count);
+          }
+          if(overdueItem.count > 0){
             categoryNames.push(cat.text);
             overdueData.push(overdueItem.count);
-            onTimeData.push(onTimeItem.count);
           }
         });
 

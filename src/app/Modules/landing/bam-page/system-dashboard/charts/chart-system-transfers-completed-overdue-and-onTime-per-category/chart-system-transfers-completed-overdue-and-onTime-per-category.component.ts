@@ -7,16 +7,19 @@ import { FormsModule } from '@angular/forms';
 import { LookupsService } from '../../../../../../services/lookups.service';
 import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 @Component({
   selector: 'app-chart-system-transfers-completed-overdue-and-onTime-per-category',
   templateUrl: './chart-system-transfers-completed-overdue-and-onTime-per-category.component.html',
   styleUrls: ['./chart-system-transfers-completed-overdue-and-onTime-per-category.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule,MatTooltipModule]
 })
 export class ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent implements OnInit {
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
+  info!:string;
 
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
@@ -25,6 +28,7 @@ export class ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent i
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
+  isDataAvailable: boolean = true;
   private languageSubscription!: Subscription;
 
   constructor(
@@ -36,6 +40,7 @@ export class ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent i
   ngOnInit() {
 
     this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.info = this.translateService.instant("BAM.CHARTS.TRANSFERS_COMPLETED_INFO")
       this.loadChartData();
     });
     // Only load chart data when categories are available
@@ -67,10 +72,15 @@ export class ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent i
           const overdueItem = res.overDue.find(item => item.categoryId === cat.id) || { count: 0 };
           const onTimeItem = res.onTime.find(item => item.categoryId === cat.id) || { count: 0 };
 
-          if (overdueItem.count > 0 || onTimeItem.count > 0) {
+          if (onTimeItem.count > 0) {
+            categoryNames.push(cat.text);
+            onTimeData.push(onTimeItem.count);
+            this.isDataAvailable = true;
+          }
+          if(overdueItem.count > 0){
             categoryNames.push(cat.text);
             overdueData.push(overdueItem.count);
-            onTimeData.push(onTimeItem.count);
+            this.isDataAvailable = true;
           }
         });
 
