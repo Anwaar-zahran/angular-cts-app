@@ -218,4 +218,17 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
     }
   }
 
+  opacity: string = '0';
+  visibility: string = 'hidden';
+
+  showInfo() {
+    debugger;
+    this.opacity = '1';
+    this.visibility = 'visible';
+  }
+
+  hideInfo() {
+    this.opacity = '0';
+    this.visibility = 'hidden';
+  }
 }

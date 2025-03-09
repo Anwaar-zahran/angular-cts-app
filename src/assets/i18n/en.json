@@ -284,6 +284,7 @@
     "DELETE_SUCCESS": "Delegation deleted successfully",
     "SAVE_SUCCESS": "Delegation saved successfully",
     "UPDATE_SUCCESS": "Delegation updated successfully",
+    "Duplicate_Error": "User already delegated",
     "PLACEHOLDERS": {
       "SELECT_USER": "Select user",
       "SELECT_PRIVACY": "Select privacy",
@@ -412,6 +413,8 @@
         "DOCUMENTS_COMPLETED": "Documents Completed (Overdue and On Time)",
         "TRANSFERS_IN_PROGRESS": "Transfers In Progress (Overdue and On Time)",
         "TRANSFERS_COMPLETED": "Transfers Completed (Overdue and On Time)",
+        "STATUS_CAREGORY": "Count per Status Grouped by Category",
+        "STATUS_CAREGORY_INFO": "Number of correspondences created by you grouped by category and status",
         "NO_DATA_FOUND": "No Data Found",
 
         "STATISTICS_PER_STRUCTURE": {
