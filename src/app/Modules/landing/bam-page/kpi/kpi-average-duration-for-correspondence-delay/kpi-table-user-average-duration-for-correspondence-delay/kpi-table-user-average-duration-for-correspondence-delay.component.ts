@@ -129,6 +129,7 @@ export class KpiTableUserAverageDurationForCorrespondenceDelayComponent implemen
   }
 
   loadData() {
+    debugger;
     this.userPerStructure = [];
 
     this.kpiService.ListUserStructureAverageDurationForCorrespondenceDelay(this.structureId, this.year).subscribe({

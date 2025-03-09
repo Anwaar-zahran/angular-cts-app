@@ -379,7 +379,7 @@ export class SearchPageComponent {
 
     this.searchService.searchInbox(this.accessToken!, formattedSearchModel).subscribe((result: SearchResponse) => {
       this.response = result;
-      this.response.data.forEach(item => {
+      this.response?.data?.forEach(item => {
         item.categoryText = item.categoryId != null ? this.categories[item.categoryId - 1].text : '';
         item.statusText = item.statusId != null ? this.statuses[item.statusId - 1].text : '';
         item.priorityText = item.priorityId != null ? this.priorities[item.priorityId - 1].text : '';

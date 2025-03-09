@@ -38,6 +38,7 @@ export class KpiChartStructureAverageDurationForCorrespondenceDelayComponent imp
   ) { }
 
   ngOnInit() {
+    debugger;
     this.loadChartData();
 
     this.langChangeSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
