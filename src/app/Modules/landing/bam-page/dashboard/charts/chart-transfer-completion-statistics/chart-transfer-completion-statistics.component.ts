@@ -60,7 +60,9 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
       .subscribe((res: any) => {
         const averageCreatedByUser = (parseFloat(res?.averageCreatedByUser) || 0) / 10000;
         const averageTransfers = (parseFloat(res?.averageTransfers) || 0) / 10000;
-
+  
+        const isRTL = document.dir === 'rtl';
+  
         this.chartOptions = {
           chart: {
             type: 'column',
@@ -89,9 +91,12 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
               this.translate.instant('BAM.CHARTS.TRANSFER_COMPLETION_STATISTICS.AVERAGE_TRANSFERS')
             ],
             crosshair: true,
+            reversed: isRTL,
           },
           yAxis: {
             min: 0,
+            reversed: false,
+            opposite: isRTL,
             title: {
               text: this.translate.instant("BAM.DASHBOARD.CHARTS.LABELS.VALUE"),
             },
@@ -103,6 +108,14 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
           },
           tooltip: {
             pointFormat: '{series.name}: <b>{point.y:.1f}</b>',
+            style: {
+              textAlign: isRTL ? 'right' : 'left'
+            }
+          },
+          plotOptions: {
+            series: {
+              stacking: undefined
+            }
           },
           series: [
             {
@@ -111,6 +124,9 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
               data: [averageCreatedByUser || 0, averageTransfers || 0],
             },
           ],
+          legend: {
+            rtl: isRTL
+          },
         };
       });
   }
