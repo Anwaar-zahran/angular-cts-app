@@ -293,10 +293,10 @@ export class SearchPageComponent {
       autoWidth: false,
       language: {
         paginate: {
-          first: "<i class='text-secondary fa fa-angle-left'></i>",
-          previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-          next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-          last: "<i class='text-secondary fa fa-angle-right'></i>",
+          first: "<i class='text-secondary fa fa-angle-double-left'></i>",
+          previous: "<i class='text-secondary fa fa-angle-left'></i>",
+          next: "<i class='text-secondary fa fa-angle-right'></i>",
+          last: "<i class='text-secondary fa fa-angle-double-right'></i>",
         },
       },
       dom: 'tp',
@@ -382,6 +382,7 @@ export class SearchPageComponent {
       this.response = result;
       console.log(this.response.recordsTotal)
       this.response.data.forEach(item => {
+
         item.categoryText = item.categoryId != null ? this.categories[item.categoryId - 1].text : '';
         item.statusText = item.statusId != null ? this.statuses[item.statusId - 1].text : '';
         item.priorityText = item.priorityId != null ? this.priorities[item.priorityId - 1].text : '';

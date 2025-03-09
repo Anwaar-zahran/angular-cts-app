@@ -247,15 +247,9 @@
             </td>
             <td>
               <span>
-                <img
-                  alt=""
-                  [src]="
-                    item.isRead
-                      ? 'assets/images/icons/open-message.svg'
-                      : 'assets/images/icons/red-email.svg'
-                  "
-                />
-              </span>
+
+                <img src='assets/images/icons/open-message.svg'/>
+            </span>
               <span *ngIf="item.isOverDue">
                 <img alt="" src="assets/images/icons/clock.svg" />
               </span>
@@ -273,20 +267,13 @@
       "
     >
       <div class="dataTables_paginate paging_full_numbers">
-        <a
-          class="paginate_button first"
-          [class.disabled]="currentPage === 1"
-          (click)="goToPage(1)"
-        >
-          <i class="text-secondary fa fa-angle-left"></i>
-        </a>
 
-        <a
-          class="paginate_button previous"
-          [class.disabled]="currentPage === 1"
-          (click)="previousPage()"
-        >
+        <a class="paginate_button first" [class.disabled]="currentPage === 1" (click)="goToPage(1)">
           <i class="text-secondary fa fa-angle-double-left"></i>
+        </a>
+    
+        <a class="paginate_button previous" [class.disabled]="currentPage === 1" (click)="previousPage()">
+          <i class="text-secondary fa fa-angle-left"></i>
         </a>
 
         <span class="d-inline-flex align-items-center mx-2">
@@ -302,20 +289,13 @@
           {{ "COMMON.OF" | translate }} {{ totalPages }}
         </span>
 
-        <a
-          class="paginate_button next"
-          [class.disabled]="currentPage === totalPages"
-          (click)="nextPage()"
-        >
-          <i class="text-secondary fa fa-angle-double-right"></i>
-        </a>
-
-        <a
-          class="paginate_button last"
-          [class.disabled]="currentPage === totalPages"
-          (click)="goToPage(totalPages)"
-        >
+    
+        <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()">
           <i class="text-secondary fa fa-angle-right"></i>
+        </a>
+    
+        <a class="paginate_button last" [class.disabled]="currentPage === totalPages" (click)="goToPage(totalPages)">
+          <i class="text-secondary fa fa-angle-double-right"></i>
         </a>
       </div>
     </div>

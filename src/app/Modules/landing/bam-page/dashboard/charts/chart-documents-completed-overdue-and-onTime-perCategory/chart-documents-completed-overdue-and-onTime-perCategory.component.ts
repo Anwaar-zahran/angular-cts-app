@@ -135,7 +135,22 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
           data: onTimeData,
           color: '#00695E'
         }
-      ]
+      ],
+    
+      lang: {
+      noData: this.translate.instant('BAM.CHARTS.NO_DATA_FOUND') 
+    },
+    noData: {
+      position: {
+        align: 'center',
+          verticalAlign: 'middle'
+      },
+      style: {
+        fontWeight: 'bold',
+          fontSize: '15px',
+            color: '#303030'
+      }
+    }
     };
   }
 

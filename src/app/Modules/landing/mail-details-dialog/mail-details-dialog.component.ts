@@ -208,7 +208,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     console.log('Dialog opened with ID:', this.data.id, 'and Reference Number:', this.data.referenceNumber);
     this.accessToken = this.authService.getToken();
     //if (!this.accessToken) {
-    //  debugger
+    //   
     //  this.router.navigate(['/login']);
     //  return;
     //}
@@ -328,10 +328,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       autoWidth: false,
       language: {
         paginate: {
-          first: "<i class='text-secondary fa fa-angle-left'></i>",
-          previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-          next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-          last: "<i class='text-secondary fa fa-angle-right'></i>",
+          first: "<i class='text-secondary fa fa-angle-double-left'></i>",
+          previous: "<i class='text-secondary fa fa-angle-left'></i>",
+          next: "<i class='text-secondary fa fa-angle-right'></i>",
+          last: "<i class='text-secondary fa fa-angle-double-right'></i>",
         },
       },
       dom: 'tp',
@@ -435,7 +435,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   private createTreeNode(attachment: any): TreeNode {
     const node: TreeNode = {
       id: attachment.id,
-      name: (attachment.text == "Original document") ? this.translate.instant('MAIL_DETAILS.ATTACHMENT.OriginalDoc') : (attachment.text == "Documents") ? "المستندات" : attachment.name || attachment.text || 'Unnamed Attachment',
+      name: this.getAttachmentName(attachment),
+      //name: (attachment.text == "Original document") ? this.translate.instant('MAIL_DETAILS.ATTACHMENT.OriginalDoc') : (attachment.text == "Documents") ? this.translate.instant('MAIL_DETAILS.ATTACHMENT.Documents') : attachment.name || attachment.text || 'Unnamed Attachment',
       expanded: true
     };
 
@@ -447,6 +448,23 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     }
     return node;
   }
+
+  getAttachmentName(attachment: any) {
+     
+    const { text, name } = attachment;
+
+    // Define constants for hardcoded strings
+    const ORIGINAL_DOCUMENT = "Original document";
+    const DOCUMENTS = "Documents";
+
+    if (text === ORIGINAL_DOCUMENT) {
+      return this.translate.instant('MAIL_DETAILS.ATTACHMENT.OriginalDoc');
+    } else if (text === DOCUMENTS) {
+      return this.translate.instant('MAIL_DETAILS.ATTACHMENT.Documents');
+    } else {
+      return name || text || 'Unnamed Attachment';
+    }
+  };
 
   // Update the transformer to include expanded state
   private _transformer = (node: TreeNode, level: number): FlatTreeNode => ({
@@ -512,7 +530,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   async fetchDetails(docID: string): Promise<void> {
-    debugger
+     
     try {
       // Create an array of promises for all data fetching operations
       const promises = [
@@ -526,18 +544,18 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.getVisualTracking(docID)
       ];
 
-      if (this.showMyTransferTab && this.data?.row?.id) {
+      if (this.showMyTransferTab && this.data ?.row ?.id) {
         promises.push(this.getTransfer(this.data.row.id));
       }
 
       const results = await Promise.all(promises);
 
       this.attributes = results[0];
-      this.nonArchAttachments = results[1]?.data;
-      this.linkedDocs = results[2]?.data;
-      this.activityLogs = this.data.fromSearch ? results[3] : results[3]?.data;
+      this.nonArchAttachments = results[1] ?.data;
+      this.linkedDocs = results[2] ?.data;
+      this.activityLogs = this.data.fromSearch ? results[3] : results[3] ?.data;
       this.notes = results[4].data;
-      this.transHistory = results[5]?.data;
+      this.transHistory = results[5] ?.data;
       this.attachments = results[6];
       this.visualTracking = results[7];
 
@@ -552,9 +570,9 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.priorityId = this.attributes.priorityId ?? '';
       this.docTypeId = this.attributes.documentTypeId ?? '';
 
-      if (this.linkedDocs?.length > 0) {
+      if (this.linkedDocs ?.length > 0) {
         this.mappedArray = this.linkedDocs.map((doc: any) => {
-          const foundItem = this.categories?.data.find((cat: any) => cat.id === doc.categoryId);
+          const foundItem = this.categories ?.data.find((cat: any) => cat.id === doc.categoryId);
           return {
             id: doc.id,
             linkedDocumentReferenceNumber: doc.linkedDocumentReferenceNumber,
@@ -568,7 +586,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       }
 
 
-      if (this.attributes.carbonCopy?.length > 0)
+      if (this.attributes.carbonCopy ?.length > 0)
         this.selectedCarbonText = this.attributes.carbonCopies.map((carbon: any) => carbon.text).join(', ');
       //else
       //  this.userId = [];
@@ -593,10 +611,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       }
 
       if (this.showMyTransferTab) {
-        if (this.transfers?.purpose)
+        if (this.transfers ?.purpose)
           this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.purposes, false);
 
-        if (this.transfers?.priorityId)
+        if (this.transfers ?.priorityId)
           this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.priority, true);
       }
 
@@ -613,7 +631,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   getItemName(filterText: string, source: any, byId: boolean) {
-    const item = byId ? source?.find((i: any) => i.id == filterText) : source?.find((i: any) => i.name == filterText);
+    const item = byId ? source ?.find((i: any) => i.id == filterText) : source ?.find((i: any) => i.name == filterText);
     return this.getName(item);
   }
 
@@ -643,10 +661,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.searchService.getDocAttributes(this.accessToken!, docID).subscribe(
         (response: any) => {
           this.attributes = response || [];
-          this.basicAttributes = JSON.parse(response?.basicAttributes);
-          this.customAttribute = JSON.parse(response?.customAttributes);
-          this.customAttributes = JSON.parse(response?.customAttributes);
-          this.customFormData = JSON.parse(response?.formData);
+          this.basicAttributes = JSON.parse(response ?.basicAttributes);
+          this.customAttribute = JSON.parse(response ?.customAttributes);
+          this.customAttributes = JSON.parse(response ?.customAttributes);
+          this.customFormData = JSON.parse(response ?.formData);
 
           this.getFormDataValue();
 
@@ -771,7 +789,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getAttachments(this.accessToken!, docID).subscribe(
         (response: any) => {
-          debugger;
+           
           this.attachments = response || [];
           this.TREE_DATA = this.transformAttachmentsToTree(this.attachments);
           this.dataSource.data = this.TREE_DATA;
@@ -793,7 +811,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
 
   tryFetchOriginalDocument(): void {
-    debugger
+     
 
     // Recursive function to search for folder_originalMail
     const findOriginalMailFolder = (nodes: any[]): any => {
@@ -812,7 +830,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     // Search recursively starting from root
     const originalMailFolder = findOriginalMailFolder(this.TREE_DATA);
 
-    if (originalMailFolder?.children?.[0]?.id) {
+    if (originalMailFolder ?.children ?.[0] ?.id) {
       const firstChild = originalMailFolder.children[0];
       const idParts = firstChild.id.split('_');
       if (idParts.length > 1) {
@@ -912,6 +930,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           category: isFirstNode ? categoryTranslation : categoryTranslation,                                 //(item.category || '') : (item.category || ''),
           title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user?.fullName || ''}`,
           createdBy: isFirstNode ? (item.createdBy || '') : user?.fullName || '',
+
+
           date: isFirstNode ? (item.createdDate || '') : (item.transferDate || '')
         };
       });
@@ -1013,7 +1033,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
 
   isEnabled(name: string): boolean {
-    const attribute = this.basicAttributes?.find((attr: BasicAttribute) => attr.Name === name);
+    const attribute = this.basicAttributes ?.find((attr: BasicAttribute) => attr.Name === name);
     return attribute ? attribute.Enabled : false;
   }
 
@@ -1021,7 +1041,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   getFormDataValue() {
 
-    this.customAttributes?.components?.forEach((component: CustomAttributeComponent) => {
+    this.customAttributes ?.components ?.forEach((component: CustomAttributeComponent) => {
       const key = component.key;
       if (this.customFormData) {
         const value = this.customFormData[key];
@@ -1055,11 +1075,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
     switch (this.currentLang) {
       case 'ar':
-        return item?.nameAr || item?.name;
+        return item ?.nameAr || item ?.name;
       case 'fr':
-        return item?.nameFr || item?.name;
+        return item ?.nameFr || item ?.name;
       default:
-        return item?.name;
+        return item ?.name;
     }
   }
 }

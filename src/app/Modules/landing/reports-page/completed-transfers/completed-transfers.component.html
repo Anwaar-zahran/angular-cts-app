@@ -179,14 +179,14 @@
           class="paginate_button first"
           [class.disabled]="currentPage === 1"
           (click)="goToPage(1)"
-          ><i class="text-secondary fa fa-angle-left"></i
+          ><i class="text-secondary fa fa-angle-double-left"></i
         ></a>
 
         <a
           class="paginate_button previous"
           [class.disabled]="currentPage === 1"
           (click)="previousPage()"
-          ><i class="text-secondary fa fa-angle-double-left"></i
+          ><i class="text-secondary fa fa-angle-left"></i
         ></a>
 
         <span class="d-inline-flex align-items-center mx-2"
@@ -206,14 +206,14 @@
           class="paginate_button next"
           [class.disabled]="currentPage === totalPages"
           (click)="nextPage()"
-          ><i class="text-secondary fa fa-angle-double-right"></i
+          ><i class="text-secondary fa fa-angle-right"></i
         ></a>
 
         <a
           class="paginate_button last"
           [class.disabled]="currentPage === totalPages"
           (click)="goToPage(totalPages)"
-          ><i class="text-secondary fa fa-angle-right"></i
+          ><i class="text-secondary fa fa-angle-double-right"></i
         ></a>
       </div>
     </div>
