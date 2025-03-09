@@ -929,15 +929,32 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         }
         console.log('category')
         console.log(categoryTranslation);
+
+        let maxLength = 25;
+        // Trim text to fit
+        const trimmedCategory = categoryTranslation.length > maxLength ? categoryTranslation.substring(0, maxLength) + "..." : categoryTranslation;
+        const trimmedTitle = (isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`).length > maxLength ?
+          (isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`).substring(0, maxLength) + "..." :
+          (isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`);
+
+        const trimmedCreatedBy = (isFirstNode ? (item.createdBy || '') : user ?.fullName || '').length > maxLength ?
+          (isFirstNode ? (item.createdBy || '') : user ?.fullName || '').substring(0, maxLength) + "..." :
+          (isFirstNode ? (item.createdBy || '') : user ?.fullName || '');
+
         return {
           id: String(item.id || Math.random()),
           pid: item.parentId ? String(item.parentId) : null,
-          category: isFirstNode ? categoryTranslation : categoryTranslation,                                 //(item.category || '') : (item.category || ''),
-          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`,
-          createdBy: isFirstNode ? (item.createdBy || '') : user ?.fullName || '',
+          //category: isFirstNode ? categoryTranslation : categoryTranslation,                                 //(item.category || '') : (item.category || ''),
+          //title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`,
+          //createdBy: isFirstNode ? (item.createdBy || '') : user ?.fullName || '',
+          category: isFirstNode ? trimmedCategory : trimmedCategory,
+          title: isFirstNode ? trimmedTitle : trimmedTitle,
+          createdBy: isFirstNode ? trimmedCreatedBy : trimmedCreatedBy,
+          date: isFirstNode ? (item.createdDate || '') : (item.transferDate || ''),
+          Category: isFirstNode ? categoryTranslation : categoryTranslation,                                 //(item.category || '') : (item.category || ''),
+          //FullTitle: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`,
+          //CreatedBy: isFirstNode ? (item.createdBy || '') : user ?.fullName || '',
 
-
-          date: isFirstNode ? (item.createdDate || '') : (item.transferDate || '')
         };
       });
 
@@ -945,10 +962,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       // Define fields in the template using bracket notation
       OrgChart['templates']['myTemplate'] = Object.assign({}, OrgChart['templates']['ana']);
       OrgChart['templates']['myTemplate']['size'] = [250, 120]; // Reduced height from 140 to 120
+      OrgChart['templates']['myTemplate']['node'] = '<rect x="0" y="0" width="250" height="120" fill="white" stroke="black" stroke-width="2"/>'; // White background
 
       // Define text fields with proper styling and labels - adjusted y positions
       OrgChart['templates']['myTemplate']['field_0'] =
-        '<text class="field_0" style="font-size: 18px;" fill="#454545" x="125" y="30" text-anchor="middle">{val}</text>';
+        //'<text class="field_0" style="font-size: 18px;" fill="green" x="125" y="30" text-anchor="middle" title="{fullCategory}">{val}</text>';
+        '<text class="field_0" style="font-size: 18px;" fill="green" x="125" y="30" text-anchor="middle">{val}</text>';
       OrgChart['templates']['myTemplate']['field_1'] =
         '<text class="field_1" style="font-size: 13px;" fill="#454545" x="125" y="55" text-anchor="middle">{val}</text>';
       OrgChart['templates']['myTemplate']['field_2'] =
@@ -975,6 +994,19 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         padding: 20,
         mouseScrool: OrgChart.action.zoom,
         nodeMouseClick: OrgChart.action.details,
+        //nodeMouseClick: (event: Event, data: any) => {
+        //  debugger;
+        //  // When a node is clicked, hide the trimmedcategory field in the details popup
+        //  const trimmedCategoryField = document.querySelector('[data-binding="category"]');
+        //  const fullCategoryField = document.querySelector('[data-binding="Category"]');
+        //  if (trimmedCategoryField) {
+        //    (trimmedCategoryField as HTMLElement).style.display = 'none';
+        //  }
+
+        //  if (fullCategoryField) {
+        //    (fullCategoryField as HTMLElement).style.display = 'block';
+        //  }
+        //},
         showXScroll: true,
         showYScroll: true,
         miniMap: false,
@@ -990,7 +1022,9 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           expandAll: false
         },
         nodeMenu: {
-          details: { text: this.translate.instant('VISUAL_TRACKING.DETAILS.TITLE') }
+          details: {
+            text: this.translate.instant('VISUAL_TRACKING.DETAILS.TITLE')                 
+            }         
         },
         editForm: {
           readOnly: true,
@@ -1000,7 +1034,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             pdf: null
           },
           elements: [
-            { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.CATEGORY.TITLE'), binding: 'category', readOnly: true },
+            { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.CATEGORY.TITLE'), binding: 'Category', readOnly: true },
             { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.TITLE_STRUCTURE'), binding: 'title', readOnly: true },
             { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.CREATED_BY_USER'), binding: 'createdBy', readOnly: true },
             { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.DATE'), binding: 'date', readOnly: true }

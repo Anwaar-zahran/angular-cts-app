@@ -292,3 +292,9 @@ span.form-label {
   width: 50%;
   display: inline-block;
 }
+/* Hide the trimmed text fields in the details popup */
+.boc-edit-form input[data-binding="category"]{
+  display: none !important;
+}
+
+
