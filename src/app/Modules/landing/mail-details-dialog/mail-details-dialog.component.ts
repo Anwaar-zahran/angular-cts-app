@@ -367,6 +367,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       }
     };
   }
+
   showModalTransfer() {
     if (!this.showMyTransferTab) {
       this.toaster.showToaster("Transfer functionality is not available in this context.");
@@ -450,18 +451,22 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   getAttachmentName(attachment: any) {
-     
+
     const { text, name } = attachment;
 
     // Define constants for hardcoded strings
     const ORIGINAL_DOCUMENT = "Original document";
     const DOCUMENTS = "Documents";
+    const Attachment = "Attachments";
 
     if (text === ORIGINAL_DOCUMENT) {
       return this.translate.instant('MAIL_DETAILS.ATTACHMENT.OriginalDoc');
     } else if (text === DOCUMENTS) {
       return this.translate.instant('MAIL_DETAILS.ATTACHMENT.Documents');
-    } else {
+    } else if (text === Attachment) {
+      return this.translate.instant('MAIL_DETAILS.TABS.ATTACHMENTS');
+    }
+    else {
       return name || text || 'Unnamed Attachment';
     }
   };
@@ -530,7 +535,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   async fetchDetails(docID: string): Promise<void> {
-     
+
     try {
       // Create an array of promises for all data fetching operations
       const promises = [
@@ -789,7 +794,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.searchService.getAttachments(this.accessToken!, docID).subscribe(
         (response: any) => {
-           
+
           this.attachments = response || [];
           this.TREE_DATA = this.transformAttachmentsToTree(this.attachments);
           this.dataSource.data = this.TREE_DATA;
@@ -811,7 +816,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
 
   tryFetchOriginalDocument(): void {
-     
+
 
     // Recursive function to search for folder_originalMail
     const findOriginalMailFolder = (nodes: any[]): any => {
@@ -872,7 +877,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     const currentLang = this.translate.currentLang;
 
     var viewMode = 'edit'
-    
+
     if (this.isLocKed) {
       viewMode = 'view';
     }
@@ -919,7 +924,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         const categoryKey = item.category.toUpperCase().replace(/\s+/g, "_");
         let categoryTranslation = this.translate.instant(`VISUAL_TRACKING.DETAILS.CATEGORY.${categoryKey}`) || item.category;
 
-        if(categoryTranslation.startsWith('VISUAL_TRACKING')){
+        if (categoryTranslation.startsWith('VISUAL_TRACKING')) {
           categoryTranslation = item.category;
         }
         console.log('category')
@@ -928,8 +933,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           id: String(item.id || Math.random()),
           pid: item.parentId ? String(item.parentId) : null,
           category: isFirstNode ? categoryTranslation : categoryTranslation,                                 //(item.category || '') : (item.category || ''),
-          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user?.fullName || ''}`,
-          createdBy: isFirstNode ? (item.createdBy || '') : user?.fullName || '',
+          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`,
+          createdBy: isFirstNode ? (item.createdBy || '') : user ?.fullName || '',
 
 
           date: isFirstNode ? (item.createdDate || '') : (item.transferDate || '')

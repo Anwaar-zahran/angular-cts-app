@@ -239,10 +239,7 @@ export class DelegationPageComponent implements OnInit {
     categoryControl.markAsDirty();
     this.cdr.detectChanges();
   }
-  
-  
-
-
+    
   dateRangeValidator(group: FormControl): { [key: string]: boolean } | null {
     const fromDate = group.get('fromDate')?.value;
     const toDate = group.get('toDate')?.value;
@@ -337,6 +334,7 @@ export class DelegationPageComponent implements OnInit {
       }
     );
   }
+
   getPrivacyData(): void {
     this.lookupservice.getPrivacy(this.accessToken!).subscribe(
       (response) => {
@@ -365,7 +363,6 @@ export class DelegationPageComponent implements OnInit {
       }
     );
   }
-
 
   formatDate(date: Date | undefined): string {
     if (!date) return '';
@@ -437,7 +434,7 @@ export class DelegationPageComponent implements OnInit {
         //privacyId: this.selectedPrivacyId,
         allowSign: formValues.allowSign || false,
         showOldCorrespondecne: formValues.showOldCorrespondence || false,
-        draftInbox: formValues.draftInbox || false,
+        draftInbox:  false, //formValues.draftInbox || false,
         note: formValues.note || '',
         startDate: this.formatDate(formValues.startDate),
         toUser: formValues.userId,
@@ -457,6 +454,7 @@ export class DelegationPageComponent implements OnInit {
 
         this.delegationService.updateDelegate(this.accessToken!, itemData).subscribe(
           (response: any) => {
+            debugger;
             this.isEdit = false;
             this.clear();
             this.getListData();
@@ -475,12 +473,16 @@ export class DelegationPageComponent implements OnInit {
       } else {
         this.delegationService.updateDelegate(this.accessToken!, itemData).subscribe(
           (response: any) => {
+            debugger;
             this.isEdit = false;
             this.clear();
             this.getListData();
+            if (response.message && response.id==0)
+              this.translate.get('DELEGATION.Duplicate_Error').subscribe((msg: string) => {
+                this.toaster.showToaster(msg); });
+            else
             this.translate.get('DELEGATION.SAVE_SUCCESS').subscribe((msg: string) => {
-              this.toaster.showToaster(msg);
-            });
+              this.toaster.showToaster(msg);   });
           },
           (error: any) => {
             console.error('Error adding:', error);
