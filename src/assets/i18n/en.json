@@ -23,7 +23,8 @@
       "BACK": "Back",
       "TITLE": "Actions",
       "APPLY": "Apply",
-      "CONFIRM": "Confirm"
+      "CONFIRM": "Confirm",
+      "ADD":"Add"
     },
     "SELECT": "Select",
     "LOADING": "Loading...",
@@ -150,7 +151,8 @@
       "TYPE": "Type",
       "QUANTITY": "Quantity",
       "DESC": "Description",
-      "OriginalDoc": "Original Document"
+      "OriginalDoc": "Original Document",
+      "Documents": "Documents"
 
     },
     "HISTORY": {
@@ -187,7 +189,18 @@
     "TITLE": "Visual tracking",
     "DETAILS": {
       "TITLE": "Details",
-      "CATEGORY": "Category",
+      "CATEGORY":{
+        "TITLE":"Category",
+        "INCOMING":"Incoming",
+        "ANNUAL_REPORT":"Annual Report",
+        "INTERNAL":"Internal",
+        "OUTGOING":"Outgoing",
+        "MEETING_MINUTES":"Meeting Minutes",
+        "SEP_RESOLUTION":"Sep Resolution",
+        "FOLLOW_UP":"Follow Up",
+        "CIRCULAR":"Circular"
+
+      },
       "TITLE_STRUCTURE": "Title/Structure",
       "CREATED_BY_USER": "Created By/User",
       "DATE": "Date"
@@ -337,6 +350,7 @@
   "REPORTS": {
     "TITLE": "Reports",
     "IN_PROGRESS_REPORT": "In Progress Report",
+    "IN_PROGRESS_TRANSFERS": "In Progress Transfers",
     "COMPLETED_TRANSFERS": "Completed Transfers",
     "IN_PROGRESS_CORRESPONDENCES": "In Progress Correspondences",
     "COMPLETED_CORRESPONDENCES": "Completed Correspondences",
@@ -348,6 +362,16 @@
     "CLEAR": "Clear",
     "SEARCH": "Search",
     "CATEGORY": "Category",
+    "CATEGORIES":{
+      "INCOMING":"Incoming",
+      "ANNUAL_REPORT":"Annual Report",
+      "INTERNAL":"Internal",
+      "OUTGOING":"Outgoing",
+      "MEETING_MINUTES":"Meeting Minutes",
+      "SEP_RESOLUTION":"Sep Resolution",
+      "FOLLOW_UP":"Follow Up",
+      "CIRCULAR":"Circular"
+    },
     "REFERENCE_NUMBER": "Reference number",
     "SUBJECT": "Subject",
     "FROM_STRUCTURE_USER": "From (Structure / User)",
@@ -388,6 +412,8 @@
         "DOCUMENTS_COMPLETED": "Documents Completed (Overdue and On Time)",
         "TRANSFERS_IN_PROGRESS": "Transfers In Progress (Overdue and On Time)",
         "TRANSFERS_COMPLETED": "Transfers Completed (Overdue and On Time)",
+        "NO_DATA_FOUND": "No Data Found",
+
         "STATISTICS_PER_STRUCTURE": {
           "TITLE": "Statistics per structure",
           "INFO": "Number of correspondences for each structure grouped by category"
@@ -434,7 +460,8 @@
           "STATUS": "Status",
           "CATEGORY": "Category",
           "TRANSFERS": "transfers",
-          "VALUE": "Value"
+          "VALUE": "Value",
+          "PERCENTAGE": "Percentage"
         }
       }
     },
@@ -456,6 +483,7 @@
       "TRANSFERS_COMPLETED_INFO": "Number of completed transfers sent to you grouped by category divided into 2 circles (Only for transfers with due date)",
       "TRANSFERS_IN_PROGRESS": "Due Date Statistics for In Progress Transfers",
       "TRANSFERS_IN_PROGRESS_INFO": "Number of in progress transfers sent to you grouped by category divided into 2 circles (Only for transfers with due date)",
+      "PERCENTAGE":"Percentage",
       "FILTER": {
         "TITLE": "Select Date Range",
         "FROM_DATE": "From Date",

@@ -3,13 +3,15 @@
     "",
     "\\src",
     "\\src\\app",
+    "\\src\\app\\interceptors",
     "\\src\\app\\Modules",
-    "\\src\\app\\Modules\\auth",
     "\\src\\app\\Modules\\landing",
-    "\\src\\app\\Modules\\landing\\mail-details-dialog",
-    "\\src\\app\\Modules\\landing\\reply-to",
-    "\\src\\app\\Modules\\landing\\transfer-modal",
-    "\\src\\assets"
+    "\\src\\app\\Modules\\landing\\bam-page",
+    "\\src\\app\\Modules\\landing\\bam-page\\dashboard",
+    "\\src\\app\\Modules\\landing\\bam-page\\dashboard\\charts",
+    "\\src\\app\\Modules\\landing\\bam-page\\dashboard\\charts\\chart-count-per-category-and-status",
+    "\\src\\app\\Modules\\landing\\bam-page\\dashboard\\charts\\chart-documents-completed-overdue-and-onTime-perCategory"
   ],
+  "SelectedNode": "\\src\\app\\Modules\\landing\\bam-page\\dashboard\\charts\\chart-documents-completed-overdue-and-onTime-perCategory\\chart-documents-completed-overdue-and-onTime-perCategory.component.ts",
   "PreviewInSolutionExplorer": false
 }

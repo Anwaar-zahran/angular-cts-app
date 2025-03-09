@@ -18,6 +18,8 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
   @Input() categories: { id: number, text: string }[] = [];
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
+  minToDate: string | null = null;
+
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
@@ -27,6 +29,7 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
   isModalOpen: boolean = false;
   statuses: { id: number, text: string }[] = [];
   private languageSubscription!: Subscription
+  totalCount!:number;
 
   constructor(
     private chartsService: ChartsService,
@@ -84,6 +87,17 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
         });
 
         // Create series data for each category and filter out categories with all zeros
+        const totalFirstElements = this.categories.reduce((sum, category) => {
+          const data = statusIds.map(statusId => {
+            const item = res.find((r: any) => r.categoryId === category.id && r.statusId === statusId);
+            return item ? item.count : 0;
+          });
+          return sum + (data.length > 0 ? data[0] : 0);
+        }, 0);
+
+        console.log('total count 1')
+        console.log(totalFirstElements);
+
         const seriesData = this.categories
           .map(category => {
             const data = statusIds.map(statusId => {
@@ -91,17 +105,20 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
               return item ? item.count : 0;
             });
 
-            // Only include categories that have at least one non-zero value
             if (data.some(count => count > 0)) {
+              const percentage = totalFirstElements > 0 ? (data[0] / totalFirstElements) * 100 : 0;
+        
               return {
                 name: this.translate.instant(`BAM.DASHBOARD.CHARTS.STATUS.${category.text.toUpperCase().replace(/\s+/g, '_')}`),
                 type: 'column',
-                data: data
+                data: [percentage, ...data.slice(1)] 
               };
             }
             return null;
           })
           .filter((series): series is NonNullable<typeof series> => series !== null);
+        console.log('serrrrrrrrrrrrrr')
+        console.log(seriesData); // Debugging: Check the data
 
         this.chartOptions = {
           chart: {
@@ -127,15 +144,19 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
           },
           yAxis: {
             min: 0,
+            max:110,
             title: {
-              text: this.translate.instant("BAM.DASHBOARD.CHARTS.LABELS.COUNT"),
+              text: this.translate.instant("BAM.DASHBOARD.CHARTS.LABELS.PERCENTAGE"),
             },
             stackLabels: {
               enabled: true,
+              formatter: function () {
+                return totalFirstElements.toString(); // Display totalFirstElements instead of default sum
+              },
               style: {
                 fontWeight: 'bold',
                 color: (Highcharts!.defaultOptions!.title!.style && Highcharts!.defaultOptions!.title!.style!.color) || 'gray'
-              }
+              },
             }
           },
           tooltip: {
@@ -143,7 +164,7 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
             pointFormat: `{series.name}: {point.y}<br/>${totalLabel}: {point.stackTotal}`,
             formatter: function () {
               if (this.y === 0) return false; // Hide tooltip for zero values
-              return `${this.series.name}: ${this.y}<br/>${totalLabel}: ${this.total}`;
+              return `${this.series.name}: ${this.y?.toFixed(2)}%<br/>${totalLabel}: ${totalFirstElements}`;
             }
           },
           plotOptions: {
@@ -152,7 +173,7 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
               dataLabels: {
                 enabled: true,
                 formatter: function () {
-                  return this.y === 0 ? '' : this.y; // Hide zero labels
+                  return this.y === 0 ? '' : this.y?.toFixed(2)+'%'; // Hide zero labels
                 }
               }
             }
@@ -177,6 +198,18 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
     this.toDate = this.tempToDate;
     this.loadChartData(); // Reload chart data with new dates
     this.toggleModal(); // Close the modal after applying the filter
+  }
+
+  onFromDateChange() {
+    console.log(this.tempFromDate);
+    if (this.tempFromDate) {
+      let fromDate = new Date(this.tempFromDate);
+      fromDate.setDate(fromDate.getDate());
+      
+      this.minToDate = fromDate.toISOString().split('T')[0];
+    } else {
+      this.minToDate = null;
+    }
   }
 
 }

@@ -68,36 +68,40 @@
       <div class="col-md-3">
         <div class="form-group">
           <label class="form-label">{{ 'REPORTS.PRIVACY' | translate }}</label>
-         
-          <select [(ngModel)]="selectedPrivacyId" class="form-control" id="ddlPrivacy" name="ddlPrivacy">
-            <option [ngValue]="null" disabled>
-              {{ "REPORTS.PLACEHOLDERS.SELECT_PRIVACY" | translate }}
-            </option>
-            <option *ngFor="let item of privacyOptions" [ngValue]="item.id">
-              {{ getName(item) }}
-            </option>
-          </select>
+          <div class="custom-select">
 
+            <select [(ngModel)]="selectedPrivacyId" class="form-control" id="ddlPrivacy" name="ddlPrivacy">
+              <option [ngValue]="null" disabled>
+                {{ "REPORTS.PLACEHOLDERS.SELECT_PRIVACY" | translate }}
+              </option>
+              <option *ngFor="let item of privacyOptions" [ngValue]="item.id">
+                {{ getName(item) }}
+              </option>
+            </select>
+
+          </div>
+          </div>
         </div>
-      </div>
 
       <!-- Priority Select -->
       <div class="col-md-3">
         <div class="form-group">
           <label class="form-label">{{ 'REPORTS.PRIORITY' | translate }}</label>
-        
+          <div class="custom-select">
 
-          <select [(ngModel)]="selectedPriorityId" class="form-control" id="ddlPriority" name="ddlPriority">
-            <option [ngValue]="null" disabled >
-              {{ "REPORTS.PLACEHOLDERS.SELECT_PRIORITY" | translate }}
-            </option>
-            <option *ngFor="let item of priorityOptions" [ngValue]="item.id">
-              {{ getName(item) }}
-            </option>
-          </select>
 
+            <select [(ngModel)]="selectedPriorityId" class="form-control" id="ddlPriority" name="ddlPriority">
+              <option [ngValue]="null" disabled>
+                {{ "REPORTS.PLACEHOLDERS.SELECT_PRIORITY" | translate }}
+              </option>
+              <option *ngFor="let item of priorityOptions" [ngValue]="item.id">
+                {{ getName(item) }}
+              </option>
+            </select>
+
+          </div>
+          </div>
         </div>
-      </div>
       <!-- Date Controls -->
       <div class="col-md-3">
         <div class="form-group">
@@ -112,6 +116,8 @@
             [(ngModel)]="fromDate"
             name="dp1"
             (click)="picker1.open()"
+            (keydown)="preventTyping($event)"
+            (ngModelChange)="onFromDateChange()"
           />
           <mat-datepicker #picker1></mat-datepicker>
         </div>
@@ -128,6 +134,8 @@
             [(ngModel)]="toDate"
             name="dp2"
             (click)="picker2.open()"
+            (keydown)="preventTyping($event)"
+            [min]="minToDate"
           />
           <mat-datepicker #picker2></mat-datepicker>
         </div>
@@ -207,7 +215,7 @@
               ></i>
             </button>
           </td>
-          <td>{{item.categoryName}}</td>
+          <td>{{ transformCategoryName(item.categoryName) | translate }}</td>
           <td>{{item.referenceNumber}}</td>
           <td>{{item.subject}}</td>
           <td>{{item.sendingEntity}}</td>
@@ -255,14 +263,14 @@
           class="paginate_button first"
           [class.disabled]="currentPage === 1"
           (click)="goToPage(1)"
-          ><i class="text-secondary fa fa-angle-left"></i
+          ><i class="text-secondary fa fa-angle-double-left"></i
         ></a>
 
         <a
           class="paginate_button previous"
           [class.disabled]="currentPage === 1"
           (click)="previousPage()"
-          ><i class="text-secondary fa fa-angle-double-left"></i
+          ><i class="text-secondary fa fa-angle-left"></i
         ></a>
 
         <span class="d-inline-flex align-items-center mx-2"
@@ -282,14 +290,14 @@
           class="paginate_button next"
           [class.disabled]="currentPage === totalPages"
           (click)="nextPage()"
-          ><i class="text-secondary fa fa-angle-double-right"></i
+          ><i class="text-secondary fa fa-angle-right"></i
         ></a>
 
         <a
           class="paginate_button last"
           [class.disabled]="currentPage === totalPages"
           (click)="goToPage(totalPages)"
-          ><i class="text-secondary fa fa-angle-right"></i
+          ><i class="text-secondary fa fa-angle-double-right"></i
         ></a>
       </div>
     </div>

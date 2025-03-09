@@ -22,6 +22,8 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
   @Input() categories: { id: number, text: string }[] = [];
+  minToDate: string | null = null;
+
 
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
@@ -73,7 +75,7 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
         categoryIds: []
       })
       .subscribe((res: { text: string, count: number }[]) => {
-        this.translate.get(['BAM.CHARTS.COMPLETION_VS_PROGRESS', 'Status.InProgress', 'Status.Completed']).subscribe(translations => {
+        this.translate.get(['', 'Status.InProgress', 'Status.Completed']).subscribe(translations => {
           
           const chartData = res.map(item => {
             const translatedText = this.translate.instant(`BAM.DASHBOARD.CHARTS.STATUS.${item.text.toUpperCase()}`);
@@ -143,6 +145,18 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
     this.toDate = this.tempToDate;
     this.loadChartData(); // Reload chart data with new dates
     this.toggleModal(); // Close the modal after applying the filter
+  }
+
+  onFromDateChange() {
+    console.log(this.tempFromDate);
+    if (this.tempFromDate) {
+      let fromDate = new Date(this.tempFromDate);
+      fromDate.setDate(fromDate.getDate());
+      
+      this.minToDate = fromDate.toISOString().split('T')[0];
+    } else {
+      this.minToDate = null;
+    }
   }
 
 }

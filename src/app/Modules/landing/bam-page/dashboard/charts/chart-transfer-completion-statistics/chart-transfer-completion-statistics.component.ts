@@ -8,6 +8,7 @@ import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-transla
 import { Subscription } from 'rxjs';
 
 
+
 @Component({
   selector: 'app-chart-transfer-completion-statistics',
   templateUrl: './chart-transfer-completion-statistics.component.html',
@@ -18,13 +19,22 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
 
+  // @Input() fromDate: Date | undefined;
+  // @Input() toDate: Date | undefined;
+
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
+  minToDate: string | null = null;
 
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
   isModalOpen: boolean = false;
-  private languageSubscription!: Subscription;
+
+  // tempFromDate: Date | undefined;
+  // tempToDate: Date | undefined;
+  // isModalOpen: boolean = false;
+
+  languageSubscription!: Subscription;
 
   constructor(private chartsService: ChartsService, private translate: TranslateService) { }
 
@@ -44,14 +54,16 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
   private loadChartData() {
     this.chartsService
       .getTransferCompletionStatistics({
-        fromDate: this.fromDate,
-        toDate: this.toDate,
+        fromDate: this.fromDate? this.formatDate(this.fromDate) : '',
+        toDate: this.toDate? this.formatDate(this.toDate): '',
         structureId:  localStorage.getItem('structureId') || "1",
       })
       .subscribe((res: any) => {
         const averageCreatedByUser = (parseFloat(res?.averageCreatedByUser) || 0) / 10000;
         const averageTransfers = (parseFloat(res?.averageTransfers) || 0) / 10000;
-
+  
+        const isRTL = document.dir === 'rtl';
+  
         this.chartOptions = {
           chart: {
             type: 'column',
@@ -80,9 +92,12 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
               this.translate.instant('BAM.CHARTS.TRANSFER_COMPLETION_STATISTICS.AVERAGE_TRANSFERS')
             ],
             crosshair: true,
+            reversed: isRTL,
           },
           yAxis: {
             min: 0,
+            reversed: false,
+            opposite: isRTL,
             title: {
               text: this.translate.instant("BAM.DASHBOARD.CHARTS.LABELS.VALUE"),
             },
@@ -94,6 +109,14 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
           },
           tooltip: {
             pointFormat: '{series.name}: <b>{point.y:.1f}</b>',
+            style: {
+              textAlign: isRTL ? 'right' : 'left'
+            }
+          },
+          plotOptions: {
+            series: {
+              stacking: undefined
+            }
           },
           series: [
             {
@@ -102,6 +125,9 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
               data: [averageCreatedByUser || 0, averageTransfers || 0],
             },
           ],
+          legend: {
+            rtl: isRTL
+          },
         };
       });
   }
@@ -123,5 +149,36 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
     this.toggleModal(); // Close the modal after applying the filter
   }
 
+  formatDate(date: Date | undefined | string): string {
+    if (!date) return '';
 
+    let parsedDate: Date;
+
+    if (typeof date === 'string') {
+        parsedDate = new Date(date);
+        if (isNaN(parsedDate.getTime())) {
+            return ''; // Return empty string if the date is invalid
+        }
+    } else {
+        parsedDate = date;
+    }
+
+    const day = parsedDate.getDate().toString().padStart(2, '0');
+    const month = (parsedDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = parsedDate.getFullYear().toString();
+
+    return `${day}/${month}/${year}`;
+}
+
+onFromDateChange() {
+  console.log(this.tempFromDate);
+  if (this.tempFromDate) {
+    let fromDate = new Date(this.tempFromDate);
+    fromDate.setDate(fromDate.getDate());
+    
+    this.minToDate = fromDate.toISOString().split('T')[0];
+  } else {
+    this.minToDate = null;
+  }
+}
 }

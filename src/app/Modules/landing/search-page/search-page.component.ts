@@ -73,6 +73,8 @@ export class SearchPageComponent {
 
   loading: boolean = true; // Loading state
   formVisible = true;
+  minToDate: Date | null = null;
+
 
   constructor(
     private searchService: SearchPageService,
@@ -110,7 +112,7 @@ export class SearchPageComponent {
     this.getStatuses();
     this.getPrivacies();
   }
-    
+
   getSendingEntites(searchText: string): void {
     this.lookupservice.getSearchableEntities(searchText).subscribe(
       (response) => {
@@ -174,7 +176,7 @@ export class SearchPageComponent {
     );
   }
 
-  getFromUsers(searchText:string): void {
+  getFromUsers(searchText: string): void {
     this.lookupservice.getSearchUsers(this.accessToken!, searchText).subscribe(
       (response) => {
         this.searchFromUsers = response || [];
@@ -291,10 +293,10 @@ export class SearchPageComponent {
       autoWidth: false,
       language: {
         paginate: {
-          first: "<i class='text-secondary fa fa-angle-left'></i>",
-          previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-          next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-          last: "<i class='text-secondary fa fa-angle-right'></i>",
+          first: "<i class='text-secondary fa fa-angle-double-left'></i>",
+          previous: "<i class='text-secondary fa fa-angle-left'></i>",
+          next: "<i class='text-secondary fa fa-angle-right'></i>",
+          last: "<i class='text-secondary fa fa-angle-double-right'></i>",
         },
       },
       dom: 'tp',
@@ -331,13 +333,28 @@ export class SearchPageComponent {
     };
   }
 
-  formatDate(date: NgbDateStruct | undefined): string {
+  formatDate(date: NgbDateStruct | Date | string): string {
     if (!date) return '';
-    const month = date.month.toString().padStart(2, '0');
-    const day = date.day.toString().padStart(2, '0');
-    const year = date.year.toString();
+  
+    let parsedDate: Date;
+  
+    if (typeof date === 'string') {
+      parsedDate = new Date(date);
+    } else if ('year' in date) {
+      parsedDate = new Date(date.year, date.month - 1, date.day);
+    } else {
+      parsedDate = date;
+    }
+  
+    if (isNaN(parsedDate.getTime())) return '';
+  
+    const day = parsedDate.getDate().toString().padStart(2, '0');
+    const month = (parsedDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = parsedDate.getFullYear().toString();
+  
     return `${year}/${month}/${day}`;
   }
+  
 
   onSearch() {
     console.log(this.searchModel);
@@ -363,7 +380,9 @@ export class SearchPageComponent {
 
     this.searchService.searchInbox(this.accessToken!, formattedSearchModel).subscribe((result: SearchResponse) => {
       this.response = result;
+      console.log(this.response.recordsTotal)
       this.response.data.forEach(item => {
+
         item.categoryText = item.categoryId != null ? this.categories[item.categoryId - 1].text : '';
         item.statusText = item.statusId != null ? this.statuses[item.statusId - 1].text : '';
         item.priorityText = item.priorityId != null ? this.priorities[item.priorityId - 1].text : '';
@@ -372,10 +391,24 @@ export class SearchPageComponent {
       },
         (error: any) => {
           console.error('Error getting search result:', error);
-          this.toaster.showToaster(error ?.message || 'Something went wrong');
+          this.toaster.showToaster(error?.message || 'Something went wrong');
         });
     });
 
+    
+
+  }
+
+
+
+  
+  isValidNgbDateStruct(value: NgbDateStruct): boolean {
+    return (
+      value &&
+      typeof value.year === "number" &&
+      typeof value.month === "number" &&
+      typeof value.day === "number"
+    );
   }
 
   ResetForm() {
@@ -395,11 +428,10 @@ export class SearchPageComponent {
   }
 
   getCategoryName(catId: any): string {
-   // debugger;
     const cat = this.categories.find(p => p.id === catId);
     return cat ? this.getName(cat) : '';
   }
-  
+
   async showDetails(row: any) {
     this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
@@ -412,7 +444,7 @@ export class SearchPageComponent {
         row: row,
         fromSearch: false
       }
-    });
+    }).componentInstance.showMyTransferTab = false; // Set showMyTransferTab to false
 
   } catch(error: any) {
     console.error("Error loading data", error);
@@ -424,11 +456,11 @@ export class SearchPageComponent {
     const currentLang = this.translate.currentLang;
     switch (currentLang) {
       case 'ar':
-        return item ?.nameAr || item ?.name;
+        return item?.nameAr || item?.name;
       case 'fr':
-        return item ?.nameFr || item ?.name;
+        return item?.nameFr || item?.name;
       default:
-        return item ?.name;
+        return item?.name;
     }
   }
 
@@ -484,7 +516,7 @@ export class SearchPageComponent {
     }
   }
 
-  onSearchUsers(event: { term: string; items: any[] }, fromUsersFilter:boolean): void {
+  onSearchUsers(event: { term: string; items: any[] }, fromUsersFilter: boolean): void {
     const query = event.term;
     if (query.length > 2) {
       this.loading = true;
@@ -502,5 +534,22 @@ export class SearchPageComponent {
 
   toggleSearchForm() {
     this.formVisible = !this.formVisible;
+  }
+
+  onFromDateChange():void{
+    if(this.searchModel.fromTransferDate){
+      this.minToDate = new Date(this.searchModel.fromTransferDate);
+    }else{
+      this.minToDate = null ;
+    }
+
+    console.log(this.minToDate)
+  }
+
+  preventTyping(event :KeyboardEvent):void{
+    console.log('clickkkked')
+    if(!(event.ctrlKey && event.key ==='v')&& !(['Delete','Backspace','Tap','ArrowLeft',"ArrowRight"].includes(event.key))){
+      event.preventDefault();
+    }
   }
 }

@@ -1,31 +1,66 @@
 <div class="body-content">
   <div class="d-flex justify-content-between">
-    <h1 class="page-title"><app-back-button></app-back-button>{{ 'MYMAIL.TITLE' | translate }}</h1>
+    <h1 class="page-title">
+      <app-back-button></app-back-button>{{ "MYMAIL.TITLE" | translate }}
+    </h1>
 
     <!-- Sort Dropdown -->
     <div class="dropdown">
-      <button class="btn btn-link" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa fa-sort"></i> {{ 'COMMON.SORT_BY' | translate }}
+      <button
+        class="btn btn-link"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <i class="fa fa-sort"></i> {{ "COMMON.SORT_BY" | translate }}
       </button>
       <ul class="dropdown-menu">
-        <li><button class="dropdown-item" (click)="sortBy('date')">{{ 'COMMON.TRANSFER_DATE' | translate }}</button>
+        <li>
+          <button class="dropdown-item" (click)="sortByTransfer('date')">
+            {{ "COMMON.TRANSFER_DATE" | translate }}
+          </button>
         </li>
-        <li><button class="dropdown-item" (click)="sortBy('ref')">{{ 'COMMON.REFERENCE_NB' | translate }}</button></li>
+        <li>
+          <button class="dropdown-item" (click)="sortByRef('ref')">
+            {{ "COMMON.REFERENCE_NB" | translate }}
+          </button>
+        </li>
       </ul>
     </div>
   </div>
 
-
   <!-- Tabs -->
   <div class="nav nav-tabs mt-3" role="tablist">
-    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-new" type="button" role="tab">
-      <i class="fa fa-plus-circle"></i>{{ 'COMMON.TABS.NEW' | translate }}
+    <button
+      class="nav-link active"
+      data-bs-toggle="tab"
+      data-bs-target="#nav-new"
+      type="button"
+      role="tab"
+      (click)="loadInboxData()"
+    >
+      <i class="fa fa-plus-circle"></i>{{ "COMMON.TABS.NEW" | translate }}
     </button>
-    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-sent" type="button" role="tab">
-      <i class="fa fa-paper-plane"></i>{{ 'COMMON.TABS.SENT' | translate }}
+    <button
+      class="nav-link"
+      data-bs-toggle="tab"
+      data-bs-target="#nav-sent"
+      type="button"
+      role="tab"
+      (click)="loadSentData()"
+    >
+      <i class="fa fa-paper-plane"></i>{{ "COMMON.TABS.SENT" | translate }}
     </button>
-    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-completed" type="button" role="tab">
-      <i class="fa fa-check-circle"></i>{{ 'COMMON.TABS.COMPLETED' | translate }}
+    <button
+      class="nav-link"
+      data-bs-toggle="tab"
+      data-bs-target="#nav-completed"
+      type="button"
+      role="tab"
+      (click)="loadCompletedData()"
+    >
+      <i class="fa fa-check-circle"></i
+      >{{ "COMMON.TABS.COMPLETED" | translate }}
     </button>
   </div>
 
@@ -33,38 +68,62 @@
   <div class="tab-content">
     <div class="tab-pane fade show active" id="nav-new" role="tabpanel">
       <!-- No Data Message -->
-      <div *ngIf="!loading && newItems.length === 0" class="alert alert-warning" role="alert">
-        {{ 'COMMON.NO_DATA' | translate }}
+      <div
+        *ngIf="!loading && newItems.length === 0"
+        class="alert alert-warning"
+        role="alert"
+      >
+        {{ "COMMON.NO_DATA" | translate }}
       </div>
 
-      <table class="table table-text light-text" datatable [dtOptions]="dtOptions"
-        *ngIf="!loading && newItems.length > 0">
+      <table
+        class="table table-text light-text"
+        datatable
+        [dtOptions]="dtOptions"
+        *ngIf="!loading && newItems.length > 0"
+      >
         <thead>
           <tr>
-            <th>{{ 'COMMON.SUBJECT' | translate }}</th>
-            <th>{{ 'COMMON.TRANSFER_DATE' | translate }}</th>
-            <th>{{ 'COMMON.REFERENCE_NB' | translate }}</th>
-            <th>{{ 'TABLE.HEADERS.ACTIONS' | translate }}</th>
-            <th>{{ 'TABLE.HEADERS.STATUS' | translate }}</th>
+            <th>{{ "COMMON.SUBJECT" | translate }}</th>
+            <th>{{ "COMMON.TRANSFER_DATE" | translate }}</th>
+            <th>{{ "COMMON.REFERENCE_NB" | translate }}</th>
+            <th>{{ "TABLE.HEADERS.ACTIONS" | translate }}</th>
+            <th>{{ "TABLE.HEADERS.STATUS" | translate }}</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of newItems; trackBy: trackByFn">
             <td>
-              <p (click)="showMailDetails(item,true)" class="text-primary bold">{{ item.subject }}</p>
-              <p (click)="showMailDetails(item,true)" class="text-secondary">{{ item.details }}</p>
+              <p
+                (click)="showMailDetails(item, true)"
+                class="text-primary bold"
+              >
+                {{ item.subject }}
+              </p>
+              <p (click)="showMailDetails(item, true)" class="text-secondary">
+                {{ item.details }}
+              </p>
             </td>
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
             <td>
-              <button class="btn btn-primary" (click)="showVisualTracking(item)">
-                {{ 'COMMON.VISUAL_TRACKING' | translate }}
+              <button
+                class="btn btn-primary"
+                (click)="showVisualTracking(item)"
+              >
+                {{ "COMMON.VISUAL_TRACKING" | translate }}
               </button>
             </td>
             <td>
               <span>
-                <img alt=""
-                  [src]="item.isRead ? 'assets/images/icons/open-message.svg' : 'assets/images/icons/red-email.svg'" />
+                <img
+                  alt=""
+                  [src]="
+                    item.isRead
+                      ? 'assets/images/icons/open-message.svg'
+                      : 'assets/images/icons/red-email.svg'
+                  "
+                />
               </span>
               <span *ngIf="item.isOverDue">
                 <img alt="" src="assets/images/icons/clock.svg" />
@@ -74,38 +133,62 @@
         </tbody>
       </table>
     </div>
-
     <div class="tab-pane fade" id="nav-sent" role="tabpanel">
-      <div *ngIf="!loading && sentItems.length === 0" class="alert alert-warning" role="alert">
-        {{ 'COMMON.NO_DATA' | translate }}
+      <div
+        *ngIf="!loading && sentItems.length === 0"
+        class="alert alert-warning"
+        role="alert"
+      >
+        {{ "COMMON.NO_DATA" | translate }}
       </div>
-      <table class="table light-text" datatable [dtOptions]="dtOptions" *ngIf="!loading && sentItems.length > 0">
+      <table
+        class="table light-text"
+        datatable
+        [dtOptions]="dtOptions"
+        *ngIf="!loading && sentItems.length > 0"
+      >
         <thead>
           <tr>
-            <th>{{ 'MYMAIL.TABLE.HEADERS.SUBJECT' | translate }}</th>
-            <th>{{ 'MYMAIL.TABLE.HEADERS.TRANSFER_DATE' | translate }}</th>
-            <th>{{ 'MYMAIL.TABLE.HEADERS.REFERENCE_NB' | translate }}</th>
-            <th>{{ 'MYMAIL.TABLE.HEADERS.ACTIONS' | translate }}</th>
-            <th>{{ 'MYMAIL.TABLE.HEADERS.STATUS' | translate }}</th>
+            <th>{{ "MYMAIL.TABLE.HEADERS.SUBJECT" | translate }}</th>
+            <th>{{ "MYMAIL.TABLE.HEADERS.TRANSFER_DATE" | translate }}</th>
+            <th>{{ "MYMAIL.TABLE.HEADERS.REFERENCE_NB" | translate }}</th>
+            <th>{{ "MYMAIL.TABLE.HEADERS.ACTIONS" | translate }}</th>
+            <th>{{ "MYMAIL.TABLE.HEADERS.STATUS" | translate }}</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of sentItems; trackBy: trackByFn">
             <td>
-              <p (click)="showMailDetails(item,false)" class="text-primary bold">{{ item.subject }}</p>
-              <p (click)="showMailDetails(item,false)" class="text-secondary">{{ item.details }}</p>
+              <p
+                (click)="showMailDetails(item, false)"
+                class="text-primary bold"
+              >
+                {{ item.subject }}
+              </p>
+              <p (click)="showMailDetails(item, false)" class="text-secondary">
+                {{ item.details }}
+              </p>
             </td>
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
             <td>
-              <button class="btn btn-primary" (click)="showVisualTracking(item)">
-                {{ 'COMMON.VISUAL_TRACKING' | translate }}
+              <button
+                class="btn btn-primary"
+                (click)="showVisualTracking(item)"
+              >
+                {{ "COMMON.VISUAL_TRACKING" | translate }}
               </button>
             </td>
             <td>
               <span>
-                <img alt=""
-                  [src]="item.isRead ? 'assets/images/icons/open-message.svg' : 'assets/images/icons/red-email.svg'" />
+                <img
+                  alt=""
+                  [src]="
+                    item.isRead
+                      ? 'assets/images/icons/open-message.svg'
+                      : 'assets/images/icons/red-email.svg'
+                  "
+                />
               </span>
               <span *ngIf="item.isOverDue">
                 <img alt="" src="assets/images/icons/clock.svg" />
@@ -117,37 +200,56 @@
     </div>
 
     <div class="tab-pane fade" id="nav-completed" role="tabpanel">
-      <div *ngIf="!loading && completedItems.length === 0" class="alert alert-warning" role="alert">
-        {{ 'COMMON.NO_DATA' | translate }}
+      <div
+        *ngIf="!loading && completedItems.length === 0"
+        class="alert alert-warning"
+        role="alert"
+      >
+        {{ "COMMON.NO_DATA" | translate }}
       </div>
-      <table class="table light-text" datatable [dtOptions]="dtOptions" *ngIf="!loading && completedItems.length > 0">
+      <table
+        class="table light-text"
+        datatable
+        [dtOptions]="dtOptions"
+        *ngIf="!loading && completedItems.length > 0"
+      >
         <thead>
           <tr>
-            <th>{{ 'MYMAIL.TABLE.HEADERS.SUBJECT' | translate }}</th>
-            <th>{{ 'MYMAIL.TABLE.HEADERS.TRANSFER_DATE' | translate }}</th>
-            <th>{{ 'MYMAIL.TABLE.HEADERS.REFERENCE_NB' | translate }}</th>
-            <th>{{ 'MYMAIL.TABLE.HEADERS.ACTIONS' | translate }}</th>
-            <th>{{ 'MYMAIL.TABLE.HEADERS.STATUS' | translate }}</th>
+            <th>{{ "MYMAIL.TABLE.HEADERS.SUBJECT" | translate }}</th>
+            <th>{{ "MYMAIL.TABLE.HEADERS.TRANSFER_DATE" | translate }}</th>
+            <th>{{ "MYMAIL.TABLE.HEADERS.REFERENCE_NB" | translate }}</th>
+            <th>{{ "MYMAIL.TABLE.HEADERS.ACTIONS" | translate }}</th>
+            <th>{{ "MYMAIL.TABLE.HEADERS.STATUS" | translate }}</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of completedItems; trackBy: trackByFn">
             <td>
-              <p (click)="showMailDetails(item,false)" class="text-primary bold">{{ item.subject }}</p>
-              <p (click)="showMailDetails(item,false)" class="text-secondary">{{ item.details }}</p>
+              <p
+                (click)="showMailDetails(item, false)"
+                class="text-primary bold"
+              >
+                {{ item.subject }}
+              </p>
+              <p (click)="showMailDetails(item, false)" class="text-secondary">
+                {{ item.details }}
+              </p>
             </td>
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
             <td>
-              <button class="btn btn-primary" (click)="showVisualTracking(item)">
-                {{ 'COMMON.VISUAL_TRACKING' | translate }}
+              <button
+                class="btn btn-primary"
+                (click)="showVisualTracking(item)"
+              >
+                {{ "COMMON.VISUAL_TRACKING" | translate }}
               </button>
             </td>
             <td>
               <span>
-                <img alt=""
-                  [src]="item.isRead ? 'assets/images/icons/open-message.svg' : 'assets/images/icons/red-email.svg'" />
-              </span>
+
+                <img src='assets/images/icons/open-message.svg'/>
+            </span>
               <span *ngIf="item.isOverDue">
                 <img alt="" src="assets/images/icons/clock.svg" />
               </span>
@@ -155,6 +257,47 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div
+      class="d-flex justify-content-between align-items-center"
+      *ngIf="
+        (activeTab === 'new' && newItems.length > 0) ||
+        (activeTab === 'sent' && sentItems.length > 0) ||
+        (activeTab === 'completed' && completedItems.length > 0)
+      "
+    >
+      <div class="dataTables_paginate paging_full_numbers">
+
+        <a class="paginate_button first" [class.disabled]="currentPage === 1" (click)="goToPage(1)">
+          <i class="text-secondary fa fa-angle-double-left"></i>
+        </a>
+    
+        <a class="paginate_button previous" [class.disabled]="currentPage === 1" (click)="previousPage()">
+          <i class="text-secondary fa fa-angle-left"></i>
+        </a>
+
+        <span class="d-inline-flex align-items-center mx-2">
+          {{ "COMMON.PAGE" | translate }}
+          <input
+            type="number"
+            class="paginate-input form-control form-control-sm mx-2"
+            [(ngModel)]="currentPage"
+            (ngModelChange)="goToPage(currentPage)"
+            [min]="1"
+            [max]="totalPages"
+          />
+          {{ "COMMON.OF" | translate }} {{ totalPages }}
+        </span>
+
+    
+        <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()">
+          <i class="text-secondary fa fa-angle-right"></i>
+        </a>
+    
+        <a class="paginate_button last" [class.disabled]="currentPage === totalPages" (click)="goToPage(totalPages)">
+          <i class="text-secondary fa fa-angle-double-right"></i>
+        </a>
+      </div>
     </div>
   </div>
 </div>

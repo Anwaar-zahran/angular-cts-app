@@ -1936,3 +1936,18 @@ app-back-button {
     color: var(--text-black);
     font-size: 16px;
 }
+
+mat-month-view .mat-calendar-table-header span.cdk-visually-hidden:lang(ar) {
+    display: block !important;
+    visibility: visible !important;
+    position: static !important;
+    opacity: 1 !important;
+    font-size: 10px;
+    font-weight: normal;
+	width: auto;
+	height: auto;
+}
+
+mat-month-view .mat-calendar-table-header span.cdk-visually-hidden + span:lang(ar) {
+    display: none
+}

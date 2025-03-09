@@ -33,6 +33,7 @@ export class CompletedTransfersComponent implements OnInit {
 
   fromDate: Date | undefined;
   toDate: Date | undefined;
+  minToDate: Date | null = null;
 
   selectedUsers: number[] = [];
   users: User[] = [];
@@ -123,10 +124,10 @@ export class CompletedTransfersComponent implements OnInit {
           info: "",
           infoEmpty: "",
           paginate: {
-            first: "<i class='text-secondary fa fa-angle-left'></i>",
-            previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-            next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-            last: "<i class='text-secondary fa fa-angle-right'></i>",
+            first: "<i class='text-secondary fa fa-angle-double-left'></i>",
+            previous: "<i class='text-secondary fa fa-angle-left'></i>",
+            next: "<i class='text-secondary fa fa-angle-right'></i>",
+            last: "<i class='text-secondary fa fa-angle-double-right'></i>",
           }
         },
         dom: "t",
@@ -322,7 +323,7 @@ export class CompletedTransfersComponent implements OnInit {
       this.currentPage = page;
       this.loadReports();
     }
-}
+  }
 
   onUserSearch(event: { term: string, items: User[] }) {
     this.userSearchText = event.term;
@@ -354,6 +355,24 @@ export class CompletedTransfersComponent implements OnInit {
     this.rerender.unsubscribe();
     this.userSearchSubject.complete();
     this.structureSearchSubject.complete();
+  }
+
+  preventTyping(event: KeyboardEvent): void {
+    if (!(event.ctrlKey && event.key === 'v') && !(['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab']).includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  onFromDateChange(): void {
+    if (this.fromDate) {
+      this.minToDate = new Date(this.fromDate);
+    } else {
+      this.minToDate = null;
+    }
+  }
+
+  transformCategoryName(categoryName: string): string {
+    return "REPORTS.CATEGORIES." + (categoryName ? categoryName.toUpperCase().replace(/\s+/g, "_") : "UNKNOWN");
   }
 
 }

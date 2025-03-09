@@ -13,3 +13,59 @@
     font-weight: bold;
     margin-right: 3px;
 }
+
+.custom-ng-select .ng-select-container {
+    height: 38px; /* Match button height */
+    border-radius: 5px;
+  }
+  
+  .custom-btn {
+    height: 38px; /* Match ng-select height */
+    width: 38px;
+    border-radius: 5px;
+    background-color: #33AAE1;
+    border: none;
+    color: white;
+    font-size: 14px;
+  }
+  
+  .custom-btn i {
+    font-size: 14px; /* Icon size */
+  }
+
+  .form-group.d-flex.align-items-center {
+    align-items: flex-end !important; /* Ensures vertical alignment at the bottom */
+  }
+  
+  .custom-btn {
+    height: 38px; /* Match the height of ng-select */
+    width: 38px; /* Square button to match ng-select height */
+    padding: 0;
+  }
+.custom-select {
+  position: relative;
+  display: inline-block;
+  width: 100%; /* Adjust as needed */
+}
+  .custom-select select {
+  appearance: none; /* Remove default arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  padding: 8px 30px 8px 10px; /* Add padding for the custom arrow */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px; /* Adjust font size as needed */
+}
+
+.custom-select::after {
+  content: "▼"; /* Custom arrow */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none; /* Ensure the arrow doesn't interfere with clicking */
+  font-size: 12px;
+  color: #007bff; /* Blue color */
+}

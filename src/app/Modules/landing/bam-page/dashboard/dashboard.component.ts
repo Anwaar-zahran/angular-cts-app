@@ -40,10 +40,17 @@ export class DashboardComponent implements OnInit {
 
   fromDate: string = Helpers.formatDateToYYYYMMDD(new Date(new Date().setMonth(new Date().getMonth() - 1)));
   toDate: string = Helpers.formatDateToYYYYMMDD(new Date());
+  minToDate: string | null = null;
+  
 
   tempFromDate: string = this.fromDate;
   tempToDate: string = this.toDate;
   isModalOpen: boolean = false;
+
+  
+  // tempFromDate: Date | undefined;
+  // tempToDate: Date | undefined;
+  // isModalOpen: boolean = false;
 
   constructor(
     private lookupsService: LookupsService,
@@ -56,9 +63,8 @@ export class DashboardComponent implements OnInit {
   }
 
   private getCategories() {
-    debugger;
     this.lookupsService.getCategories(undefined).subscribe((res: any) => {
-       
+
       this.categories = res;
     });
   }
@@ -83,5 +89,25 @@ export class DashboardComponent implements OnInit {
     this.fromDate = this.tempFromDate;
     this.toDate = this.tempToDate;
     this.toggleModal();
+  }
+
+
+  onFromDateChange() {
+    console.log(this.tempFromDate);
+    if (this.tempFromDate) {
+      let fromDate = new Date(this.tempFromDate);
+      fromDate.setDate(fromDate.getDate());
+      
+      this.minToDate = fromDate.toISOString().split('T')[0];
+    } else {
+      this.minToDate = null;
+    }
+  }
+  
+
+  preventTyping(event: KeyboardEvent): void {
+    if ((event.key === 'v' && event.ctrlKey) && (['Backspace', 'Delete', 'Tap', 'ArrowLeft', 'ArrowRight'])) {
+      event.preventDefault();
+    }
   }
 }

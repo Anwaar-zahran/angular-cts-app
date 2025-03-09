@@ -42,7 +42,7 @@ export class StructuresService {
         console.log('structureId:', structureId);
         console.log('oldStrutureId:', oldStrutureId);
         const url = `${this.apiBaseUrl}/CTS/Structure/UpdateLoggedInStrucure?structureId=${structureId}&oldStrutureId=${oldStrutureId}`;
-        return this.http.post<string>(url, null, { headers }); // Provide `null` as the bodyreturn this.http.post<string>(`${this.apiBaseUrl}/CTS/Structure/UpdateLoggedInStrucure??structureId=${structureId}&oldStrutureId=${oldStrutureId}`);
+        return this.http.post<string>(url, null, { headers }); // Provide `null` as the bodyreturn 
     }
 
     getLoggedInStructure(): Observable<number> {

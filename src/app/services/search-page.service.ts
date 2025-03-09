@@ -34,7 +34,8 @@ export class SearchPageService {
     const payload = accessToken.split('.')[1]; // Get the payload (2nd part)
     const decodedPayload = this.base64UrlDecode(payload);
     const parsedPayload = JSON.parse(decodedPayload);
-    const structureId = parsedPayload.StructureId; // Adjust based on your token's payload
+    //const structureId = parsedPayload.StructureId; // Adjust based on your token's payload
+    const structureId = localStorage.getItem('structureId') || parsedPayload.StructureId;
     const draw = 0;
     const start = 0;
     const length = 10000;
@@ -240,7 +241,9 @@ export class SearchPageService {
       'Content-Type': 'application/json',
     });
 
-    const params = new HttpParams().set('documentId', id);
+    const params = new HttpParams()
+      .set('documentId', id)
+      .set('ctsTranferId', 1)
 
     return this.httpClient.get<AttachmentsApiResponce[]>(this.attachmentsURL, { headers, params })
       .pipe(
@@ -280,17 +283,6 @@ export class SearchPageService {
         })
       );
   }
-
-  getViewerInfo(documentId: number, version: string, structId: number) {
-    const url = `https://java-qatar.d-intalio.com/VIEWER/api/document/${documentId}/version/${version}/details?structId=${structId}`;
-    debugger
-    return this.httpClient.get(url).pipe(
-      catchError((error) => {
-        console.error('Error while fetching visual tracking:', error.message);
-        return throwError(() => new Error('Failed to fetch viewer info'));
-      })
-    );
-  }  
 }
 
 

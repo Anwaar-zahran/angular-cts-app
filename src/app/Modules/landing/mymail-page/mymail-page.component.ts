@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
@@ -8,20 +8,8 @@ import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-
 import { AuthService } from '../../auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MailsService } from '../../../services/mail.service';
-interface ApiResponseItem {
-  id: number;
-  documentId: number;
-  ref: string;
-  categoryId: number;
-  referenceNumber: string;
-  transferDate: string;
-  status: number;
-  fromUser: string;
-  subject: string;
-  isRead: boolean;
-  isOverDue: boolean;
-  row: any;
-}
+import { DataTableDirective } from 'angular-datatables';
+import { ApiResponseItem } from '../../../models/ApiResponseItem.model';
 
 @Component({
   selector: 'app-mymail-page',
@@ -37,10 +25,25 @@ export class MymailPageComponent implements OnInit {
   newItems: any[] = [];
   sentItems: any[] = [];
   completedItems: any[] = [];
-
+  // Pagination
+  currentPage: number = 1;
+  totalPages: number = 1;
+  totalItems: number = 0;
+  startIndex: number = 0;
+  endIndex: number = 0;
+  pages: number[] = [];
   loading: boolean = true; // Loading state
+  activeTab: 'new' | 'sent' | 'completed' = 'new';
+  itemsPerPage: number = this.dtOptions.pageLength || 10;
+  currentPageMap = {
+    new: 1,
+    sent: 1,
+    completed: 1
+  };
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement!: DataTableDirective;
 
-
+  isDtInitialized: boolean = false;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -48,13 +51,14 @@ export class MymailPageComponent implements OnInit {
     private authService: AuthService,
     private translate: TranslateService,
     private mailService: MailsService,
+    private cdr: ChangeDetectorRef
   ) {
     this.accessToken = localStorage.getItem('access_token');
   }
 
   ngOnInit() {
     this.initDtOptions();
-    this.loadData();
+    this.loadInboxData();
   }
   ngAfterViewInit() {
     /*reset pagination*/
@@ -70,60 +74,46 @@ export class MymailPageComponent implements OnInit {
               dt.page(0).draw('page');
             }
           }
+          this.cdr.detectChanges();
         }, 50);
       });
     });
   }
-  private initDtOptions() {
-    this.translate.get('COMMON.DATATABLE').subscribe(translations => {
+  calculatePagination() {
+    this.totalPages = Math.ceil(this.totalItems / this.dtOptions.pageLength);
+    this.startIndex = (this.currentPage - 1) * this.dtOptions.pageLength + 1;
+    this.endIndex = Math.min(this.startIndex + this.dtOptions.pageLength - 1, this.totalItems);
+
+    this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+  initDtOptions() {
+    this.translate.get('COMMON').subscribe(translations => {
       this.dtOptions = {
         pageLength: 10,
+        search: false,
+        order: [],
         pagingType: 'full_numbers',
-        paging: true,
+        paging: false,
         searching: false,
+        displayStart: 0,
         autoWidth: false,
         language: {
+          emptyTable: "",
+          zeroRecords: "",
+          info: "",
+          infoEmpty: "",
           paginate: {
-            first: "<i class='text-secondary fa fa-angle-left'></i>",
-            previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-            next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-            last: "<i class='text-secondary fa fa-angle-right'></i>",
-          },
+            first: "<i class='text-secondary fa fa-angle-double-left'></i>",
+            previous: "<i class='text-secondary fa fa-angle-left'></i>",
+            next: "<i class='text-secondary fa fa-angle-right'></i>",
+            last: "<i class='text-secondary fa fa-angle-double-right'></i>",
+          }
         },
-        dom: 'tp',
-        drawCallback: (settings: any) => {
-          const api = settings.oInstance.api();
-          const pageInfo = api.page.info();
-          const pagination = $(api.table().container()).find('.dataTables_paginate');
-          pagination.find('input.paginate-input').remove();
-
-          const page = $('<span class="d-inline-flex align-items-center mx-2">' + this.translate.instant('COMMON.PAGE') + '<input type="number" class="paginate-input form-control form-control-sm mx-2" min="1" max="' + pageInfo.pages + '" value="' + (pageInfo.page + 1) + '"> ' + this.translate.instant('COMMON.OF') + ' ' + pageInfo.pages + '</span>');
-
-          let timeout: any;
-          page.find('input').on('keyup', function () {
-            clearTimeout(timeout);
-
-            timeout = setTimeout(() => {
-              const pageNumber = parseInt($(this).val() as string, 10);
-              if (pageNumber >= 1 && pageNumber <= pageInfo.pages) {
-                api.page(pageNumber - 1).draw('page');
-              }
-            }, 500);
-          });
-
-          const previous = pagination.find('.previous');
-          const next = pagination.find('.next');
-          page.insertAfter(previous);
-          next.insertAfter(page);
-
-          pagination.find('a.paginate_button').on('click', function () {
-            page.find('input').val(api.page() + 1);
-          });
-        }
+        dom: "t",
+        ordering: true
       };
     });
   }
-
   base64UrlDecode(str: string): string {
     // Replace non-URL safe characters and pad with `=`
     str = str.replace(/-/g, '+').replace(/_/g, '/');
@@ -147,86 +137,44 @@ export class MymailPageComponent implements OnInit {
       row: item
     };
   }
+  previousPage() {
+    if (this.currentPageMap[this.activeTab] > 1) {
+      this.goToPage(this.currentPageMap[this.activeTab] - 1);
+    }
+  }
 
-  loadData() {
-    const payload = this.accessToken?.split('.')[1] || '';
-    debugger
-    const decodedPayload = this.base64UrlDecode(payload);
-    const parsedPayload = JSON.parse(decodedPayload);
-    this.structureId = localStorage.getItem('structureId') || parsedPayload.StructureId;
-    console.log('Structure ID:', this.structureId);
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.accessToken}`,
-    });
+  nextPage() {
+    if (this.currentPageMap[this.activeTab] < this.totalPages) {
+      this.goToPage(this.currentPageMap[this.activeTab] + 1);
+    }
+  }
 
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPageMap[this.activeTab] = page;
+      this.setActiveTab(this.activeTab);
+    }
+  }
 
-    const formData = new FormData();
-    formData.append('length', '1000');
-    formData.append('structureId', this.structureId);
-    //formData.append('NodeId', '34');
-
-
-    const callApi = (url: string) => {
-      return this.http.post<any>(url, formData, { headers }).toPromise();
-    };
-
-
-    // Fetch all data concurrently
-    Promise.all([
-      callApi(`${environment.apiBaseUrl}/Transfer/ListSent`),
-      callApi(`${environment.apiBaseUrl}/Transfer/ListCompleted`),
-      callApi(`${environment.apiBaseUrl}/Transfer/ListInbox`)
-    ])
-      .then(([sentResponse, completedResponse, inboxResponse]) => {
-        console.log('Sent Response:', sentResponse);
-        console.log('Completed Response:', completedResponse);
-        console.log('Inbox Response:', inboxResponse);
-        // Map the API data to respective items
-        this.sentItems = sentResponse.data.map(this.mapApiResponse.bind(this)) || [];
-        this.completedItems = completedResponse.data.map(this.mapApiResponse.bind(this)) || [];
-        this.newItems = inboxResponse.data.map(this.mapApiResponse.bind(this)) || [];
-        console.log('newItems:', this.newItems);
-        console.log('Completed:', this.completedItems);
-        console.log('sentItems:', this.sentItems);
-
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      }).finally(() => {
-        this.loading = false;
-      });;
-
+  setActiveTab(tab: 'new' | 'sent' | 'completed',) {
+    if (this.activeTab !== tab) {
+      // Reset pagination ONLY when switching tabs
+      this.currentPageMap[tab] = 1;
+    }
+    this.activeTab = tab;
+    const currentPageforTab = this.currentPageMap[this.activeTab];
+    if (tab === 'new') {
+      this.loadInboxData(currentPageforTab);
+    } else if (tab === 'sent') {
+      this.loadSentData(currentPageforTab);
+    } else {
+      this.loadCompletedData(currentPageforTab);
+    }
   }
   active = 1;
   fromSent: boolean = false;
   fromCompleted: boolean = false;
 
-  showMailDetailsOld(item: ApiResponseItem, showActionbtns: boolean) {
-    debugger
-    const currentName = this.authService.getDisplayName();
-    this.mailService.markCorrespondanceAsRead(this.accessToken!, item.id).subscribe({ next: () => { }, error: (err) => console.error(err) });
-    const dialogRef = this.dialog.open(MailDetailsDialogComponent, {
-      disableClose: true,
-      width: '90%',
-      height: '90%',
-      data: {
-        id: item.row.documentId,
-        documentId: item.documentId,
-        referenceNumber: item.ref,
-        row: item.row,
-        fromSearch: false,
-        showActionButtons: (showActionbtns && (!item.row?.isLocked || (item.row?.isLocked && item.row?.lockedBy == currentName)) && item.row.purposeId != 10)
-
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('Mail details closed', result);
-      //  window.location.reload();
-      //this.fetchData();
-      //this.router.navigate([this.router.url]);
-    });
-  }
   showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
     debugger;
     const currentName = this.authService.getDisplayName();
@@ -260,10 +208,79 @@ export class MymailPageComponent implements OnInit {
       console.log('Mail details closed', result);
 
       // if (result === 'updated') { 
-      this.loadData(); // Call API again to refresh only the necessary data
+      this.setActiveTab(this.activeTab); // Call API again to refresh only the necessary data
       //}
 
     });
+  }
+  private getStructureId(): string {
+    const payload = this.accessToken?.split('.')[1] || '';
+    const decodedPayload = this.base64UrlDecode(payload);
+    const parsedPayload = JSON.parse(decodedPayload);
+    return localStorage.getItem('structureId') || parsedPayload.StructureId;
+  }
+  loadInboxData(page: number = 1) {
+    this.activeTab = "new";
+    this.loading = true;
+    this.currentPage = page
+    this.structureId = this.getStructureId();
+
+    this.mailService.fetchData('/Transfer/ListInbox', this.structureId, page, this.itemsPerPage, this.accessToken!)
+      .subscribe(
+        (response) => {
+          this.newItems = response.data.map(this.mapApiResponse.bind(this)) || [];
+          // this.totalPages = Math.ceil(response.recordsTotal / this.itemsPerPage);
+          this.totalItems = response.recordsTotal;
+          this.calculatePagination()
+        },
+        (error) => console.error('Error fetching inbox:', error),
+        () => (this.loading = false)
+      );
+  }
+  loadSentData(page: number = 1) {
+
+    debugger;
+    this.activeTab = 'sent';
+    this.currentPage = page;
+    this.fromSent = true;
+    // if (this.sentItems.length > 0) return; // Prevent duplicate calls
+    this.loading = true;
+    this.structureId = this.getStructureId();
+
+    this.mailService.fetchData('/Transfer/ListSent', this.structureId, page, this.itemsPerPage, this.accessToken!)
+      .subscribe(
+        (response) => {
+          this.sentItems = response.data.map(this.mapApiResponse.bind(this)) || [];
+          this.totalItems = response.recordsTotal;
+          this.calculatePagination();
+        },
+        (error) => console.error('Error fetching sent mails:', error),
+        () => (this.loading = false)
+      );
+  }
+
+  loadCompletedData(page: number = 1) {
+    this.activeTab = 'completed';
+    // if (this.completedItems.length > 0) return; // Prevent duplicate calls
+    this.loading = true;
+    this.currentPage = page;
+    this.fromCompleted = true;
+    this.structureId = this.getStructureId();
+
+    this.mailService.fetchData('/Transfer/ListCompleted', this.structureId, page, this.itemsPerPage, this.accessToken!)
+      .subscribe(
+        (response) => {
+          this.completedItems = response.data.map(this.mapApiResponse.bind(this)) || [];
+          this.totalItems = response.recordsTotal;
+          this.calculatePagination();
+
+          setTimeout(() => {
+            this.initializeDataTable('#completed-tab table');
+          }, 0);
+        },
+        (error) => console.error('Error fetching completed mails:', error),
+        () => (this.loading = false)
+      );
   }
 
   showVisualTracking(item: ApiResponseItem) {
@@ -279,14 +296,26 @@ export class MymailPageComponent implements OnInit {
 
   sortOrder: { [key: string]: 'asc' | 'desc' } = { date: 'asc', ref: 'asc' };
 
-  sortBy(criteria: string) {
+  sortByRef(criteria: string) {
+
     const activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
 
     if (!activeTab) {
       return;
     }
+    const tableElement = document.querySelector(`${activeTab} table`);
+    if (!tableElement) {
+      console.error("Table not found in active tab");
+      return;
+    }
 
-    const table = $(activeTab).find('table').DataTable();
+    let table;
+    try {
+      table = $(tableElement).DataTable();
+    } catch (e) {
+      console.error("Error accessing DataTable:", e);
+      return;
+    }
 
     let columnIndex = 0;
     if (criteria === 'date') {
@@ -294,11 +323,57 @@ export class MymailPageComponent implements OnInit {
     } else if (criteria === 'ref') {
       columnIndex = 2;
     }
-    const currentOrder = table.order();
-    const currentSortOrder = currentOrder.length && currentOrder[0][1];
 
-    const newSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
-    table.order([columnIndex, newSortOrder]).draw();
+    this.sortOrder[criteria] = this.sortOrder[criteria] === 'asc' ? 'desc' : 'asc';
+
+    table.order([columnIndex, this.sortOrder[criteria]]).draw();
+  }
+
+  sortByTransfer(criteria: string) {
+    this.sortOrder[criteria] = this.sortOrder[criteria] === 'asc' ? 'desc' : 'asc';
+    const direction = this.sortOrder[criteria];
+
+    const activeTab = document.querySelector('.nav-link.active')?.getAttribute('data-bs-target');
+    if (!activeTab) return;
+
+    let dataArray: any[] = [];
+    if (activeTab === '#nav-new') {
+      dataArray = this.newItems;
+    } else if (activeTab === '#nav-sent') {
+      dataArray = this.sentItems;
+    } else if (activeTab === '#nav-completed') {
+      dataArray = this.completedItems;
+    }
+
+    if (criteria === 'date') {
+      dataArray.sort((a, b) => {
+        const partsA = a.date.split('/');
+        const partsB = b.date.split('/');
+
+        const dateA = new Date(
+          parseInt(partsA[2]),
+          parseInt(partsA[1]) - 1,
+          parseInt(partsA[0])
+        );
+
+        const dateB = new Date(
+          parseInt(partsB[2]),
+          parseInt(partsB[1]) - 1,
+          parseInt(partsB[0])
+        );
+
+        return direction === 'asc' ?
+          dateA.getTime() - dateB.getTime() :
+          dateB.getTime() - dateA.getTime();
+      });
+    } else if (criteria === 'ref') {
+      dataArray.sort((a, b) => {
+        return direction === 'asc' ?
+          a.ref.localeCompare(b.ref) :
+          b.ref.localeCompare(a.ref);
+      });
+    }
+    this.cdr.detectChanges();
   }
 
   compare(a: any, b: any, criteria: string): number {
@@ -315,5 +390,21 @@ export class MymailPageComponent implements OnInit {
     return item.id;
   }
 
+  initializeDataTable(selector: string) {
+    // Destroy existing table if it exists
+    const existingTable = $(selector).DataTable();
+    if (existingTable) {
+      existingTable.destroy();
+    }
+
+    // Initialize with your options
+    $(selector).DataTable({
+      paging: false, // Since you're handling pagination yourself
+      searching: false, // If you don't need search
+      info: false, // Hide "Showing X of Y entries"
+      ordering: true, // Enable sorting
+      order: [] // Default ordering, empty for none
+    });
+  }
 
 }

@@ -10,10 +10,15 @@ import { ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent } fr
 import { ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent } from './charts/chart-system-transfers-completed-overdue-and-onTime-per-category/chart-system-transfers-completed-overdue-and-onTime-per-category.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { BackButtonComponent } from '../../../shared/back-button/back-button.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-system-dashboard',
   imports: [
+    CommonModule,
+    FormsModule,
     ChartSystemCountPerCategoryAndStatusComponent,
     ChartSystemStatisticsPerDepartmentComponent,
     ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent,
@@ -34,22 +39,63 @@ export class SystemDashboardComponent {
   fromDate: string = Helpers.formatDateToYYYYMMDD(new Date(new Date().setMonth(new Date().getMonth() - 1)));
   toDate: string = Helpers.formatDateToYYYYMMDD(new Date());
   categories: any[] = [];
+  minToDate: string | null = null;
 
-  constructor(private lookupsService: LookupsService) { }
+  tempFromDate: string = this.fromDate;
+  tempToDate: string = this.toDate;
+  isModalOpen: boolean = false;
+
+  constructor(private lookupsService: LookupsService,
+    private modalService: NgbModal) { }
 
   ngOnInit() {
     this.getCategories();
   }
 
+  toggleModal() {
+    this.isModalOpen = !this.isModalOpen;
+    if (this.isModalOpen) {
+      this.tempFromDate = this.fromDate;
+      this.tempToDate = this.toDate;
+    }
+  }
+ 
+
+ openModal(content: any) {
+  console.log('open modal');
+  this.isModalOpen = true;
+  this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+    (result) => {
+      this.applyFilter();
+    },
+    (reason) => {
+      this.isModalOpen = false; // Ensure state updates when dismissed
+    }
+  );
+}
+
+
+  applyFilter() {
+    this.fromDate = this.tempFromDate;
+    this.toDate = this.tempToDate;
+    this.toggleModal();
+  }
+
   getCategories() {
-    debugger
     this.lookupsService.getCategories(undefined).subscribe((res: any) => {
       this.categories = res;
     });
   }
 
-
-
-
-
+  onFromDateChange() {
+    console.log(this.tempFromDate);
+    if (this.tempFromDate) {
+      let fromDate = new Date(this.tempFromDate);
+      fromDate.setDate(fromDate.getDate());
+      
+      this.minToDate = fromDate.toISOString().split('T')[0];
+    } else {
+      this.minToDate = null;
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import { LOCALE_ID ,NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -27,16 +27,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTablesModule } from 'angular-datatables';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoaderInterceptor } from './interceptors/loader.interceptor';
+import { LoaderComponent } from './Modules/shared/loader/loader.component';
 //import { AddressBookComponent } from './Modules/landing/address-book/address-book.component';
 
 declare var $: any;
 if (typeof $ !== 'undefined') {
   $.fn.dataTable.ext.errMode = 'none';
-}
-
-// Factory to provide LOCALE_ID dynamically
-export function localeIdFactory(languageService: LanguageService): string {
-  return languageService.getCurrentLang();
 }
 
 export function tokenGetter() {
@@ -68,11 +65,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     JwtModule.forRoot({
-        config: {
-            tokenGetter: tokenGetter, // Helps JwtHelperService find the token
-            allowedDomains: ['localhost:8090'], // Define the allowed API domains
-            disallowedRoutes: [] // Specify routes that do not require a token
-        }
+      config: {
+        tokenGetter: tokenGetter, // Helps JwtHelperService find the token
+        allowedDomains: ['localhost:8090'], // Define the allowed API domains
+        disallowedRoutes: [] // Specify routes that do not require a token
+      }
     }),
     BrowserAnimationsModule,
     MatDatepickerModule,
@@ -80,23 +77,24 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatInputModule,
     MatNativeDateModule,
     TranslateModule.forRoot({
-        loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClient]
-        }
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
     }),
-],
+    LoaderComponent,
+  ],
   providers: [
     LanguageService,
     {
-      provide: LOCALE_ID,
-      useFactory: localeIdFactory,
-      deps: [LanguageService],
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
+      useClass: LoaderInterceptor,
       multi: true
     }
   ],

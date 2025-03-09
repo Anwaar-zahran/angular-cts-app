@@ -39,7 +39,9 @@ export class KpiAverageDurationForCorrespondenceCompletionComponent implements O
 
     this.lookupsService.getYears().subscribe((years: any[]) => {
       this.availableYears = years;
-      this.year = this.availableYears[this.availableYears.length - 1];
+      this.availableYears ?.sort((a, b) => a - b);
+      this.year = this.availableYears[this.availableYears ?.length - 1];
+
       this.tempYear = this.year;
     });
   }

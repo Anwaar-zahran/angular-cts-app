@@ -12,7 +12,7 @@ export class MailsService {
   private CorrsondanceViewURL = `${environment.apiBaseUrl}/Transfer/View`;
   private myTransferURL = `${environment.apiBaseUrl}/Transfer/GetTransferInfoById`;
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient,) { }
 
   transferMail(accessToken: string, model: any[]): Observable<any> {
     const headers = new HttpHeaders({
@@ -111,5 +111,23 @@ export class MailsService {
         })
       );
   }
+  fetchData(url: string, structureId: string,
+     page: number, pageSize: number, accessToken: string,
+     purposeId?: string // Optional parameter
+    ): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${accessToken}`,
+    });
 
+    const formData = new FormData();
+    formData.append('draw', '1');
+    formData.append('start', ((page - 1) * pageSize).toString());
+    formData.append('length', pageSize.toString());
+    formData.append('structureId', structureId);
+  // Only append PurposeId if it's provided
+    if (purposeId) {
+      formData.append('PurposeId', purposeId);
+    }
+    return this.httpClient.post<any>(`${environment.apiBaseUrl}${url}`, formData, { headers });
+  }
 }

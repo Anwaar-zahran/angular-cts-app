@@ -35,6 +35,7 @@ export class CompleteCorrespondencesComponent implements OnInit {
 
   fromDate: Date | undefined;
   toDate: Date | undefined;
+  minToDate: Date | null = null;
 
   selectedUsers: number[] = [];
   users: User[] = [];
@@ -98,7 +99,6 @@ export class CompleteCorrespondencesComponent implements OnInit {
   }
 
   ngOnInit() {
-    debugger;
 
     //this.selectedPrivacyId = null;
     //this.selectedPriorityId = null;
@@ -128,10 +128,10 @@ export class CompleteCorrespondencesComponent implements OnInit {
           info: "",
           infoEmpty: "",
           paginate: {
-            first: "<i class='text-secondary fa fa-angle-left'></i>",
-            previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-            next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-            last: "<i class='text-secondary fa fa-angle-right'></i>",
+            first: "<i class='text-secondary fa fa-angle-double-left'></i>",
+            previous: "<i class='text-secondary fa fa-angle-left'></i>",
+            next: "<i class='text-secondary fa fa-angle-right'></i>",
+            last: "<i class='text-secondary fa fa-angle-double-right'></i>",
           }
         },
         dom: "t",
@@ -249,13 +249,30 @@ export class CompleteCorrespondencesComponent implements OnInit {
     });
   }
 
-  formatDate(date: Date | undefined): string {
+  formatDate(date: Date | string | undefined): string {
     if (!date) return '';
+  
+    // If the input is a string, try converting it to a Date
+    if (typeof date === 'string') {
+      const parsedDate = new Date(date);
+      if (isNaN(parsedDate.getTime())) {
+        return ''; // Return empty if it's an invalid date
+      }
+      date = parsedDate;
+    }
+  
+    // Ensure it's a valid Date object
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      return ''; // Return empty for invalid date values
+    }
+  
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear().toString();
+  
     return `${day}/${month}/${year}`;
   }
+  
 
   joinStructureAndUser(structure: string, user: string): string {
     if (!structure && !user) return '';
@@ -292,7 +309,7 @@ export class CompleteCorrespondencesComponent implements OnInit {
       priorityId: this.selectedPriorityId ? this.selectedPriorityId : null
     };
 
-    this.reportsService.listInProgressCorrespondences(params).subscribe({
+    this.reportsService.listCompletedCorrespondences(params).subscribe({
       next: (response) => {
         this.reports = response.data;
         this.totalItems = response.recordsTotal;
@@ -423,4 +440,23 @@ export class CompleteCorrespondencesComponent implements OnInit {
       }
     });
   }
+
+
+  preventTyping(event: KeyboardEvent): void{
+    if(!(event.ctrlKey && event.key === 'v') && !(['Backspace','Delete','ArrowLeft','ArrowRight','Tab']).includes(event.key)){
+      event.preventDefault();
+    }
+  }
+
+  onFromDateChange() {
+    if (this.fromDate) {
+      this.minToDate = new Date(this.fromDate);
+    } else {
+      this.minToDate = null;
+    }
+  }
+
+  transformCategoryName(categoryName: string): string {
+    return "REPORTS.CATEGORIES." + (categoryName ? categoryName.toUpperCase().replace(/\s+/g, "_") : "UNKNOWN");
+}
 }

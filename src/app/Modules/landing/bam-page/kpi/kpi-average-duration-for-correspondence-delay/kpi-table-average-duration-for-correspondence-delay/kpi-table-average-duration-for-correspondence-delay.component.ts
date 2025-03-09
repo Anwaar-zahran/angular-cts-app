@@ -70,6 +70,7 @@ export class KpiTableAverageDurationForCorrespondenceDelayComponent implements O
   ) { }
 
   ngOnInit() {
+    debugger;
     this.initDtOptions();
     this.loadData();
     this.getTotalAverage();
@@ -98,6 +99,7 @@ export class KpiTableAverageDurationForCorrespondenceDelayComponent implements O
   }
 
   private loadData() {
+    debugger;
     this.kpiService.ListStructureAverageDurationForCorrespondenceDelay(this.year).subscribe((response: any) => {
       // Map the data to include both structureId and structureName
       this.data = response.data.map((item: any) => {
@@ -133,6 +135,7 @@ export class KpiTableAverageDurationForCorrespondenceDelayComponent implements O
   }
 
   openStructureChart(type: string, average: number, year: number, userId: number | null, structureId: number) {
+    debugger;
     // Implement the logic to open the structure chart
     console.log(`Opening chart for ${type} with average ${average}, year ${year}, userId ${userId}, structureId ${structureId}`);
 

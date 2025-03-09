@@ -33,6 +33,7 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
     fromDate: Date | undefined;
     //formatDate?: (date: NgbDateStruct | undefined) => string; // Use '?' to make it optional
     toDate: Date | undefined;
+    minToDate: Date | null = null;
 
     selectedUsers: number[] = [];
     users: User[] = [];
@@ -123,10 +124,10 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
                     info: "",
                     infoEmpty: "",
                     paginate: {
-                        first: "<i class='text-secondary fa fa-angle-left'></i>",
-                        previous: "<i class='text-secondary fa fa-angle-double-left'></i>",
-                        next: "<i class='text-secondary fa fa-angle-double-right'></i>",
-                        last: "<i class='text-secondary fa fa-angle-right'></i>",
+                        first: "<i class='text-secondary fa fa-angle-double-left'></i>",
+                        previous: "<i class='text-secondary fa fa-angle-left'></i>",
+                        next: "<i class='text-secondary fa fa-angle-right'></i>",
+                        last: "<i class='text-secondary fa fa-angle-double-right'></i>",
                     }
                 },
                 dom: "t",
@@ -306,8 +307,8 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
 
     goToPage(page: number) {
         if (page >= 1 && page <= this.totalPages) {
-          this.currentPage = page;
-          this.loadReports();
+            this.currentPage = page;
+            this.loadReports();
         }
     }
 
@@ -344,4 +345,23 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
         this.userSearchSubject.complete();
         this.structureSearchSubject.complete();
     }
+
+    preventTyping(event: KeyboardEvent): void {
+        if (!(event.ctrlKey && event.key === 'v') && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(event.key)) {
+            event.preventDefault();
+        }
+    }
+
+    onFromDateChange(): void {
+        if (this.fromDate) {
+            this.minToDate = new Date(this.fromDate)
+        } else {
+            this.minToDate = null;
+        }
+    }
+
+    transformCategoryName(categoryName: string): string {
+        return "REPORTS.CATEGORIES." + (categoryName ? categoryName.toUpperCase().replace(/\s+/g, "_") : "UNKNOWN");
+    }
+
 } 

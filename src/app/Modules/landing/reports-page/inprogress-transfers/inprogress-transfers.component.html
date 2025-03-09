@@ -1,138 +1,220 @@
 <div class="body-content">
-    <!-- Title Section -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="page-title"><app-back-button></app-back-button>{{ 'REPORTS.IN_PROGRESS_REPORT' | translate }}</h1>
+  <!-- Title Section -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="page-title">
+      <app-back-button></app-back-button
+      >{{ "REPORTS.IN_PROGRESS_TRANSFERS" | translate }}
+    </h1>
+  </div>
+
+  <!-- Search Form -->
+  <form class="search-form" (ngSubmit)="search()" #searchForm="ngForm">
+    <div class="row">
+      <!-- Structures Select -->
+      <div class="col-md-3">
+        <div class="form-group">
+          <label class="form-label">{{
+            "REPORTS.STRUCTURE" | translate
+          }}</label>
+          <ng-select
+            [items]="structures"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            [searchable]="true"
+            bindLabel="name"
+            bindValue="id"
+            [(ngModel)]="selectedStructures"
+            [ngModelOptions]="{ standalone: true }"
+            [loading]="isLoadingStructures"
+            (search)="onStructureSearch($event)"
+            class="form-control"
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <i class="fas fa-building me-2"></i>
+              {{ item.name }}
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+
+      <!-- Users Select -->
+      <div class="col-md-3">
+        <div class="form-group">
+          <label class="form-label">{{ "REPORTS.USER" | translate }}</label>
+          <ng-select
+            [items]="users"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            [searchable]="true"
+            bindLabel="fullName"
+            bindValue="id"
+            [(ngModel)]="selectedUsers"
+            [ngModelOptions]="{ standalone: true }"
+            [loading]="isLoadingUsers"
+            (search)="onUserSearch($event)"
+            class="form-control"
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <i class="fas fa-user me-2"></i>
+              {{ getUserDisplayName(item) }}
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+      <!-- Date Controls -->
+      <div class="col-md-3">
+        <div class="form-group">
+          <label class="form-label">{{
+            "REPORTS.FROM_DATE" | translate
+          }}</label>
+          <input
+            class="form-control date-picker"
+            matInput
+            [matDatepicker]="picker1"
+            placeholder="mm-dd-yyyy"
+            [(ngModel)]="fromDate"
+            name="dp1"
+            (click)="picker1.open()"
+            (keydown)="preventTyping($event)"
+            (ngModelChange)="onFromDateChange()"
+          />
+          <mat-datepicker #picker1></mat-datepicker>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="form-group">
+          <label class="form-label">{{ "REPORTS.TO_DATE" | translate }}</label>
+          <input
+            class="form-control date-picker"
+            matInput
+            [matDatepicker]="picker2"
+            placeholder="mm-dd-yyyy"
+            [(ngModel)]="toDate"
+            name="dp2"
+            (click)="picker2.open()"
+            (keydown)="preventTyping($event)"
+            [min]="minToDate"
+          />
+          <mat-datepicker #picker2></mat-datepicker>
+        </div>
+      </div>
+
+      <!-- Checkbox -->
+      <div class="col-md-3">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="isOverdue"
+            name="isOverdue"
+            [(ngModel)]="isOverdue"
+          />
+          <label class="form-check-label" for="isOverdue">
+            {{ "REPORTS.SHOW_OVERDUE" | translate }}
+          </label>
+        </div>
+      </div>
     </div>
+    <!-- Action Buttons -->
+    <div class="d-flex justify-content-end gap-3 mt-2">
+      <button class="btn btn-secondary btn-lg" (click)="clear()">
+        {{ "COMMON.ACTIONS.CLEAR" | translate }}
+      </button>
+      <button type="submit" class="btn btn-primary btn-lg">
+        <i class="fa fa-search"></i> {{ "COMMON.ACTIONS.SEARCH" | translate }}
+      </button>
+    </div>
+  </form>
 
-    <!-- Search Form -->
-    <form class="search-form" (ngSubmit)="search()" #searchForm="ngForm">
-        <div class="row">
-            <!-- Structures Select -->
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="form-label">{{ 'REPORTS.STRUCTURE' | translate }}</label>
-                    <ng-select [items]="structures" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
-                        bindLabel="name" bindValue="id" [(ngModel)]="selectedStructures"
-                        [ngModelOptions]="{standalone: true}" [loading]="isLoadingStructures"
-                        (search)="onStructureSearch($event)" class="form-control">
-                        <ng-template ng-option-tmp let-item="item">
-                            <i class="fas fa-building me-2"></i>
-                            {{item.name}}
-                        </ng-template>
-                    </ng-select>
-                </div>
-            </div>
+  <hr />
+  <!-- Table -->
+  <div class="shadow table-container overflow-x-auto">
+    <table
+      id="inprogress-report-table"
+      class="table"
+      datatable
+      [dtOptions]="dtOptions"
+      [dtTrigger]="dtTrigger"
+    >
+      <thead>
+        <tr>
+          <th colspan="8" class="text-center text-muted fs-5">
+            {{ "REPORTS.TOTAL_REPORTS" | translate }} : {{ totalItems }}
+          </th>
+        </tr>
+        <tr>
+          <th>{{ "REPORTS.CATEGORY" | translate }}</th>
+          <th>{{ "REPORTS.REFERENCE_NUMBER" | translate }}</th>
+          <th>{{ "REPORTS.SUBJECT" | translate }}</th>
+          <th>{{ "REPORTS.FROM_STRUCTURE_USER" | translate }}</th>
+          <th>{{ "REPORTS.TO_STRUCTURE_USER" | translate }}</th>
+          <th>{{ "REPORTS.TRANSFER_DATE" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of reports">
+          <td>{{ transformCategoryName(item.categoryName) | translate }}</td>
+          <td>{{ item.referenceNumber }}</td>
+          <td>{{ item.subject }}</td>
+          <td>{{ joinStructureAndUser(item.fromStructure, item.fromUser) }}</td>
+          <td>{{ joinStructureAndUser(item.toStructure, item.toUser) }}</td>
+          <td>{{ item.transferDate }}</td>
+        </tr>
+      </tbody>
+    </table>
 
-            <!-- Users Select -->
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="form-label">{{ 'REPORTS.USER' | translate }}</label>
-                    <ng-select [items]="users" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
-                        bindLabel="fullName" bindValue="id" [(ngModel)]="selectedUsers"
-                        [ngModelOptions]="{standalone: true}" [loading]="isLoadingUsers" (search)="onUserSearch($event)"
-                        class="form-control">
-                        <ng-template ng-option-tmp let-item="item">
-                            <i class="fas fa-user me-2"></i>
-                            {{getUserDisplayName(item)}}
-                        </ng-template>
-                    </ng-select>
-                </div>
-            </div>
-            <!-- Date Controls -->
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="form-label">{{ 'REPORTS.FROM_DATE' | translate }}</label>
-                    <input class="form-control date-picker" matInput [matDatepicker]="picker1" placeholder="mm-dd-yyyy"
-                        [(ngModel)]="fromDate" name="dp1" (click)="picker1.open()" />
-                    <mat-datepicker #picker1></mat-datepicker>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="form-label">{{ 'REPORTS.TO_DATE' | translate }}</label>
-                    <input class="form-control date-picker" matInput [matDatepicker]="picker2" placeholder="mm-dd-yyyy"
-                        [(ngModel)]="toDate" name="dp2" (click)="picker2.open()" />
-                    <mat-datepicker #picker2></mat-datepicker>
-                </div>
-            </div>
-
-            <!-- Checkbox -->
-            <div class="col-md-3">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="isOverdue" name="isOverdue"
-                        [(ngModel)]="isOverdue">
-                    <label class="form-check-label" for="isOverdue">
-                        {{ 'REPORTS.SHOW_OVERDUE' | translate }}
-                    </label>
-                </div>
-            </div>
-
-        </div>
-        <!-- Action Buttons -->
-        <div class="d-flex justify-content-end gap-3 mt-2">
-            <button class="btn btn-secondary btn-lg" (click)="clear()">{{ 'COMMON.ACTIONS.CLEAR' | translate }}</button>
-            <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-search"></i> {{ 'COMMON.ACTIONS.SEARCH'
-                | translate }}</button>
-        </div>
-    </form>
-
-    <hr />
-    <!-- Table -->
-    <div class="shadow table-container overflow-x-auto">
-        <table id="inprogress-report-table" class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-            <thead>
-                <tr>
-                    <th colspan="8" class="text-center text-muted fs-5">
-                      {{ "REPORTS.TOTAL_REPORTS" | translate }} : {{ totalItems }}
-                    </th>
-                  </tr>
-                <tr>
-                    <th>{{ 'REPORTS.CATEGORY' | translate }}</th>
-                    <th>{{ 'REPORTS.REFERENCE_NUMBER' | translate }}</th>
-                    <th>{{ 'REPORTS.SUBJECT' | translate }}</th>
-                    <th>{{ 'REPORTS.FROM_STRUCTURE_USER' | translate }}</th>
-                    <th>{{ 'REPORTS.TO_STRUCTURE_USER' | translate }}</th>
-                    <th>{{ 'REPORTS.TRANSFER_DATE' | translate }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of reports">
-                    <td>{{item.categoryName}}</td>
-                    <td>{{item.referenceNumber}}</td>
-                    <td>{{item.subject}}</td>
-                    <td>{{joinStructureAndUser(item.fromStructure, item.fromUser)}}</td>
-                    <td>{{joinStructureAndUser(item.toStructure, item.toUser)}}</td>
-                    <td>{{item.transferDate}}</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- Only show pagination if there's data -->
-        <div class="d-flex justify-content-between align-items-center" *ngIf="reports && reports.length > 0">
-            <!--<div>
+    <!-- Only show pagination if there's data -->
+    <div
+      class="d-flex justify-content-between align-items-center"
+      *ngIf="reports && reports.length > 0"
+    >
+      <!--<div>
                 Showing {{startIndex}} to {{endIndex}} of {{totalItems}} entries
             </div>-->
 
-            <div class="dataTables_paginate paging_full_numbers">
-                <a class="paginate_button first" [class.disabled]="currentPage === 1" (click)="goToPage(1)"><i
-                        class='text-secondary fa fa-angle-left'></i></a>
+      <div class="dataTables_paginate paging_full_numbers">
+        <a
+          class="paginate_button first"
+          [class.disabled]="currentPage === 1"
+          (click)="goToPage(1)"
+          ><i class="text-secondary fa fa-angle-double-left"></i
+        ></a>
 
-                <a class="paginate_button previous" [class.disabled]="currentPage === 1" (click)="previousPage()"><i
-                        class='text-secondary fa fa-angle-double-left'></i></a>
+        <a
+          class="paginate_button previous"
+          [class.disabled]="currentPage === 1"
+          (click)="previousPage()"
+          ><i class="text-secondary fa fa-angle-left"></i
+        ></a>
 
-                        <span class="d-inline-flex align-items-center mx-2">{{ 'COMMON.PAGE' | translate }}  
-                            <input type="number" class="paginate-input form-control form-control-sm mx-2" [(ngModel)]="currentPage" (ngModelChange)="goToPage(currentPage)"
-                            [min]="1" [max]="totalPages" />
-                              {{ 'COMMON.OF' | translate }} {{totalPages}}</span>
+        <span class="d-inline-flex align-items-center mx-2"
+          >{{ "COMMON.PAGE" | translate }}
+          <input
+            type="number"
+            class="paginate-input form-control form-control-sm mx-2"
+            [(ngModel)]="currentPage"
+            (ngModelChange)="goToPage(currentPage)"
+            [min]="1"
+            [max]="totalPages"
+          />
+          {{ "COMMON.OF" | translate }} {{ totalPages }}</span
+        >
 
-                <a class="paginate_button next" [class.disabled]="currentPage === totalPages" (click)="nextPage()"><i
-                        class='text-secondary fa fa-angle-double-right'></i></a>
+        <a
+          class="paginate_button next"
+          [class.disabled]="currentPage === totalPages"
+          (click)="nextPage()"
+          ><i class="text-secondary fa fa-angle-right"></i
+        ></a>
 
-                <a class="paginate_button last" [class.disabled]="currentPage === totalPages"
-                    (click)="goToPage(totalPages)"><i class='text-secondary fa fa-angle-right'></i></a>
-
-            </div>
-        </div>
+        <a
+          class="paginate_button last"
+          [class.disabled]="currentPage === totalPages"
+          (click)="goToPage(totalPages)"
+          ><i class="text-secondary fa fa-angle-double-right"></i
+        ></a>
+      </div>
     </div>
+  </div>
 </div>
