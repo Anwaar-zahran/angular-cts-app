@@ -128,8 +128,8 @@
                 class="form-control"
                 required
                 (keydown)="preventTyping($event)"
+                (ngModelChange)="onFromDateChange()"
               />
-              <!-- (ngModelChange)="onFromDateChange()" -->
             </div>
             <div class="form-group">
               <label for="toDate">{{
@@ -143,8 +143,8 @@
                 class="form-control"
                 required
                 (keydown)="preventTyping($event)"
+                [min]="minToDate"
                 />
-                <!-- [min]="minToDate" -->
             </div>
             <button type="submit" class="btn btn-primary">
               {{ "BAM.CHARTS.FILTER.APPLY" | translate }}

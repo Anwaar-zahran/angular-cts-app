@@ -18,6 +18,8 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
   @Input() categories: { id: number, text: string }[] = [];
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
+  minToDate: string | null = null;
+
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
@@ -196,6 +198,18 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
     this.toDate = this.tempToDate;
     this.loadChartData(); // Reload chart data with new dates
     this.toggleModal(); // Close the modal after applying the filter
+  }
+
+  onFromDateChange() {
+    console.log(this.tempFromDate);
+    if (this.tempFromDate) {
+      let fromDate = new Date(this.tempFromDate);
+      fromDate.setDate(fromDate.getDate());
+      
+      this.minToDate = fromDate.toISOString().split('T')[0];
+    } else {
+      this.minToDate = null;
+    }
   }
 
 }

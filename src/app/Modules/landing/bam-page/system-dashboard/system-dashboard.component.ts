@@ -39,6 +39,7 @@ export class SystemDashboardComponent {
   fromDate: string = Helpers.formatDateToYYYYMMDD(new Date(new Date().setMonth(new Date().getMonth() - 1)));
   toDate: string = Helpers.formatDateToYYYYMMDD(new Date());
   categories: any[] = [];
+  minToDate: string | null = null;
 
   tempFromDate: string = this.fromDate;
   tempToDate: string = this.toDate;
@@ -84,5 +85,17 @@ export class SystemDashboardComponent {
     this.lookupsService.getCategories(undefined).subscribe((res: any) => {
       this.categories = res;
     });
+  }
+
+  onFromDateChange() {
+    console.log(this.tempFromDate);
+    if (this.tempFromDate) {
+      let fromDate = new Date(this.tempFromDate);
+      fromDate.setDate(fromDate.getDate());
+      
+      this.minToDate = fromDate.toISOString().split('T')[0];
+    } else {
+      this.minToDate = null;
+    }
   }
 }

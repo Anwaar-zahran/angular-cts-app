@@ -23,7 +23,8 @@
       "BACK": "Back",
       "TITLE": "Actions",
       "APPLY": "Apply",
-      "CONFIRM": "Confirm"
+      "CONFIRM": "Confirm",
+      "ADD":"Add"
     },
     "SELECT": "Select",
     "LOADING": "Loading...",
@@ -188,7 +189,18 @@
     "TITLE": "Visual tracking",
     "DETAILS": {
       "TITLE": "Details",
-      "CATEGORY": "Category",
+      "CATEGORY":{
+        "TITLE":"Category",
+        "INCOMING":"Incoming",
+        "ANNUAL_REPORT":"Annual Report",
+        "INTERNAL":"Internal",
+        "OUTGOING":"Outgoing",
+        "MEETING_MINUTES":"Meeting Minutes",
+        "SEP_RESOLUTION":"Sep Resolution",
+        "FOLLOW_UP":"Follow Up",
+        "CIRCULAR":"Circular"
+
+      },
       "TITLE_STRUCTURE": "Title/Structure",
       "CREATED_BY_USER": "Created By/User",
       "DATE": "Date"
@@ -350,6 +362,16 @@
     "CLEAR": "Clear",
     "SEARCH": "Search",
     "CATEGORY": "Category",
+    "CATEGORIES":{
+      "INCOMING":"Incoming",
+      "ANNUAL_REPORT":"Annual Report",
+      "INTERNAL":"Internal",
+      "OUTGOING":"Outgoing",
+      "MEETING_MINUTES":"Meeting Minutes",
+      "SEP_RESOLUTION":"Sep Resolution",
+      "FOLLOW_UP":"Follow Up",
+      "CIRCULAR":"Circular"
+    },
     "REFERENCE_NUMBER": "Reference number",
     "SUBJECT": "Subject",
     "FROM_STRUCTURE_USER": "From (Structure / User)",

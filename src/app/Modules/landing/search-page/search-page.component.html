@@ -154,8 +154,9 @@
             name="dp1"
             (click)="picker.open()"
             (keydown)="preventTyping($event)"
-            />
-            <!-- (ngModelChange)="onFromDateChange()" -->
+            (ngModelChange)="onFromDateChange()"
+          />
+          <!-- (ngModelChange)="onFromDateChange()" -->
           <mat-datepicker #picker></mat-datepicker>
         </div>
       </div>
@@ -243,9 +244,12 @@
     </div>
     <hr *ngIf="response" />
   </div>
-  <!--<p *ngIf="response && response.recordsTotal">
-    {{ 'SEARCH.TABLE.TOTAL_RECORDS' | translate:{ count: response.recordsTotal } }}
-  </p>-->
+  <p *ngIf="response && response.recordsTotal">
+    {{
+      "SEARCH.TABLE.TOTAL_RECORDS"
+        | translate : { count: response.recordsTotal }
+    }}
+  </p>
 
   <div class="shadow table-container overflow-x-auto">
     <table
@@ -260,14 +264,6 @@
           <th>{{ "SEARCH.TABLE.HEADERS.REFERENCE_NUMBER" | translate }}</th>
           <th>{{ "SEARCH.TABLE.HEADERS.SUBJECT" | translate }}</th>
           <th>{{ "SEARCH.TABLE.HEADERS.CREATED_DATE" | translate }}</th>
-          <!--<th>Sending Entity</th>
-        <th>Receiving Entity</th>
-        <th>Created ByUser</th>
-        <th>Due Date</th>
-        <th>Document Date</th>
-        <th>Priority</th>
-        <th>Importance</th>
-        <th>Privacy</th>-->
           <th>{{ "SEARCH.TABLE.HEADERS.STATUS" | translate }}</th>
           <th>{{ "SEARCH.TABLE.HEADERS.ACTIONS" | translate }}</th>
         </tr>

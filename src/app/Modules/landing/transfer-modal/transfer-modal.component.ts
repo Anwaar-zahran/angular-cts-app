@@ -15,6 +15,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { AuthService } from '../../auth/auth.service';
 import { ToasterComponent } from '../../shared/toaster/toaster.component';
 import { AddressBookComponent } from '../address-book/address-book.component';
+import { LanguageService } from '../../../services/language.service';
 
 interface User {
   id: number;
@@ -91,15 +92,20 @@ export class TransferModalComponent implements OnInit {
   isFollowUp: any;
   isTransferring: boolean = false;
 
+  currentLanguage!:string;
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService, private toaster: ToasterService,
     private router: Router, private lookupsService: LookupsService, private dialog: MatDialog, private cdr: ChangeDetectorRef,
-    private dialogRef: MatDialogRef<TransferModalComponent>, private mailService: MailsService, private translate: TranslateService) {
-    debugger
-      this.receivedData = data; // ✅ Initialize here to ensure it's available everywhere
+    private dialogRef: MatDialogRef<TransferModalComponent>, private mailService: MailsService, private translate: TranslateService,
+    private languageService:LanguageService) {
+
+    this.receivedData = data; 
     this.documentId = this.data.documentId;
     this.documentPrivacyId = this.data.row.privacyId;
     this.parentTransferId = this.data.row.id;
     this.fromStructureId = this.data.row.toStructureId;
+    this.currentLanguage = this.languageService.getCurrentLang();
+    console.log(this.currentLanguage);
   }
 
   ngOnInit(): void {
@@ -208,6 +214,8 @@ export class TransferModalComponent implements OnInit {
     this.lookupsService.getPrioritiesWithDays(this.accessToken!).subscribe(
       (reponse) => {
 
+        console.log('priority')
+        console.log(reponse)
         this.priorities = reponse || [];
         const defaultPriorityId = this.priorities.length > 0 ? this.priorities[0].id : null;
         this.rows = this.rows.map(row => ({
@@ -222,7 +230,10 @@ export class TransferModalComponent implements OnInit {
 
     this.lookupsService.getPurposes(this.accessToken!).subscribe(
       (reponse) => {
+
+        console.log(reponse)
         this.purposes = [...(reponse || [])].sort((a, b) => a.name.localeCompare(b.name));
+        console.log(this.purposes)
 
       },
       (error) => {

@@ -1,5 +1,7 @@
 <div class="modal-header">
-  <h3 ref="modalTransferTitle" class="modal-title">{{ 'TRANSFER_DIALOG.TITLE' | translate }}</h3>
+  <h3 ref="modalTransferTitle" class="modal-title">
+    {{ "TRANSFER_DIALOG.TITLE" | translate }}
+  </h3>
   <div class="d-flex justify-content-end align-items-center flex-1 gap-3">
     <!-- <button type="button" class="btn btn-secondary" (click)="showAddress()">Address book</button> -->
     <!-- <div title="Set purpose for all">
@@ -16,84 +18,164 @@
       </h4>
     </div>-->
   </div>
-  <button mat-button mat-dialog-close class="btn btn-transparent"><i class="fa fa-times"></i></button>
+  <button mat-button mat-dialog-close class="btn btn-transparent">
+    <i class="fa fa-times"></i>
+  </button>
 </div>
 <mat-dialog-content>
-  <form ref="formTransferPost" method="post" data-parsley-validate="" novalidate="">
+  <form
+    ref="formTransferPost"
+    method="post"
+    data-parsley-validate=""
+    novalidate=""
+  >
     <table class="table table-bordered layout-fixed">
       <thead>
         <tr>
-          <th width="20%">{{ 'TRANSFER_DIALOG.TO' | translate }}<span class="text-danger">*</span></th>
-          <th width="14%">{{ 'TRANSFER_DIALOG.PURPOSE' | translate }}<span class="text-danger">*</span></th>
-          <th width="14%">{{ 'TRANSFER_DIALOG.PRIORITY' | translate }}<span class="text-danger">*</span></th>
-          <th width="14%">{{ 'TRANSFER_DIALOG.DUEDATE' | translate }}</th>
-          <th width="17%">{{ 'TRANSFER_DIALOG.INSTRUCTION' | translate }}</th>
-          <th>{{ 'TRANSFER_DIALOG.PRIVATE' | translate }}</th>
-          <th>{{ 'TRANSFER_DIALOG.CCED' | translate }}</th>
-          <th>{{ 'TRANSFER_DIALOG.FOLLOWUP' | translate }}</th>
+          <th width="20%">
+            {{ "TRANSFER_DIALOG.TO" | translate
+            }}<span class="text-danger">*</span>
+          </th>
+          <th width="14%">
+            {{ "TRANSFER_DIALOG.PURPOSE" | translate
+            }}<span class="text-danger">*</span>
+          </th>
+          <th width="14%">
+            {{ "TRANSFER_DIALOG.PRIORITY" | translate
+            }}<span class="text-danger">*</span>
+          </th>
+          <th width="14%">{{ "TRANSFER_DIALOG.DUEDATE" | translate }}</th>
+          <th width="17%">{{ "TRANSFER_DIALOG.INSTRUCTION" | translate }}</th>
+          <th>{{ "TRANSFER_DIALOG.PRIVATE" | translate }}</th>
+          <th>{{ "TRANSFER_DIALOG.CCED" | translate }}</th>
+          <th>{{ "TRANSFER_DIALOG.FOLLOWUP" | translate }}</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr class="col-lg-12" *ngFor="let row of rows; let i = index">
           <td>
-            <ng-select id="ddlToUsers{{i}}" name="toUsers{{i}}" [items]="users" [(ngModel)]="row.selectedUser"
-              (ngModelChange)="onUserOrPurposeChange(i)" bindLabel="name" class="form-control">
+            <ng-select
+              id="ddlToUsers{{ i }}"
+              name="toUsers{{ i }}"
+              [items]="users"
+              [(ngModel)]="row.selectedUser"
+              (ngModelChange)="onUserOrPurposeChange(i)"
+              bindLabel="name"
+              class="form-control"
+            >
               <ng-template ng-label-tmp let-item="item">
                 {{ item.name }}
                 <!-- <span *ngIf="item.isStructure">(Structure)</span> -->
               </ng-template>
             </ng-select>
-            <div *ngIf="row.showValidationError && !row.selectedUser" class="text-danger">This field is required</div>
-          </td>
-          <td>
-            <ng-select id="ddlPurposes{{i}}" name="dllPurposes{{i}}" [items]="purposes"
-              [(ngModel)]="row.selectedPurposeId" (ngModelChange)="onUserOrPurposeChange(i)" bindLabel="name"
-              bindValue="id" class="form-control">
-              <ng-template ng-label-tmp let-item="item">
-                {{ item.name }}
-              </ng-template>
-            </ng-select>
-            <div *ngIf="row.showValidationError && !row.selectedPurposeId" class="text-danger">This field is required
+            <div
+              *ngIf="row.showValidationError && !row.selectedUser"
+              class="text-danger"
+            >
+              This field is required
             </div>
           </td>
           <td>
-            <ng-select id="ddlToPriority{{i}}" name="dllPriority{{i}}" [items]="priorities"
-              [(ngModel)]="row.selectedPriorityId" (ngModelChange)="updateDueDate(i)" bindLabel="name" bindValue="id"
-              class="form-control">
+            <ng-select
+              id="ddlPurposes{{ i }}"
+              name="dllPurposes{{ i }}"
+              [items]="purposes"
+              [(ngModel)]="row.selectedPurposeId"
+              (ngModelChange)="onUserOrPurposeChange(i)"
+              [bindLabel]="currentLanguage === 'en' ? 'name':'nameAr'"
+              bindValue="id"
+              class="form-control"
+            >
               <ng-template ng-label-tmp let-item="item">
-                {{ item.name }}
+                {{ currentLanguage === "en" ? item.name : item.nameAr }}
               </ng-template>
             </ng-select>
-            <div *ngIf="row.showValidationError && !row.selectedPriorityId" class="text-danger">This field is required
+            <div
+              *ngIf="row.showValidationError && !row.selectedPurposeId"
+              class="text-danger"
+            >
+              This field is required
             </div>
           </td>
           <td>
-            <input class="form-control date-picker" matInput [matDatepicker]="picker" [(ngModel)]="row.selectedDueDate"
-              [min]="minDate" placeholder="mm-dd-yyyy" name="dp3{{i}}" (click)="openDatepicker(i)"
-                   (paste)="preventPaste($event)"  [readonly]="true" />
+            <ng-select
+              id="ddlToPriority{{ i }}"
+              name="dllPriority{{ i }}"
+              [items]="priorities"
+              [(ngModel)]="row.selectedPriorityId"
+              (ngModelChange)="updateDueDate(i)"
+              [bindLabel]="currentLanguage === 'en' ? 'name' : 'nameAr'"
+              bindValue="id"
+              class="form-control"
+            >
+              <ng-template ng-label-tmp let-item="item">
+                {{ currentLanguage === "en" ? item.name : item.nameAr }}
+              </ng-template>
+            </ng-select>
+            <div
+              *ngIf="row.showValidationError && !row.selectedPriorityId"
+              class="text-danger"
+            >
+              This field is required
+            </div>
+          </td>
+          <td>
+            <input
+              class="form-control date-picker"
+              matInput
+              [matDatepicker]="picker"
+              [(ngModel)]="row.selectedDueDate"
+              [min]="minDate"
+              placeholder="mm-dd-yyyy"
+              name="dp3{{ i }}"
+              (click)="openDatepicker(i)"
+              (paste)="preventPaste($event)"
+              [readonly]="true"
+            />
             <mat-datepicker #picker></mat-datepicker>
           </td>
           <td>
-            <input id="txtTransferInstruction{{i}}" name="txtTransferInstruction{{i}}" [(ngModel)]="row.txtInstruction"
-              class="form-control" type="text" />
+            <input
+              id="txtTransferInstruction{{ i }}"
+              name="txtTransferInstruction{{ i }}"
+              [(ngModel)]="row.txtInstruction"
+              class="form-control"
+              type="text"
+            />
           </td>
           <td>
             <div class="form-check justify-content-center">
-              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isPrivate" id="chbxPrivate{{i}}"
-                name="ckIsPrivate{{i}}">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [(ngModel)]="row.isPrivate"
+                id="chbxPrivate{{ i }}"
+                name="ckIsPrivate{{ i }}"
+              />
             </div>
           </td>
           <td>
             <div class="form-check justify-content-center">
-              <input class="form-check-input" type="checkbox"  [(ngModel)]="row.isCCed" id="chbxCCed{{i}}"
-                name="ckISCced{{i}}" (click)="onCCedClick($event, i)">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [(ngModel)]="row.isCCed"
+                id="chbxCCed{{ i }}"
+                name="ckISCced{{ i }}"
+                (click)="onCCedClick($event, i)"
+              />
             </div>
           </td>
           <td>
             <div class="form-check justify-content-center">
-              <input class="form-check-input" type="checkbox" [(ngModel)]="row.isFollowUp" id="chbxFollowUp{{i}}"
-                name="ckIsFollowUp{{i}}">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [(ngModel)]="row.isFollowUp"
+                id="chbxFollowUp{{ i }}"
+                name="ckIsFollowUp{{ i }}"
+              />
             </div>
           </td>
           <!-- <td>
@@ -102,7 +184,12 @@
             </a>
           </td> -->
           <td>
-            <a class="btn btn-danger delete-row" title="Delete" (click)="removeRow(i)" *ngIf="i !== rows.length - 1">
+            <a
+              class="btn btn-danger delete-row"
+              title="Delete"
+              (click)="removeRow(i)"
+              *ngIf="i !== rows.length - 1"
+            >
               <span class="fa fa-trash fa-fw"></span>
             </a>
           </td>
@@ -113,11 +200,23 @@
 </mat-dialog-content>
 <app-toaster></app-toaster>
 <div class="modal-footer">
-  <button type="button" data-dismiss="modal" (click)="onClose()" class="btn btn-secondary">{{
-    'TRANSFER_DIALOG.BUTTONS.CLOSE' | translate }}</button>
-  <button type="button" (click)="Transfer()" class="btn btn-primary" [disabled]="isTransferring"
-    data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving...">{{ 'TRANSFER_DIALOG.BUTTONS.TRANSFER' |
-    translate }}</button>
+  <button
+    type="button"
+    data-dismiss="modal"
+    (click)="onClose()"
+    class="btn btn-secondary"
+  >
+    {{ "TRANSFER_DIALOG.BUTTONS.CLOSE" | translate }}
+  </button>
+  <button
+    type="button"
+    (click)="Transfer()"
+    class="btn btn-primary"
+    [disabled]="isTransferring"
+    data-loading-text="<i class='fa fa-spinner fa-spin'></i> Saving..."
+  >
+    {{ "TRANSFER_DIALOG.BUTTONS.TRANSFER" | translate }}
+  </button>
 </div>
 <!--<div *ngIf="showAddressBook">
   <app-address-book (selectedUsersChange)="onUsersSelected($event)"></app-address-book>

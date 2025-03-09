@@ -214,7 +214,7 @@
                 ></i>
               </button>
             </td>
-            <td>{{ item.categoryName }}</td>
+            <td>{{ transformCategoryName(item.categoryName) | translate }}</td>
             <td>{{ item.referenceNumber }}</td>
             <td>{{ item.subject }}</td>
             <td>{{ item.sendingEntity }}</td>

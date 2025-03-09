@@ -23,7 +23,8 @@
             "BACK": "رجوع",
             "TITLE": "الإجراءات",
             "APPLY": "تطبيق",
-            "CONFIRM":"تاكيد"
+            "CONFIRM":"تاكيد",
+            "ADD":"اضافة"
         },
         "SELECT": "اختر",
         "LOADING": "جاري التحميل...",
@@ -180,7 +181,18 @@
         "TITLE": "التتبع المرئي",
         "DETAILS": {
             "TITLE": "التفاصيل",
-            "CATEGORY": "الفئة",
+            "CATEGORY":{
+                "TITLE":"الفئات",
+                "INCOMING":"مراسلة واردة جديدة",
+                "ANNUAL_REPORT":"تقرير سنوي",
+                "INTERNAL":"مراسلة داخلية جديدة",
+                "OUTGOING":"مراسلة صادرة جديدة",
+                "MEETING_MINUTES":"محضر الاجتماع",
+                "SEP_RESOLUTION":"قرار منفصل",
+                "FOLLOW_UP":"متابعة",
+                "CIRCULAR":"Circular"
+
+            },
             "TITLE_STRUCTURE": "العنوان/الهيكل",
             "CREATED_BY_USER": "تم الإنشاء بواسطة/المستخدم",
             "DATE": "التاريخ"
@@ -343,6 +355,16 @@
         "CLEAR": "مسح",
         "SEARCH": "بحث",
         "CATEGORY": "الفئة",
+        "CATEGORIES":{
+            "INCOMING":"مراسلة واردة جديدة",
+            "ANNUAL_REPORT":"تقرير سنوي",
+            "INTERNAL":"مراسلة داخلية جديدة",
+            "OUTGOING":"مراسلة صادرة جديدة",
+            "MEETING_MINUTES":"محضر الاجتماع",
+            "SEP_RESOLUTION":"قرار منفصل",
+            "FOLLOW_UP":"متابعة",
+            "CIRCULAR":"Circular"
+          },
         "REFERENCE_NUMBER": "الرقم المرجعي",
         "SUBJECT": "الموضوع",
         "FROM_STRUCTURE_USER": "من (الهيكل / المستخدم)",

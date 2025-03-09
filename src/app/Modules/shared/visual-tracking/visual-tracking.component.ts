@@ -85,7 +85,7 @@ export class VisualTrackingComponent implements OnInit, OnDestroy {
       (response) => {
         this.visualTracking = response || [];
         console.log("Visual Tracking Data:", this.visualTracking);
-        // Initialize chart after data is loaded
+
         setTimeout(() => {
           this.initOrgChart();
         }, 250);
@@ -113,11 +113,21 @@ export class VisualTrackingComponent implements OnInit, OnDestroy {
         const structure = this.structures.find(s => s.id === item.structureId) || { name: '' };
         const user = this.users.find(u => u.id === item.userId) || { name: '' };
 
+        
         const isFirstNode = index === 0;
+        const categoryKey = item.category.toUpperCase().replace(/\s+/g, "_");
+        let categoryTranslation = this.translateService.instant(`VISUAL_TRACKING.DETAILS.CATEGORY.${categoryKey}`) || item.category;
+
+        if(categoryTranslation.startsWith('VISUAL_TRACKING')){
+          categoryTranslation = item.category;
+        }
+        console.log('category')
+        console.log(categoryTranslation);
+
         return {
           id: String(item.id || Math.random()),
           pid: item.parentId ? String(item.parentId) : null,
-          category: isFirstNode ? (item.category || '') : (item.category || ''),
+          category: isFirstNode ? categoryTranslation : categoryTranslation,                                 //(item.category || '') : (item.category || ''),
           title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user?.fullName || ''}`,
           createdBy: isFirstNode ? (item.createdBy || '') : user?.fullName || '',
           date: isFirstNode ? (item.createdDate || '') : (item.transferDate || '')

@@ -75,6 +75,7 @@ export class SearchPageComponent {
   formVisible = true;
   minToDate: Date | null = null;
 
+
   constructor(
     private searchService: SearchPageService,
     private router: Router,
@@ -379,7 +380,9 @@ export class SearchPageComponent {
 
     this.searchService.searchInbox(this.accessToken!, formattedSearchModel).subscribe((result: SearchResponse) => {
       this.response = result;
-      this.response?.data?.forEach(item => {
+      console.log(this.response.recordsTotal)
+      this.response.data.forEach(item => {
+
         item.categoryText = item.categoryId != null ? this.categories[item.categoryId - 1].text : '';
         item.statusText = item.statusId != null ? this.statuses[item.statusId - 1].text : '';
         item.priorityText = item.priorityId != null ? this.priorities[item.priorityId - 1].text : '';
@@ -391,6 +394,8 @@ export class SearchPageComponent {
           this.toaster.showToaster(error?.message || 'Something went wrong');
         });
     });
+
+    
 
   }
 
@@ -531,16 +536,15 @@ export class SearchPageComponent {
     this.formVisible = !this.formVisible;
   }
 
-  // onFromDateChange():void{
-  //   if(this.searchModel.fromDate){
-  //     this.minToDate = new Date(this.searchModel.fromDate)
-  //   }else{
-  //     this.minToDate = null ;
-  //   }
+  onFromDateChange():void{
+    if(this.searchModel.fromTransferDate){
+      this.minToDate = new Date(this.searchModel.fromTransferDate);
+    }else{
+      this.minToDate = null ;
+    }
 
-  //   console.log(this.minToDate)
-
-  // }
+    console.log(this.minToDate)
+  }
 
   preventTyping(event :KeyboardEvent):void{
     console.log('clickkkked')

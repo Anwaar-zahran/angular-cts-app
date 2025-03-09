@@ -1,90 +1,145 @@
 <div class="body-content">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="page-title"><app-back-button></app-back-button>{{ 'BAM.DASHBOARD.SYSTEM_DASHBOARD_TITLE' | translate }}</h1>
-    <button class="btn btn-secondary filter-icon" v-if="categories && categories.length > 0"
-        (click)="toggleModal()">
-        <i class="fas fa-filter"></i>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="page-title">
+      <app-back-button></app-back-button
+      >{{ "BAM.DASHBOARD.SYSTEM_DASHBOARD_TITLE" | translate }}
+    </h1>
+    <button
+      class="btn btn-secondary filter-icon"
+      v-if="categories && categories.length > 0"
+      (click)="toggleModal()"
+    >
+      <i class="fas fa-filter"></i>
     </button>
-    </div>
-    <div class="charts">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <app-chart-system-count-per-category-and-status [fromDate]="fromDate" [toDate]="toDate"
-                        [categories]="categories">
-                    </app-chart-system-count-per-category-and-status>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card">
-                    <app-chart-system-statistics-per-department [fromDate]="fromDate" [toDate]="toDate"
-                        [categories]="categories">
-                    </app-chart-system-statistics-per-department>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card">
-                    <app-chart-system-documents-inProgress-overdue-and-onTime-per-category [fromDate]="fromDate"
-                        [toDate]="toDate" [categories]="categories">
-                    </app-chart-system-documents-inProgress-overdue-and-onTime-per-category>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card">
-                    <app-chart-system-documents-completed-overdue-and-onTime-per-category [fromDate]="fromDate"
-                        [toDate]="toDate" [categories]="categories">
-                    </app-chart-system-documents-completed-overdue-and-onTime-per-category>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card">
-                    <app-chart-system-transfers-inProgressOverdue-and-onTime-per-category [fromDate]="fromDate"
-                        [toDate]="toDate" [categories]="categories">
-                    </app-chart-system-transfers-inProgressOverdue-and-onTime-per-category>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card">
-                    <app-chart-system-transfers-completed-overdue-and-onTime-per-category [fromDate]="fromDate"
-                        [toDate]="toDate" [categories]="categories">
-                    </app-chart-system-transfers-completed-overdue-and-onTime-per-category>
-                </div>
-            </div>
+  </div>
+  <div class="charts">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <app-chart-system-count-per-category-and-status
+            [fromDate]="fromDate"
+            [toDate]="toDate"
+            [categories]="categories"
+          >
+          </app-chart-system-count-per-category-and-status>
         </div>
-    </div>
+      </div>
 
-    
-    <div *ngIf="isModalOpen" class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ 'BAM.CHARTS.FILTER.TITLE' | translate }}</h5>
-                    <button type="button" class="close" (click)="toggleModal()" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form (ngSubmit)="applyFilter()">
-                        <div class="form-group">
-                            <label for="fromDate">{{ 'BAM.CHARTS.FILTER.FROM_DATE' | translate }}</label>
-                            <input type="date" id="fromDate" [(ngModel)]="tempFromDate" name="tempFromDate"
-                                class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="toDate">{{ 'BAM.CHARTS.FILTER.TO_DATE' | translate }}</label>
-                            <input type="date" id="toDate" [(ngModel)]="tempToDate" name="tempToDate"
-                                class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">{{ 'BAM.CHARTS.FILTER.APPLY' | translate
-                            }}</button>
-                    </form>
-                </div>
-            </div>
+      <div class="col-md-6">
+        <div class="card">
+          <app-chart-system-statistics-per-department
+            [fromDate]="fromDate"
+            [toDate]="toDate"
+            [categories]="categories"
+          >
+          </app-chart-system-statistics-per-department>
         </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card">
+          <app-chart-system-documents-inProgress-overdue-and-onTime-per-category
+            [fromDate]="fromDate"
+            [toDate]="toDate"
+            [categories]="categories"
+          >
+          </app-chart-system-documents-inProgress-overdue-and-onTime-per-category>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card">
+          <app-chart-system-documents-completed-overdue-and-onTime-per-category
+            [fromDate]="fromDate"
+            [toDate]="toDate"
+            [categories]="categories"
+          >
+          </app-chart-system-documents-completed-overdue-and-onTime-per-category>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card">
+          <app-chart-system-transfers-inProgressOverdue-and-onTime-per-category
+            [fromDate]="fromDate"
+            [toDate]="toDate"
+            [categories]="categories"
+          >
+          </app-chart-system-transfers-inProgressOverdue-and-onTime-per-category>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card">
+          <app-chart-system-transfers-completed-overdue-and-onTime-per-category
+            [fromDate]="fromDate"
+            [toDate]="toDate"
+            [categories]="categories"
+          >
+          </app-chart-system-transfers-completed-overdue-and-onTime-per-category>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <div
+    *ngIf="isModalOpen"
+    class="modal fade show"
+    style="display: block"
+    tabindex="-1"
+    role="dialog"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            {{ "BAM.CHARTS.FILTER.TITLE" | translate }}
+          </h5>
+          <button
+            type="button"
+            class="close"
+            (click)="toggleModal()"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="applyFilter()">
+            <div class="form-group">
+              <label for="fromDate">{{
+                "BAM.CHARTS.FILTER.FROM_DATE" | translate
+              }}</label>
+              <input
+                type="date"
+                id="fromDate"
+                [(ngModel)]="tempFromDate"
+                name="tempFromDate"
+                class="form-control"
+                required
+                (ngModelChange)="onFromDateChange()"
+              />
+            </div>
+            <div class="form-group">
+              <label for="toDate">{{
+                "BAM.CHARTS.FILTER.TO_DATE" | translate
+              }}</label>
+              <input
+                type="date"
+                id="toDate"
+                [(ngModel)]="tempToDate"
+                name="tempToDate"
+                class="form-control"
+                required
+                [min]="minToDate"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">
+              {{ "BAM.CHARTS.FILTER.APPLY" | translate }}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

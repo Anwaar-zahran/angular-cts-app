@@ -36,7 +36,7 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
   fromDate: Date | undefined; // or set to a specific date like { year: 2023, month: 1, day: 1 }
   //fromDate: NgbDateStruct | undefined;
   toDate: Date | undefined;
-  minToDate:Date | null = null;
+  minToDate: Date | null = null;
 
   selectedUsers: number[] = [];
   users: User[] = [];
@@ -284,7 +284,7 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
     console.log('Search Parameters:', params); // Debugging line
     this.reportsService.listInProgressCorrespondences(params).subscribe({
       next: (response) => {
-        
+
         this.reports = response.data;
         this.totalItems = response.recordsTotal;
         this.calculatePagination();
@@ -396,12 +396,12 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
       next: (options) => {
         this.privacyOptions = options;
         //this.privacyOptions = options.map(option => {
-          //const formattedKey = option.name.trim().toLowerCase().replace(/\s+/g, ' '); // Remove extra spaces
-         //debugger
-         // return {
-         //   ...option,
-         //   translatedName: this.translate.instant(`PrivacyOptions.${formattedKey}`) || option.name // Translate option name
-         // };
+        //const formattedKey = option.name.trim().toLowerCase().replace(/\s+/g, ' '); // Remove extra spaces
+        //debugger
+        // return {
+        //   ...option,
+        //   translatedName: this.translate.instant(`PrivacyOptions.${formattedKey}`) || option.name // Translate option name
+        // };
         //});
       },
       error: (error) => {
@@ -413,7 +413,7 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
   loadPriorityOptions() {
     this.lookupsService.getPriorityOptions().subscribe({
       next: (options) => {
-        this.priorityOptions = options;        
+        this.priorityOptions = options;
       },
       error: (error) => {
         console.error('Error loading priority options:', error);
@@ -426,24 +426,29 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
     const currentLang = this.translate.currentLang;
     switch (currentLang) {
       case 'ar':
-        return item ?.nameAr || item ?.name;
+        return item?.nameAr || item?.name;
       case 'fr':
-        return item ?.nameFr || item ?.name;
+        return item?.nameFr || item?.name;
       default:
-        return item ?.name;
+        return item?.name;
     }
   }
 
-  preventTyping(event: KeyboardEvent): void{
-    if(!(event.ctrlKey && event.key === 'v') && !(['Backspace','Delete','ArrowLeft','ArrowRight','Tab']).includes(event.key)){
+  preventTyping(event: KeyboardEvent): void {
+    if (!(event.ctrlKey && event.key === 'v') && !(['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab']).includes(event.key)) {
       event.preventDefault();
     }
   }
-  onFormDateChange():void{
-    if(this.fromDate){
+
+  onFormDateChange(): void {
+    if (this.fromDate) {
       this.minToDate = new Date(this.fromDate);
-    }else{
+    } else {
       this.minToDate = null;
     }
+  }
+
+  transformCategoryName(categoryName: string): string {
+    return "REPORTS.CATEGORIES." + (categoryName ? categoryName.toUpperCase().replace(/\s+/g, "_") : "UNKNOWN");
   }
 }
