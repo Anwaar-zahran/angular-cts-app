@@ -442,7 +442,7 @@ export class SearchPageComponent {
         documentId: row.documentId,
         referenceNumber: row.ref,
         row: row,
-        fromSearch: false
+        fromSearch: true
       }
     }).componentInstance.showMyTransferTab = false; // Set showMyTransferTab to false
 
