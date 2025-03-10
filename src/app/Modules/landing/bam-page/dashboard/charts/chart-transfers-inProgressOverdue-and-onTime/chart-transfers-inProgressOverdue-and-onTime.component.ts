@@ -60,6 +60,7 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
   }
 
   private loadChartData() {
+    this.info = this.translate.instant("BAM.CHARTS.TRANSFERS_IN_PROGRESS_INFO")
     this.chartsService
       .GetTransfersInProgressOverdueAndOnTimePerCategoryByUser({
         fromDate: this.fromDate,

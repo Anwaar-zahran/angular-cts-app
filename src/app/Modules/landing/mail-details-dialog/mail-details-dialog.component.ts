@@ -26,6 +26,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { ToasterComponent } from '../../shared/toaster/toaster.component';
 import { DatePipe } from '@angular/common';
 import { MailsService } from '../../../services/mail.service';
+import { HttpClient } from '@angular/common/http';
 
 interface TreeNode {
   id: string | number;
@@ -107,6 +108,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   dataSource: MatTreeFlatDataSource<TreeNode, FlatTreeNode>;
   selectedDocumentId!: number;
   documentViewerUrl!: SafeResourceUrl;
+  current_Tab!: string;
 
   // Attachments tree data
   TREE_DATA: TreeNode[] = [];
@@ -170,8 +172,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     private dialogRef: MatDialogRef<MailDetailsDialogComponent>,
     private translate: TranslateService,
     private toaster: ToasterService,
-    public datePipe: DatePipe
+    public datePipe: DatePipe,
+    private httpclient:HttpClient
   ) {
+
+    this.current_Tab = localStorage.getItem('current_Tab') ?? '';
     // Initialize Angular Material tree for attachments
     this.treeFlattener = new MatTreeFlattener(
       this._transformer,
@@ -549,18 +554,18 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.getVisualTracking(docID)
       ];
 
-      if (this.showMyTransferTab && this.data ?.row ?.id) {
+      if (this.showMyTransferTab && this.data?.row?.id) {
         promises.push(this.getTransfer(this.data.row.id));
       }
 
       const results = await Promise.all(promises);
 
       this.attributes = results[0];
-      this.nonArchAttachments = results[1] ?.data;
-      this.linkedDocs = results[2] ?.data;
-      this.activityLogs = this.data.fromSearch ? results[3] : results[3] ?.data;
+      this.nonArchAttachments = results[1]?.data;
+      this.linkedDocs = results[2]?.data;
+      this.activityLogs = this.data.fromSearch ? results[3] : results[3]?.data;
       this.notes = results[4].data;
-      this.transHistory = results[5] ?.data;
+      this.transHistory = results[5]?.data;
       this.attachments = results[6];
       this.visualTracking = results[7];
 
@@ -575,9 +580,9 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.priorityId = this.attributes.priorityId ?? '';
       this.docTypeId = this.attributes.documentTypeId ?? '';
 
-      if (this.linkedDocs ?.length > 0) {
+      if (this.linkedDocs?.length > 0) {
         this.mappedArray = this.linkedDocs.map((doc: any) => {
-          const foundItem = this.categories ?.data.find((cat: any) => cat.id === doc.categoryId);
+          const foundItem = this.categories?.data.find((cat: any) => cat.id === doc.categoryId);
           return {
             id: doc.id,
             linkedDocumentReferenceNumber: doc.linkedDocumentReferenceNumber,
@@ -591,7 +596,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       }
 
 
-      if (this.attributes.carbonCopy ?.length > 0)
+      if (this.attributes.carbonCopy?.length > 0)
         this.selectedCarbonText = this.attributes.carbonCopies.map((carbon: any) => carbon.text).join(', ');
       //else
       //  this.userId = [];
@@ -616,10 +621,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       }
 
       if (this.showMyTransferTab) {
-        if (this.transfers ?.purpose)
+        if (this.transfers?.purpose)
           this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.purposes, false);
 
-        if (this.transfers ?.priorityId)
+        if (this.transfers?.priorityId)
           this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.priority, true);
       }
 
@@ -636,7 +641,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   getItemName(filterText: string, source: any, byId: boolean) {
-    const item = byId ? source ?.find((i: any) => i.id == filterText) : source ?.find((i: any) => i.name == filterText);
+    const item = byId ? source?.find((i: any) => i.id == filterText) : source?.find((i: any) => i.name == filterText);
     return this.getName(item);
   }
 
@@ -666,10 +671,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.searchService.getDocAttributes(this.accessToken!, docID).subscribe(
         (response: any) => {
           this.attributes = response || [];
-          this.basicAttributes = JSON.parse(response ?.basicAttributes);
-          this.customAttribute = JSON.parse(response ?.customAttributes);
-          this.customAttributes = JSON.parse(response ?.customAttributes);
-          this.customFormData = JSON.parse(response ?.formData);
+          this.basicAttributes = JSON.parse(response?.basicAttributes);
+          this.customAttribute = JSON.parse(response?.customAttributes);
+          this.customAttributes = JSON.parse(response?.customAttributes);
+          this.customFormData = JSON.parse(response?.formData);
 
           this.getFormDataValue();
 
@@ -835,7 +840,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     // Search recursively starting from root
     const originalMailFolder = findOriginalMailFolder(this.TREE_DATA);
 
-    if (originalMailFolder ?.children ?.[0] ?.id) {
+    if (originalMailFolder?.children?.[0]?.id) {
       const firstChild = originalMailFolder.children[0];
       const idParts = firstChild.id.split('_');
       if (idParts.length > 1) {
@@ -873,14 +878,33 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     }
 
     const loggedInUserId = this.authService.getUserTypeId();
+    console.log('Currrrrrent Tab' + this.current_Tab);
+    let viewMode = '';
+
+    if (this.current_Tab === 'sent' || this.current_Tab === 'complete') {
+      viewMode = 'view';
+    } else if (this.current_Tab === 'new') {
+      viewMode = 'edit';
+    }
+
+
 
     const currentLang = this.translate.currentLang;
 
-    var viewMode = 'edit'
+    const params2 = {
+      documentId: this.selectedDocumentId,
+      language: currentLang,
+      token: encodeURIComponent(token),
+      version: 'autocheck',
+      structId: 1,
+      ctsTransferId: this.ctsTransferId,
+      ctsDocumentId: this.ctsDocumentId
+    };
+    const queryString2 = Object.entries(params2)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&');
 
-    if (this.isLocKed) {
-      viewMode = 'view';
-    }
+      this.sanitizer.bypassSecurityTrustResourceUrl(`https://java-qatar.d-intalio.com/VIEWER/api/document/260/version/1.2/details?&structId=1&viewermode=edit&ctsTransferId=320&ctsDocumentId=375&token=${token}`);
 
     const params = {
       documentId: this.selectedDocumentId,
@@ -933,8 +957,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           id: String(item.id || Math.random()),
           pid: item.parentId ? String(item.parentId) : null,
           category: isFirstNode ? categoryTranslation : categoryTranslation,                                 //(item.category || '') : (item.category || ''),
-          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`,
-          createdBy: isFirstNode ? (item.createdBy || '') : user ?.fullName || '',
+          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user?.fullName || ''}`,
+          createdBy: isFirstNode ? (item.createdBy || '') : user?.fullName || '',
 
 
           date: isFirstNode ? (item.createdDate || '') : (item.transferDate || '')
@@ -1038,7 +1062,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
 
   isEnabled(name: string): boolean {
-    const attribute = this.basicAttributes ?.find((attr: BasicAttribute) => attr.Name === name);
+    const attribute = this.basicAttributes?.find((attr: BasicAttribute) => attr.Name === name);
     return attribute ? attribute.Enabled : false;
   }
 
@@ -1046,7 +1070,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   getFormDataValue() {
 
-    this.customAttributes ?.components ?.forEach((component: CustomAttributeComponent) => {
+    this.customAttributes?.components?.forEach((component: CustomAttributeComponent) => {
       const key = component.key;
       if (this.customFormData) {
         const value = this.customFormData[key];
@@ -1080,11 +1104,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
     switch (this.currentLang) {
       case 'ar':
-        return item ?.nameAr || item ?.name;
+        return item?.nameAr || item?.name;
       case 'fr':
-        return item ?.nameFr || item ?.name;
+        return item?.nameFr || item?.name;
       default:
-        return item ?.name;
+        return item?.name;
     }
   }
 }

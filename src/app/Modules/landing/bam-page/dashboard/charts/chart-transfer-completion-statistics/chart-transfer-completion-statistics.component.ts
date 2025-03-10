@@ -55,6 +55,7 @@ export class ChartTransferCompletionStatisticsComponent implements OnInit, OnCha
   }
 
   private loadChartData() {
+    this.info = this.translate.instant("BAM.CHARTS.TRANSFER_COMPLETION_INFO")
     this.chartsService
       .getTransferCompletionStatistics({
         fromDate: this.fromDate? this.formatDate(this.fromDate) : '',

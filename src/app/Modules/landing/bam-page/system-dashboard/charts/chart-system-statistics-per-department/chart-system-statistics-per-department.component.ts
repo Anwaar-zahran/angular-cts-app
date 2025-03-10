@@ -62,6 +62,7 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
   }
 
   private loadChartData() {
+    this.info = this.translateService.instant("BAM.CHARTS.INFO.STATISTICS_PER_STRUCTURE")
     this.chartsService
       .GetStatisticsPerDepartment({
         fromDate: this.fromDate,

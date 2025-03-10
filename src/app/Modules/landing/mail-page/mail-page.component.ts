@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
@@ -17,7 +17,7 @@ import { ApiResponseItem } from '../../../models/ApiResponseItem.model';
   standalone: false
 })
 
-export class MailPageComponent implements OnInit {
+export class MailPageComponent implements OnInit,OnDestroy {
   accessToken: string | null;
   structureId: any; // Declare at class level
   //
@@ -27,22 +27,22 @@ export class MailPageComponent implements OnInit {
   completedItems: any[] = [];
 
   loading: boolean = true; // Loading state
-// Pagination
-currentPage: number = 1;
-totalPages: number = 1;
-totalItems: number = 0;
-startIndex: number = 0;
-endIndex: number = 0;
-pages: number[] = [];
-purposeId:string="8";
+  // Pagination
+  currentPage: number = 1;
+  totalPages: number = 1;
+  totalItems: number = 0;
+  startIndex: number = 0;
+  endIndex: number = 0;
+  pages: number[] = [];
+  purposeId: string = "8";
   activeTab: 'new' | 'sent' | 'completed' = 'new';
-  itemsPerPage: number =  this.dtOptions.pageLength || 10;
+  itemsPerPage: number = this.dtOptions.pageLength || 10;
   currentPageMap = {
     new: 1,
     sent: 1,
     completed: 1
   };
- @ViewChild(DataTableDirective, { static: false })
+  @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
 
   isDtInitialized: boolean = false;
@@ -55,6 +55,9 @@ purposeId:string="8";
     private mailService: MailsService,
   ) {
     this.accessToken = localStorage.getItem('access_token');
+  }
+  ngOnDestroy(): void {
+    localStorage.removeItem('current_Tab');
   }
 
   ngOnInit() {
@@ -111,7 +114,6 @@ purposeId:string="8";
   active = 1;
 
   showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
-    debugger;
     const currentName = this.authService.getDisplayName();
 
     // Mark correspondence as read
@@ -241,7 +243,7 @@ purposeId:string="8";
   trackByFn(index: number, item: any): number {
     return item.id;
   }
-  
+
   private mapApiResponse(item: ApiResponseItem) {
     return {
       subject: item.subject,
@@ -275,85 +277,88 @@ purposeId:string="8";
     }
   }
 
- setActiveTab(tab: 'new' | 'sent' | 'completed',) {
-  debugger
-  if (this.activeTab !== tab) {
-    // Reset pagination ONLY when switching tabs
-    this.currentPageMap[tab] = 1;
+  setActiveTab(tab: 'new' | 'sent' | 'completed',) {
+    if (this.activeTab !== tab) {
+      // Reset pagination ONLY when switching tabs
+      this.currentPageMap[tab] = 1;
+    }
+    this.activeTab = tab;
+    const currentPageforTab = this.currentPageMap[this.activeTab];
+    if (tab === 'new') {
+      this.loadInboxData(currentPageforTab);
+    } else if (tab === 'sent') {
+      this.loadSentData(currentPageforTab);
+    } else {
+      this.loadCompletedData(currentPageforTab);
+    }
   }
-  this.activeTab = tab;
- const currentPageforTab = this.currentPageMap[this.activeTab];
-  if (tab === 'new') {
-    this.loadInboxData(currentPageforTab);
-  } else if (tab === 'sent') {
-    this.loadSentData(currentPageforTab);
-  } else {
-    this.loadCompletedData(currentPageforTab);
+  private getStructureId(): string {
+    const payload = this.accessToken?.split('.')[1] || '';
+    const decodedPayload = this.base64UrlDecode(payload);
+    const parsedPayload = JSON.parse(decodedPayload);
+    return localStorage.getItem('structureId') || parsedPayload.StructureId;
   }
-}
-private getStructureId(): string {
-  const payload = this.accessToken?.split('.')[1] || '';
-  const decodedPayload = this.base64UrlDecode(payload);
-  const parsedPayload = JSON.parse(decodedPayload);
-  return localStorage.getItem('structureId') || parsedPayload.StructureId;
-}
-loadInboxData(page:number=1) {
-  debugger;
-  this.activeTab="new";
-  this.loading = true;
-  this.currentPage=page
-  this.structureId = this.getStructureId();
- 
-  this.mailService.fetchData('/Transfer/ListInbox', this.structureId, page, this.itemsPerPage, this.accessToken!,this.purposeId)
-    .subscribe(
-      (response) => {
-        this.newItems = response.data.map(this.mapApiResponse.bind(this)) || [];
-       // this.totalPages = Math.ceil(response.recordsTotal / this.itemsPerPage);
-       this.totalItems = response.recordsTotal;
-        this.calculatePagination()
-      },
-      (error) => console.error('Error fetching inbox:', error),
-      () => (this.loading = false)
-    );
-}
-loadSentData(page:number=1) {
-  
-  debugger;
-  this.activeTab='sent';
-  this.currentPage=page;
- // if (this.sentItems.length > 0) return; // Prevent duplicate calls
-  this.loading = true;
-  this.structureId = this.getStructureId();
+  loadInboxData(page: number = 1) {
+    this.activeTab = "new";
+    this.loading = true;
+    this.currentPage = page
+    this.structureId = this.getStructureId();
+    console.log(this.activeTab)
+    localStorage.setItem('current_Tab', this.activeTab)
 
-  this.mailService.fetchData('/Transfer/ListSent', this.structureId, page, this.itemsPerPage, this.accessToken!,this.purposeId)
-    .subscribe(
-      (response) => {
-        this.sentItems = response.data.map(this.mapApiResponse.bind(this)) || [];
-        this.totalItems = response.recordsTotal;
-        this.calculatePagination();
-      },
-      (error) => console.error('Error fetching sent mails:', error),
-      () => (this.loading = false)
-    );
-}
-loadCompletedData(page:number=1) {
-  this.activeTab='completed';
- // if (this.completedItems.length > 0) return; // Prevent duplicate calls
-  this.loading = true;
-  this.currentPage=page;
-  this.structureId = this.getStructureId();
+    this.mailService.fetchData('/Transfer/ListInbox', this.structureId, page, this.itemsPerPage, this.accessToken!, this.purposeId)
+      .subscribe(
+        (response) => {
+          this.newItems = response.data.map(this.mapApiResponse.bind(this)) || [];
+          // this.totalPages = Math.ceil(response.recordsTotal / this.itemsPerPage);
+          this.totalItems = response.recordsTotal;
+          this.calculatePagination()
+        },
+        (error) => console.error('Error fetching inbox:', error),
+        () => (this.loading = false)
+      );
+  }
+  loadSentData(page: number = 1) {
 
-  this.mailService.fetchData('/Transfer/ListCompleted', this.structureId, page, this.itemsPerPage, this.accessToken!,this.purposeId)
-    .subscribe(
-      (response) => {
-        this.completedItems = response.data.map(this.mapApiResponse.bind(this)) || [];
-        this.totalItems = response.recordsTotal;
-        this.calculatePagination();
-      },
-      (error) => console.error('Error fetching completed mails:', error),
-      () => (this.loading = false)
-    );
-}
+    this.activeTab = 'sent';
+    this.currentPage = page;
+    // if (this.sentItems.length > 0) return; // Prevent duplicate calls
+    this.loading = true;
+    this.structureId = this.getStructureId();
+    console.log(this.activeTab)
+    localStorage.setItem('current_Tab', this.activeTab)
+
+    this.mailService.fetchData('/Transfer/ListSent', this.structureId, page, this.itemsPerPage, this.accessToken!, this.purposeId)
+      .subscribe(
+        (response) => {
+          this.sentItems = response.data.map(this.mapApiResponse.bind(this)) || [];
+          this.totalItems = response.recordsTotal;
+          this.calculatePagination();
+        },
+        (error) => console.error('Error fetching sent mails:', error),
+        () => (this.loading = false)
+      );
+  }
+  loadCompletedData(page: number = 1) {
+    this.activeTab = 'completed';
+    // if (this.completedItems.length > 0) return; // Prevent duplicate calls
+    this.loading = true;
+    this.currentPage = page;
+    this.structureId = this.getStructureId();
+    console.log(this.activeTab)
+    localStorage.setItem('current_Tab', this.activeTab)
+
+    this.mailService.fetchData('/Transfer/ListCompleted', this.structureId, page, this.itemsPerPage, this.accessToken!, this.purposeId)
+      .subscribe(
+        (response) => {
+          this.completedItems = response.data.map(this.mapApiResponse.bind(this)) || [];
+          this.totalItems = response.recordsTotal;
+          this.calculatePagination();
+        },
+        (error) => console.error('Error fetching completed mails:', error),
+        () => (this.loading = false)
+      );
+  }
 
 
 }

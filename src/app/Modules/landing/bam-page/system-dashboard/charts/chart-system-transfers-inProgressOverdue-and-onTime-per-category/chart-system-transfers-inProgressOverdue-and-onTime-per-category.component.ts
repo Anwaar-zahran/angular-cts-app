@@ -67,6 +67,7 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
   }
 
   private loadChartData() {
+    this.info = this.translateService.instant("BAM.CHARTS.TRANSFERS_IN_PROGRESS_INFO")
     this.chartsService
       .GetTransfersInProgressOverdueAndOnTimePerCategory({
         fromDate: this.fromDate,
@@ -111,10 +112,13 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
       colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
       xAxis: {
         categories: [
-          this.translateService.instant('BAM.DASHBOARD.CHARTS.STATUS.INCOMING'),
-          this.translateService.instant('BAM.DASHBOARD.CHARTS.STATUS.OUTGOING'),
-          this.translateService.instant('BAM.DASHBOARD.CHARTS.STATUS.INTERNAL'),
-          this.translateService.instant('BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP')
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.COMPLETED"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.IN_PROGRESS"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.OVERDUE"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
         ],
         title: {
           text: this.translateService.instant('BAM.DASHBOARD.CHARTS.LABELS.CATEGORIES'),

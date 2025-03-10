@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
@@ -17,7 +17,7 @@ import { ApiResponseItem } from '../../../models/ApiResponseItem.model';
   styleUrls: ['./mymail-page.component.scss'],
   standalone: false
 })
-export class MymailPageComponent implements OnInit {
+export class MymailPageComponent implements OnInit,OnDestroy {
   accessToken: string | null;
   structureId: any; // Declare at class level
   //
@@ -54,6 +54,9 @@ export class MymailPageComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {
     this.accessToken = localStorage.getItem('access_token');
+  }
+  ngOnDestroy(): void {
+    localStorage.removeItem('current_Tab');
   }
 
   ngOnInit() {
@@ -224,12 +227,16 @@ export class MymailPageComponent implements OnInit {
     this.loading = true;
     this.currentPage = page
     this.structureId = this.getStructureId();
+    console.log(this.activeTab)
+    localStorage.setItem('current_Tab',this.activeTab)
 
     this.mailService.fetchData('/Transfer/ListInbox', this.structureId, page, this.itemsPerPage, this.accessToken!)
       .subscribe(
         (response) => {
           this.newItems = response.data.map(this.mapApiResponse.bind(this)) || [];
           // this.totalPages = Math.ceil(response.recordsTotal / this.itemsPerPage);
+          console.log('mailss')
+          console.log(this.newItems);
           this.totalItems = response.recordsTotal;
           this.calculatePagination()
         },
@@ -239,13 +246,14 @@ export class MymailPageComponent implements OnInit {
   }
   loadSentData(page: number = 1) {
 
-    debugger;
     this.activeTab = 'sent';
     this.currentPage = page;
     this.fromSent = true;
     // if (this.sentItems.length > 0) return; // Prevent duplicate calls
     this.loading = true;
     this.structureId = this.getStructureId();
+    console.log(this.activeTab)
+    localStorage.setItem('current_Tab',this.activeTab)
 
     this.mailService.fetchData('/Transfer/ListSent', this.structureId, page, this.itemsPerPage, this.accessToken!)
       .subscribe(
@@ -266,6 +274,8 @@ export class MymailPageComponent implements OnInit {
     this.currentPage = page;
     this.fromCompleted = true;
     this.structureId = this.getStructureId();
+    console.log(this.activeTab)
+    localStorage.setItem('current_Tab',this.activeTab)
 
     this.mailService.fetchData('/Transfer/ListCompleted', this.structureId, page, this.itemsPerPage, this.accessToken!)
       .subscribe(

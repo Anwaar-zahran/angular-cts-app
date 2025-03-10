@@ -14,7 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   selector: 'app-chart-percentage-of-correspondences-completed-and-inprogress',
   templateUrl: './chart-percentage-of-correspondences-completed-and-inprogress.component.html',
   styleUrls: ['./chart-percentage-of-correspondences-completed-and-inprogress.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule,MatTooltipModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule, MatTooltipModule]
 })
 export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -72,6 +72,7 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
   }
 
   private loadChartData() {
+    this.info = this.translate.instant("BAM.CHARTS.COMPLETION_VS_PROGRESS_INFO")
     this.chartsService
       .GetDocumentsCompletedAndInProgressByUser({
         fromDate: this.fromDate,

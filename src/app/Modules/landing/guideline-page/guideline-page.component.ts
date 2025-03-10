@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
@@ -17,7 +17,7 @@ import { ApiResponseItem } from '../../../models/ApiResponseItem.model';
   styleUrl: './guideline-page.component.scss',
   standalone: false
 })
-export class GuidelinePageComponent implements OnInit {
+export class GuidelinePageComponent implements OnInit,OnDestroy {
   accessToken: string | null;
   structureId: any; // Declare at class level
   //
@@ -34,18 +34,18 @@ export class GuidelinePageComponent implements OnInit {
   startIndex: number = 0;
   endIndex: number = 0;
   pages: number[] = [];
-  purposeId:string="9";
-    activeTab: 'new' | 'sent' | 'completed' = 'new';
-    itemsPerPage: number =  this.dtOptions.pageLength || 10;
-    currentPageMap = {
-      new: 1,
-      sent: 1,
-      completed: 1
-    };
-    @ViewChild(DataTableDirective, { static: false })
-      dtElement!: DataTableDirective;
-    
-      isDtInitialized: boolean = false;
+  purposeId: string = "9";
+  activeTab: 'new' | 'sent' | 'completed' = 'new';
+  itemsPerPage: number = this.dtOptions.pageLength || 10;
+  currentPageMap = {
+    new: 1,
+    sent: 1,
+    completed: 1
+  };
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement!: DataTableDirective;
+
+  isDtInitialized: boolean = false;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -55,6 +55,9 @@ export class GuidelinePageComponent implements OnInit {
     private mailService: MailsService,
   ) {
     this.accessToken = localStorage.getItem('access_token');
+  }
+  ngOnDestroy(): void {
+    localStorage.removeItem('current_Tab');
   }
 
   ngOnInit() {
@@ -97,7 +100,7 @@ export class GuidelinePageComponent implements OnInit {
     });
   }
 
- 
+
   base64UrlDecode(str: string): string {
     // Replace non-URL safe characters and pad with `=`
     str = str.replace(/-/g, '+').replace(/_/g, '/');
@@ -235,48 +238,48 @@ export class GuidelinePageComponent implements OnInit {
   trackByFn(index: number, item: any): number {
     return item.id;
   }
-  
-    private mapApiResponse(item: ApiResponseItem) {
-      return {
-        subject: item.subject,
-        details: this.translate.instant('MYMAIL.DETAILS.TRANSFERRED_FROM', { user: item.fromUser }),
-        date: item.transferDate,
-        ref: item.referenceNumber,
-        isRead: item.isRead,
-        isOverDue: item.isOverDue,
-        id: item.id,
-        documentId: item.documentId,
-        row: item
-      };
+
+  private mapApiResponse(item: ApiResponseItem) {
+    return {
+      subject: item.subject,
+      details: this.translate.instant('MYMAIL.DETAILS.TRANSFERRED_FROM', { user: item.fromUser }),
+      date: item.transferDate,
+      ref: item.referenceNumber,
+      isRead: item.isRead,
+      isOverDue: item.isOverDue,
+      id: item.id,
+      documentId: item.documentId,
+      row: item
+    };
+  }
+  previousPage() {
+    if (this.currentPageMap[this.activeTab] > 1) {
+      this.goToPage(this.currentPageMap[this.activeTab] - 1);
     }
-    previousPage() {
-      if (this.currentPageMap[this.activeTab] > 1) {
-        this.goToPage(this.currentPageMap[this.activeTab] - 1);
-      }
+  }
+
+  nextPage() {
+    if (this.currentPageMap[this.activeTab] < this.totalPages) {
+      this.goToPage(this.currentPageMap[this.activeTab] + 1);
     }
-  
-    nextPage() {
-      if (this.currentPageMap[this.activeTab] < this.totalPages) {
-        this.goToPage(this.currentPageMap[this.activeTab] + 1);
-      }
+  }
+
+  goToPage(page: number) {
+    debugger;
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPageMap[this.activeTab] = page;
+      this.setActiveTab(this.activeTab);
     }
-  
-    goToPage(page: number) {
-      debugger;
-      if (page >= 1 && page <= this.totalPages) {
-        this.currentPageMap[this.activeTab] = page;
-        this.setActiveTab(this.activeTab);
-      }
-    }
-  
-   setActiveTab(tab: 'new' | 'sent' | 'completed',) {
+  }
+
+  setActiveTab(tab: 'new' | 'sent' | 'completed',) {
     debugger
     if (this.activeTab !== tab) {
       // Reset pagination ONLY when switching tabs
       this.currentPageMap[tab] = 1;
     }
     this.activeTab = tab;
-   const currentPageforTab = this.currentPageMap[this.activeTab];
+    const currentPageforTab = this.currentPageMap[this.activeTab];
     if (tab === 'new') {
       this.loadInboxData(currentPageforTab);
     } else if (tab === 'sent') {
@@ -291,35 +294,38 @@ export class GuidelinePageComponent implements OnInit {
     const parsedPayload = JSON.parse(decodedPayload);
     return localStorage.getItem('structureId') || parsedPayload.StructureId;
   }
-  loadInboxData(page:number=1) {
+  loadInboxData(page: number = 1) {
     debugger;
-    this.activeTab="new";
+    this.activeTab = "new";
     this.loading = true;
-    this.currentPage=page
+    this.currentPage = page
     this.structureId = this.getStructureId();
-   
-    this.mailService.fetchData('/Transfer/ListInbox', this.structureId, page, this.itemsPerPage, this.accessToken!,this.purposeId)
+    console.log(this.activeTab)
+    localStorage.setItem('current_Tab', this.activeTab)
+
+    this.mailService.fetchData('/Transfer/ListInbox', this.structureId, page, this.itemsPerPage, this.accessToken!, this.purposeId)
       .subscribe(
         (response) => {
           this.newItems = response.data.map(this.mapApiResponse.bind(this)) || [];
-         // this.totalPages = Math.ceil(response.recordsTotal / this.itemsPerPage);
-         this.totalItems = response.recordsTotal;
+          // this.totalPages = Math.ceil(response.recordsTotal / this.itemsPerPage);
+          this.totalItems = response.recordsTotal;
           this.calculatePagination()
         },
         (error) => console.error('Error fetching inbox:', error),
         () => (this.loading = false)
       );
   }
-  loadSentData(page:number=1) {
-    
-    debugger;
-    this.activeTab='sent';
-    this.currentPage=page;
-   // if (this.sentItems.length > 0) return; // Prevent duplicate calls
+  loadSentData(page: number = 1) {
+
+    this.activeTab = 'sent';
+    this.currentPage = page;
+    // if (this.sentItems.length > 0) return; // Prevent duplicate calls
     this.loading = true;
     this.structureId = this.getStructureId();
-  
-    this.mailService.fetchData('/Transfer/ListSent', this.structureId, page, this.itemsPerPage, this.accessToken!,this.purposeId)
+    console.log(this.activeTab)
+    localStorage.setItem('current_Tab', this.activeTab)
+
+    this.mailService.fetchData('/Transfer/ListSent', this.structureId, page, this.itemsPerPage, this.accessToken!, this.purposeId)
       .subscribe(
         (response) => {
           this.sentItems = response.data.map(this.mapApiResponse.bind(this)) || [];
@@ -330,14 +336,16 @@ export class GuidelinePageComponent implements OnInit {
         () => (this.loading = false)
       );
   }
-  loadCompletedData(page:number=1) {
-    this.activeTab='completed';
-   // if (this.completedItems.length > 0) return; // Prevent duplicate calls
+  loadCompletedData(page: number = 1) {
+    this.activeTab = 'completed';
+    // if (this.completedItems.length > 0) return; // Prevent duplicate calls
     this.loading = true;
-    this.currentPage=page;
+    this.currentPage = page;
     this.structureId = this.getStructureId();
-  
-    this.mailService.fetchData('/Transfer/ListCompleted', this.structureId, page, this.itemsPerPage, this.accessToken!,this.purposeId)
+    console.log(this.activeTab)
+    localStorage.setItem('current_Tab', this.activeTab)
+
+    this.mailService.fetchData('/Transfer/ListCompleted', this.structureId, page, this.itemsPerPage, this.accessToken!, this.purposeId)
       .subscribe(
         (response) => {
           this.completedItems = response.data.map(this.mapApiResponse.bind(this)) || [];

@@ -14,12 +14,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   selector: 'app-chart-transfers-completed-overdue-and-onTime-per-category',
   templateUrl: './chart-transfers-completed-overdue-and-onTime-per-category.component.html',
   styleUrls: ['./chart-transfers-completed-overdue-and-onTime-per-category.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule,MatTooltipModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule, MatTooltipModule]
 })
 export class ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent implements OnInit, OnChanges {
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
-  info!:string;
+  info!: string;
 
 
   @Input() fromDate: string = '';
@@ -57,6 +57,7 @@ export class ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent impleme
   }
 
   private loadChartData() {
+    this.info = this.translate.instant("BAM.CHARTS.TRANSFERS_COMPLETED_INFO")
     this.chartsService
       .GetTransfersCompletedOverdueAndOnTimePerCategoryByUser({
         fromDate: this.fromDate,
@@ -77,7 +78,7 @@ export class ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent impleme
             onTimeData.push(onTimeItem.count);
             this.isDataAvailable = true;
           }
-          if(overdueItem.count > 0){
+          if (overdueItem.count > 0) {
             categoryNames.push(cat.text);
             overdueData.push(overdueItem.count);
             this.isDataAvailable = true;
@@ -101,6 +102,11 @@ export class ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent impleme
         categories: [
           this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
           this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.COMPLETED"),
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.IN_PROGRESS"),
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.OVERDUE"),
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
         ],
         title: {
           text: this.translate.instant('BAM.CHARTS.LABELS.CATEGORY')
@@ -161,12 +167,12 @@ export class ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent impleme
     if (this.tempFromDate) {
       let fromDate = new Date(this.tempFromDate);
       fromDate.setDate(fromDate.getDate());
-      
+
       this.minToDate = fromDate.toISOString().split('T')[0];
     } else {
       this.minToDate = null;
     }
   }
-  
+
 
 }
