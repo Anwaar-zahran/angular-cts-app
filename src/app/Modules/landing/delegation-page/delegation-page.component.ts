@@ -137,7 +137,7 @@ export class DelegationPageComponent implements OnInit {
       toDate: [{ value: null, disabled: true }, Validators.required],
       allowSign: [false],
       showOldCorrespondence: [false],
-      draftInbox: [false],
+      //draftInbox: [false],
       note: [''],
       startDate: [null],
     }, {
@@ -377,6 +377,8 @@ export class DelegationPageComponent implements OnInit {
   onEdit(item: Delegation): void {
     if (item) {
       this.isEdit = true;
+      this.delegationForm.markAllAsTouched();
+
       this.selectedRowId = item.id;
       this.selectedUserId = item.toUserValueText.id;
       debugger;
@@ -389,7 +391,8 @@ export class DelegationPageComponent implements OnInit {
           toDate: this.convertToNgbDateStruct(item.toDate),
           allowSign: item.allowSign,
           showOldCorrespondence: item.showOldCorrespondecne,
-          draftInbox: item.draftInbox,
+          //draftInbox: item.draftInbox,
+          draftInbox: false,
           note: item.note,
           startDate: this.convertToNgbDateStruct(item.startDate),
         });
@@ -634,6 +637,7 @@ export class DelegationPageComponent implements OnInit {
   toggleShowOldCorrespondance() {
     this.showOldCorrespondance = !this.showOldCorrespondance;
   }
+
   onSearchUsers(event: { term: string; items: any[] }): void {
     const query = event.term;
     if (query.length > 2) {
@@ -644,24 +648,30 @@ export class DelegationPageComponent implements OnInit {
       this.getFromUsers('');
     }
   }
+
   getFromUsers(searchText: string): void {
-    
+    debugger;
     this.lookupservice.getUsersWithSearch(this.accessToken!, searchText).subscribe(
       (response) => {
+        debugger;
         this.contacts = response || [];
-        // console.log('Contacts', this.contacts);
-
-        this.contacts.unshift({ id: 0, fullName: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_NAME') });
 
         let currentExistUser = this.authService.getCurrentUserFullName();
         console.log('currentUser:', currentExistUser);
         this.contacts = this.contacts.filter(contact => contact.fullName !== currentExistUser);
 
-        if (this.contacts.length > 0) {
-          this.delegationForm.patchValue({
-            userId: this.contacts[0]?.id,
-          });
-        }
+        // console.log('Contacts', this.contacts);
+      
+        this.contacts.unshift({ id: 0, fullName: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_NAME') });
+
+       
+      //  this.selectedUserId = null;
+
+        //if (this.contacts.length > 0) {
+        //  this.delegationForm.patchValue({
+        //    userId: this.contacts[0]?.id,
+        //  });
+        //}
       },
       (error: any) => {
         console.error(error);

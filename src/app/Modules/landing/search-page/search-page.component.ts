@@ -117,7 +117,7 @@ export class SearchPageComponent {
     this.lookupservice.getSearchableEntities(searchText).subscribe(
       (response) => {
         this.sendingEntities = response || [];
-        this.sendingEntities.unshift({ id: 0, name: 'Select Entity' });
+        this.sendingEntities.unshift({ id: 0, name: this.translate.instant('SEARCH.FORM.SELECT_ENTITY') });
         //this.searchModel.documentReceiver = "0";
         this.searchModel.documentSender = "0";
         //this.searchModel.toStructure = "0";
@@ -133,7 +133,7 @@ export class SearchPageComponent {
     this.lookupservice.getSearchableEntities(searchText).subscribe(
       (response) => {
         this.recEntities = response || [];
-        this.recEntities.unshift({ id: 0, name: 'Select Entity' });
+        this.recEntities.unshift({ id: 0, name: this.translate.instant('SEARCH.FORM.SELECT_ENTITY') });
         this.searchModel.documentReceiver = "0";
         //this.searchModel.documentSender = "0";
         //this.searchModel.toStructure = "0";
@@ -148,8 +148,8 @@ export class SearchPageComponent {
   getTransferFromEntites(searchText: string): void {
     this.lookupservice.getSearchableEntities(searchText).subscribe(
       (response) => {
-        this.transferFromEntities = response || [];
-        this.transferFromEntities.unshift({ id: 0, name: 'Select Entity' });
+        this.transferFromEntities = response || [];//DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE
+        this.transferFromEntities.unshift({ id: 0, name: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE'), });
         //this.searchModel.documentReceiver = "0";
         //this.searchModel.documentSender = "0";
         //this.searchModel.toStructure = "0";
@@ -164,7 +164,7 @@ export class SearchPageComponent {
     this.lookupservice.getSearchableEntities(searchText).subscribe(
       (response) => {
         this.transferToEntities = response || [];
-        this.transferToEntities.unshift({ id: 0, name: 'Select Entity' });
+        this.transferToEntities.unshift({ id: 0, name: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE') });
         //this.searchModel.documentReceiver = "0";
         //this.searchModel.documentSender = "0";
         this.searchModel.toStructure = "0";
@@ -180,7 +180,7 @@ export class SearchPageComponent {
     this.lookupservice.getSearchUsers(this.accessToken!, searchText).subscribe(
       (response) => {
         this.searchFromUsers = response || [];
-        this.searchFromUsers.unshift({ id: 0, fullName: 'Select User' });
+        this.searchFromUsers.unshift({ id: 0, fullName: this.translate.instant('SEARCH.FORM.SELECT_USER') });
         this.searchModel.delegationId = "0";
         //this.searchModel.toUser = "0";
         this.searchModel.fromUser = "0";
@@ -195,7 +195,7 @@ export class SearchPageComponent {
     this.lookupservice.getSearchUsers(this.accessToken!, searchText).subscribe(
       (response) => {
         this.searchToUsers = response || [];
-        this.searchToUsers.unshift({ id: 0, fullName: 'Select User' });
+        this.searchToUsers.unshift({ id: 0, fullName: this.translate.instant('SEARCH.FORM.SELECT_USER') });
         this.searchModel.delegationId = "0";
         this.searchModel.toUser = "0";
         //this.searchModel.fromUser = "0";
