@@ -124,12 +124,24 @@ export class VisualTrackingComponent implements OnInit, OnDestroy {
         console.log('category')
         console.log(categoryTranslation);
 
+
+        let maxLength = 25;
+        const trimmedCategory = categoryTranslation;
+        const trimmedTitle =
+          (isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`);
+
+        const trimmedCreatedBy =
+          (isFirstNode ? (item.createdBy || '') : user ?.fullName || '');
+
         return {
           id: String(item.id || Math.random()),
           pid: item.parentId ? String(item.parentId) : null,
-          category: isFirstNode ? categoryTranslation : categoryTranslation,                                 //(item.category || '') : (item.category || ''),
-          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user?.fullName || ''}`,
-          createdBy: isFirstNode ? (item.createdBy || '') : user?.fullName || '',
+          //category: isFirstNode ? categoryTranslation : categoryTranslation,                                 //(item.category || '') : (item.category || ''),
+          //title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user?.fullName || ''}`,
+          //createdBy: isFirstNode ? (item.createdBy || '') : user?.fullName || '',
+          category: isFirstNode ? trimmedCategory : trimmedCategory,
+          title: isFirstNode ? trimmedTitle : trimmedTitle,
+          createdBy: isFirstNode ? trimmedCreatedBy : trimmedCreatedBy,
           date: isFirstNode ? (item.createdDate || '') : (item.transferDate || '')
         };
       });
@@ -138,10 +150,14 @@ export class VisualTrackingComponent implements OnInit, OnDestroy {
       // Define fields in the template using bracket notation
       OrgChart['templates']['myTemplate'] = Object.assign({}, OrgChart['templates']['ana']);
       OrgChart['templates']['myTemplate']['size'] = [250, 120]; // Reduced height from 140 to 120
+      OrgChart['templates']['myTemplate']['defs'] = '<style>.field_0 {font-size: 16px;text-align: center;color: #0095DA;overflow: ellispsis;max-width: 100%;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}</style>';
+
+      OrgChart['templates']['myTemplate']['node'] = '<rect x="0" y="0" width="250" height="120" fill="white" stroke="black" stroke-width="2"/>'; // White background
 
       // Define text fields with proper styling and labels - adjusted y positions
       OrgChart['templates']['myTemplate']['field_0'] =
-        '<text class="field_0" style="font-size: 18px;" fill="#454545" x="125" y="30" text-anchor="middle">{val}</text>';
+        //'<text class="field_0" style="font-size: 18px;" fill="green" x="125" y="30" text-anchor="middle">{val}</text>';
+        '<foreignObject x="10" y="10" width="230" height="30"><span class="field_0">{val}</span></foreignObject>';
       OrgChart['templates']['myTemplate']['field_1'] =
         '<text class="field_1" style="font-size: 13px;" fill="#454545" x="125" y="55" text-anchor="middle">{val}</text>';
       OrgChart['templates']['myTemplate']['field_2'] =
@@ -195,7 +211,7 @@ export class VisualTrackingComponent implements OnInit, OnDestroy {
             pdf: null
           },
           elements: [
-            { type: 'textbox', label: this.translateService.instant('VISUAL_TRACKING.DETAILS.CATEGORY'), binding: 'category', readOnly: true },
+            { type: 'textbox', label: this.translateService.instant('VISUAL_TRACKING.DETAILS.CATEGORY.TITLE'), binding: 'category', readOnly: true },
             { type: 'textbox', label: this.translateService.instant('VISUAL_TRACKING.DETAILS.TITLE_STRUCTURE'), binding: 'title', readOnly: true },
             { type: 'textbox', label: this.translateService.instant('VISUAL_TRACKING.DETAILS.CREATED_BY_USER'), binding: 'createdBy', readOnly: true },
             { type: 'textbox', label: this.translateService.instant('VISUAL_TRACKING.DETAILS.DATE'), binding: 'date', readOnly: true }
