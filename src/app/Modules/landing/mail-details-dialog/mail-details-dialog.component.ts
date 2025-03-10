@@ -949,7 +949,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           title: isFirstNode ? trimmedTitle : trimmedTitle,
           createdBy: isFirstNode ? trimmedCreatedBy : trimmedCreatedBy,
           date: isFirstNode ? (item.createdDate || '') : (item.transferDate || ''),
-          Category: isFirstNode ? categoryTranslation : categoryTranslation,                                 //(item.category || '') : (item.category || ''),
+          //Category: isFirstNode ? categoryTranslation : categoryTranslation,                                 //(item.category || '') : (item.category || ''),
           //FullTitle: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`,
           //CreatedBy: isFirstNode ? (item.createdBy || '') : user ?.fullName || '',
 
@@ -1034,7 +1034,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             pdf: null
           },
           elements: [
-            { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.CATEGORY.TITLE'), binding: 'Category', readOnly: true },
+            { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.CATEGORY.TITLE'), binding: 'category', readOnly: true },
             { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.TITLE_STRUCTURE'), binding: 'title', readOnly: true },
             { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.CREATED_BY_USER'), binding: 'createdBy', readOnly: true },
             { type: 'textbox', label: this.translate.instant('VISUAL_TRACKING.DETAILS.DATE'), binding: 'date', readOnly: true }
