@@ -9,9 +9,8 @@
     "\\src\\app\\Modules\\landing\\bam-page",
     "\\src\\app\\Modules\\landing\\bam-page\\dashboard",
     "\\src\\app\\Modules\\landing\\bam-page\\dashboard\\charts",
-    "\\src\\app\\Modules\\landing\\bam-page\\dashboard\\charts\\chart-count-per-category-and-status",
-    "\\src\\app\\Modules\\landing\\bam-page\\dashboard\\charts\\chart-documents-completed-overdue-and-onTime-perCategory"
+    "\\src\\app\\Modules\\landing\\bam-page\\dashboard\\charts\\chart-count-per-category-and-status"
   ],
-  "SelectedNode": "\\src\\app\\Modules\\landing\\bam-page\\dashboard\\charts\\chart-documents-completed-overdue-and-onTime-perCategory\\chart-documents-completed-overdue-and-onTime-perCategory.component.ts",
+  "SelectedNode": "\\src\\app",
   "PreviewInSolutionExplorer": false
 }
