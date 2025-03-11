@@ -61,6 +61,7 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
   }
 
   private loadChartData() {
+    this.info = this.translate.instant("BAM.CHARTS.DUE_DATE_COMPLETED_INFO")
     this.chartsService
       .GetDocumentsCompletedOverdueAndOnTimePerCategoryByUser({
         fromDate: this.fromDate,
@@ -105,10 +106,11 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
         categories:  [
           this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
           this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
-          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.IN_PROGRESS"),
           this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.COMPLETED"),
-          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.IN_PROGRESS"),
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.OVERDUE"),
           this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
+          this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
         ],
         title: {
           text: this.translate.instant('BAM.CHARTS.LABELS.CATEGORY')

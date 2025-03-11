@@ -64,6 +64,7 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
   }
 
   private loadChartData() {
+    this.info = this.translateService.instant('"BAM.CHARTS.DUE_DATE_IN_PROGRESS_INFO"');
     this.chartsService
       .GetDocumentsInProgressOverdueAndOnTimePerCategory({
         fromDate: this.fromDate,

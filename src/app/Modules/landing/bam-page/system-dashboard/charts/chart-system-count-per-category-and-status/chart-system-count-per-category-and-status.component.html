@@ -3,14 +3,17 @@
     <div class="row">
       <div class="col-sm-10 pull-left">
         {{ "BAM.CHARTS.TITLES.COUNT_PER_STATUS" | translate }}
-        <i class="fa fa-info-circle font-15 classInfoDivIcon" [matTooltip]="info"></i>
+        <i
+          class="fa fa-info-circle font-15 classInfoDivIcon"
+          [matTooltip]="info"
+        ></i>
         <div class="font-13 classInfoDiv" style="opacity: 0">
           {{ "BAM.CHARTS.INFO.COUNT_PER_STATUS" | translate }}
         </div>
       </div>
       <div class="col-sm-2 pull-right">
         <button
-        *ngIf="isDataAvailable"
+          *ngIf="isDataAvailable"
           id="btnOpenSearchTransferAverageCompletionTimeModal"
           type="button"
           tabindex="3"

@@ -73,6 +73,7 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
   }
 
   private loadChartData() {
+    this.info = this.translate.instant("BAM.CHARTS.INFO.COUNT_PER_STATUS")
     // Store translated text before setting chart options
     const totalLabel = this.translate.instant('BAM.CHARTS.LABELS.TOTAL');
 
@@ -136,12 +137,13 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
           colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
           xAxis: {
             categories: [
-              this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
-              this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
               this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
-              this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
-              this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.IN_PROGRESS"),
+              this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
               this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.COMPLETED"),
+              this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.IN_PROGRESS"),
+              this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.OVERDUE"),
+              this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
+              this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
             ],
             title:{
               text: this.translate.instant('BAM.DASHBOARD.CHARTS.LABELS.CATEGORY')

@@ -14,7 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   selector: 'app-chart-system-count-per-category-and-status',
   templateUrl: './chart-system-count-per-category-and-status.component.html',
   styleUrls: ['./chart-system-count-per-category-and-status.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule,MatTooltipModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule, MatTooltipModule]
 })
 export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
 
@@ -22,11 +22,11 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
   minToDate: string | null = null;
-  info!:string;
+  info!: string;
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
-  isDataAvailable:boolean = false;
+  isDataAvailable: boolean = false;
 
   tempFromDate: string = this.fromDate; // Temporary variable for modal input
   tempToDate: string = this.toDate; // Temporary variable for modal input
@@ -41,6 +41,7 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
       this.info = this.translateService.instant("BAM.CHARTS.INFO.COUNT_PER_STATUS")
       this.loadChartData();
@@ -49,6 +50,7 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
     this.lookupsService.getStatus().subscribe((res: any) => {
       this.statuses = res;
       if (this.categories && this.categories.length > 0) {
+        this.info = this.translateService.instant("BAM.CHARTS.INFO.COUNT_PER_STATUS")
         this.loadChartData();
       }
     });
@@ -63,6 +65,7 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
   }
 
   private loadChartData() {
+    this.info = this.translateService.instant("BAM.CHARTS.INFO.COUNT_PER_STATUS")
     this.chartsService
       .GetCountPerCategoryAndStatus({
         fromDate: this.fromDate,
@@ -96,10 +99,10 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
             return null;
           })
           .filter((series): series is NonNullable<typeof series> => series !== null);
-          
-          if(seriesData.length > 0){
-            this.isDataAvailable = true;
-          }
+
+        if (seriesData.length > 0) {
+          this.isDataAvailable = true;
+        }
 
         this.renderChart(seriesData);
       });
@@ -117,8 +120,11 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
       colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
       xAxis: {
         categories: [
-          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
           this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.COMPLETED"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.IN_PROGRESS"),
+          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.OVERDUE"),
           this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
           this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
         ],
@@ -188,7 +194,7 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
     if (this.tempFromDate) {
       let fromDate = new Date(this.tempFromDate);
       fromDate.setDate(fromDate.getDate());
-      
+
       this.minToDate = fromDate.toISOString().split('T')[0];
     } else {
       this.minToDate = null;
