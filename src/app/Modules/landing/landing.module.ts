@@ -38,6 +38,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { BackButtonComponent } from '../shared/back-button/back-button.component';
+import { dateService } from '../../services/date-service';
 
 @NgModule({
   declarations: [
@@ -80,5 +81,13 @@ import { BackButtonComponent } from '../shared/back-button/back-button.component
     TranslateModule,
     BackButtonComponent
   ],
+  providers: [
+    dateService
+  ]
 })
-export class LandingModule { }
+export class LandingModule {
+  constructor( private dateService: dateService,) {
+    const savedLang = localStorage.getItem('language') || 'en';
+    dateService.changeDate(savedLang) 
+  }
+}
