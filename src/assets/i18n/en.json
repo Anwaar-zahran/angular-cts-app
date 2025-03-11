@@ -321,7 +321,8 @@
     "BUTTONS": {
       "ADD_NEW": "Add New Delegation",
       "EDIT": "Edit Delegation",
-      "DELETE": "Delete Delegation"
+      "DELETE": "Delete Delegation",
+      "ADD":"Submit"
     }
   },
   "MAIL": {
