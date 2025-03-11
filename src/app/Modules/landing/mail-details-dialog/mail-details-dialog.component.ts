@@ -881,7 +881,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     console.log('Currrrrrent Tab' + this.current_Tab);
     let viewMode = '';
 
-    if (this.current_Tab === 'sent' || this.current_Tab === 'complete') {
+    if (this.current_Tab === 'sent' || this.current_Tab === 'complete' || this.current_Tab === 'search') {
       viewMode = 'view';
     } else if (this.current_Tab === 'new') {
       viewMode = 'edit';
