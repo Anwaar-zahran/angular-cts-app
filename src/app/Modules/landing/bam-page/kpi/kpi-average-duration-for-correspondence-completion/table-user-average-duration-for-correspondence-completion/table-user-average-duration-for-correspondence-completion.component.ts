@@ -24,6 +24,7 @@ export class TableUserAverageDurationForCorrespondenceCompletionComponent implem
   @Input() year!: number;
   @Input() average!: number;
   @Input() key!: number;
+  @Input() totalAverage!: number;
   @Input() isPerformanceCardVisible: boolean = true;
   @Input() isAverageDurationCardVisible: boolean = true;
   @Output() CardVisibilityChanged = new EventEmitter<boolean>();
@@ -135,6 +136,7 @@ export class TableUserAverageDurationForCorrespondenceCompletionComponent implem
 
     this.kpiService.ListUserStructureAverageDurationForCorrespondenceCompletion(this.structureId, this.year).subscribe({
       next: (response) => {
+        console.log('datttttttttta')
         console.log(response.data);
         let data = response.data;
 
@@ -212,5 +214,9 @@ export class TableUserAverageDurationForCorrespondenceCompletionComponent implem
     this.cardsVisibility.isPerformanceCardVisible = this.isPerformanceCardVisible;
     this.CardVisibilityCheck.emit(this.cardsVisibility);
     console.log(this.cardsVisibility)
+  }
+
+  getCeil(itemaverage:number,totalAverage:number){
+    return (itemaverage - totalAverage).toFixed(2);
   }
 }

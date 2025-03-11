@@ -433,6 +433,7 @@ export class SearchPageComponent {
   }
 
   async showDetails(row: any) {
+    localStorage.setItem('current_Tab','search');
     this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
       width: '90%',
