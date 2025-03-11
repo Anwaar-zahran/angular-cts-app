@@ -11,7 +11,8 @@ import { AttachmentsApiResponce } from '../models/attachments.model';
 })
 export class SearchPageService {
   private searchApiUrl = `${environment.apiBaseUrl}/Search/List`;
-  private getDocDetails = `${environment.apiBaseUrl}/Document/GetSearchDocument`;
+  //private getDocDetails = `${environment.apiBaseUrl}/Document/GetSearchDocument`;
+  private getDocDetails = `${environment.apiBaseUrl}/Document/GetDocumentByTransferId`;
   private notesURL = `${environment.apiBaseUrl}/Note/List`;
   private linkedDocURL = `${environment.apiBaseUrl}/LinkedDocument/List`;
   private nonArchiveURL = `${environment.apiBaseUrl}/NonArchivedAttachments/List`;

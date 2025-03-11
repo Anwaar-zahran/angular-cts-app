@@ -15,6 +15,8 @@ import { Priority } from '../../../models/priority.model';
 import { User } from '../../../models/user.model';
 import { TranslateService } from '@ngx-translate/core';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 //import { setTimeout } from 'timers';
 
 @Component({
@@ -73,6 +75,8 @@ export class DelegationPageComponent implements OnInit {
   placeholder: any;
 
   today!: string
+  private userSearchSubject = new Subject<string>();
+  isLoadingUsers = false;
 
   //col: any = null;
   //@NgModel({ imports: [FormsModule] })
@@ -90,7 +94,16 @@ export class DelegationPageComponent implements OnInit {
     private modalService: NgbModal,
     private translate: TranslateService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+    debugger;
+    // Setup user search debounce
+    this.userSearchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(searchText => {
+      this.getFromUsers(searchText);
+      });
+  }
 
   ngOnInit(): void {
     this.accessToken = this.authService.getToken();
@@ -120,7 +133,8 @@ export class DelegationPageComponent implements OnInit {
     this.getCategories();
     this.getPrivacyData();
     //this.getUsers();
-    this.getFromUsers('');
+    this.getFromUsers();
+   
     this.getListData();
 
     this.delegationForm.get('fromDate')?.valueChanges.subscribe(() => {
@@ -616,6 +630,13 @@ export class DelegationPageComponent implements OnInit {
     event.preventDefault();
   }
 
+
+  preventTyping(event: KeyboardEvent): void {
+    if (!(event.ctrlKey && event.key === 'v') && !(['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab']).includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
   toggleSearchForm() {
     this.formVisible = !this.formVisible;
   }
@@ -640,6 +661,8 @@ export class DelegationPageComponent implements OnInit {
 
   onSearchUsers(event: { term: string; items: any[] }): void {
     const query = event.term;
+    this.isLoadingUsers = true;
+
     if (query.length > 2) {
       //this.loading = true;
       this.getFromUsers(query);
@@ -649,23 +672,24 @@ export class DelegationPageComponent implements OnInit {
     }
   }
 
-  getFromUsers(searchText: string): void {
+  getFromUsers(searchText: string='') {
     debugger;
-    this.lookupservice.getUsersWithSearch(this.accessToken!, searchText).subscribe(
-      (response) => {
+    this.lookupservice.getUsersWithSearch(this.accessToken!, searchText).subscribe({
+      next: (response) => {
+
         debugger;
         this.contacts = response || [];
-
+        this.isLoadingUsers = false;
         let currentExistUser = this.authService.getCurrentUserFullName();
         console.log('currentUser:', currentExistUser);
         this.contacts = this.contacts.filter(contact => contact.fullName !== currentExistUser);
 
         // console.log('Contacts', this.contacts);
-      
+
         this.contacts.unshift({ id: 0, fullName: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_NAME') });
 
-       
-      //  this.selectedUserId = null;
+
+        //  this.selectedUserId = null;
 
         //if (this.contacts.length > 0) {
         //  this.delegationForm.patchValue({
@@ -673,10 +697,10 @@ export class DelegationPageComponent implements OnInit {
         //  });
         //}
       },
-      (error: any) => {
+      error: (error: any) => {
         console.error(error);
       }
-    );
+    });
   }
 
   selectAllCategories(): void {
