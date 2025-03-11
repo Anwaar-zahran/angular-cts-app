@@ -604,7 +604,7 @@ export class DelegationPageComponent implements OnInit {
     this.isAllCategoriesSelecte = false;
     this.resetDropDowns();
     this.selectedPrivacyId = null;
-
+    this.getFromUsers('');
     const today = new Date();
     this.fromModal = {
       year: today.getFullYear(),
@@ -663,7 +663,7 @@ export class DelegationPageComponent implements OnInit {
     const query = event.term;
     this.isLoadingUsers = true;
 
-    if (query.length > 2) {
+    if (query.length >=1) {
       //this.loading = true;
       this.getFromUsers(query);
     }else {
@@ -673,11 +673,9 @@ export class DelegationPageComponent implements OnInit {
   }
 
   getFromUsers(searchText: string='') {
-    debugger;
     this.lookupservice.getUsersWithSearch(this.accessToken!, searchText).subscribe({
       next: (response) => {
 
-        debugger;
         this.contacts = response || [];
         this.isLoadingUsers = false;
         let currentExistUser = this.authService.getCurrentUserFullName();

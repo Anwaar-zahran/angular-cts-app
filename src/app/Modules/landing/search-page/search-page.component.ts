@@ -176,10 +176,13 @@ export class SearchPageComponent {
     );
   }
 
+  isLoadingFromUsers = false;
   getFromUsers(searchText: string): void {
+    this.isLoadingFromUsers = true;
     this.lookupservice.getSearchUsers(this.accessToken!, searchText).subscribe(
       (response) => {
         this.searchFromUsers = response || [];
+        this.isLoadingFromUsers = false;
         this.searchFromUsers.unshift({ id: 0, fullName: this.translate.instant('SEARCH.FORM.SELECT_USER') });
         this.searchModel.delegationId = "0";
         //this.searchModel.toUser = "0";
@@ -190,10 +193,12 @@ export class SearchPageComponent {
       }
     );
   }
-
+  isLoadingToUsers = false;
   getToUsers(searchText: string): void {
+    this.isLoadingToUsers = true;
     this.lookupservice.getSearchUsers(this.accessToken!, searchText).subscribe(
       (response) => {
+        this.isLoadingToUsers = false;
         this.searchToUsers = response || [];
         this.searchToUsers.unshift({ id: 0, fullName: this.translate.instant('SEARCH.FORM.SELECT_USER') });
         this.searchModel.delegationId = "0";
@@ -425,6 +430,13 @@ export class SearchPageComponent {
     this.searchModel = new SearchFilter();
     this.response = null;
     this.ResetForm();
+
+    this.getSendingEntites('');
+    this.getReceivingEntites('');
+    this.getFromUsers('');
+    this.getToUsers('');
+    this.getTransferFromEntites('');
+    this.getTransferToEntities('');
   }
 
   getCategoryName(catId: any): string {
@@ -466,7 +478,7 @@ export class SearchPageComponent {
 
   onSearchSendingEntites(event: { term: string; items: any[] }): void {
     const query = event.term;
-    if (query.length > 2) {
+    if (query.length >=1) {
       this.loading = true;
       this.getSendingEntites(query);
     }
@@ -479,7 +491,7 @@ export class SearchPageComponent {
 
   onSearchReceivingEntites(event: { term: string; items: any[] }): void {
     const query = event.term;
-    if (query.length > 2) {
+    if (query.length >=1) {
       this.loading = true;
       this.getReceivingEntites(query);
     }
@@ -492,7 +504,7 @@ export class SearchPageComponent {
 
   onSearchTransferFromEntites(event: { term: string; items: any[] }): void {
     const query = event.term;
-    if (query.length > 2) {
+    if (query.length >=1) {
       this.loading = true;
       this.getTransferFromEntites(query);
     }
@@ -505,7 +517,7 @@ export class SearchPageComponent {
 
   onSearchTransferToEntites(event: { term: string; items: any[] }): void {
     const query = event.term;
-    if (query.length > 2) {
+    if (query.length >=1) {
       this.loading = true;
       this.getTransferToEntities(query);
     }
@@ -518,7 +530,7 @@ export class SearchPageComponent {
 
   onSearchUsers(event: { term: string; items: any[] }, fromUsersFilter: boolean): void {
     const query = event.term;
-    if (query.length > 2) {
+    if (query.length >= 1) {
       this.loading = true;
       if (fromUsersFilter)
         this.getFromUsers(query);

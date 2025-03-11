@@ -30,7 +30,7 @@
                        [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_NAME' | translate"
                        class="form-control"
                        (search)="onSearchUsers($event)"
-                       (open)="getFromUsers('')">
+                       (focus)="getFromUsers('')">
             </ng-select>
             <div *ngIf="
                 delegationForm.controls['userId'].invalid &&

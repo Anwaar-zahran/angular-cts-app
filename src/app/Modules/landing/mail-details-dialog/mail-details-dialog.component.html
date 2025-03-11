@@ -561,6 +561,7 @@
 
           <!-- Attachments Tab -->
           <div
+               *ngIf="showAttachment"
             [ngClass]="{
               'tab-pane': true,
               fade: true,
@@ -658,6 +659,7 @@
 
           <!-- Linked Documents Tab -->
           <div
+                *ngIf="showLinkedDoc"
             [ngClass]="{
               'tab-pane': true,
               fade: true,
@@ -701,6 +703,7 @@
 
           <!-- Non-archived Attachments Tab -->
           <div
+                *ngIf="showNonArch"
             [ngClass]="{
               'tab-pane': true,
               fade: true,
@@ -747,6 +750,7 @@
 
           <!-- Visual Tracking Tab -->
           <div
+               *ngIf="showVisualTrace"
             [ngClass]="{
               'tab-pane': true,
               fade: true,
@@ -760,6 +764,7 @@
 
           <!-- Transaction History Tab -->
           <div
+                *ngIf="showHistory"
             [ngClass]="{
               'tab-pane': true,
               fade: true,
@@ -817,6 +822,7 @@
 
           <!-- Activity Logs Tab -->
           <div
+                *ngIf="showLogs"
             [ngClass]="{
               'tab-pane': true,
               fade: true,
