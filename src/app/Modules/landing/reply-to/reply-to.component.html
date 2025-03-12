@@ -80,17 +80,19 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="form-group">
-          <label class="control-label">{{
+          <label class="control-label">
+            {{
             "REPLY_DIALOG.INSTRUCTIONS" | translate
-          }}</label>
-          <textarea
-            class="form-control"
-            tabindex="52"
-            rows="5"
-            formControlName="txtArea"
-            id="txtAreaInstruction"
-          >
+            }}
+          </label>
+          <textarea class="form-control"
+                    tabindex="52"
+                    rows="5"
+                    maxlength="220"
+                    formControlName="txtArea"
+                    id="txtAreaInstruction">
           </textarea>
+          <div class="error-msg text-muted">{{"REPLY_DIALOG.MAXLENGTH"|translate}}</div>
         </div>
       </div>
     </div>

@@ -348,6 +348,7 @@ export class SearchPageComponent {
         }
   
         this.isLoadingEntities = false;
+
       },
       error: (error) => {
         console.error('Error fetching entities:', error);
@@ -355,7 +356,6 @@ export class SearchPageComponent {
       }
     });
   }
-
   filterTransferFromUser(searchText: string) {
     searchText = searchText.trim().toLowerCase(); // Ensure case-insensitive search
   
@@ -384,6 +384,7 @@ export class SearchPageComponent {
         }
   
         this.isLoadingEntities = false;
+
       },
       error: (error) => {
         console.error('Error fetching entities:', error);
@@ -431,7 +432,7 @@ export class SearchPageComponent {
   }
 
   getStatuses(): void {
-    this.lookupservice.getStatus().subscribe(
+    this.lookupservice.getStatusByName().subscribe(
       (response) => {
         this.statuses = response || [];
 
@@ -555,7 +556,6 @@ export class SearchPageComponent {
     return `${year}/${month}/${day}`;
   }
   
-
   onSearch() {
     console.log(this.searchModel);
     const formattedSearchModel = { ...this.searchModel };
@@ -598,9 +598,6 @@ export class SearchPageComponent {
     
 
   }
-
-
-
   
   isValidNgbDateStruct(value: NgbDateStruct): boolean {
     return (
@@ -625,11 +622,24 @@ export class SearchPageComponent {
     this.searchModel = new SearchFilter();
     this.response = null;
     this.ResetForm();
+
+    this.getSendingEntities('');
+    this.getReceivingEntites('');
+    this.getFromUsers('');
+    this.getToUsers('');
+    this.getTransferFromEntites('');
+    this.getTransferToEntities('');
   }
 
   getCategoryName(catId: any): string {
     const cat = this.categories.find(p => p.id === catId);
     return cat ? this.getName(cat) : '';
+  }
+
+  getStatusName(id: any): string {
+    debugger;
+    const status = this.statuses.find(p => p.id === id);
+    return status ? this.getName(status) : '';
   }
 
   async showDetails(row: any) {
@@ -643,7 +653,7 @@ export class SearchPageComponent {
         documentId: row.documentId,
         referenceNumber: row.ref,
         row: row,
-        fromSearch: true
+        fromSearch: false
       }
     }).componentInstance.showMyTransferTab = false; // Set showMyTransferTab to false
 
@@ -668,6 +678,8 @@ export class SearchPageComponent {
   onSearchSendingEntites(searchText: string | null): void {
     if (searchText === null) {
       searchText = ''; // Ensure it's always a string
+
+
     }
   
     console.log('Search text:', searchText);
@@ -690,10 +702,23 @@ export class SearchPageComponent {
   }
 
 
+  onSearchReceivingEntitesold(event: { term: string; items: any[] }): void {
+    const query = event.term;
+    if (query.length >=1) {
+      this.loading = true;
+      this.getReceivingEntites(query);
+    }
+    else {
+      this.loading = true;
+      this.getReceivingEntites('');
+    }
+  }
+
 
   onSearchTransferFromEntites(searchText: string | null): void {
     if (searchText === null) {
       searchText = ''; // Ensure it's always a string
+
     }
   
     console.log('Search text:', searchText);
@@ -748,6 +773,7 @@ export class SearchPageComponent {
   
     if (!searchText) {
       searchText = ''; // Ensure it's always a string
+
     }
   
     console.log('Search From User:', searchText);
@@ -773,6 +799,7 @@ export class SearchPageComponent {
     console.log('Search To User:', searchText);
   
     if (searchText.length > 0) {
+
       this.loading = true;
       this.filteredTransferToUser = this.transferToUser.filter(user =>
         user.fullName.toLowerCase().startsWith(searchText.toLowerCase())
