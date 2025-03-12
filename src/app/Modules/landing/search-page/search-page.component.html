@@ -35,6 +35,7 @@
         </ng-select>
         
         
+
         </div>
       </div>
       <div class="col-sm-6 col-md-4 col-lg-3">
@@ -53,6 +54,7 @@
             class="form-control"
             (search)="onSearchReceivingEntites($event.term)"
             (open)="getReceivingEntites('')"
+
           >
           </ng-select>
         </div>
@@ -70,11 +72,13 @@
             bindLabel="fullName"
             bindValue="id"
             [placeholder]="'SEARCH.FORM.SELECT_USER' | translate"
+            [loading]="isLoadingFromUsers"
             class="form-control"
             (search)="onSearchFromUser($event)"
             (open)="getFromUsers('')"
             [loading]="isLoadingEntities"
             [clearable]="true"
+
           >
           </ng-select>
         </div>
@@ -91,12 +95,14 @@
             [items]="filteredTransferToUser"
             bindLabel="fullName"
             bindValue="id"
+            [loading]="isLoadingToUsers"
             [placeholder]="'SEARCH.FORM.SELECT_USER' | translate"
             class="form-control"
             (search)="onSearchToUser($event)"
             (open)="getToUsers('')"
             [loading]="isLoadingEntities"
             [clearable]="true"
+
           >
           </ng-select>
         </div>
@@ -118,7 +124,7 @@
             "
             (search)="onSearchTransferFromEntites($event?.term || '')"
             class="form-control"
-            (open)="getTransferFromEntites('')"
+            (focus)="getTransferFromEntites('')"
           >
           </ng-select>
         </div>
@@ -135,12 +141,13 @@
             [items]="filteredTransferToEntities"
             bindLabel="name"
             bindValue="id"
+
             [placeholder]="
               'DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE' | translate
             "
             (search)="onSearchTransferToEntites($event?.term || '')"
             class="form-control"
-            (open)="getTransferToEntities('')"
+            (focus)="getTransferToEntities('')"
           >
           </ng-select>
         </div>
@@ -253,7 +260,6 @@
           | translate : { count: response.recordsTotal }
       }}
     </p>
-
     <div class="shadow table-container overflow-x-auto">
       <table
         class="table"
@@ -283,6 +289,7 @@
                 <i class="fa fa-eye"></i>
               </button>
               <!--<button type="button" class="btn" (click)="onDelete(row)">
+
             <i class="fa fa-times-circle"></i>
           </button>-->
             </td>

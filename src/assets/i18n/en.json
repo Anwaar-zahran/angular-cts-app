@@ -223,6 +223,7 @@
     "SENT": "Sent successfully",
     "INSTRUCTIONS": "Instructions",
     "ERROR": "Something went wrong",
+    "MAXLENGTH": "Maximum length 220 characters",
     "PURPOSE": "Purpose",
     "FILEINUSEERROR": "There is a file checked out, please make sure to check in or discard checkout",
     "BUTTONS": {
