@@ -274,7 +274,6 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     }
   }
 
-  // Helper function to convert an observable to a promise
   private toPromise<T>(observable: Observable<T>, callback: (data: T) => void): Promise<T> {
     return new Promise((resolve, reject) => {
       observable.subscribe({
@@ -404,7 +403,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   // Update the transformAttachmentsToTree method
   private transformAttachmentsToTree(mailAttachments: any[]): TreeNode[] {
     const nodes = mailAttachments.map(attachment => this.createTreeNode(attachment));
-    debugger;
+    
     // Function to recursively move the "Original Document" or "older_originalMail" node to the top
     const moveOriginalDocumentToTop = (nodes: TreeNode[]): TreeNode[] => {
       const originalDocumentNodeIndex = nodes.findIndex(
@@ -438,7 +437,6 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       expanded: true
     };
 
-    debugger;
     if ((attachment.children && attachment.children.length > 0) ||
       (attachment.childAttachments && attachment.childAttachments.length > 0)) {
       const childrenData = attachment.children || attachment.childAttachments;
@@ -612,12 +610,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       debugger;
       if (this.showMyTransferTab) {
 
-        //if (this.transfers?.purpose)
-        //  this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.lookupPromiseResults[6], false);
-        //  //this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.purposes, false);
+        if (this.transfers ?.purpose && !this.selectedTransPurposeText)
+          this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.lookupPromiseResults[3], false);
+        //this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.purposes, false);
 
-        //if (this.transfers?.priorityId)
-        //  this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.lookupPromiseResults[5], true);
+        if (this.transfers ?.priorityId && !this.selectedTransPriorityText)
+          this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.lookupPromiseResults[5], true);
         // // this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.priority, true);
       }
 
