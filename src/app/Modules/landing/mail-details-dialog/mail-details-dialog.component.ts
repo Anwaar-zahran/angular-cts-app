@@ -404,7 +404,29 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   // Update the transformAttachmentsToTree method
   private transformAttachmentsToTree(mailAttachments: any[]): TreeNode[] {
     const nodes = mailAttachments.map(attachment => this.createTreeNode(attachment));
-    return nodes;
+    debugger;
+    // Function to recursively move the "Original Document" or "older_originalMail" node to the top
+    const moveOriginalDocumentToTop = (nodes: TreeNode[]): TreeNode[] => {
+      const originalDocumentNodeIndex = nodes.findIndex(
+        node => (node.name === this.translate.instant('MAIL_DETAILS.ATTACHMENT.OriginalDoc')) || node.id === 'older_originalMail');
+
+      if (originalDocumentNodeIndex !== -1) {
+        // Remove the node from its current position and move it to the top
+        const [originalDocumentNode] = nodes.splice(originalDocumentNodeIndex, 1);
+        nodes.unshift(originalDocumentNode);
+      }
+
+      // Recursively move the original document in children nodes
+      nodes.forEach(node => {
+        if (node.children && node.children.length > 0) {
+          node.children = moveOriginalDocumentToTop(node.children); // Recurse on children
+        }
+      }); return nodes;
+    };
+
+    // Apply the function to the root nodes
+    return moveOriginalDocumentToTop(nodes);
+  
   }
 
   // Update the createTreeNode method to set expanded by default
