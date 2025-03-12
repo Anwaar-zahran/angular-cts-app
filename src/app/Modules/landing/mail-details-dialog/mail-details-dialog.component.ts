@@ -28,6 +28,14 @@ import { DatePipe } from '@angular/common';
 import { MailsService } from '../../../services/mail.service';
 import { HttpClient } from '@angular/common/http';
 
+
+interface Attachment {
+  id: string;
+  text: string;
+  title: string;
+  type: number | string; // Adjust based on actual type
+  children?: Attachment[]; // Recursive structure
+}
 interface TreeNode {
   id: string | number;
   name: string;
@@ -446,12 +454,13 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       expanded: true
     };
 
-
+    
     if ((attachment.children && attachment.children.length > 0) ||
-      (attachment.childAttachments && attachment.childAttachments.length > 0)) {
+    (attachment.childAttachments && attachment.childAttachments.length > 0)) {
       const childrenData = attachment.children || attachment.childAttachments;
       node.children = childrenData.map((child: any) => this.createTreeNode(child));
     }
+    console.log(node)
     return node;
   }
 
@@ -801,6 +810,9 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         (response: any) => {
 
           this.attachments = response || [];
+          console.log('55522222')
+          this.attachments = this.sortAttachments(response || []);
+          console.log(this.attachments)
           this.TREE_DATA = this.transformAttachmentsToTree(this.attachments);
           this.dataSource.data = this.TREE_DATA;
           this.tryFetchOriginalDocument();
@@ -1139,5 +1151,29 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       default:
         return item?.name;
     }
+  }
+
+  sortAttachments(attachments: Attachment[]): Attachment[] {
+    return attachments
+      .map((attachment) => ({
+        ...attachment,
+        children: attachment.children ? this.sortAttachments(attachment.children) : [], // Sort children recursively
+      }))
+      .sort((a, b) => {
+        // First sort by type
+        const typeComparison = Number(a.type) - Number(b.type);
+        
+        // If types are the same, then sort by id
+        if (typeComparison === 0) {
+          // Special handling for "Original document" to always appear first
+          if (a.text === "Original document") return -1;
+          if (b.text === "Original document") return 1;
+          
+          // For other items, compare by id
+          return a.id.localeCompare(b.id);
+        }
+        
+        return typeComparison;
+      });
   }
 }

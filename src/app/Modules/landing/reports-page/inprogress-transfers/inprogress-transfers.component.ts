@@ -28,6 +28,7 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
 
     selectedStructures: number[] = [];
     structures: Structure[] = [];
+    filteredStructures: Structure[] = [];
     structureError: string = '';
 
     fromDate: Date | undefined;
@@ -37,6 +38,7 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
 
     selectedUsers: number[] = [];
     users: User[] = [];
+    filteredUsers: User[] = [];
     userError: string = '';
 
     isOverdue: boolean = false;
@@ -77,15 +79,15 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
             debounceTime(300),
             distinctUntilChanged()
         ).subscribe(searchText => {
-            this.loadUsers(searchText);
+            this.filterUsers(searchText);
         });
 
-        // Add structure search debounce
         this.structureSearchSubject.pipe(
             debounceTime(300),
             distinctUntilChanged()
         ).subscribe(searchText => {
-            this.loadStructures(searchText);
+            console.log('Search subject received:', searchText);
+            this.filterStructures(searchText);
         });
     }
 
@@ -192,11 +194,12 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
         this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
     }
 
-    loadStructures(searchText: string = '') {
+    loadStructures() {
         this.isLoadingStructures = true;
-        this.structuresService.searchStructures(searchText).subscribe({
+        this.structuresService.searchStructures('').subscribe({
             next: (structures) => {
                 this.structures = structures;
+                this.filteredStructures = [...this.structures];
                 this.isLoadingStructures = false;
             },
             error: (error) => {
@@ -206,18 +209,35 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
         });
     }
 
-    loadUsers(searchText: string = '') {
-        debugger
-        this.usersService.searchUsers(searchText).subscribe({
+    onStructureDropdownOpen() {
+        if (this.structures && this.structures.length > 0) {
+            this.filteredStructures = [...this.structures];
+        } else {
+            this.loadStructures();
+        }
+    }
+
+    loadUsers() {
+        this.isLoadingUsers = true;
+        this.usersService.searchUsers('').subscribe({
             next: (users) => {
                 this.users = users;
+                this.filteredUsers = [...this.users];
                 this.isLoadingUsers = false;
             },
-            error: (error: any) => {
+            error: (error) => {
                 console.error('Error loading users:', error);
                 this.isLoadingUsers = false;
             }
         });
+    }
+
+    onUserDropdownOpen() {
+        if (this.users && this.users.length > 0) {
+            this.filteredUsers = [...this.users];
+        } else {
+            this.loadUsers();
+        }
     }
 
     formatDate(date: Date | undefined): string {
@@ -312,23 +332,66 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
         }
     }
 
-    onUserSearch(event: { term: string, items: User[] }) {
-        debugger
-        this.userSearchText = event.term;
+    onUserSearch(event: { term: string; items: any[] }) {
+        let searchText = event.term.trim();
         this.isLoadingUsers = true;
-        this.userSearchSubject.next(this.userSearchText);
-    }
+    
+        if (!searchText) {
+          this.filteredUsers = [...this.users];
+          this.isLoadingUsers = false;
+          return;
+        }
+    
+        searchText = searchText.toLowerCase();
+        this.filteredUsers = this.users.filter(user =>
+          user.fullName.toLowerCase().startsWith(searchText)
+        );
+        this.isLoadingUsers = false;
+      }
 
     getUserDisplayName(user: User): string {
         debugger
         return user.fullName || `${user.firstName} ${user.lastName}`.trim();
     }
 
-    onStructureSearch(event: { term: string, items: Structure[] }) {
-        this.structureSearchText = event.term;
+    onStructureSearch(event: { term: string; items: Structure[] }) {
+        let searchText = event.term.trim();
         this.isLoadingStructures = true;
-        this.structureSearchSubject.next(this.structureSearchText);
-    }
+    
+        if (!searchText) {
+          this.filteredStructures = [...this.structures];
+          this.isLoadingStructures = false;
+          return;
+        }
+    
+        searchText = searchText.toLowerCase();
+        this.filteredStructures = this.structures.filter(structure =>
+          structure.name.toLowerCase().startsWith(searchText)
+        );
+        this.isLoadingStructures = false;
+      }
+    
+      filterStructures(searchText: string) {
+        if (!searchText) {
+          this.filteredStructures = [...this.structures];
+        } else {
+          this.filteredStructures = this.structures.filter(structure =>
+            structure.name.toLowerCase().startsWith(searchText)
+          );
+        }
+        this.isLoadingStructures = false;
+      }
+    
+      filterUsers(searchText: string) {
+        if (!searchText) {
+          this.filteredUsers = [...this.users];
+        } else {
+          this.filteredUsers = this.users.filter(user =>
+            user.fullName.toLowerCase().startsWith(searchText)
+          );
+        }
+        this.isLoadingUsers = false;
+      }
 
     ngAfterViewInit(): void {
         this.dtTrigger.next(null);

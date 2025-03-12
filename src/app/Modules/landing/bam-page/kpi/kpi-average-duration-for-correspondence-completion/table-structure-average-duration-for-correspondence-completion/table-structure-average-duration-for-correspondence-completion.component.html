@@ -57,12 +57,12 @@
                   {{ item.structureName }}
                 </span>
               </td>
-              <td class="min-max-width-50-250" title="{{ item.average }}">
+              <td class="min-max-width-50-250" title="{{ (item.average).toFixed(2) }}">
                 {{ item.average.toFixed(2) }}
               </td>
               <td
                 class="min-max-width-50-250"
-                title="{{ item.average - totalAverage }}"
+                title="{{ (item.average - totalAverage).toFixed(2) }}"
               >
                 {{ (item.average - totalAverage).toFixed(2) }}
               </td>
@@ -165,6 +165,7 @@
   [average]="this.selectedAverage"
   [key]="this.componentKey"
   [totalAverage]="this.totalAverage"
+  [totalAveragePerStructure]="this.totalAveragePerStructure"
 >
 </app-table-user-average-duration-for-correspondence-completion>
 
