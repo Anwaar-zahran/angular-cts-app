@@ -73,15 +73,15 @@
                 </td>
                 <td
                   class="min-max-width-50-250"
-                  title="{{ item.average - item.average }}"
+                  title="{{ item.average - totalAverage }}"
                 >
-                  {{ item.average.toFixed(2) }}
+                {{ (item.average - totalAverage).toFixed(2) }}
                 </td>
                 <td
                   class="min-max-width-50-250"
-                  title="{{ item.average - item.average }}"
+                  title="{{ item.average - totalAverage }}"
                 >
-                  {{ item.average.toFixed(2) }}
+                {{ getCeil(item.average,totalAverage)}}
                 </td>
                 <td class="min-max-width-50-250">
                   <span class="yearlygraph pointer">
@@ -99,7 +99,7 @@
 
 <ng-template #noData>
   <tr>
-    <td colspan="5" class="text-center">No data available in table</td>
+    <td colspan="5" class="text-center">{{'BAM.COMMON.NO_DATA' | translate}}</td>
   </tr>
 </ng-template>
 
