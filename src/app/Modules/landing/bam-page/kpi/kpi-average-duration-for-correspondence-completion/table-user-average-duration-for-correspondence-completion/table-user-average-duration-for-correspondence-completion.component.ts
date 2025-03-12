@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, Output, output, SimpleChanges,EventEmitter } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, Output, output, SimpleChanges, EventEmitter, input } from '@angular/core';
 import { KpiService } from '../../../../../../services/kpi.service';
 import { forkJoin, map } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -25,17 +25,19 @@ export class TableUserAverageDurationForCorrespondenceCompletionComponent implem
   @Input() average!: number;
   @Input() key!: number;
   @Input() totalAverage!: number;
+  @Input() totalAveragePerStructure!: number;
   @Input() isPerformanceCardVisible: boolean = true;
   @Input() isAverageDurationCardVisible: boolean = true;
   @Output() CardVisibilityChanged = new EventEmitter<boolean>();
   @Output() CardVisibilityCheck = new EventEmitter<CardsVisibility>();
 
   public structureName!: string;
+  comparasion!: number;
 
   bestPerformanceUser: UserPerStructure | null = null;
   worstPerformanceUser: UserPerStructure | null = null;
 
-  cardsVisibility:CardsVisibility = { isAverageDurationCardVisible: true, isPerformanceCardVisible: true };
+  cardsVisibility: CardsVisibility = { isAverageDurationCardVisible: true, isPerformanceCardVisible: true };
 
   // isAverageDurationCardVisible: boolean = true;
   // isPerformanceCardVisible: boolean = true;
@@ -44,40 +46,41 @@ export class TableUserAverageDurationForCorrespondenceCompletionComponent implem
 
 
   public userPerStructure: UserPerStructure[] = [];
+  compareStructureTotalAverage:number[] = []
+  compareTotalAverage:number[] = []
 
   constructor(
     private kpiService: KpiService,
     private cdr: ChangeDetectorRef,
     private translate: TranslateService
-  ) { }
-
-
-  // ngOnInit() {
-  //   this.initDtOptions(); 
-  //   this.loadData();   
-  // }
+  ) { 
+    console.log(this.compareStructureTotalAverage)
+    console.log(this.compareTotalAverage)
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['structureId'] || changes['year'] || changes['key'] || changes['isAverageDurationCardVisible'] || changes['isPerformanceCardVisible']) {
+      this.compareStructureTotalAverage =[]
+      this.compareTotalAverage =[]
       this.initDtOptions();
       this.loadData();
-  
+
       this.isAverageDurationCardVisible = true;
       this.isPerformanceCardVisible = true;
-  
+
       this.cdr.detectChanges();
     }
-  
+
     // Detect changes for visibility flags
     if (changes['isAverageDurationCardVisible']) {
       console.log('isAverageDurationCardVisible changed:', changes['isAverageDurationCardVisible'].currentValue);
     }
-  
+
     if (changes['isPerformanceCardVisible']) {
       console.log('isPerformanceCardVisible changed:', changes['isPerformanceCardVisible'].currentValue);
     }
   }
-  
+
 
 
 
@@ -138,6 +141,7 @@ export class TableUserAverageDurationForCorrespondenceCompletionComponent implem
       next: (response) => {
         console.log('datttttttttta')
         console.log(response.data);
+        console.log(this.totalAveragePerStructure);
         let data = response.data;
 
         if (Array.isArray(data) && data.length > 0) {
@@ -200,9 +204,9 @@ export class TableUserAverageDurationForCorrespondenceCompletionComponent implem
 
   hideAverageDurationCard() {
     this.isAverageDurationCardVisible = false;
-    this.cardsVisibility.isAverageDurationCardVisible =this.isAverageDurationCardVisible
+    this.cardsVisibility.isAverageDurationCardVisible = this.isAverageDurationCardVisible
     this.cardsVisibility.isPerformanceCardVisible = this.isPerformanceCardVisible;
-    
+
     this.CardVisibilityCheck.emit(this.cardsVisibility);
     console.log(this.cardsVisibility)
 
@@ -210,13 +214,35 @@ export class TableUserAverageDurationForCorrespondenceCompletionComponent implem
 
   hidePerformanceCard() {
     this.isPerformanceCardVisible = false;
-    this.cardsVisibility.isAverageDurationCardVisible =this.isAverageDurationCardVisible
+    this.cardsVisibility.isAverageDurationCardVisible = this.isAverageDurationCardVisible
     this.cardsVisibility.isPerformanceCardVisible = this.isPerformanceCardVisible;
     this.CardVisibilityCheck.emit(this.cardsVisibility);
     console.log(this.cardsVisibility)
   }
 
-  getCeil(itemaverage:number,totalAverage:number){
-    return (itemaverage - totalAverage).toFixed(2);
+  getTotalAveragePerStructure(itemaverage: number, totalAverage: number) {
+    this.comparasion = Number((itemaverage - totalAverage).toFixed(2));
+    this.compareStructureTotalAverage.push(this.comparasion);
+  
+    // Find the maximum value in the array
+    const maxValue = Math.max(...this.compareStructureTotalAverage);
+  
+    return {
+      value: this.comparasion > 0 ? `+${this.comparasion}` : `${this.comparasion}`,
+      class: this.comparasion === maxValue ? 'text-danger' : 'text-success'
+    };
+  }
+  
+  getTotalAverage(itemaverage: number, totalAverage: number) {
+    this.comparasion = Number((itemaverage - totalAverage).toFixed(2));
+    this.compareTotalAverage.push(this.comparasion);
+  
+    // Find the maximum value in the array
+    const maxValue = Math.max(...this.compareTotalAverage);
+  
+    return {
+      value: this.comparasion > 0 ? `+${this.comparasion}` : `${this.comparasion}`,
+      class: this.comparasion === maxValue ? 'text-danger' : 'text-success'
+    };
   }
 }

@@ -21,6 +21,7 @@ export class KpiTableUserAverageDurationForTransferCompletionComponent implement
   @Input() year!: number;
   @Input() average!: number;
   @Input() key!: number;
+  @Input() totalAverage!: number;
   @Input() isPerformanceCardVisible: boolean = true;
   @Input() isAverageDurationCardVisible: boolean = true;
   @Output() CardVisibilityChanged = new EventEmitter<boolean>();
@@ -40,12 +41,19 @@ export class KpiTableUserAverageDurationForTransferCompletionComponent implement
 
 
   public userPerStructure: UserPerStructure[] = [];
+  comparasion!: number;
+  compareStructureTotalAverage:number[] = []
+  compareTotalAverage:number[] = []
+
 
   constructor(
     private kpiService: KpiService,
     private cdr: ChangeDetectorRef,
     private translate: TranslateService
-  ) { }
+  ) { 
+    console.log(this.compareStructureTotalAverage)
+    console.log(this.compareTotalAverage)
+  }
 
 
   // ngOnInit() {
@@ -55,6 +63,9 @@ export class KpiTableUserAverageDurationForTransferCompletionComponent implement
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['structureId'] || changes['year'] || changes['key'] || changes['isAverageDurationCardVisible'] || changes['isPerformanceCardVisible']) {
+      
+      this.compareStructureTotalAverage =[]
+      this.compareTotalAverage =[]
       this.initDtOptions();
       this.loadData();
 
@@ -210,5 +221,31 @@ export class KpiTableUserAverageDurationForTransferCompletionComponent implement
     this.cardsVisibility.isPerformanceCardVisible = this.isPerformanceCardVisible;
     this.CardVisibilityCheck.emit(this.cardsVisibility);
     console.log(this.cardsVisibility)
+  }
+
+  getTotalAveragePerStructure(itemaverage: number, totalAverage: number) {
+    this.comparasion = Number((itemaverage - totalAverage).toFixed(2));
+    this.compareStructureTotalAverage.push(this.comparasion);
+  
+    // Find the maximum value in the array
+    const maxValue = Math.max(...this.compareStructureTotalAverage);
+  
+    return {
+      value: this.comparasion > 0 ? `+${this.comparasion}` : `${this.comparasion}`,
+      class: this.comparasion === maxValue ? 'text-danger' : 'text-success'
+    };
+  }
+  
+  getTotalAverage(itemaverage: number, totalAverage: number) {
+    this.comparasion = Number((itemaverage - totalAverage).toFixed(2));
+    this.compareTotalAverage.push(this.comparasion);
+  
+    // Find the maximum value in the array
+    const maxValue = Math.max(...this.compareTotalAverage);
+  
+    return {
+      value: this.comparasion > 0 ? `+${this.comparasion}` : `${this.comparasion}`,
+      class: this.comparasion === maxValue ? 'text-danger' : 'text-success'
+    };
   }
 }
