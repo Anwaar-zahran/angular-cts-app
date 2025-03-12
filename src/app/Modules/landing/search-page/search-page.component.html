@@ -29,7 +29,7 @@
           bindValue="id"
           [placeholder]="'SEARCH.FORM.SELECT_ENTITY' | translate"
           class="form-control"
-          (search)="onSearchSendingEntites($event?.term || '')"
+          (search)="onSearchSendingEntites($event.term || '')"
           (open)="getSendingEntities('')"
         >
         </ng-select>
@@ -95,7 +95,6 @@
             [items]="filteredTransferToUser"
             bindLabel="fullName"
             bindValue="id"
-            [loading]="isLoadingToUsers"
             [placeholder]="'SEARCH.FORM.SELECT_USER' | translate"
             class="form-control"
             (search)="onSearchToUser($event)"
@@ -122,7 +121,7 @@
             [placeholder]="
               'DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE' | translate
             "
-            (search)="onSearchTransferFromEntites($event?.term || '')"
+            (search)="onSearchTransferFromEntites($event.term || '')"
             class="form-control"
             (focus)="getTransferFromEntites('')"
           >
@@ -145,7 +144,7 @@
             [placeholder]="
               'DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE' | translate
             "
-            (search)="onSearchTransferToEntites($event?.term || '')"
+            (search)="onSearchTransferToEntites($event.term || '')"
             class="form-control"
             (focus)="getTransferToEntities('')"
           >
@@ -283,15 +282,14 @@
             <td>{{ row.referenceNumber }}</td>
             <td>{{ row.subject }}</td>
             <td>{{ row.createdDate }}</td>
-            <td>{{ row.statusText }}</td>
+            <td>{{ getStatusName(row.statusId) }}</td>
             <td>
               <button type="button" class="btn" (click)="showDetails(row)">
                 <i class="fa fa-eye"></i>
               </button>
               <!--<button type="button" class="btn" (click)="onDelete(row)">
-
-            <i class="fa fa-times-circle"></i>
-          </button>-->
+              <i class="fa fa-times-circle"></i>
+            </button>-->
             </td>
           </tr>
         </tbody>

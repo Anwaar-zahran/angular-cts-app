@@ -24,6 +24,7 @@ import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 @Component({
   selector: 'app-search-page',
   templateUrl: './search-page.component.html',
+  
   styleUrl: './search-page.component.scss',
   standalone: false,
   animations: [
@@ -333,7 +334,6 @@ export class SearchPageComponent {
     );
   }
 
-  isLoadingFromUsers = false;
   getFromUsers(searchText: string): void {
     this.isLoadingEntities = true;
     this.lookupservice.getUsers(this.accessToken!).subscribe({
@@ -624,7 +624,7 @@ export class SearchPageComponent {
     this.response = null;
     this.ResetForm();
 
-    this.getSendingEntites('');
+    this.getSendingEntities('');
     this.getReceivingEntites('');
     this.getFromUsers('');
     this.getToUsers('');
@@ -713,7 +713,8 @@ export class SearchPageComponent {
       this.loading = true;
       this.getReceivingEntites('');
 
-
+    }
+  }
 
 
   onSearchTransferFromEntites(searchText: string | null): void {
