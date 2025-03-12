@@ -27,6 +27,7 @@ import { ToasterComponent } from '../../shared/toaster/toaster.component';
 import { DatePipe } from '@angular/common';
 import { MailsService } from '../../../services/mail.service';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 interface TreeNode {
   id: string | number;
@@ -173,7 +174,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     private translate: TranslateService,
     private toaster: ToasterService,
     public datePipe: DatePipe,
-    private httpclient:HttpClient
+    private httpclient: HttpClient
   ) {
 
     this.current_Tab = localStorage.getItem('current_Tab') ?? '';
@@ -224,104 +225,72 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     this.fetchDetails(this.data.id);
     console.log("row", this.data.row);
     console.log("row", this.data.row.id);
-
     if (!this.showMyTransferTab) {
       this.tabs = this.tabs.filter(tab => tab !== 'MY_TRANSFER');
     }
+
+  }
+  lookupPromiseResults: any;
+  async loadLookupData(): Promise<void> {
+    try {
+      // Create an array of promises for all data fetching operations
+      const promises = [
+        this.toPromise(this.lookupsService.getEntities(), (structures: any) => {
+          this.structures = structures || [];
+        }),
+        this.toPromise(this.lookupsService.getUsers(this.accessToken!), (users: any) => {
+          this.users = users || [];
+        }),
+        this.toPromise(this.lookupsService.getImportance(this.accessToken!), (response: any) => {
+          this.importance = response || [];
+        }),
+        this.toPromise(this.lookupsService.getPurposes(this.accessToken!), (response: any) => {
+          this.purposes = response || [];
+        }),
+        this.toPromise(this.lookupsService.getClassfication(this.accessToken!), (response: any) => {
+          this.classification = response || [];
+        }),
+        this.toPromise(this.lookupsService.getPriorities(this.accessToken!), (response: any) => {
+          this.priority = response || [];
+        }),
+        this.toPromise(this.lookupsService.getPrivacy(this.accessToken!), (response: any) => {
+          this.privacy = response || [];
+        }),
+        this.toPromise(this.lookupsService.getDocumentTypes(this.accessToken!), (response: any) => {
+          this.docTypes = response.data || [];
+        }),
+        this.toPromise(this.lookupsService.getCarbonUsers(this.accessToken!), (response: any) => {
+          this.carbonUsers = response;
+        }),
+        this.toPromise(this.lookupsService.getCategoriesByName(undefined), (response: any) => {
+          this.categories = response || [];
+        }),
+      ];
+
+      // Wait for all promises to resolve
+      this.lookupPromiseResults = await Promise.all(promises);
+    } catch (error) {
+      console.error('Error loading lookup data:', error);
+    }
   }
 
-  loadLookupData(): void {
-    this.lookupsService.getEntities().subscribe(
-      (structures) => {
-        this.structures = structures;
-      },
-      (error) => {
-        console.error('Error loading structures:', error);
-      }
-    );
-
-    this.lookupsService.getUsers(this.accessToken!).subscribe(
-      (users) => {
-        this.users = users;
-      },
-      (error) => {
-        console.error('Error loading users:', error);
-      }
-    );
-
-    this.lookupsService.getImportance(this.accessToken!).subscribe(
-      (response) => {
-        this.importance = response;
-        console.log(this.importance)
-      },
-      (error) => {
-        console.error('Error loading users:', error);
-      }
-    );
-
-    this.lookupsService.getPurposes(this.accessToken!).subscribe(
-      (response) => {
-        this.purposes = response;
-        console.log(this.importance)
-      },
-      (error) => {
-        console.error('Error loading users:', error);
-      }
-    );
-    this.lookupsService.getClassfication(this.accessToken!).subscribe(
-      (response) => {
-        this.classification = response;
-      },
-      (error) => {
-        console.error('Error loading users:', error);
-      }
-    );
-
-    this.lookupsService.getPriorities(this.accessToken!).subscribe(
-      (response) => {
-        this.priority = response;
-      },
-      (error) => {
-        console.error('Error loading users:', error);
-      }
-    );
-
-    this.lookupsService.getPrivacy(this.accessToken!).subscribe(
-      (response) => {
-        this.privacy = response;
-      },
-      (error) => {
-        console.error('Error loading users:', error);
-      }
-    );
-
-    this.lookupsService.getDocumentTypes(this.accessToken!).subscribe(
-      (response) => {
-        this.docTypes = response.data || [];
-      },
-      (error) => {
-        console.error('Error loading structures:', error);
-      }
-    );
-
-    this.lookupsService.getCarbonUsers(this.accessToken!).subscribe(
-      (response) => {
-
-        this.carbonUsers = response;
-      },
-      (error) => {
-        console.error('Error loading users:', error);
-      }
-    );
-
-    this.lookupsService.getCategoriesByName(undefined).subscribe(
-      (response) => {
-        this.categories = response || [];
-      },
-      (error: any) => {
-        console.error(error);
-      }
-    );
+  private toPromise<T>(observable: Observable<T>, callback: (data: T) => void): Promise<T> {
+    return new Promise((resolve, reject) => {
+      observable.subscribe({
+        next: (data: any) => {
+          callback(data);
+          resolve(data);
+        },
+        error: (err: any) => {
+          if (err.status === 401)
+            resolve(null as any);
+          else {
+            console.error('Error in observable:', err);
+            reject(err);
+          }
+        },
+      });
+    });
   }
 
   initDtOptions(): void {
@@ -434,7 +403,29 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   // Update the transformAttachmentsToTree method
   private transformAttachmentsToTree(mailAttachments: any[]): TreeNode[] {
     const nodes = mailAttachments.map(attachment => this.createTreeNode(attachment));
-    return nodes;
+    
+    // Function to recursively move the "Original Document" or "older_originalMail" node to the top
+    const moveOriginalDocumentToTop = (nodes: TreeNode[]): TreeNode[] => {
+      const originalDocumentNodeIndex = nodes.findIndex(
+        node => (node.name === this.translate.instant('MAIL_DETAILS.ATTACHMENT.OriginalDoc')) || node.id === 'older_originalMail');
+
+      if (originalDocumentNodeIndex !== -1) {
+        // Remove the node from its current position and move it to the top
+        const [originalDocumentNode] = nodes.splice(originalDocumentNodeIndex, 1);
+        nodes.unshift(originalDocumentNode);
+      }
+
+      // Recursively move the original document in children nodes
+      nodes.forEach(node => {
+        if (node.children && node.children.length > 0) {
+          node.children = moveOriginalDocumentToTop(node.children); // Recurse on children
+        }
+      }); return nodes;
+    };
+
+    // Apply the function to the root nodes
+    return moveOriginalDocumentToTop(nodes);
+  
   }
 
   // Update the createTreeNode method to set expanded by default
@@ -445,7 +436,6 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       //name: (attachment.text == "Original document") ? this.translate.instant('MAIL_DETAILS.ATTACHMENT.OriginalDoc') : (attachment.text == "Documents") ? this.translate.instant('MAIL_DETAILS.ATTACHMENT.Documents') : attachment.name || attachment.text || 'Unnamed Attachment',
       expanded: true
     };
-
 
     if ((attachment.children && attachment.children.length > 0) ||
       (attachment.childAttachments && attachment.childAttachments.length > 0)) {
@@ -544,28 +534,30 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     try {
       // Create an array of promises for all data fetching operations
       const promises = [
-        this.getAttributes(docID),
+        this.data.fromSearch ? this.getSearchAttributes(docID): this.getAttributes(this.data.row.id),
         this.getNonArchAttachments(docID),
         this.getLinkedDocuments(docID),
-        this.data.fromSearch ? this.getActivityLogs(docID) : this.getActivityLogsByDocId(docID),
+      //this.data.fromSearch ? this.getActivityLogs(docID) : this.getActivityLogsByDocId(docID),
+        this.getActivityLogs(docID),
         this.getNotes(docID),
         this.getHistory(docID),
         this.getAttachments(docID),
         this.getVisualTracking(docID)
       ];
 
-      if (this.showMyTransferTab && this.data?.row?.id) {
+      if (this.showMyTransferTab && this.data ?.row ?.id) {
         promises.push(this.getTransfer(this.data.row.id));
       }
 
       const results = await Promise.all(promises);
 
       this.attributes = results[0];
-      this.nonArchAttachments = results[1]?.data;
-      this.linkedDocs = results[2]?.data;
-      this.activityLogs = this.data.fromSearch ? results[3] : results[3]?.data;
+      this.nonArchAttachments = results[1] ?.data;
+      this.linkedDocs = results[2] ?.data;
+      //this.activityLogs = this.data.fromSearch ? results[3] : results[3] ?.data;
+      this.activityLogs = results[3];
       this.notes = results[4].data;
-      this.transHistory = results[5]?.data;
+      this.transHistory = results[5] ?.data;
       this.attachments = results[6];
       this.visualTracking = results[7];
 
@@ -573,16 +565,37 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       if (this.showMyTransferTab && results.length > 8) {
         this.transfers = results[8];
       }
+      //if (this.attributes) {
+      //  this.classId = this.attributes.classificationId ?? '';
+      //  this.importanceId = this.attributes.importanceId ?? '';
+      //  this.privacyId = this.attributes.privacyId ?? '';
+      //  this.priorityId = this.attributes.priorityId ?? '';
+      //  this.docTypeId = this.attributes.documentTypeId ?? '';
 
-      this.classId = this.attributes.classificationId ?? '';
-      this.importanceId = this.attributes.importanceId ?? '';
-      this.privacyId = this.attributes.privacyId ?? '';
-      this.priorityId = this.attributes.priorityId ?? '';
-      this.docTypeId = this.attributes.documentTypeId ?? '';
+      //  debugger;
+      //  if (this.priorityId) {
+      //    this.selectedPriorityText = this.getItemName(this.priorityId, this.priority, true);
+      //  }
+      //  if (this.privacyId) {
+      //    this.selectedPrivacyText = this.getItemName(this.privacyId, this.privacy, true);
+      //  }
+      //  if (this.importanceId) {
+      //    this.selectedImportanceText = this.getItemName(this.importanceId, this.importance, true);
+      //  }
+      //  if (this.classId) {
+      //    this.selectedClassText = this.getItemName(this.classId, this.classification, true);
+      //  }
+      //  if (this.attributes.carbonCopy ?.length > 0)
+      //    this.selectedCarbonText = this.attributes.carbonCopies.map((carbon: any) => carbon.text).join(', ');
 
-      if (this.linkedDocs?.length > 0) {
+      //  if (this.docTypeId) {
+      //    this.selectedDocTypeText = this.getItemName(this.docTypeId, this.docTypes, true);
+      //  }
+      //}
+
+      if (this.linkedDocs ?.length > 0) {
         this.mappedArray = this.linkedDocs.map((doc: any) => {
-          const foundItem = this.categories?.data.find((cat: any) => cat.id === doc.categoryId);
+          const foundItem = this.categories ?.data.find((cat: any) => cat.id === doc.categoryId);
           return {
             id: doc.id,
             linkedDocumentReferenceNumber: doc.linkedDocumentReferenceNumber,
@@ -594,38 +607,16 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           };
         });
       }
-
-
-      if (this.attributes.carbonCopy?.length > 0)
-        this.selectedCarbonText = this.attributes.carbonCopies.map((carbon: any) => carbon.text).join(', ');
-      //else
-      //  this.userId = [];
-
-      if (this.priorityId) {
-        this.selectedPriorityText = this.getItemName(this.priorityId, this.priority, true);
-      }
-
-
-      if (this.privacyId) {
-        this.selectedPrivacyText = this.getItemName(this.privacyId, this.privacy, true);
-      }
-      if (this.importanceId) {
-        this.selectedImportanceText = this.getItemName(this.importanceId, this.importance, true);
-      }
-      if (this.classId) {
-        this.selectedClassText = this.getItemName(this.classId, this.classification, true);
-      }
-
-      if (this.docTypeId) {
-        this.selectedDocTypeText = this.getItemName(this.docTypeId, this.docTypes, true);
-      }
-
+      debugger;
       if (this.showMyTransferTab) {
-        if (this.transfers?.purpose)
-          this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.purposes, false);
 
-        if (this.transfers?.priorityId)
-          this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.priority, true);
+        if (this.transfers ?.purpose && !this.selectedTransPurposeText)
+          this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.lookupPromiseResults[3], false);
+        //this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.purposes, false);
+
+        if (this.transfers ?.priorityId && !this.selectedTransPriorityText)
+          this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.lookupPromiseResults[5], true);
+        // // this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.priority, true);
       }
 
       // Build attachments tree if available
@@ -641,7 +632,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   getItemName(filterText: string, source: any, byId: boolean) {
-    const item = byId ? source?.find((i: any) => i.id == filterText) : source?.find((i: any) => i.name == filterText);
+    const item = byId ? source ?.find((i: any) => i.id == filterText) : source ?.find((i: any) => i.name == filterText);
     return this.getName(item);
   }
 
@@ -649,7 +640,16 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.mailService.getMyTransfer(this.accessToken!, docID).subscribe(
         (response) => {
+          debugger;
           this.transfers = response || [];
+
+
+          if (this.transfers ?.purpose)
+            this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.lookupPromiseResults[3], false);
+          //this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.purposes, false);
+
+          if (this.transfers ?.priorityId)
+            this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.lookupPromiseResults[5], true);
           resolve(response);
           console.log("Transfer:", response)
         },
@@ -671,16 +671,42 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.searchService.getDocAttributes(this.accessToken!, docID).subscribe(
         (response: any) => {
           this.attributes = response || [];
-          this.basicAttributes = JSON.parse(response?.basicAttributes);
-          this.customAttribute = JSON.parse(response?.customAttributes);
-          this.customAttributes = JSON.parse(response?.customAttributes);
-          this.customFormData = JSON.parse(response?.formData);
+          this.basicAttributes = JSON.parse(response ?.basicAttributes);
+          //this.customAttribute = JSON.parse(response?.customAttributes);
+          this.customAttributes = JSON.parse(response ?.customAttributes);
+          this.customFormData = JSON.parse(response ?.formData);
 
+          if (this.attributes) {
+            this.classId = this.attributes.classificationId ?? '';
+            this.importanceId = this.attributes.importanceId ?? '';
+            this.privacyId = this.attributes.privacyId ?? '';
+            this.priorityId = this.attributes.priorityId ?? '';
+            this.docTypeId = this.attributes.documentTypeId ?? '';
+
+            if (this.priorityId) {
+              this.selectedPriorityText = this.getItemName(this.priorityId, this.priority, true);
+            }
+            if (this.privacyId) {
+              this.selectedPrivacyText = this.getItemName(this.privacyId, this.privacy, true);
+            }
+            if (this.importanceId) {
+              this.selectedImportanceText = this.getItemName(this.importanceId, this.importance, true);
+            }
+            if (this.classId) {
+              this.selectedClassText = this.getItemName(this.classId, this.classification, true);
+            }
+            if (this.attributes.carbonCopy ?.length > 0)
+              this.selectedCarbonText = this.attributes.carbonCopies.map((carbon: any) => carbon.text).join(', ');
+
+            if (this.docTypeId) {
+              this.selectedDocTypeText = this.getItemName(this.docTypeId, this.docTypes, true);
+            }
+          }
           this.getFormDataValue();
 
           console.log("Attributes:", this.attributes);
           console.log("BasicAttributes:", this.basicAttributes);
-          console.log("CustomAttributes:", this.customAttribute);
+          console.log("CustomAttributes:", this.customAttributes);
           console.log("customFormData:", this.customFormData);
           resolve(response);
         },
@@ -692,6 +718,58 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     });
   }
 
+  getSearchAttributes(docID: string): Promise<DocAttributesApiResponse> {
+    return new Promise((resolve, reject) => {
+      this.searchService.getSearchDocAttributes(this.accessToken!, docID).subscribe(
+        (response: any) => {
+          this.attributes = response || [];
+          this.basicAttributes = JSON.parse(response ?.basicAttributes);
+          this.customAttributes = JSON.parse(response ?.customAttributes);
+          this.customFormData = JSON.parse(response ?.formData);
+
+          if (this.attributes) {
+            this.classId = this.attributes.classificationId ?? '';
+            this.importanceId = this.attributes.importanceId ?? '';
+            this.privacyId = this.attributes.privacyId ?? '';
+            this.priorityId = this.attributes.priorityId ?? '';
+            this.docTypeId = this.attributes.documentTypeId ?? '';
+
+            if (this.priorityId) {
+              this.selectedPriorityText = this.getItemName(this.priorityId, this.priority, true);
+            }
+            if (this.privacyId) {
+              this.selectedPrivacyText = this.getItemName(this.privacyId, this.privacy, true);
+            }
+            if (this.importanceId) {
+              this.selectedImportanceText = this.getItemName(this.importanceId, this.importance, true);
+            }
+            if (this.classId) {
+              this.selectedClassText = this.getItemName(this.classId, this.classification, true);
+            }
+            if (this.attributes.carbonCopy ?.length > 0)
+              this.selectedCarbonText = this.attributes.carbonCopies.map((carbon: any) => carbon.text).join(', ');
+
+            if (this.docTypeId) {
+              this.selectedDocTypeText = this.getItemName(this.docTypeId, this.docTypes, true);
+            }
+          }
+          this.getFormDataValue();
+
+          console.log("Attributes:", this.attributes);
+          console.log("BasicAttributes:", this.basicAttributes);
+          console.log("CustomAttributes:", this.customAttributes);
+          console.log("customFormData:", this.customFormData);
+          resolve(response);
+        },
+        (error: any) => {
+          console.error(error);
+          reject(error);
+        }
+      );
+    });
+  }
+
+  showNotes: boolean = true;
   getNotes(docID: string): Promise<any> {
 
     return new Promise((resolve, reject) => {
@@ -702,14 +780,21 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           resolve(response);
         },
         (error: any) => {
+          if (error.status === 401) {
+            this.showNotes = false;
+            this.tabs = this.tabs.filter(tab => tab !== 'NOTES');
 
-          console.error(error);
-          reject(error);
+          }
+          else {
+            console.error(error);
+            reject(error);
+          }
         }
       );
     });
   }
 
+  showLogs: boolean = true;
   getActivityLogs(docID: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.searchService.getActivityLog(this.accessToken!, docID).subscribe(
@@ -719,9 +804,14 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           resolve(response);
         },
         (error: any) => {
+          if (error.status === 401) {
+            this.showLogs = false;
+            this.tabs = this.tabs.filter(tab => tab !== 'ACTIVITY_LOG');
 
-          console.error(error);
-          reject(error);
+          } else {
+            console.error(error);
+            reject(error);
+          }
         }
       );
     });
@@ -736,13 +826,20 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           resolve(response);
         },
         (error: any) => {
-          console.error(error);
-          reject(error);
+          if (error.status === 401) {
+            this.showLogs = false;
+            this.tabs = this.tabs.filter(tab => tab !== 'ACTIVITY_LOG');
+
+          } else {
+            console.error(error);
+            reject(error);
+          }
         }
       );
     });
   }
 
+  showLinkedDoc: boolean = true;
   getLinkedDocuments(docID: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.searchService.getLinkedCorrespondence(this.accessToken!, docID).subscribe(
@@ -752,14 +849,20 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           resolve(response);
         },
         (error: any) => {
+          if (error.status === 401) {
+            this.showLinkedDoc = false;
+            this.tabs = this.tabs.filter(tab => tab !== 'LINKED_CORRESPONDENCE');
 
-          console.error(error);
-          reject(error);
+          } else {
+            console.error(error);
+            reject(error);
+          }
         }
       );
     });
   }
 
+  showNonArch: boolean = true;
   getNonArchAttachments(docID: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.searchService.getNonArchivedAttachment(this.accessToken!, docID).subscribe(
@@ -769,14 +872,20 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           resolve(response);
         },
         (error: any) => {
+          if (error.status === 401) {
+            this.showNonArch = false;
+            this.tabs = this.tabs.filter(tab => tab !== 'NON_ARCHIVED_ATTACHMENT');
 
-          console.error(error);
-          reject(error);
+          } else {
+            console.error(error);
+            reject(error);
+          }
         }
       );
     });
   }
 
+  showHistory: boolean = true;
   getHistory(docID: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.searchService.getTransHistory(this.accessToken!, docID).subscribe(
@@ -786,13 +895,21 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           resolve(response);
         },
         (error: any) => {
-          console.error(error);
-          reject(error);
+          if (error.status === 401) {
+            this.showHistory = false;
+            this.tabs = this.tabs.filter(tab => tab !== 'TRANSACTION_HISTORY');
+
+          } else {
+
+            console.error(error);
+            reject(error);
+          }
         }
       );
     });
   }
 
+  showAttachment: boolean = true;
   getAttachments(docID: string): Promise<AttachmentsApiResponce> {
     // this.ctsDocumentId = Number(docID);
     console.log('from attachement service' + this.ctsDocumentId)
@@ -811,9 +928,14 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           resolve(response);
         },
         (error: any) => {
+          if (error.status === 401) {
+            this.showAttachment = false;
+            this.tabs = this.tabs.filter(tab => tab !== 'ATTACHMENTS');
 
-          console.error(error);
-          reject(error);
+          } else {
+            console.error(error);
+            reject(error);
+          }
         }
       );
     });
@@ -840,7 +962,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     // Search recursively starting from root
     const originalMailFolder = findOriginalMailFolder(this.TREE_DATA);
 
-    if (originalMailFolder?.children?.[0]?.id) {
+    if (originalMailFolder ?.children ?.[0] ?.id) {
       const firstChild = originalMailFolder.children[0];
       const idParts = firstChild.id.split('_');
       if (idParts.length > 1) {
@@ -850,18 +972,24 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     }
   }
 
+  showVisualTrace: boolean = true;
   getVisualTracking(docID: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.searchService.getVisualTracking(docID).subscribe(
-
         (response) => {
           this.visualTracking = response || [];
           console.log("Visual Tracking Data:", this.visualTracking);
           resolve(response);
         },
         (error: any) => {
-          console.error(error);
-          reject(error);
+          if (error.status === 401) {
+            this.showVisualTrace = false;
+            this.tabs = this.tabs.filter(tab => tab !== 'VISUAL_TRACKING');
+
+          } else {
+            console.error(error);
+            reject(error);
+          }
         }
       );
     });
@@ -904,7 +1032,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       .map(([key, value]) => `${key}=${value}`)
       .join('&');
 
-      this.sanitizer.bypassSecurityTrustResourceUrl(`https://java-qatar.d-intalio.com/VIEWER/api/document/260/version/1.2/details?&structId=1&viewermode=edit&ctsTransferId=320&ctsDocumentId=375&token=${token}`);
+    this.sanitizer.bypassSecurityTrustResourceUrl(`https://java-qatar.d-intalio.com/VIEWER/api/document/260/version/1.2/details?&structId=1&viewermode=edit&ctsTransferId=320&ctsDocumentId=375&token=${token}`);
 
     const params = {
       documentId: this.selectedDocumentId,
@@ -957,19 +1085,19 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         let maxLength = 25;
         // Trim text to fit
         const trimmedCategory = categoryTranslation;
-        const trimmedTitle = 
+        const trimmedTitle =
           (isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`);
 
-        const trimmedCreatedBy = 
+        const trimmedCreatedBy =
           (isFirstNode ? (item.createdBy || '') : user ?.fullName || '');
 
         return {
           id: String(item.id || Math.random()),
           pid: item.parentId ? String(item.parentId) : null,
           category: isFirstNode ? categoryTranslation : categoryTranslation,                                 //(item.category || '') : (item.category || ''),
-          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user?.fullName || ''}`,
-          createdBy: isFirstNode ? (item.createdBy || '') : user?.fullName || '',
-           date: isFirstNode ? (item.createdDate || '') : (item.transferDate || ''),
+          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`,
+          createdBy: isFirstNode ? (item.createdBy || '') : user ?.fullName || '',
+          date: isFirstNode ? (item.createdDate || '') : (item.transferDate || ''),
 
 
         };
@@ -1042,8 +1170,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         },
         nodeMenu: {
           details: {
-            text: this.translate.instant('VISUAL_TRACKING.DETAILS.TITLE')                 
-            }         
+            text: this.translate.instant('VISUAL_TRACKING.DETAILS.TITLE')
+          }
         },
         editForm: {
           readOnly: true,
@@ -1091,7 +1219,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
 
   isEnabled(name: string): boolean {
-    const attribute = this.basicAttributes?.find((attr: BasicAttribute) => attr.Name === name);
+    const attribute = this.basicAttributes ?.find((attr: BasicAttribute) => attr.Name === name);
     return attribute ? attribute.Enabled : false;
   }
 
@@ -1099,7 +1227,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   getFormDataValue() {
 
-    this.customAttributes?.components?.forEach((component: CustomAttributeComponent) => {
+    this.customAttributes ?.components ?.forEach((component: CustomAttributeComponent) => {
       const key = component.key;
       if (this.customFormData) {
         const value = this.customFormData[key];
@@ -1133,11 +1261,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
     switch (this.currentLang) {
       case 'ar':
-        return item?.nameAr || item?.name;
+        return item ?.nameAr || item ?.name;
       case 'fr':
-        return item?.nameFr || item?.name;
+        return item ?.nameFr || item ?.name;
       default:
-        return item?.name;
+        return item ?.name;
     }
   }
 }

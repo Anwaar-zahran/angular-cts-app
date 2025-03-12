@@ -30,7 +30,7 @@
             [placeholder]="'SEARCH.FORM.SELECT_ENTITY' | translate"
             class="form-control"
             (search)="onSearchSendingEntites($event)"
-            (open)="getSendingEntites('')"
+            (focus)="getSendingEntites('')"
           >
           </ng-select>
         </div>
@@ -50,7 +50,7 @@
             [placeholder]="'SEARCH.FORM.SELECT_ENTITY' | translate"
             class="form-control"
             (search)="onSearchReceivingEntites($event)"
-            (open)="getReceivingEntites('')"
+            (focus)="getReceivingEntites('')"
           >
           </ng-select>
         </div>
@@ -68,9 +68,10 @@
             bindLabel="fullName"
             bindValue="id"
             [placeholder]="'SEARCH.FORM.SELECT_USER' | translate"
+            [loading]="isLoadingFromUsers"
             class="form-control"
             (search)="onSearchUsers($event, true)"
-            (open)="getFromUsers('')"
+            (focus)="getFromUsers('')"
           >
           </ng-select>
         </div>
@@ -87,10 +88,11 @@
             [items]="searchToUsers"
             bindLabel="fullName"
             bindValue="id"
+            [loading]="isLoadingToUsers"
             [placeholder]="'SEARCH.FORM.SELECT_USER' | translate"
             class="form-control"
             (search)="onSearchUsers($event, false)"
-            (open)="getToUsers('')"
+            (focus)="getToUsers('')"
           >
           </ng-select>
         </div>
@@ -112,7 +114,7 @@
             "
             (search)="onSearchTransferFromEntites($event)"
             class="form-control"
-            (open)="getTransferFromEntites('')"
+            (focus)="getTransferFromEntites('')"
           >
           </ng-select>
         </div>
@@ -129,12 +131,10 @@
             [items]="transferToEntities"
             bindLabel="name"
             bindValue="id"
-            [placeholder]="
-              'DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE' | translate
-            "
+            [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE' | translate"
             (search)="onSearchTransferToEntites($event)"
             class="form-control"
-            (open)="getTransferToEntities('')"
+            (focus)="getTransferToEntities('')"
           >
           </ng-select>
         </div>
@@ -272,7 +272,7 @@
           <td>{{ row.referenceNumber }}</td>
           <td>{{ row.subject }}</td>
           <td>{{ row.createdDate }}</td>
-          <td>{{ row.statusText }}</td>
+          <td>{{ getStatusName(row.statusId) }}</td>
           <td>
             <button type="button" class="btn" (click)="showDetails(row)">
               <i class="fa fa-eye"></i>

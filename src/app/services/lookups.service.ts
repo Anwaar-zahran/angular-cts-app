@@ -22,6 +22,7 @@ export class LookupsService {
  // private listImportance = `${environment.apiBaseUrl}/Importance/ListImportances`;
   private listImportance = `${environment.apiBaseUrl}/Importance/List?Name=`;
   private listStatus = `${environment.apiBaseUrl}/Status/ListStatuses`;
+  private listStatusByName = `${environment.apiBaseUrl}/Status/List?Name=`;
  // private listPriorities = `${environment.apiBaseUrl}/Priority/ListPriorities`;
   private listPriorities = `${environment.apiBaseUrl}/Priority/List?Name=`;
   private listYears = `${environment.apiBaseUrl}/Dashboard/GetAvailableYears`;
@@ -322,8 +323,20 @@ export class LookupsService {
           throw error;
         })
       );
-  }
+  } 
+  getStatusByName(): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
 
+    return this.http.get(this.listStatusByName, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching Status data', error.message);
+          throw error;
+        })
+      );
+  } 
   getPriorities(accessToken: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
