@@ -236,7 +236,7 @@ export class SearchPageComponent {
   }
 
   getStatuses(): void {
-    this.lookupservice.getStatus().subscribe(
+    this.lookupservice.getStatusByName().subscribe(
       (response) => {
         this.statuses = response || [];
 
@@ -438,6 +438,12 @@ export class SearchPageComponent {
   getCategoryName(catId: any): string {
     const cat = this.categories.find(p => p.id === catId);
     return cat ? this.getName(cat) : '';
+  }
+
+  getStatusName(id: any): string {
+    debugger;
+    const status = this.statuses.find(p => p.id === id);
+    return status ? this.getName(status) : '';
   }
 
   async showDetails(row: any) {
