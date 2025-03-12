@@ -109,6 +109,7 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
   }
 
   private renderChart(seriesData: any[]) {
+    const isRTL = document.dir === 'rtl';
 
     this.chartOptions = {
       chart: {
@@ -132,9 +133,12 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
           text: this.translateService.instant("BAM.DASHBOARD.CHARTS.LABELS.CATEGORY")
         },
         crosshair: true,
+        reversed: isRTL,
       },
       yAxis: {
         min: 0,
+        reversed: false,
+        opposite: isRTL,
         title: {
           text: this.translateService.instant('BAM.CHARTS.LABELS.COUNT')
         },
@@ -153,9 +157,15 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
         formatter: function () {
           if (this.y === 0) return false;
           return `${this.series.name}: ${this.y}<br/>${this.series.chart.tooltip.options.pointFormat}`;
+        },
+        style: {
+          textAlign: isRTL ? 'right' : 'left'
         }
       },
       plotOptions: {
+        series: {
+          stacking: undefined
+        },
         column: {
           stacking: 'normal',
           dataLabels: {
@@ -166,7 +176,10 @@ export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
           }
         }
       },
-      series: seriesData as Highcharts.SeriesOptionsType[]
+      series: seriesData as Highcharts.SeriesOptionsType[],
+      legend: {
+        rtl: isRTL
+      },
     };
   }
 

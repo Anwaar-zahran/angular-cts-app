@@ -101,6 +101,7 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
   }
 
   private drawChart(categories: string[], overdueData: number[], onTimeData: number[]) {
+    const isRTL = document.dir === 'rtl';
 
     this.chartOptions = {
       chart: {
@@ -122,10 +123,13 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
         ],
         title: {
           text: this.translateService.instant('BAM.DASHBOARD.CHARTS.LABELS.CATEGORIES'),
-        }
+        },
+        reversed: isRTL,
       },
       yAxis: {
         min: 0,
+        reversed: false,
+        opposite: isRTL,
         title: {
           text: this.translateService.instant('BAM.DASHBOARD.CHARTS.LABELS.DOCUMENT_COUNT')
         }
@@ -133,9 +137,15 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
       tooltip: {
         shared: true,
         pointFormat: '<b>{series.name}</b>: {point.y} ' +
-          this.translateService.instant('BAM.DASHBOARD.CHARTS.LABELS.TRANSFERS') + '<br/>'
+          this.translateService.instant('BAM.DASHBOARD.CHARTS.LABELS.TRANSFERS') + '<br/>',
+        style: {
+          textAlign: isRTL ? 'right' : 'left'
+        }
       },
       plotOptions: {
+        series: {
+          stacking: undefined
+        },
         column: {
           borderRadius: 4,
           dataLabels: {
@@ -156,7 +166,10 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
           data: onTimeData,
           color: '#00695E'
         }
-      ]
+      ],
+      legend: {
+        rtl: isRTL
+      },
     };
   }
 

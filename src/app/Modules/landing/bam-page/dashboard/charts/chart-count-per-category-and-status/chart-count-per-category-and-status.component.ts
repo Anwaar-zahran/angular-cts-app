@@ -127,6 +127,7 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
         if(seriesData.length > 0){
           this.isDataAvailable = true;
         }
+        const isRTL = document.dir === 'rtl';
         this.chartOptions = {
           chart: {
             type: 'column',
@@ -149,10 +150,13 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
               text: this.translate.instant('BAM.DASHBOARD.CHARTS.LABELS.CATEGORY')
             },
             crosshair: true,
+            reversed: isRTL
           },
           yAxis: {
             min: 0,
             max:110,
+            reversed: false,
+            opposite: isRTL,
             title: {
               text: this.translate.instant("BAM.DASHBOARD.CHARTS.LABELS.PERCENTAGE"),
             },
@@ -173,9 +177,15 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
             formatter: function () {
               if (this.y === 0) return false; // Hide tooltip for zero values
               return `${this.series.name}: ${this.y?.toFixed(2)}%<br/>${totalLabel}: ${totalFirstElements}`;
+            },
+            style: {
+              textAlign: isRTL ? 'right' : 'left'
             }
           },
           plotOptions: {
+            series: {
+              stacking: undefined
+            },
             column: {
               stacking: 'normal',
               dataLabels: {
@@ -186,7 +196,10 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
               }
             }
           },
-          series: seriesData as Highcharts.SeriesOptionsType[]
+          series: seriesData as Highcharts.SeriesOptionsType[],
+          legend: {
+            rtl: isRTL
+          },
         };
       });
   }
