@@ -29,7 +29,7 @@
           bindValue="id"
           [placeholder]="'SEARCH.FORM.SELECT_ENTITY' | translate"
           class="form-control"
-          (search)="onSearchSendingEntites($event?.term || '')"
+          (search)="onSearchSendingEntites($event.term || '')"
           (open)="getSendingEntities('')"
         >
         </ng-select>
@@ -116,7 +116,7 @@
             [placeholder]="
               'DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE' | translate
             "
-            (search)="onSearchTransferFromEntites($event?.term || '')"
+            (search)="onSearchTransferFromEntites($event.term || '')"
             class="form-control"
             (open)="getTransferFromEntites('')"
           >
@@ -138,7 +138,7 @@
             [placeholder]="
               'DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE' | translate
             "
-            (search)="onSearchTransferToEntites($event?.term || '')"
+            (search)="onSearchTransferToEntites($event.term || '')"
             class="form-control"
             (open)="getTransferToEntities('')"
           >

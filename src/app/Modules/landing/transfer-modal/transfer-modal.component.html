@@ -45,7 +45,10 @@
             }}<span class="text-danger">*</span>
           </th>
           <th width="14%">{{ "TRANSFER_DIALOG.DUEDATE" | translate }}</th>
-          <th width="17%">{{ "TRANSFER_DIALOG.INSTRUCTION" | translate }}</th>
+          <th width="17%">
+            {{ "TRANSFER_DIALOG.INSTRUCTION" | translate
+            }}<span *ngIf="isFollowUpRequired" class="text-danger">*</span>
+          </th>
           <th>{{ "TRANSFER_DIALOG.PRIVATE" | translate }}</th>
           <th>{{ "TRANSFER_DIALOG.CCED" | translate }}</th>
           <th>{{ "TRANSFER_DIALOG.FOLLOWUP" | translate }}</th>
@@ -73,7 +76,7 @@
               *ngIf="row.showValidationError && !row.selectedUser"
               class="text-danger"
             >
-              This field is required
+              {{ "ERRORS.REQUIRED_FIELD" | translate }}
             </div>
           </td>
           <td>
@@ -83,7 +86,7 @@
               [items]="purposes"
               [(ngModel)]="row.selectedPurposeId"
               (ngModelChange)="onUserOrPurposeChange(i)"
-              [bindLabel]="currentLanguage === 'en' ? 'name':'nameAr'"
+              [bindLabel]="currentLanguage === 'en' ? 'name' : 'nameAr'"
               bindValue="id"
               class="form-control"
             >
@@ -95,7 +98,7 @@
               *ngIf="row.showValidationError && !row.selectedPurposeId"
               class="text-danger"
             >
-              This field is required
+              {{ "ERRORS.REQUIRED_FIELD" | translate }}
             </div>
           </td>
           <td>
@@ -117,7 +120,7 @@
               *ngIf="row.showValidationError && !row.selectedPriorityId"
               class="text-danger"
             >
-              This field is required
+              {{ "ERRORS.REQUIRED_FIELD" | translate }}
             </div>
           </td>
           <td>
@@ -142,7 +145,14 @@
               [(ngModel)]="row.txtInstruction"
               class="form-control"
               type="text"
+              [required]="row.isFollowUp"
             />
+            <div
+              *ngIf="row.showValidationError && !row.txtInstruction && row.isFollowUp"
+              class="text-danger"
+            >
+              {{ "ERRORS.REQUIRED_FIELD" | translate }}
+            </div>
           </td>
           <td>
             <div class="form-check justify-content-center">
@@ -175,6 +185,7 @@
                 [(ngModel)]="row.isFollowUp"
                 id="chbxFollowUp{{ i }}"
                 name="ckIsFollowUp{{ i }}"
+                (change)="onFollowUpChange(row)"
               />
             </div>
           </td>

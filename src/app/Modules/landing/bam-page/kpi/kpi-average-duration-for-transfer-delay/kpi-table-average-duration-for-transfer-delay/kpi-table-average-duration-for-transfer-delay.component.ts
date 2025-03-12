@@ -97,7 +97,6 @@ export class KpiTableAverageDurationForTransferDelayComponent implements OnInit 
 
   private loadData() {
     this.kpiService.ListStructureAverageDurationForTransferDelay(this.year).subscribe((response: any) => {
-      // Map the data to include both structureId and structureName
       this.data = response.data.map((item: any) => {
         const entity = this.entities.find(e => e.id === item.structureId);
         return {
