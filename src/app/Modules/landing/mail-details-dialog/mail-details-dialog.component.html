@@ -447,7 +447,7 @@
                     *ngIf="isEnabled('ExternalReferenceNumber')"
                   >
                     <div class="form-group">
-                      <label class="form-label">{{
+                      <label class="form-label w-100">{{
                         "MAIL_DETAILS.ExternalReferenceNumber" | translate
                       }}</label>
                       <input
@@ -673,7 +673,7 @@
                   class="table"
                   datatable
                   [dtOptions]="dtOptions"
-                  *ngIf="linkedDocs?.length"
+                  *ngIf="linkedDocs?.length>0"
                 >
                   <thead>
                     <tr>

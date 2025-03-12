@@ -416,7 +416,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       expanded: true
     };
 
-
+    debugger;
     if ((attachment.children && attachment.children.length > 0) ||
       (attachment.childAttachments && attachment.childAttachments.length > 0)) {
       const childrenData = attachment.children || attachment.childAttachments;
@@ -514,11 +514,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     try {
       // Create an array of promises for all data fetching operations
       const promises = [
-        //this.getAttributes(docID),
-        this.getAttributes(this.data.row.id),
+        this.data.fromSearch ? this.getSearchAttributes(docID): this.getAttributes(this.data.row.id),
         this.getNonArchAttachments(docID),
         this.getLinkedDocuments(docID),
-        this.data.fromSearch ? this.getActivityLogs(docID) : this.getActivityLogsByDocId(docID),
+      //this.data.fromSearch ? this.getActivityLogs(docID) : this.getActivityLogsByDocId(docID),
+        this.getActivityLogs(docID),
         this.getNotes(docID),
         this.getHistory(docID),
         this.getAttachments(docID),
@@ -534,7 +534,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.attributes = results[0];
       this.nonArchAttachments = results[1] ?.data;
       this.linkedDocs = results[2] ?.data;
-      this.activityLogs = this.data.fromSearch ? results[3] : results[3] ?.data;
+      //this.activityLogs = this.data.fromSearch ? results[3] : results[3] ?.data;
+      this.activityLogs = results[3];
       this.notes = results[4].data;
       this.transHistory = results[5] ?.data;
       this.attachments = results[6];
@@ -652,6 +653,57 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           this.attributes = response || [];
           this.basicAttributes = JSON.parse(response ?.basicAttributes);
           //this.customAttribute = JSON.parse(response?.customAttributes);
+          this.customAttributes = JSON.parse(response ?.customAttributes);
+          this.customFormData = JSON.parse(response ?.formData);
+
+          if (this.attributes) {
+            this.classId = this.attributes.classificationId ?? '';
+            this.importanceId = this.attributes.importanceId ?? '';
+            this.privacyId = this.attributes.privacyId ?? '';
+            this.priorityId = this.attributes.priorityId ?? '';
+            this.docTypeId = this.attributes.documentTypeId ?? '';
+
+            if (this.priorityId) {
+              this.selectedPriorityText = this.getItemName(this.priorityId, this.priority, true);
+            }
+            if (this.privacyId) {
+              this.selectedPrivacyText = this.getItemName(this.privacyId, this.privacy, true);
+            }
+            if (this.importanceId) {
+              this.selectedImportanceText = this.getItemName(this.importanceId, this.importance, true);
+            }
+            if (this.classId) {
+              this.selectedClassText = this.getItemName(this.classId, this.classification, true);
+            }
+            if (this.attributes.carbonCopy ?.length > 0)
+              this.selectedCarbonText = this.attributes.carbonCopies.map((carbon: any) => carbon.text).join(', ');
+
+            if (this.docTypeId) {
+              this.selectedDocTypeText = this.getItemName(this.docTypeId, this.docTypes, true);
+            }
+          }
+          this.getFormDataValue();
+
+          console.log("Attributes:", this.attributes);
+          console.log("BasicAttributes:", this.basicAttributes);
+          console.log("CustomAttributes:", this.customAttributes);
+          console.log("customFormData:", this.customFormData);
+          resolve(response);
+        },
+        (error: any) => {
+          console.error(error);
+          reject(error);
+        }
+      );
+    });
+  }
+
+  getSearchAttributes(docID: string): Promise<DocAttributesApiResponse> {
+    return new Promise((resolve, reject) => {
+      this.searchService.getSearchDocAttributes(this.accessToken!, docID).subscribe(
+        (response: any) => {
+          this.attributes = response || [];
+          this.basicAttributes = JSON.parse(response ?.basicAttributes);
           this.customAttributes = JSON.parse(response ?.customAttributes);
           this.customFormData = JSON.parse(response ?.formData);
 

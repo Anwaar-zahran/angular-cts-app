@@ -11,8 +11,8 @@ import { AttachmentsApiResponce } from '../models/attachments.model';
 })
 export class SearchPageService {
   private searchApiUrl = `${environment.apiBaseUrl}/Search/List`;
-  //private getDocDetails = `${environment.apiBaseUrl}/Document/GetSearchDocument`;
-  private getDocDetails = `${environment.apiBaseUrl}/Document/GetDocumentByTransferId`;
+  private getDocDetails = `${environment.apiBaseUrl}/Document/GetSearchDocument`;
+  //private getDocDetails = `${environment.apiBaseUrl}/Document/GetDocumentByTransferId`;
   private notesURL = `${environment.apiBaseUrl}/Note/List`;
   private linkedDocURL = `${environment.apiBaseUrl}/LinkedDocument/List`;
   private nonArchiveURL = `${environment.apiBaseUrl}/NonArchivedAttachments/List`;
@@ -124,6 +124,7 @@ export class SearchPageService {
         })
       );
   }
+
   getNonArchivedAttachment(accessToken: string, id: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
@@ -216,6 +217,26 @@ export class SearchPageService {
       );
   }
 
+  getSearchDocAttributes(accessToken: string, id: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    });
+
+    const params = new URLSearchParams();
+    params.set('id', id);
+
+    const urlWithParams = `${this.getDocDetails}?${params.toString()}`;
+
+    return this.httpClient.get(urlWithParams, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching attributes', error.message);
+          throw error;
+        })
+      );
+  }
+
   getTransHistory(accessToken: string, id: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
@@ -271,6 +292,7 @@ export class SearchPageService {
       );
 
   }
+
   getVisualTracking(documentId: string): Observable<any> {
 
 

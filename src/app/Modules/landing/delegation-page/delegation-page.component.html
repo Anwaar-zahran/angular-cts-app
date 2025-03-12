@@ -170,17 +170,17 @@
                 <i class="fas fa-plus"></i>
               </button>
             </div>
-          </div>
 
-          <div *ngIf="
+
+            <div *ngIf="
               delegationForm.controls['categoryId'].invalid &&
               delegationForm.controls['categoryId'].touched
             "
-               class="error-msg">
-            {{ "DELEGATION.ERRORS.REQUIRED_CATEGORY" | translate }}
+                 class="error-msg">
+              {{ "DELEGATION.ERRORS.REQUIRED_CATEGORY" | translate }}
+            </div>
           </div>
         </div>
-
         <!-- Checkboxes -->
         <div class="col-md-6">
           <div class="d-flex gap-3 mt-4">

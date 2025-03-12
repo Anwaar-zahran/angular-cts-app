@@ -1211,7 +1211,10 @@ label.form-label.required:after {
 	color: var(--danger);
 	font-size: 11px;
 }
-
+.error-msg.text-muted {
+  color: #919191 !important;
+  font-size: 10px !important;
+}
 @media screen and (max-width: 1600px) {
 	.fa.fa-edit {
 		width: 20px;

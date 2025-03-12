@@ -360,7 +360,6 @@ export class SearchPageComponent {
     return `${year}/${month}/${day}`;
   }
   
-
   onSearch() {
     console.log(this.searchModel);
     const formattedSearchModel = { ...this.searchModel };
@@ -403,9 +402,6 @@ export class SearchPageComponent {
     
 
   }
-
-
-
   
   isValidNgbDateStruct(value: NgbDateStruct): boolean {
     return (
@@ -454,7 +450,7 @@ export class SearchPageComponent {
         documentId: row.documentId,
         referenceNumber: row.ref,
         row: row,
-        fromSearch: true
+        fromSearch: false
       }
     }).componentInstance.showMyTransferTab = false; // Set showMyTransferTab to false
 
