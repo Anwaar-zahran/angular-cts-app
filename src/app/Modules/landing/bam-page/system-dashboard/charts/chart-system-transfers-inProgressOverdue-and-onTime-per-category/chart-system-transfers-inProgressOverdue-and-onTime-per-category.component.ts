@@ -45,12 +45,12 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
   ngOnInit() {
 
     this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.info = this.translateService.instant("BAM.CHARTS.TRANSFERS_IN_PROGRESS_INFO")
+      this.info = this.translateService.instant("BAM.CHARTS.TRANSFERS_IN_PROGRESS_INFO_V2")
       this.loadChartData();
     });
     
     this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.info = this.translateService.instant("BAM.CHARTS.TRANSFERS_COMPLETED_INFO")
+      this.info = this.translateService.instant("BAM.CHARTS.TRANSFERS_COMPLETED_INFO_V2")
       this.loadChartData();
     });
     // Only load chart data when categories are available
@@ -67,7 +67,7 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
   }
 
   private loadChartData() {
-    this.info = this.translateService.instant("BAM.CHARTS.TRANSFERS_IN_PROGRESS_INFO")
+    this.info = this.translateService.instant("BAM.CHARTS.TRANSFERS_IN_PROGRESS_INFO_V2")
     this.chartsService
       .GetTransfersInProgressOverdueAndOnTimePerCategory({
         fromDate: this.fromDate,
@@ -85,12 +85,18 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
           const onTimeItem = res.onTime.find(item => item.categoryId === cat.id) || { count: 0 };
 
           if (onTimeItem.count > 0) {
-            categoryNames.push(cat.text);
+            let category = this.translateService.instant(`BAM.DASHBOARD.CHARTS.STATUS.${cat.text.toUpperCase().replace(/\s+/g, '_')}`);
+            console.log(category);
+            console.log('------------')
+            categoryNames.push(category);
             onTimeData.push(onTimeItem.count);
             this.isDataAvailable = true;
           }
           if(overdueItem.count > 0){
-            categoryNames.push(cat.text);
+            let category = this.translateService.instant(`BAM.DASHBOARD.CHARTS.STATUS.${cat.text.toUpperCase().replace(/\s+/g, '_')}`);
+            console.log(category);
+            console.log('------------')
+            categoryNames.push(category);
             overdueData.push(overdueItem.count);
             this.isDataAvailable = true;
           }
@@ -111,15 +117,16 @@ export class ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent 
       },
       colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
       xAxis: {
-        categories: [
-          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
-          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
-          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.COMPLETED"),
-          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.IN_PROGRESS"),
-          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.OVERDUE"),
-          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
-          this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
-        ],
+        categories: categories,
+        // categories: [
+        //   this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INTERNAL"),
+        //   this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.INCOMING"),
+        //   this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.COMPLETED"),
+        //   this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.IN_PROGRESS"),
+        //   this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.OVERDUE"),
+        //   this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
+        //   this.translateService.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
+        // ],
         title: {
           text: this.translateService.instant('BAM.DASHBOARD.CHARTS.LABELS.CATEGORIES'),
         }

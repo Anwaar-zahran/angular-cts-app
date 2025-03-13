@@ -4,7 +4,7 @@ import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import { KpiService } from '../../../../../../services/kpi.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { catchError, of, Subject } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { KpiTableUserAverageDurationForTransferDelayComponent } from '../kpi-table-user-average-duration-for-transfer-delay/kpi-table-user-average-duration-for-transfer-delay.component';
 import { KpiChartStructureAverageDurationForTransferDelayComponent } from '../kpi-chart-structure-average-duration-for-transfer-delay/kpi-chart-structure-average-duration-for-transfer-delay.component';
@@ -95,21 +95,41 @@ export class KpiTableAverageDurationForTransferDelayComponent implements OnInit 
     };
   }
 
-  private loadData() {
-    this.kpiService.ListStructureAverageDurationForTransferDelay(this.year).subscribe((response: any) => {
-      this.data = response.data.map((item: any) => {
-        const entity = this.entities.find(e => e.id === item.structureId);
-        return {
-          ...item,
-          structureName: entity ? entity.name :this.translateService.instant('BAM.COMMON.UNKNOWN_STRUCTURE'),
-          structureId: item.structureId // Keep original structureId
-        };
-      });
-      this.totalItems = response.recordsTotal;
-      this.calculatePagination();
-      this.dtTrigger.next(null);
+  private loadData(): void {
+    if (!this.year) {
+      console.warn('Year is not defined.');
+      return;
+    }
+  
+    this.kpiService.ListStructureAverageDurationForTransferDelay(this.year).pipe(
+      catchError(error => {
+        console.error('Error fetching data:', error);
+        return of({ data: [], recordsTotal: 0 }); // Return default response to prevent breakage
+      })
+    ).subscribe(response => {
+      this.processResponse(response);
     });
   }
+  
+  private processResponse(response: any): void {
+    if (!response || !Array.isArray(response.data)) {
+      console.warn('Invalid response structure:', response);
+      return;
+    }
+  
+    const entityMap = new Map(this.entities?.map(e => [e.id, e.name]));
+  
+    this.data = response.data.map((item:any) => ({
+      ...item,
+      structureName: entityMap.get(item.structureId) || this.translateService.instant('BAM.COMMON.UNKNOWN_STRUCTURE'),
+      structureId: item.structureId
+    }));
+  
+    this.totalItems = response.recordsTotal;
+    this.calculatePagination();
+    this.dtTrigger.next(null);
+  }
+  
 
   getTotalAverage() {
     this.kpiService

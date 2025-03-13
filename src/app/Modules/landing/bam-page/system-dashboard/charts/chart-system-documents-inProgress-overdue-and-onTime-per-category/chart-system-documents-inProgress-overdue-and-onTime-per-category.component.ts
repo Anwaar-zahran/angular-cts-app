@@ -41,9 +41,9 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
 
   ngOnInit() {
 
-    this.translateService.get("BAM.CHARTS.DUE_DATE_IN_PROGRESS_INFO").subscribe((translatedText: string) => {
-      this.info = translatedText;
-    });
+    // this.translateService.get("BAM.CHARTS.DUE_DATE_IN_PROGRESS_INFO_V2").subscribe((translatedText: string) => {
+    //   this.info = translatedText;
+    // });
   
 
     // Only load chart data when categories are available
@@ -64,7 +64,7 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
   }
 
   private loadChartData() {
-    this.info = this.translateService.instant('"BAM.CHARTS.DUE_DATE_IN_PROGRESS_INFO"');
+    this.info = this.translateService.instant("BAM.CHARTS.DUE_DATE_IN_PROGRESS_INFO_V2");
     this.chartsService
       .GetDocumentsInProgressOverdueAndOnTimePerCategory({
         fromDate: this.fromDate,

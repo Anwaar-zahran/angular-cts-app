@@ -480,14 +480,18 @@
       "TRANSFER_COMPLETION_INFO": "Average transfer completion for transfers sent to you",
       "DUE_DATE_COMPLETED": "Due Date Statistics for Completed Correspondences",
       "DUE_DATE_COMPLETED_INFO": "Number of completed correspondences created by you per category divided into 2 circles (Only for correspondences with due date)",
+      "DUE_DATE_COMPLETED_INFO_V2": "Number of completed correspondences created by you per category (Only for correspondences with due date)",
       "DUE_DATE_IN_PROGRESS": "Due Date Statistics for In Progress Correspondences",
       "DUE_DATE_IN_PROGRESS_INFO": "Number of in progress correspondences created by you per category divided into 2 circles (Only for correspondences with due date)",
+      "DUE_DATE_IN_PROGRESS_INFO_V2": "Number of in progress correspondences created by you per category (Only for correspondences with due date)",
       "COMPLETION_VS_PROGRESS": "Percentage of Correspondences \"Completed\" vs \"In Progress\"",
       "COMPLETION_VS_PROGRESS_INFO": "Percentage of correspondences created by you or transferred to you",
       "TRANSFERS_COMPLETED": "Due Date Statistics for Completed Transfers",
       "TRANSFERS_COMPLETED_INFO": "Number of completed transfers sent to you grouped by category divided into 2 circles (Only for transfers with due date)",
+      "TRANSFERS_COMPLETED_INFO_V2": "Number of completed transfers sent to you grouped by category (Only for transfers with due date)",
       "TRANSFERS_IN_PROGRESS": "Due Date Statistics for In Progress Transfers",
       "TRANSFERS_IN_PROGRESS_INFO": "Number of in progress transfers sent to you grouped by category divided into 2 circles (Only for transfers with due date)",
+      "TRANSFERS_IN_PROGRESS_INFO_V2": "Number of in progress transfers sent to you (Only for transfers with due date)",
       "STATUS_CAREGORY_GROUP":"Count per status grouped by category",
       "PERCENTAGE":"Percentage",
       "FILTER": {
@@ -522,7 +526,9 @@
         "STATISTICS_PER_STRUCTURE": "Number of correspondences for each structure grouped by category",
         "COUNT_PER_STATUS": "Number of correspondences for each category grouped by status",
         "IN_PROGRESS_DOCUMENTS_DUE_DATE": "Number of in progress correspondences per category divided into 2 circles (Only for correspondences with due date)",
-        "COMPLETED_DOCUMENTS_DUE_DATE": "Number of completed correspondences created by you per category divided into 2 circles (Only for correspondences with due date)"
+        "IN_PROGRESS_DOCUMENTS_DUE_DATE_V2": "Number of in progress correspondences per category (Only for correspondences with due date)",
+        "COMPLETED_DOCUMENTS_DUE_DATE": "Number of completed correspondences created by you per category divided into 2 circles (Only for correspondences with due date)",
+        "COMPLETED_DOCUMENTS_DUE_DATE_V2": "Number of completed correspondences created by you per category(Only for correspondences with due date)"
       },
       "LABELS": {
         "STRUCTURES": "Structures",

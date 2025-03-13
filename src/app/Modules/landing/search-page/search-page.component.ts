@@ -423,6 +423,8 @@ export class SearchPageComponent {
     this.lookupservice.getCategoriesByName(undefined).subscribe(
       (response: any) => {
         this.categories = response?.data || [];
+        console.log('--------------')
+        console.log(this.categories)
 
       },
       (error: any) => {
@@ -591,7 +593,7 @@ export class SearchPageComponent {
       },
         (error: any) => {
           console.error('Error getting search result:', error);
-          this.toaster.showToaster(error?.message || 'Something went wrong');
+          this.toaster.showToaster(error?.message || this.translate.instant('ERRORS.SOMETHING_WRONG'));
         });
     });
 
@@ -632,12 +634,12 @@ export class SearchPageComponent {
   }
 
   getCategoryName(catId: any): string {
+    console.log(this.categories)
     const cat = this.categories.find(p => p.id === catId);
     return cat ? this.getName(cat) : '';
   }
 
   getStatusName(id: any): string {
-    debugger;
     const status = this.statuses.find(p => p.id === id);
     return status ? this.getName(status) : '';
   }

@@ -42,7 +42,7 @@ export class ChartDocumentsInProgressOverdueAndOnTimeComponent implements OnInit
   ngOnInit() {
 
     this.languageSubscription = this.translate.onLangChange.subscribe((event:LangChangeEvent) =>{
-      this.info = this.translate.instant("BAM.CHARTS.DUE_DATE_IN_PROGRESS_INFO")
+      this.info = this.translate.instant("BAM.CHARTS.DUE_DATE_IN_PROGRESS_INFO_V2")
       this.loadChartData();
     });
     
@@ -60,7 +60,7 @@ export class ChartDocumentsInProgressOverdueAndOnTimeComponent implements OnInit
   }
 
   private loadChartData() {
-    this.info = this.translate.instant("BAM.CHARTS.DUE_DATE_IN_PROGRESS_INFO")
+    this.info = this.translate.instant("BAM.CHARTS.DUE_DATE_IN_PROGRESS_INFO_V2")
     this.chartsService
       .GetDocumentsInProgressOverdueAndOnTimePerCategoryByUser({
         fromDate: this.fromDate,
