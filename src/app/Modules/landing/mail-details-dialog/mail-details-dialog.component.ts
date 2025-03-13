@@ -208,6 +208,9 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       };
       OrgChart.OFFLINE = true;
     }
+
+    this.loadLookupData();
+
   }
 
   ngOnInit(): void {
@@ -221,7 +224,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     this.ctsTransferId = this.data.row.id;
     this.ctsDocumentId = Number(this.data.id);
     this.initDtOptions();
-    this.loadLookupData();
+    //this.loadLookupData();
     this.fetchDetails(this.data.id);
     console.log("row", this.data.row);
     console.log("row", this.data.row.id);
@@ -230,6 +233,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     }
 
   }
+
   lookupPromiseResults: any;
   async loadLookupData(): Promise<void> {
     try {
@@ -241,19 +245,19 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.toPromise(this.lookupsService.getUsers(this.accessToken!), (users: any) => {
           this.users = users || [];
         }),
-        this.toPromise(this.lookupsService.getImportance(this.accessToken!), (response: any) => {
+        this.toPromise(this.lookupsService.getImportanceEn(this.accessToken!), (response: any) => {
           this.importance = response || [];
         }),
         this.toPromise(this.lookupsService.getPurposes(this.accessToken!), (response: any) => {
           this.purposes = response || [];
         }),
-        this.toPromise(this.lookupsService.getClassfication(this.accessToken!), (response: any) => {
+        this.toPromise(this.lookupsService.getClassficationEn(this.accessToken!), (response: any) => {
           this.classification = response || [];
         }),
-        this.toPromise(this.lookupsService.getPriorities(this.accessToken!), (response: any) => {
+        this.toPromise(this.lookupsService.getPrioritiesEn(this.accessToken!), (response: any) => {
           this.priority = response || [];
         }),
-        this.toPromise(this.lookupsService.getPrivacy(this.accessToken!), (response: any) => {
+        this.toPromise(this.lookupsService.getPrivacyEn(this.accessToken!), (response: any) => {
           this.privacy = response || [];
         }),
         this.toPromise(this.lookupsService.getDocumentTypes(this.accessToken!), (response: any) => {
@@ -262,7 +266,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.toPromise(this.lookupsService.getCarbonUsers(this.accessToken!), (response: any) => {
           this.carbonUsers = response;
         }),
-        this.toPromise(this.lookupsService.getCategoriesByName(undefined), (response: any) => {
+        //this.toPromise(this.lookupsService.getCategoriesByName(undefined), (response: any) => {
+        this.toPromise(this.lookupsService.getCategories(undefined), (response: any) => {
           this.categories = response || [];
         }),
       ];
@@ -595,7 +600,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
       if (this.linkedDocs ?.length > 0) {
         this.mappedArray = this.linkedDocs.map((doc: any) => {
-          const foundItem = this.categories ?.data.find((cat: any) => cat.id === doc.categoryId);
+         // const foundItem = this.categories ?.data.find((cat: any) => cat.id === doc.categoryId);
+          const foundItem = this.categories?.find((cat: any) => cat.id === doc.categoryId);
           return {
             id: doc.id,
             linkedDocumentReferenceNumber: doc.linkedDocumentReferenceNumber,
@@ -697,7 +703,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             }
             if (this.attributes.carbonCopy ?.length > 0)
               this.selectedCarbonText = this.attributes.carbonCopies.map((carbon: any) => carbon.text).join(', ');
-
+            debugger;
             if (this.docTypeId) {
               this.selectedDocTypeText = this.getItemName(this.docTypeId, this.docTypes, true);
             }
@@ -717,7 +723,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       );
     });
   }
-
+  
   getSearchAttributes(docID: string): Promise<DocAttributesApiResponse> {
     return new Promise((resolve, reject) => {
       this.searchService.getSearchDocAttributes(this.accessToken!, docID).subscribe(
@@ -1261,11 +1267,11 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
     switch (this.currentLang) {
       case 'ar':
-        return item ?.nameAr || item ?.name;
+        return item ?.nameAr || item ?.name||item?.text;
       case 'fr':
-        return item ?.nameFr || item ?.name;
+        return item ?.nameFr || item ?.name||item?.text;
       default:
-        return item ?.name;
+        return item ?.name||item?.text;
     }
   }
 }

@@ -95,7 +95,6 @@ export class DelegationPageComponent implements OnInit {
     private translate: TranslateService,
     private cdr: ChangeDetectorRef
   ) {
-    debugger;
     // Setup user search debounce
     this.userSearchSubject.pipe(
       debounceTime(300),
@@ -395,7 +394,6 @@ export class DelegationPageComponent implements OnInit {
 
       this.selectedRowId = item.id;
       this.selectedUserId = item.toUserValueText.id;
-      debugger;
       if (this.contacts && this.contacts.length > 0) {
         this.delegationForm.patchValue({
           userId: this.selectedUserId,
@@ -604,6 +602,7 @@ export class DelegationPageComponent implements OnInit {
     this.isAllCategoriesSelecte = false;
     this.resetDropDowns();
     this.selectedPrivacyId = null;
+    this.isDataLoaded = false;
     this.getFromUsers('');
     const today = new Date();
     this.fromModal = {
@@ -672,7 +671,14 @@ export class DelegationPageComponent implements OnInit {
     }
   }
 
-  getFromUsers(searchText: string='') {
+  isDataLoaded = false;
+
+  getFromUsers(searchText: string = '') {
+    if (this.isDataLoaded && !searchText) {
+      return;
+    }
+    this.isLoadingUsers = true;
+
     this.lookupservice.getUsersWithSearch(this.accessToken!, searchText).subscribe({
       next: (response) => {
 
@@ -681,6 +687,7 @@ export class DelegationPageComponent implements OnInit {
         let currentExistUser = this.authService.getCurrentUserFullName();
         console.log('currentUser:', currentExistUser);
         this.contacts = this.contacts.filter(contact => contact.fullName !== currentExistUser);
+        this.isDataLoaded = true;
 
         // console.log('Contacts', this.contacts);
 
@@ -697,6 +704,7 @@ export class DelegationPageComponent implements OnInit {
       },
       error: (error: any) => {
         console.error(error);
+        this.isLoadingUsers = false;
       }
     });
   }

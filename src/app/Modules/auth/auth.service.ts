@@ -46,7 +46,6 @@ export class AuthService {
   }
 
   storeToken(response: any): void {
-    debugger
     localStorage.setItem('access_token', response.access_token);
     const expiryTime = new Date().getTime() + response.expires_in * 1000;
     localStorage.setItem('expiry', JSON.stringify(expiryTime));

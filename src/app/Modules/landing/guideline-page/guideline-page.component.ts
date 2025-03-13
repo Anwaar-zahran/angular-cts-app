@@ -134,7 +134,7 @@ export class GuidelinePageComponent implements OnInit,OnDestroy {
         documentId: item.documentId,
         referenceNumber: item.ref,
         row: item.row,
-        fromSearch: true,
+        fromSearch: false,
         showActionButtons: (showActionbtns && (!item.row?.isLocked || (item.row?.isLocked && item.row?.lockedBy == currentName)) && item.row.purposeId != 10)
       }
     });

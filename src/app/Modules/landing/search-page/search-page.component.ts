@@ -18,6 +18,8 @@ import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslateService } from '@ngx-translate/core';
 import { Category } from '../../../models/category.model';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-page',
@@ -74,7 +76,19 @@ export class SearchPageComponent {
   loading: boolean = true; // Loading state
   formVisible = true;
   minToDate: Date | null = null;
+  isDataLoaded_SendEntity = false;
+  isDataLoaded_RecEntity = false;
+  isDataLoaded_FromUser = false;
+  isDataLoaded_ToUser = false;
+  isDataLoaded_FromStr = false;
+  isDataLoaded_ToStr = false;
 
+  private fromUserSubject = new Subject<string>();
+  private toUserSubject = new Subject<string>();
+  private fromStrSubject = new Subject<string>();
+  private toStrSubject = new Subject<string>();
+  private sendingEntitySubject = new Subject<string>();
+  private recEntitySubject = new Subject<string>();
 
   constructor(
     private searchService: SearchPageService,
@@ -84,7 +98,31 @@ export class SearchPageComponent {
     private toaster: ToasterService,
     private dialog: MatDialog,
     private translate: TranslateService
-  ) { }
+  ) {
+    this.sendingEntitySubject.pipe(debounceTime(300), distinctUntilChanged()).subscribe(searchText => {
+      this.getSendingEntites(searchText);
+    });
+
+    this.recEntitySubject.pipe(debounceTime(300),distinctUntilChanged()).subscribe(searchText => {
+      this.getReceivingEntites(searchText);
+      });
+
+    this.fromUserSubject.pipe(debounceTime(300), distinctUntilChanged()).subscribe(searchText => {
+      this.getFromUsers(searchText);
+    });
+
+    this.toUserSubject.pipe(debounceTime(300),distinctUntilChanged()).subscribe(searchText => {
+      this.getToUsers(searchText);
+    });
+
+    this.fromStrSubject.pipe(debounceTime(300),distinctUntilChanged()).subscribe(searchText => {
+      this.getTransferFromEntites(searchText);
+    });
+
+    this.toStrSubject.pipe(debounceTime(300), distinctUntilChanged()).subscribe(searchText => {
+      this.getTransferToEntities(searchText);
+    });
+  }
 
   ngOnInit() {
     //this.regmodel = { year: 2025, month: 1, day: 21 };
@@ -113,102 +151,157 @@ export class SearchPageComponent {
     this.getPrivacies();
   }
 
-  getSendingEntites(searchText: string): void {
-    this.lookupservice.getSearchableEntities(searchText).subscribe(
-      (response) => {
+  isLoadingSendEntity = false;
+  getSendingEntites(searchText: string = '') {
+
+    if (this.isDataLoaded_SendEntity && !searchText)
+      return;
+
+    this.isLoadingSendEntity = true;
+    this.lookupservice.getSearchableEntities(searchText).subscribe({
+      next: (response) => {
+
+        this.isLoadingSendEntity = false;
+        this.isDataLoaded_SendEntity = true;
+
         this.sendingEntities = response || [];
         this.sendingEntities.unshift({ id: 0, name: this.translate.instant('SEARCH.FORM.SELECT_ENTITY') });
-        //this.searchModel.documentReceiver = "0";
         this.searchModel.documentSender = "0";
-        //this.searchModel.toStructure = "0";
-        //this.searchModel.fromStructure = "0";
+
       },
-      (error: any) => {
+      error:(error: any) => {
         console.error(error);
+        this.isLoadingSendEntity = false;
+        this.isDataLoaded_SendEntity = false;
       }
-    );
+    });
   }
 
-  getReceivingEntites(searchText: string): void {
-    this.lookupservice.getSearchableEntities(searchText).subscribe(
-      (response) => {
+  isLoadingRecEntity = false;
+  getReceivingEntites(searchText: string = '') {
+
+    if (this.isDataLoaded_RecEntity && !searchText)
+      return;
+
+    this.isLoadingRecEntity = true;
+    this.lookupservice.getSearchableEntities(searchText).subscribe({
+      next: (response) => {
+        this.isDataLoaded_RecEntity = true;
+        this.isLoadingRecEntity = false;
+
         this.recEntities = response || [];
         this.recEntities.unshift({ id: 0, name: this.translate.instant('SEARCH.FORM.SELECT_ENTITY') });
         this.searchModel.documentReceiver = "0";
-        //this.searchModel.documentSender = "0";
-        //this.searchModel.toStructure = "0";
-        //this.searchModel.fromStructure = "0";
+
       },
-      (error: any) => {
+      error: (error: any) => {
         console.error(error);
+        this.isDataLoaded_RecEntity = false;
+        this.isLoadingRecEntity = false;
       }
-    );
+    });
   }
 
-  getTransferFromEntites(searchText: string): void {
-    this.lookupservice.getSearchableEntities(searchText).subscribe(
-      (response) => {
-        this.transferFromEntities = response || [];//DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE
+  isLoadingFromStr = false;
+  getTransferFromEntites(searchText: string = ''): void {
+    if (this.isDataLoaded_FromStr && !searchText)
+      return;
+
+    this.isLoadingFromStr = true;
+
+    this.lookupservice.getSearchableEntities(searchText).subscribe({
+      next: (response) => {
+
+        this.isLoadingFromStr = false;
+        this.isDataLoaded_FromStr = true;
+
+        this.transferFromEntities = response || [];
         this.transferFromEntities.unshift({ id: 0, name: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE'), });
-        //this.searchModel.documentReceiver = "0";
-        //this.searchModel.documentSender = "0";
-        //this.searchModel.toStructure = "0";
+
         this.searchModel.fromStructure = "0";
       },
-      (error: any) => {
+      error: (error: any) => {
         console.error(error);
+        this.isLoadingFromStr = false;
+        this.isDataLoaded_FromStr = false;
       }
-    );
+    });
   }
-  getTransferToEntities(searchText: string): void {
-    this.lookupservice.getSearchableEntities(searchText).subscribe(
-      (response) => {
+
+  isLoadingToStr = false;
+  getTransferToEntities(searchText: string = '') {
+
+    if (this.isDataLoaded_ToStr && !searchText)
+      return;
+
+    this.isLoadingToStr = true;
+    this.lookupservice.getSearchableEntities(searchText).subscribe({
+      next: (response) => {
+
+        this.isDataLoaded_ToStr = true;
+        this.isLoadingToStr = false;
         this.transferToEntities = response || [];
         this.transferToEntities.unshift({ id: 0, name: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE') });
-        //this.searchModel.documentReceiver = "0";
-        //this.searchModel.documentSender = "0";
         this.searchModel.toStructure = "0";
-        //this.searchModel.fromStructure = "0";
       },
-      (error: any) => {
+      error: (error: any) => {
         console.error(error);
+        this.isDataLoaded_ToStr = false;
+        this.isLoadingToStr = false;
       }
-    );
+    });
   }
 
   isLoadingFromUsers = false;
-  getFromUsers(searchText: string): void {
+  getFromUsers(searchText: string = '') {
+
+    if (this.isDataLoaded_FromUser && !searchText)
+      return;
+
     this.isLoadingFromUsers = true;
-    this.lookupservice.getSearchUsers(this.accessToken!, searchText).subscribe(
-      (response) => {
+    this.lookupservice.getSearchUsers(this.accessToken!, searchText).subscribe({
+      next: (response) => {
         this.searchFromUsers = response || [];
         this.isLoadingFromUsers = false;
+        this.isDataLoaded_FromUser = true;
+
         this.searchFromUsers.unshift({ id: 0, fullName: this.translate.instant('SEARCH.FORM.SELECT_USER') });
         this.searchModel.delegationId = "0";
         //this.searchModel.toUser = "0";
         this.searchModel.fromUser = "0";
       },
-      (error: any) => {
+      error: (error: any) => {
         console.error(error);
+        this.isDataLoaded_FromUser = false;
+        this.isLoadingFromUsers = false;
       }
-    );
+    });
   }
+
   isLoadingToUsers = false;
-  getToUsers(searchText: string): void {
+  getToUsers(searchText: string = '') {
+
+    if (this.isDataLoaded_ToUser && !searchText)
+      return;
+
     this.isLoadingToUsers = true;
-    this.lookupservice.getSearchUsers(this.accessToken!, searchText).subscribe(
-      (response) => {
+    this.lookupservice.getSearchUsers(this.accessToken!, searchText).subscribe({
+     next: (response) => {
         this.isLoadingToUsers = false;
+        this.isDataLoaded_ToUser = true;
+
         this.searchToUsers = response || [];
         this.searchToUsers.unshift({ id: 0, fullName: this.translate.instant('SEARCH.FORM.SELECT_USER') });
         this.searchModel.delegationId = "0";
         this.searchModel.toUser = "0";
-        //this.searchModel.fromUser = "0";
       },
-      (error: any) => {
+      error:(error: any) => {
         console.error(error);
+        this.isDataLoaded_ToUser = false;
+        this.isLoadingToUsers = false;
+
       }
-    );
+    });
   }
 
   getDelegationUsers(): void {
@@ -226,7 +319,7 @@ export class SearchPageComponent {
   getCategories(): void {
     this.lookupservice.getCategoriesByName(undefined).subscribe(
       (response: any) => {
-        this.categories = response?.data || [];
+        this.categories = response ?.data || [];
 
       },
       (error: any) => {
@@ -340,9 +433,9 @@ export class SearchPageComponent {
 
   formatDate(date: NgbDateStruct | Date | string): string {
     if (!date) return '';
-  
+
     let parsedDate: Date;
-  
+
     if (typeof date === 'string') {
       parsedDate = new Date(date);
     } else if ('year' in date) {
@@ -350,16 +443,16 @@ export class SearchPageComponent {
     } else {
       parsedDate = date;
     }
-  
+
     if (isNaN(parsedDate.getTime())) return '';
-  
+
     const day = parsedDate.getDate().toString().padStart(2, '0');
     const month = (parsedDate.getMonth() + 1).toString().padStart(2, '0');
     const year = parsedDate.getFullYear().toString();
-  
+
     return `${year}/${month}/${day}`;
   }
-  
+
   onSearch() {
     console.log(this.searchModel);
     const formattedSearchModel = { ...this.searchModel };
@@ -395,14 +488,14 @@ export class SearchPageComponent {
       },
         (error: any) => {
           console.error('Error getting search result:', error);
-          this.toaster.showToaster(error?.message || 'Something went wrong');
+          this.toaster.showToaster(error ?.message || 'Something went wrong');
         });
     });
 
-    
+
 
   }
-  
+
   isValidNgbDateStruct(value: NgbDateStruct): boolean {
     return (
       value &&
@@ -427,6 +520,13 @@ export class SearchPageComponent {
     this.response = null;
     this.ResetForm();
 
+    this.isDataLoaded_FromStr = false;
+    this.isDataLoaded_FromUser = false;
+    this.isDataLoaded_RecEntity = false;
+    this.isDataLoaded_SendEntity = false;
+    this.isDataLoaded_ToStr = false;
+    this.isDataLoaded_ToUser = false;
+
     this.getSendingEntites('');
     this.getReceivingEntites('');
     this.getFromUsers('');
@@ -447,7 +547,7 @@ export class SearchPageComponent {
   }
 
   async showDetails(row: any) {
-    localStorage.setItem('current_Tab','search');
+    localStorage.setItem('current_Tab', 'search');
     this.dialog.open(MailDetailsDialogComponent, {
       disableClose: true,
       width: '90%',
@@ -457,7 +557,7 @@ export class SearchPageComponent {
         documentId: row.documentId,
         referenceNumber: row.ref,
         row: row,
-        fromSearch: false
+        fromSearch: true
       }
     }).componentInstance.showMyTransferTab = false; // Set showMyTransferTab to false
 
@@ -471,17 +571,17 @@ export class SearchPageComponent {
     const currentLang = this.translate.currentLang;
     switch (currentLang) {
       case 'ar':
-        return item?.nameAr || item?.name;
+        return item ?.nameAr || item ?.name;
       case 'fr':
-        return item?.nameFr || item?.name;
+        return item ?.nameFr || item ?.name;
       default:
-        return item?.name;
+        return item ?.name;
     }
   }
 
   onSearchSendingEntites(event: { term: string; items: any[] }): void {
     const query = event.term;
-    if (query.length >=1) {
+    if (query.length >= 1) {
       this.loading = true;
       this.getSendingEntites(query);
     }
@@ -494,7 +594,7 @@ export class SearchPageComponent {
 
   onSearchReceivingEntites(event: { term: string; items: any[] }): void {
     const query = event.term;
-    if (query.length >=1) {
+    if (query.length >= 1) {
       this.loading = true;
       this.getReceivingEntites(query);
     }
@@ -507,7 +607,7 @@ export class SearchPageComponent {
 
   onSearchTransferFromEntites(event: { term: string; items: any[] }): void {
     const query = event.term;
-    if (query.length >=1) {
+    if (query.length >= 1) {
       this.loading = true;
       this.getTransferFromEntites(query);
     }
@@ -520,7 +620,7 @@ export class SearchPageComponent {
 
   onSearchTransferToEntites(event: { term: string; items: any[] }): void {
     const query = event.term;
-    if (query.length >=1) {
+    if (query.length >= 1) {
       this.loading = true;
       this.getTransferToEntities(query);
     }
@@ -551,19 +651,19 @@ export class SearchPageComponent {
     this.formVisible = !this.formVisible;
   }
 
-  onFromDateChange():void{
-    if(this.searchModel.fromTransferDate){
+  onFromDateChange(): void {
+    if (this.searchModel.fromTransferDate) {
       this.minToDate = new Date(this.searchModel.fromTransferDate);
-    }else{
-      this.minToDate = null ;
+    } else {
+      this.minToDate = null;
     }
 
     console.log(this.minToDate)
   }
 
-  preventTyping(event :KeyboardEvent):void{
+  preventTyping(event: KeyboardEvent): void {
     console.log('clickkkked')
-    if(!(event.ctrlKey && event.key ==='v')&& !(['Delete','Backspace','Tap','ArrowLeft',"ArrowRight"].includes(event.key))){
+    if (!(event.ctrlKey && event.key === 'v') && !(['Delete', 'Backspace', 'Tap', 'ArrowLeft', "ArrowRight"].includes(event.key))) {
       event.preventDefault();
     }
   }

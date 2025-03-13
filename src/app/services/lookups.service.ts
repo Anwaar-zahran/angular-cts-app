@@ -10,7 +10,7 @@ import { Priority } from '../models/priority.model';
 })
 export class LookupsService {
   private listUsersUrl = `${environment.iAMUrl}/api/SearchUsersByStructureIds`;
-  //private listPrivacies = `${environment.apiBaseUrl}/Privacy/ListPrivacies`;
+  private listPrivaciesEN = `${environment.apiBaseUrl}/Privacy/ListPrivacies`;
   private listPrivacies = `${environment.apiBaseUrl}/Privacy/List?Name=`;
   private listCategories = `${environment.apiBaseUrl}/Category/ListCategories`;
   //private listCategories = `${environment.apiBaseUrl}/Category/List?Name`;
@@ -19,15 +19,15 @@ export class LookupsService {
   private listSearchUsers = `${environment.iAMUrl}/api/SearchUsers`;
   private listStructuredUsers = `${environment.apiBaseUrl}/User/GetUsersStructuresFromCTS`;
   private listDelegateToUsers = `${environment.apiBaseUrl}/CTS/Delegation/ListDelegationToUser`;
- // private listImportance = `${environment.apiBaseUrl}/Importance/ListImportances`;
+  private listImportanceEN = `${environment.apiBaseUrl}/Importance/ListImportances`;
   private listImportance = `${environment.apiBaseUrl}/Importance/List?Name=`;
   private listStatus = `${environment.apiBaseUrl}/Status/ListStatuses`;
   private listStatusByName = `${environment.apiBaseUrl}/Status/List?Name=`;
- // private listPriorities = `${environment.apiBaseUrl}/Priority/ListPriorities`;
+  private listPrioritiesEN = `${environment.apiBaseUrl}/Priority/ListPriorities`;
   private listPriorities = `${environment.apiBaseUrl}/Priority/List?Name=`;
   private listYears = `${environment.apiBaseUrl}/Dashboard/GetAvailableYears`;
   private listPurposes = `${environment.apiBaseUrl}/CTS/Purpose/ListUserPurposes`;
-  //private listClassification = `${environment.apiBaseUrl}/Classification/List`;
+  private listClassificationEN = `${environment.apiBaseUrl}/Classification/List`;
   private listClassification = `${environment.apiBaseUrl}/Classification/List?Name=`;
   private listDocumentType = `${environment.apiBaseUrl}/DocumentType/List`;
   //private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List`;
@@ -129,6 +129,20 @@ export class LookupsService {
         })
       );
   }
+  getPrivacyEn(accessToken: string): Observable<any> {
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.get(this.listPrivaciesEN, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching privacies data', error.message);
+          throw error;
+        })
+      );
+  }
 
   getPurposes(accessToken: string): Observable<any> {
 
@@ -176,6 +190,7 @@ export class LookupsService {
     params.set('Name', '');
 
     const url = `${this.listDocumentType}?${params.toString()}`;
+   // const url = `${this.listDocumentType}`;
 
     return this.http.get(url, { headers })
       .pipe(
@@ -311,6 +326,36 @@ export class LookupsService {
       );
   }
 
+  getImportanceEn(accessToken: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get(this.listImportanceEN, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching Importance data', error.message);
+          throw error;
+        })
+      );
+  }
+
+  getClassficationEn(accessToken: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get(this.listClassificationEN, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching classification data', error.message);
+          throw error;
+        })
+      );
+  }
+
   getStatus(): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -352,6 +397,20 @@ export class LookupsService {
       );
   }
 
+  getPrioritiesEn(accessToken: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get(this.listPrioritiesEN, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching priorities data', error.message);
+          throw error;
+        })
+      );
+  }
   getPrioritiesWithDays(accessToken: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
