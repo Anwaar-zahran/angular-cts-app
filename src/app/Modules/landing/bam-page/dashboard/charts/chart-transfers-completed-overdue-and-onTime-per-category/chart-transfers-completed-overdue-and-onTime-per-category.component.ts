@@ -40,7 +40,7 @@ export class ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent impleme
 
   ngOnInit() {
     this.languageSubscription = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.info = this.translate.instant("BAM.CHARTS.TRANSFERS_COMPLETED_INFO")
+      this.info = this.translate.instant("BAM.CHARTS.TRANSFERS_COMPLETED_INFO_V2")
       this.loadChartData();
     });
     // Only load chart data when categories are available
@@ -57,7 +57,7 @@ export class ChartTransfersCompletedOverdueAndOnTimePerCategoryComponent impleme
   }
 
   private loadChartData() {
-    this.info = this.translate.instant("BAM.CHARTS.TRANSFERS_COMPLETED_INFO")
+    this.info = this.translate.instant("BAM.CHARTS.TRANSFERS_COMPLETED_INFO_V2")
     this.chartsService
       .GetTransfersCompletedOverdueAndOnTimePerCategoryByUser({
         fromDate: this.fromDate,

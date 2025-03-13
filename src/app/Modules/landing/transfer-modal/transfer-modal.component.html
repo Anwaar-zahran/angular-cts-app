@@ -45,7 +45,10 @@
             }}<span class="text-danger">*</span>
           </th>
           <th width="14%">{{ "TRANSFER_DIALOG.DUEDATE" | translate }}</th>
-          <th width="17%">{{ "TRANSFER_DIALOG.INSTRUCTION" | translate }}</th>
+          <th width="17%">
+            {{ "TRANSFER_DIALOG.INSTRUCTION" | translate
+            }}<span *ngIf="isFollowUpRequired" class="text-danger">*</span>
+          </th>
           <th>{{ "TRANSFER_DIALOG.PRIVATE" | translate }}</th>
           <th>{{ "TRANSFER_DIALOG.CCED" | translate }}</th>
           <th>{{ "TRANSFER_DIALOG.FOLLOWUP" | translate }}</th>
@@ -67,27 +70,33 @@
                 <!-- <span *ngIf="item.isStructure">(Structure)</span> -->
               </ng-template>
             </ng-select>
-            <div *ngIf="row.showValidationError && !row.selectedUser"
-                 class="text-danger">
-              This field is required
+            <div
+              *ngIf="row.showValidationError && !row.selectedUser"
+              class="text-danger"
+            >
+              {{ "ERRORS.REQUIRED_FIELD" | translate }}
             </div>
           </td>
           <td>
-            <ng-select id="ddlPurposes{{ i }}"
-                       name="dllPurposes{{ i }}"
-                       [items]="purposes"
-                       [(ngModel)]="row.selectedPurposeId"
-                       (ngModelChange)="onUserOrPurposeChange(i)"
-                       [bindLabel]="currentLanguage === 'en' ? 'name':'nameAr'"
-                       bindValue="id"
-                       class="form-control">
+            <ng-select
+              id="ddlPurposes{{ i }}"
+              name="dllPurposes{{ i }}"
+              [items]="purposes"
+              [(ngModel)]="row.selectedPurposeId"
+              (ngModelChange)="onUserOrPurposeChange(i)"
+              [bindLabel]="currentLanguage === 'en' ? 'name' : 'nameAr'"
+              bindValue="id"
+              class="form-control"
+            >
               <ng-template ng-label-tmp let-item="item">
                 {{ currentLanguage === "en" ? item.name : item.nameAr }}
               </ng-template>
             </ng-select>
-            <div *ngIf="row.showValidationError && !row.selectedPurposeId"
-                 class="text-danger">
-              This field is required
+            <div
+              *ngIf="row.showValidationError && !row.selectedPurposeId"
+              class="text-danger"
+            >
+              {{ "ERRORS.REQUIRED_FIELD" | translate }}
             </div>
           </td>
           <td>
@@ -103,9 +112,11 @@
                 {{ currentLanguage === "en" ? item.name : item.nameAr }}
               </ng-template>
             </ng-select>
-            <div *ngIf="row.showValidationError && !row.selectedPriorityId"
-                 class="text-danger">
-              This field is required
+            <div
+              *ngIf="row.showValidationError && !row.selectedPriorityId"
+              class="text-danger"
+            >
+              {{ "ERRORS.REQUIRED_FIELD" | translate }}
             </div>
           </td>
           <td>
@@ -122,15 +133,21 @@
             <mat-datepicker #picker></mat-datepicker>
           </td>
           <td>
-            <input id="txtTransferInstruction{{ i }}"
-                   name="txtTransferInstruction{{ i }}"
-                   [(ngModel)]="row.txtInstruction"
-                   maxlength="220"
-                   class="form-control"
-                   type="text" />
-            <!--<div class="error-msg text-muted">{{"REPLY_DIALOG.MAXLENGTH"|translate}}</div>-->
-
-          </td>         
+            <input
+              id="txtTransferInstruction{{ i }}"
+              name="txtTransferInstruction{{ i }}"
+              [(ngModel)]="row.txtInstruction"
+              class="form-control"
+              type="text"
+              [required]="row.isFollowUp"
+            />
+            <div
+              *ngIf="row.showValidationError && !row.txtInstruction && row.isFollowUp"
+              class="text-danger"
+            >
+              {{ "ERRORS.REQUIRED_FIELD" | translate }}
+            </div>
+          </td>
           <td>
             <div class="form-check justify-content-center">
               <input class="form-check-input"
@@ -152,11 +169,14 @@
           </td>
           <td>
             <div class="form-check justify-content-center">
-              <input class="form-check-input"
-                     type="checkbox"
-                     [(ngModel)]="row.isFollowUp"
-                     id="chbxFollowUp{{ i }}"
-                     name="ckIsFollowUp{{ i }}" />
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [(ngModel)]="row.isFollowUp"
+                id="chbxFollowUp{{ i }}"
+                name="ckIsFollowUp{{ i }}"
+                (change)="onFollowUpChange(row)"
+              />
             </div>
           </td>
           <!-- <td>

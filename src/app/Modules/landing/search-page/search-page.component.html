@@ -282,7 +282,8 @@
             <td>{{ row.referenceNumber }}</td>
             <td>{{ row.subject }}</td>
             <td>{{ row.createdDate }}</td>
-            <td>{{ getStatusName(row.statusId) }}</td>
+            <td>{{ getStatusName(row.statusText) }}</td>
+
             <td>
               <button type="button" class="btn" (click)="showDetails(row)">
                 <i class="fa fa-eye"></i>

@@ -43,7 +43,7 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
   ngOnInit() {
 
     this.languageSubscription = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.info = this.translate.instant("BAM.CHARTS.TRANSFERS_IN_PROGRESS_INFO")
+      this.info = this.translate.instant("BAM.CHARTS.TRANSFERS_IN_PROGRESS_INFO_V2")
       this.loadChartData();
     });
     // Only load chart data when categories are available
@@ -60,7 +60,7 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
   }
 
   private loadChartData() {
-    this.info = this.translate.instant("BAM.CHARTS.TRANSFERS_IN_PROGRESS_INFO")
+    this.info = this.translate.instant("BAM.CHARTS.TRANSFERS_IN_PROGRESS_INFO_V2")
     this.chartsService
       .GetTransfersInProgressOverdueAndOnTimePerCategoryByUser({
         fromDate: this.fromDate,
@@ -78,18 +78,25 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
           const onTimeItem = res.onTime.find(item => item.categoryId === cat.id) || { count: 0 };
  
           if (onTimeItem.count > 0) {
-            categoryNames.push(cat.text);
+            let category = this.translate.instant(`BAM.DASHBOARD.CHARTS.STATUS.${cat.text.toUpperCase().replace(/\s+/g, '_')}`);
+            console.log(category);
+            console.log('------------')
+            categoryNames.push(category);
             onTimeData.push(onTimeItem.count);
             this.isDataAvailable = true;
           }
           if(overdueItem.count > 0){
-            categoryNames.push(cat.text);
+            let category = this.translate.instant(`BAM.DASHBOARD.CHARTS.STATUS.${cat.text.toUpperCase().replace(/\s+/g, '_')}`);
+            console.log(category);
+            console.log('------------')
+            categoryNames.push(category);
             overdueData.push(overdueItem.count);
             this.isDataAvailable = true;
           }
 
         });
-        
+        console.log('categoryNames')
+        console.log(categoryNames)
         this.drawChart(categoryNames, overdueData, onTimeData);
       });
   }

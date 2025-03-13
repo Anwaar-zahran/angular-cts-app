@@ -43,7 +43,7 @@ export class ChartSystemDocumentsCompletedOverdueAndOnTimePerCategoryComponent i
   ngOnInit() {
 
     this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.info = this.translateService.instant("BAM.CHARTS.DUE_DATE_COMPLETED_INFO")
+      this.info = this.translateService.instant("BAM.CHARTS.DUE_DATE_COMPLETED_INFO_V2")
       this.loadChartData();
     });
     // Only load chart data when categories are available
@@ -60,7 +60,7 @@ export class ChartSystemDocumentsCompletedOverdueAndOnTimePerCategoryComponent i
   }
 
   private loadChartData() {
-    this.info = this.translateService.instant("BAM.CHARTS.DUE_DATE_COMPLETED_INFO")
+    this.info = this.translateService.instant("BAM.CHARTS.DUE_DATE_COMPLETED_INFO_V2")
     this.chartsService
       .GetDocumentsCompletedOverdueAndOnTimePerCategory({
         fromDate: this.fromDate,
