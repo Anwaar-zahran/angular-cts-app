@@ -11,8 +11,8 @@ import { AttachmentsApiResponce } from '../models/attachments.model';
 })
 export class SearchPageService {
   private searchApiUrl = `${environment.apiBaseUrl}/Search/List`;
-  private getDocDetails = `${environment.apiBaseUrl}/Document/GetSearchDocument`;
-  //private getDocDetails = `${environment.apiBaseUrl}/Document/GetDocumentByTransferId`;
+  private getSearchDocDetails = `${environment.apiBaseUrl}/Document/GetSearchDocument`;
+  private getDocDetails = `${environment.apiBaseUrl}/Document/GetDocumentByTransferId`;
   private notesURL = `${environment.apiBaseUrl}/Note/List`;
   private linkedDocURL = `${environment.apiBaseUrl}/LinkedDocument/List`;
   private nonArchiveURL = `${environment.apiBaseUrl}/NonArchivedAttachments/List`;
@@ -226,7 +226,7 @@ export class SearchPageService {
     const params = new URLSearchParams();
     params.set('id', id);
 
-    const urlWithParams = `${this.getDocDetails}?${params.toString()}`;
+    const urlWithParams = `${this.getSearchDocDetails}?${params.toString()}`;
 
     return this.httpClient.get(urlWithParams, { headers })
       .pipe(
