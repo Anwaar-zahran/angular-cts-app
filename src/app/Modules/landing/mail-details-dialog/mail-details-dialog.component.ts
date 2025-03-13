@@ -920,12 +920,13 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   showAttachment: boolean = true;
   getAttachments(docID: string): Promise<AttachmentsApiResponce> {
+    debugger
     // this.ctsDocumentId = Number(docID);
     console.log('from attachement service' + this.ctsDocumentId)
     return new Promise((resolve, reject) => {
       this.searchService.getAttachments(this.accessToken!, docID).subscribe(
         (response: any) => {
-
+          debugger
           this.attachments = response || [];
           console.log('55522222')
           this.attachments = this.sortAttachments(response || []);

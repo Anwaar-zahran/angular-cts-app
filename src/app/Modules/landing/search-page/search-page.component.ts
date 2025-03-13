@@ -24,6 +24,7 @@ import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 @Component({
   selector: 'app-search-page',
   templateUrl: './search-page.component.html',
+  
   styleUrl: './search-page.component.scss',
   standalone: false,
   animations: [

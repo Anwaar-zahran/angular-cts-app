@@ -283,14 +283,14 @@
             <td>{{ row.subject }}</td>
             <td>{{ row.createdDate }}</td>
             <td>{{ getStatusName(row.statusText) }}</td>
+
             <td>
               <button type="button" class="btn" (click)="showDetails(row)">
                 <i class="fa fa-eye"></i>
               </button>
               <!--<button type="button" class="btn" (click)="onDelete(row)">
-
-            <i class="fa fa-times-circle"></i>
-          </button>-->
+              <i class="fa fa-times-circle"></i>
+            </button>-->
             </td>
           </tr>
         </tbody>

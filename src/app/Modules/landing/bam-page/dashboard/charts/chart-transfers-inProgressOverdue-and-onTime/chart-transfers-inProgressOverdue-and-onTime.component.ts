@@ -102,6 +102,7 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
   }
 
   private drawChart(categories: string[], overdueData: number[], onTimeData: number[]) {
+    const isRTL = document.dir === 'rtl';
     this.chartOptions = {
       chart: {
         type: 'column'
@@ -114,19 +115,28 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
         categories: categories,
         title: {
           text: this.translate.instant('BAM.CHARTS.LABELS.CATEGORY')
-        }
+        },
+        reversed: isRTL,
       },
       yAxis: {
         min: 0,
+        reversed: false,
+        opposite: isRTL,
         title: {
           text: this.translate.instant('BAM.CHARTS.LABELS.COUNT')
         }
       },
       tooltip: {
         shared: true,
-        pointFormat: `<b>{series.name}</b>: {point.y} ${this.translate.instant('BAM.CHARTS.LABELS.COUNT')}<br/>`
+        pointFormat: `<b>{series.name}</b>: {point.y} ${this.translate.instant('BAM.CHARTS.LABELS.COUNT')}<br/>`,
+        style: {
+          textAlign: isRTL ? 'right' : 'left'
+        }
       },
       plotOptions: {
+        series: {
+          stacking: undefined
+        },
         column: {
           borderRadius: 4,
           dataLabels: {
@@ -147,7 +157,10 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
           data: onTimeData,
           color: '#00695E' // Green
         }
-      ]
+      ],
+      legend: {
+        rtl: isRTL
+      },
     };
   }
 

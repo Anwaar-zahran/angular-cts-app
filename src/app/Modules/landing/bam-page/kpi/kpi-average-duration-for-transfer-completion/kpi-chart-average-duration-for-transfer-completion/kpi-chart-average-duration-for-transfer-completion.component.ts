@@ -71,6 +71,7 @@ export class KpiChartAverageDurationForTransferCompletionComponent implements On
           }
         });
 
+        const isRTL = document.dir === 'rtl';
         this.chartOptions = {
           chart: {
             type: 'line'
@@ -88,22 +89,31 @@ export class KpiChartAverageDurationForTransferCompletionComponent implements On
             categories: monthLabels,
             title: {
               text: null
-            }
+            },
+            reversed: isRTL,
           },
           yAxis: {
             title: {
               text: this.translateService.instant('BAM.KPI.TRANSFER_DURATION.CHART.AVERAGE_DAYS')
             },
-            min: 0
+            min: 0,
+            reversed: false,
+            opposite: isRTL,
           },
           tooltip: {
             valueSuffix: ' ' + this.translateService.instant('BAM.COMMON.DAYS'),
             shared: true,
             formatter: function () {
               return `${this.series.name}: <b>${this.y?.toFixed(2)} ${this.series.chart.tooltip.options.valueSuffix}</b>`;
+            },
+            style: {
+              textAlign: isRTL ? 'right' : 'left'
             }
           },
           plotOptions: {
+            series: {
+              stacking: undefined
+            },
             line: {
               dataLabels: {
                 enabled: true
@@ -118,7 +128,8 @@ export class KpiChartAverageDurationForTransferCompletionComponent implements On
           legend: {
             layout: 'horizontal',
             align: 'right',
-            verticalAlign: 'bottom'
+            verticalAlign: 'bottom',
+            rtl: isRTL
           },
           credits: {
             enabled: false
