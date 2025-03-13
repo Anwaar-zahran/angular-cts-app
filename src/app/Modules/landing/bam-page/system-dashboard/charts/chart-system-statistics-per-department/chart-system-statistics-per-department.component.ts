@@ -108,6 +108,7 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
           this.isDataAvailable = true;
         }
         const translateService = this.translateService;
+        const isRTL = document.dir === 'rtl';
 
         this.chartOptions = {
           chart: {
@@ -121,7 +122,9 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
             categories: uniqueStructures as string[],
             title: {
               text: this.translateService.instant('BAM.CHARTS.LABELS.STRUCTURES')
-            }
+            },
+            reversed: false,
+            opposite: isRTL
           },
           yAxis: {
             min: 0,
@@ -131,7 +134,8 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
             },
             labels: {
               overflow: 'justify'
-            }
+            },
+            reversed: isRTL
           },
           tooltip: {
             valueSuffix: ' ' + this.translateService.instant('BAM.CHARTS.LABELS.COUNTS'),
@@ -140,9 +144,15 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
             formatter: function () {
               if (this.y === 0) return false;
               return `${this.series.name}: ${this.y}<br/>${translateService.instant('BAM.CHARTS.LABELS.TOTAL')}: ${this.total}`;
+            },
+            style: {
+              textAlign: isRTL ? 'right' : 'left'
             }
           },
           plotOptions: {
+            series: {
+              stacking: undefined
+            },
             bar: {
               dataLabels: {
                 enabled: true,
@@ -166,7 +176,8 @@ export class ChartSystemStatisticsPerDepartmentComponent implements OnInit, OnCh
               color: '#333333',
               fontWeight: 'bold',
               fontSize: '12px'
-            }
+            },
+            rtl: isRTL
           },
           credits: {
             enabled: false

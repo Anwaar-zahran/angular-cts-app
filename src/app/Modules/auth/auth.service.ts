@@ -24,7 +24,7 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router, private jwtHelper: JwtHelperService) { }
 
-  login(username: string, password: string): Observable<any> {
+  loginOld(username: string, password: string): Observable<any> {
     const body = new URLSearchParams();
     body.set("client_id", this.clientId)
     body.set("client_secret", this.clientSecret)
@@ -44,6 +44,24 @@ export class AuthService {
         })
       );
   }
+  login(clientId: string, clientSecret: string, username: string, password: string): Observable<any> {
+    const body = new URLSearchParams();
+    body.set("client_id", clientId);
+    body.set("client_secret", clientSecret);
+    body.set("scope", this.scope);
+    body.set("username", username);
+    body.set("password", password);
+    body.set("grant_type", this.grantType);
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.post(this.iAMURL, body.toString(), { headers }).pipe(
+        catchError((error) => {
+            console.error('Error during login', error.message);
+            return throwError(() => error);
+        })
+    );
+}
 
   storeToken(response: any): void {
     localStorage.setItem('access_token', response.access_token);

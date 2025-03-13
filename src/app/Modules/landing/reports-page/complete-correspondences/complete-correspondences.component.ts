@@ -30,6 +30,7 @@ export class CompleteCorrespondencesComponent implements OnInit {
 
   selectedStructures: number[] = [];
   structures: Structure[] = [];
+  filteredStructures: Structure[] = [];
   structureError: string = '';
   expandedRows: Set<any> = new Set();
 
@@ -39,6 +40,7 @@ export class CompleteCorrespondencesComponent implements OnInit {
 
   selectedUsers: number[] = [];
   users: User[] = [];
+  filteredUsers: User[] = [];
   userError: string = '';
 
   isOverdue: boolean = false;
@@ -81,20 +83,22 @@ export class CompleteCorrespondencesComponent implements OnInit {
     private lookupsService: LookupsService,
     private translate: TranslateService
   ) {
+
+
     // Setup user search debounce
     this.userSearchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
     ).subscribe(searchText => {
-      this.loadUsers(searchText);
+      this.filterUsers(searchText);
     });
 
-    // Add structure search debounce
     this.structureSearchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
     ).subscribe(searchText => {
-      this.loadStructures(searchText);
+      console.log('Search subject received:', searchText);
+      this.filterStructures(searchText);
     });
   }
 
@@ -169,21 +173,12 @@ export class CompleteCorrespondencesComponent implements OnInit {
       params.priorityId = this.selectedPriorityId;
     }
 
-    console.log('Loading reports with params:', params);
 
     this.reportsService.listCompletedCorrespondences(params).subscribe({
       next: (response: ApiResponse<InprogressCorrespondence[]>) => {
         this.reports = response.data;
         this.totalItems = response.recordsTotal;
-        console.log(response.recordsTotal)
         this.calculatePagination();
-
-        console.log('total reports')
-        console.log(this.totalItems)
-
-        console.log('------------------------------------------')
-        console.log(this.reports)
-
         if (this.isDtInitialized) {
           this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
             dtInstance.destroy();
@@ -222,11 +217,12 @@ export class CompleteCorrespondencesComponent implements OnInit {
     this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
 
-  loadStructures(searchText: string = '') {
+  loadStructures() {
     this.isLoadingStructures = true;
-    this.structuresService.searchStructures(searchText).subscribe({
+    this.structuresService.searchStructures('').subscribe({
       next: (structures) => {
         this.structures = structures;
+        this.filteredStructures = [...this.structures];
         this.isLoadingStructures = false;
       },
       error: (error) => {
@@ -236,22 +232,40 @@ export class CompleteCorrespondencesComponent implements OnInit {
     });
   }
 
-  loadUsers(searchText: string = '') {
-    this.usersService.searchUsers(searchText).subscribe({
+  onStructureDropdownOpen() {
+    if (this.structures && this.structures.length > 0) {
+      this.filteredStructures = [...this.structures];
+    } else {
+      this.loadStructures();
+    }
+  }
+
+  loadUsers() {
+    this.isLoadingUsers = true;
+    this.usersService.searchUsers('').subscribe({
       next: (users) => {
         this.users = users;
+        this.filteredUsers = [...this.users];
         this.isLoadingUsers = false;
       },
-      error: (error: any) => {
+      error: (error) => {
         console.error('Error loading users:', error);
         this.isLoadingUsers = false;
       }
     });
   }
 
+  onUserDropdownOpen() {
+    if (this.users && this.users.length > 0) {
+      this.filteredUsers = [...this.users];
+    } else {
+      this.loadUsers();
+    }
+  }
+
   formatDate(date: Date | string | undefined): string {
     if (!date) return '';
-  
+
     // If the input is a string, try converting it to a Date
     if (typeof date === 'string') {
       const parsedDate = new Date(date);
@@ -260,19 +274,19 @@ export class CompleteCorrespondencesComponent implements OnInit {
       }
       date = parsedDate;
     }
-  
+
     // Ensure it's a valid Date object
     if (!(date instanceof Date) || isNaN(date.getTime())) {
       return ''; // Return empty for invalid date values
     }
-  
+
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear().toString();
-  
+
     return `${day}/${month}/${year}`;
   }
-  
+
 
   joinStructureAndUser(structure: string, user: string): string {
     if (!structure && !user) return '';
@@ -373,20 +387,65 @@ export class CompleteCorrespondencesComponent implements OnInit {
     }
   }
 
-  onUserSearch(event: { term: string, items: User[] }) {
-    this.userSearchText = event.term;
+  onUserSearch(event: { term: string; items: any[] }) {
+    let searchText = event.term.trim();
     this.isLoadingUsers = true;
-    this.userSearchSubject.next(this.userSearchText);
+
+    if (!searchText) {
+      this.filteredUsers = [...this.users];
+      this.isLoadingUsers = false;
+      return;
+    }
+
+    searchText = searchText.toLowerCase();
+    this.filteredUsers = this.users.filter(user =>
+      user.fullName.toLowerCase().startsWith(searchText)
+    );
+    this.isLoadingUsers = false;
   }
 
   getUserDisplayName(user: User): string {
     return user.fullName || `${user.firstName} ${user.lastName}`.trim();
   }
 
-  onStructureSearch(event: { term: string, items: Structure[] }) {
-    this.structureSearchText = event.term;
+
+  onStructureSearch(event: { term: string; items: Structure[] }) {
+    let searchText = event.term.trim();
     this.isLoadingStructures = true;
-    this.structureSearchSubject.next(this.structureSearchText);
+
+    if (!searchText) {
+      this.filteredStructures = [...this.structures];
+      this.isLoadingStructures = false;
+      return;
+    }
+
+    searchText = searchText.toLowerCase();
+    this.filteredStructures = this.structures.filter(structure =>
+      structure.name.toLowerCase().startsWith(searchText)
+    );
+    this.isLoadingStructures = false;
+  }
+
+  filterStructures(searchText: string) {
+    if (!searchText) {
+      this.filteredStructures = [...this.structures];
+    } else {
+      this.filteredStructures = this.structures.filter(structure =>
+        structure.name.toLowerCase().startsWith(searchText)
+      );
+    }
+    this.isLoadingStructures = false;
+  }
+
+  filterUsers(searchText: string) {
+    if (!searchText) {
+      this.filteredUsers = [...this.users];
+    } else {
+      this.filteredUsers = this.users.filter(user =>
+        user.fullName.toLowerCase().startsWith(searchText)
+      );
+    }
+    this.isLoadingUsers = false;
   }
 
   ngAfterViewInit(): void {
@@ -422,11 +481,11 @@ export class CompleteCorrespondencesComponent implements OnInit {
     const currentLang = this.translate.currentLang;
     switch (currentLang) {
       case 'ar':
-        return item ?.nameAr || item ?.name;
+        return item?.nameAr || item?.name;
       case 'fr':
-        return item ?.nameFr || item ?.name;
+        return item?.nameFr || item?.name;
       default:
-        return item ?.name;
+        return item?.name;
     }
   }
 
@@ -442,8 +501,8 @@ export class CompleteCorrespondencesComponent implements OnInit {
   }
 
 
-  preventTyping(event: KeyboardEvent): void{
-    if(!(event.ctrlKey && event.key === 'v') && !(['Backspace','Delete','ArrowLeft','ArrowRight','Tab']).includes(event.key)){
+  preventTyping(event: KeyboardEvent): void {
+    if (!(event.ctrlKey && event.key === 'v') && !(['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab']).includes(event.key)) {
       event.preventDefault();
     }
   }
@@ -458,5 +517,5 @@ export class CompleteCorrespondencesComponent implements OnInit {
 
   transformCategoryName(categoryName: string): string {
     return "REPORTS.CATEGORIES." + (categoryName ? categoryName.toUpperCase().replace(/\s+/g, "_") : "UNKNOWN");
-}
+  }
 }

@@ -19,7 +19,8 @@
       <span id="spanTransferAverageCompletionTime" class="spanDate">
         <span style="color: #444">
           ({{ "BAM.KPI.AVERAGE_DURATION.STRUCTURE" | translate }}
-          <span class="text-secondary">{{ structureName }}</span>)
+          <span class="text-secondary">{{ structureName }}</span
+          >)
         </span>
       </span>
     </div>
@@ -68,21 +69,31 @@
                     {{ item.userName }}
                   </span>
                 </td>
-                <td class="min-max-width-50-250" title="{{ item.average }}">
+                <td class="min-max-width-50-250" title="{{ item.average.toFixed(2) }}">
                   {{ item.average.toFixed(2) }}
                 </td>
                 <td
                   class="min-max-width-50-250"
-                  title="{{ item.average - totalAverage }}"
+                  title="{{
+                    (item.average - totalAveragePerStructure).toFixed(2)}}"
+                  [ngClass]="getTotalAveragePerStructure(item.average, totalAveragePerStructure).class"
                 >
-                {{ (item.average - totalAverage).toFixed(2) }}
+                  {{
+                    getTotalAveragePerStructure(
+                      item.average,
+                      totalAveragePerStructure
+                    ).value
+                  }}
                 </td>
                 <td
                   class="min-max-width-50-250"
-                  title="{{ item.average - totalAverage }}"
+                  title="{{ (item.average - totalAverage).toFixed(2) }}"
+                  [ngClass]="getTotalAverage(item.average, totalAverage).class"
+
                 >
-                {{ getCeil(item.average,totalAverage)}}
+                  {{ getTotalAverage(item.average, totalAverage).value }}
                 </td>
+
                 <td class="min-max-width-50-250">
                   <span class="yearlygraph pointer">
                     <em class="fa fa-line-chart"></em>
@@ -99,12 +110,17 @@
 
 <ng-template #noData>
   <tr>
-    <td colspan="5" class="text-center">{{'BAM.COMMON.NO_DATA' | translate}}</td>
+    <td colspan="5" class="text-center">
+      {{ "BAM.COMMON.NO_DATA" | translate }}
+    </td>
   </tr>
 </ng-template>
 
 <!-- Performance Card -->
-<div class="card" *ngIf="isPerformanceCardVisible && userPerStructure.length > 1 ">
+<div
+  class="card"
+  *ngIf="isPerformanceCardVisible && userPerStructure.length > 1"
+>
   <div class="card-title">
     <button
       class="btn btn-transparent float-right"
@@ -123,7 +139,8 @@
     <span id="spanTransferAverageCompletionTime" class="spanDate">
       <span style="color: #444">
         ({{ "BAM.KPI.AVERAGE_DURATION.STRUCTURE" | translate }}
-        <span class="text-secondary">{{ structureName }}</span>)
+        <span class="text-secondary">{{ structureName }}</span
+        >)
       </span>
     </span>
   </div>
@@ -144,7 +161,7 @@
       <p style="font-size: 80px; direction: ltr">
         <i class="fa fa-angle-left"></i> <i class="fa fa-angle-right"></i>
       </p>
-      <p class="my-3 bold">{{ average.toFixed(2) }} </p>
+      <p class="my-3 bold">{{ average.toFixed(2) }}</p>
     </div>
     <div class="col-md-4 text-center">
       <h4 class="mb-3">
@@ -152,7 +169,7 @@
       </h4>
       <i class="far fa-user text-danger"></i><br />
       <p class="text-danger my-3 bold">
-        {{ worstPerformanceUser?.average }}
+        {{ worstPerformanceUser?.average?.toFixed(2) }}
       </p>
       <p class="text-danger">{{ worstPerformanceUser?.userName }}</p>
     </div>
@@ -161,5 +178,5 @@
 
 <!-- No Data Message -->
 <div *ngIf="userPerStructure.length === 0" class="text-center mt-4">
-  <p>No data available</p>
+  <p>{{ "BAM.COMMON.NO_DATA" | translate }}</p>
 </div>

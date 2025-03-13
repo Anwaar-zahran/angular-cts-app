@@ -47,6 +47,7 @@ export class TableStructureAverageDurationForCorrespondenceCompletionComponent i
   dtTrigger: Subject<any> = new Subject<any>();
 
   selectedUser: any = null;
+  totalAveragePerStructure!:number;
 
   // i use this variable in the showUserPerStructure to update the function 'because in the another component i detect the chnages only'
   // in case i hide the table and click again on the structure name will change the value of the componentLey and the changes will updated on the another component
@@ -145,6 +146,8 @@ drawStructureUserTable(type: string, average: number, year: number, userId: numb
     this.selectedChartStrutureId = structureId;
     this.selectedChartYear = year;
     this.isChartVisible = true;
+    this.totalAveragePerStructure = average;
+    console.log(this.totalAveragePerStructure)
   }
 
   calculatePagination() {
@@ -179,7 +182,9 @@ drawStructureUserTable(type: string, average: number, year: number, userId: numb
     this.selectedYear = year;
     this.selectedAverage = average;
     this.componentKey++;
-
+    this.totalAveragePerStructure = average;
+    console.log('------------------------------')
+    console.log(this.totalAveragePerStructure)
     this.isAveragePerUserVisible = true;
     this.isPerformanceCardVisible = true;
   }
@@ -192,7 +197,6 @@ drawStructureUserTable(type: string, average: number, year: number, userId: numb
   onCardsVisibilityChanged(isCardsVisible: CardsVisibility) {
     this.isPerformanceCardVisible = isCardsVisible.isPerformanceCardVisible
     this.isAveragePerUserVisible = isCardsVisible.isAverageDurationCardVisible
-    console.log('chnagggggggggggggggggggggggggggggessssssssssss')
     console.log(this.isAveragePerUserVisible)
     console.log(this.isPerformanceCardVisible)
   }

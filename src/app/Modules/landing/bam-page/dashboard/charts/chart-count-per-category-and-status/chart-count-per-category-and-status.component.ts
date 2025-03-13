@@ -14,16 +14,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   selector: 'app-chart-count-per-category-and-status',
   templateUrl: './chart-count-per-category-and-status.component.html',
   styleUrls: ['./chart-count-per-category-and-status.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule,MatTooltipModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule, MatTooltipModule]
 })
 export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestroy {
   @Input() categories: { id: number, text: string }[] = [];
   @Input() fromDate: string = '';
   @Input() toDate: string = '';
   minToDate: string | null = null;
-  info!:string;
+  info!: string;
 
-  isDataAvailable:boolean = false;
+  isDataAvailable: boolean = false;
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
 
@@ -32,7 +32,7 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
   isModalOpen: boolean = false;
   statuses: { id: number, text: string }[] = [];
   private languageSubscription!: Subscription
-  totalCount!:number;
+  totalCount!: number;
 
   constructor(
     private chartsService: ChartsService,
@@ -40,17 +40,17 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
     private translate: TranslateService
   ) { }
 
-  
+
   ngOnDestroy() {
     if (this.languageSubscription) {
       this.languageSubscription.unsubscribe();
     }
   }
-  
+
 
   ngOnInit() {
 
-    this.languageSubscription = this.translate.onLangChange.subscribe((event:LangChangeEvent)=>{
+    this.languageSubscription = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
       this.info = this.translate.instant("BAM.CHARTS.INFO.COUNT_PER_STATUS")
       this.loadChartData();
     });
@@ -104,29 +104,29 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
         console.log(totalFirstElements);
 
         const seriesData = this.categories
-          .map(category => {
-            const data = statusIds.map(statusId => {
-              const item = res.find((r: any) => r.categoryId === category.id && r.statusId === statusId);
-              return item ? item.count : 0;
-            });
-
-            if (data.some(count => count > 0)) {
-              const percentage = totalFirstElements > 0 ? (data[0] / totalFirstElements) * 100 : 0;
-        
-              return {
-                name: this.translate.instant(`BAM.DASHBOARD.CHARTS.STATUS.${category.text.toUpperCase().replace(/\s+/g, '_')}`),
-                type: 'column',
-                data: [percentage, ...data.slice(1)] 
-              };
-            }
-            return null;
-          })
-          .filter((series): series is NonNullable<typeof series> => series !== null);
+        .map(category => {
+          const data = statusIds.map(statusId => {
+            const item = res.find((r: any) => r.categoryId === category.id && r.statusId === statusId);
+            return item ? item.count : 0;
+          });
+      
+          if (data.some(count => count > 0)) {
+            return {
+              name: this.translate.instant(`BAM.DASHBOARD.CHARTS.STATUS.${category.text.toUpperCase().replace(/\s+/g, '_')}`),
+              type: 'column',
+              data: data // Use actual data instead of percentage
+            };
+          }
+          return null;
+        })
+        .filter((series): series is NonNullable<typeof series> => series !== null);
+      
         console.log('serrrrrrrrrrrrrr')
         console.log(seriesData); // Debugging: Check the data
-        if(seriesData.length > 0){
+        if (seriesData.length > 0) {
           this.isDataAvailable = true;
         }
+        const isRTL = document.dir === 'rtl';
         this.chartOptions = {
           chart: {
             type: 'column',
@@ -145,16 +145,19 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
               this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.OUTGOING"),
               this.translate.instant("BAM.DASHBOARD.CHARTS.STATUS.FOLLOW_UP"),
             ],
-            title:{
+            title: {
               text: this.translate.instant('BAM.DASHBOARD.CHARTS.LABELS.CATEGORY')
             },
             crosshair: true,
+            reversed: isRTL
           },
           yAxis: {
             min: 0,
             max:110,
+            reversed: false,
+            opposite: isRTL,
             title: {
-              text: this.translate.instant("BAM.DASHBOARD.CHARTS.LABELS.PERCENTAGE"),
+              text: this.translate.instant("BAM.DASHBOARD.CHARTS.LABELS.COUNT"),
             },
             stackLabels: {
               enabled: true,
@@ -172,21 +175,30 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
             pointFormat: `{series.name}: {point.y}<br/>${totalLabel}: {point.stackTotal}`,
             formatter: function () {
               if (this.y === 0) return false; // Hide tooltip for zero values
-              return `${this.series.name}: ${this.y?.toFixed(2)}%<br/>${totalLabel}: ${totalFirstElements}`;
+              return `${this.series.name}: ${this.y}<br/>${totalLabel}: ${totalFirstElements}`;
+            },
+            style: {
+              textAlign: isRTL ? 'right' : 'left'
             }
           },
           plotOptions: {
+            series: {
+              stacking: undefined
+            },
             column: {
               stacking: 'normal',
               dataLabels: {
                 enabled: true,
                 formatter: function () {
-                  return this.y === 0 ? '' : this.y?.toFixed(2)+'%'; // Hide zero labels
+                  return this.y === 0 ? '' : this.y; // Hide zero labels
                 }
               }
             }
           },
-          series: seriesData as Highcharts.SeriesOptionsType[]
+          series: seriesData as Highcharts.SeriesOptionsType[],
+          legend: {
+            rtl: isRTL
+          },
         };
       });
   }
@@ -213,7 +225,7 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
     if (this.tempFromDate) {
       let fromDate = new Date(this.tempFromDate);
       fromDate.setDate(fromDate.getDate());
-      
+
       this.minToDate = fromDate.toISOString().split('T')[0];
     } else {
       this.minToDate = null;

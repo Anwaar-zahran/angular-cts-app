@@ -43,7 +43,7 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
   ngOnInit() {
 
     this.languageSubscription = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.info = this.translate.instant("BAM.CHARTS.TRANSFERS_IN_PROGRESS_INFO")
+      this.info = this.translate.instant("BAM.CHARTS.TRANSFERS_IN_PROGRESS_INFO_V2")
       this.loadChartData();
     });
     // Only load chart data when categories are available
@@ -60,7 +60,7 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
   }
 
   private loadChartData() {
-    this.info = this.translate.instant("BAM.CHARTS.TRANSFERS_IN_PROGRESS_INFO")
+    this.info = this.translate.instant("BAM.CHARTS.TRANSFERS_IN_PROGRESS_INFO_V2")
     this.chartsService
       .GetTransfersInProgressOverdueAndOnTimePerCategoryByUser({
         fromDate: this.fromDate,
@@ -78,23 +78,31 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
           const onTimeItem = res.onTime.find(item => item.categoryId === cat.id) || { count: 0 };
  
           if (onTimeItem.count > 0) {
-            categoryNames.push(cat.text);
+            let category = this.translate.instant(`BAM.DASHBOARD.CHARTS.STATUS.${cat.text.toUpperCase().replace(/\s+/g, '_')}`);
+            console.log(category);
+            console.log('------------')
+            categoryNames.push(category);
             onTimeData.push(onTimeItem.count);
             this.isDataAvailable = true;
           }
           if(overdueItem.count > 0){
-            categoryNames.push(cat.text);
+            let category = this.translate.instant(`BAM.DASHBOARD.CHARTS.STATUS.${cat.text.toUpperCase().replace(/\s+/g, '_')}`);
+            console.log(category);
+            console.log('------------')
+            categoryNames.push(category);
             overdueData.push(overdueItem.count);
             this.isDataAvailable = true;
           }
 
         });
-        
+        console.log('categoryNames')
+        console.log(categoryNames)
         this.drawChart(categoryNames, overdueData, onTimeData);
       });
   }
 
   private drawChart(categories: string[], overdueData: number[], onTimeData: number[]) {
+    const isRTL = document.dir === 'rtl';
     this.chartOptions = {
       chart: {
         type: 'column'
@@ -107,19 +115,28 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
         categories: categories,
         title: {
           text: this.translate.instant('BAM.CHARTS.LABELS.CATEGORY')
-        }
+        },
+        reversed: isRTL,
       },
       yAxis: {
         min: 0,
+        reversed: false,
+        opposite: isRTL,
         title: {
           text: this.translate.instant('BAM.CHARTS.LABELS.COUNT')
         }
       },
       tooltip: {
         shared: true,
-        pointFormat: `<b>{series.name}</b>: {point.y} ${this.translate.instant('BAM.CHARTS.LABELS.COUNT')}<br/>`
+        pointFormat: `<b>{series.name}</b>: {point.y} ${this.translate.instant('BAM.CHARTS.LABELS.COUNT')}<br/>`,
+        style: {
+          textAlign: isRTL ? 'right' : 'left'
+        }
       },
       plotOptions: {
+        series: {
+          stacking: undefined
+        },
         column: {
           borderRadius: 4,
           dataLabels: {
@@ -140,7 +157,10 @@ export class ChartTransfersInProgressOverdueAndOnTimeComponent implements OnInit
           data: onTimeData,
           color: '#00695E' // Green
         }
-      ]
+      ],
+      legend: {
+        rtl: isRTL
+      },
     };
   }
 

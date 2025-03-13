@@ -59,12 +59,12 @@
                   {{ item.structureName }}
                 </span>
               </td>
-              <td class="min-max-width-50-250" title="{{ item.average }}">
+              <td class="min-max-width-50-250" title="{{ item.average.toFixed(2) }}">
                 {{ item.average.toFixed(2) }}
               </td>
               <td
                 class="min-max-width-50-250"
-                title="{{ item.average - totalAverage }}"
+                title="{{ (item.average - totalAverage).toFixed(2) }}"
               >
                 {{ (item.average - totalAverage).toFixed(2) }}
               </td>
@@ -152,30 +152,28 @@
 </div>
 
 <app-kpi-chart-structure-average-duration-for-correspondence-delay
-*ngIf="
-this.selectedChartStrutureId &&
-this.selectedChartYear &&
-this.isChartVisible
-"
-[structureId]="this.selectedChartStrutureId"
-[year]="this.selectedChartYear"
-(chartVisibilityChanged)="onChartVisibilityChanged($event)"
-[isChartCardVisible]="this.isChartVisible"
+  *ngIf="
+    this.selectedChartStrutureId &&
+    this.selectedChartYear &&
+    this.isChartVisible
+  "
+  [structureId]="this.selectedChartStrutureId"
+  [year]="this.selectedChartYear"
+  (chartVisibilityChanged)="onChartVisibilityChanged($event)"
+  [isChartCardVisible]="this.isChartVisible"
 >
 </app-kpi-chart-structure-average-duration-for-correspondence-delay>
 
 <app-kpi-table-user-average-duration-for-correspondence-delay
-
-*ngIf="this.selectedStrutureId && this.selectedYear"
-[structureId]="this.selectedStrutureId"
-[year]="this.year"
-[average]="this.selectedAverage"
-[key]="this.componentKey"
+  *ngIf="this.selectedStrutureId && this.selectedYear"
+  [structureId]="this.selectedStrutureId"
+  [year]="this.year"
+  [average]="this.selectedAverage"
+  [key]="this.componentKey"
+  [totalAverage]="this.totalAverage"
 
 >
-
 </app-kpi-table-user-average-duration-for-correspondence-delay>
-
 
 <!--
   this for the app table user 'enhnace the fetching way instead of component key'

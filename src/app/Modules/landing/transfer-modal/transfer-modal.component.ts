@@ -89,7 +89,8 @@ export class TransferModalComponent implements OnInit {
   selectedPriorityId: any;
   isCCed: any;
   isPrivate: any;
-  isFollowUp: any;
+  isFollowUp: boolean = false;
+  isFollowUpRequired : boolean = false;
   isTransferring: boolean = false;
 
   currentLanguage!:string;
@@ -97,7 +98,7 @@ export class TransferModalComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService, private toaster: ToasterService,
     private router: Router, private lookupsService: LookupsService, private dialog: MatDialog, private cdr: ChangeDetectorRef,
     private dialogRef: MatDialogRef<TransferModalComponent>, private mailService: MailsService, private translate: TranslateService,
-    private languageService:LanguageService) {
+    private languageService:LanguageService,private cdRef: ChangeDetectorRef) {
 
     this.receivedData = data; 
     this.documentId = this.data.documentId;
@@ -111,6 +112,8 @@ export class TransferModalComponent implements OnInit {
   ngOnInit(): void {
     //    console.log('Dialog opened with ID:', this.data.id, 'and Reference Number:', this.data.referenceNumber);
 
+    this.updateHeaderState();
+    
     this.accessToken = this.authService.getToken();
     if (!this.accessToken) {
       this.router.navigate(['/login']);
@@ -241,6 +244,7 @@ export class TransferModalComponent implements OnInit {
       }
     );
   }
+
   updateDueDate(index: number) {//: Date
     let selectedRow = this.rows[index]; // Assuming 'rows' is your data array
     let selectedPriority = this.priorities.find(p => p.id === selectedRow.selectedPriorityId);
@@ -357,7 +361,6 @@ export class TransferModalComponent implements OnInit {
   }
 
   onCCedClick(event: MouseEvent, index: number): void {
-    debugger;
     const isChecked = (event.target as HTMLInputElement).checked;
     const row = this.rows[index];
     row.isCCed = isChecked;
@@ -368,6 +371,8 @@ export class TransferModalComponent implements OnInit {
     else
       row.selectedPurposeId = null;
   }
+
+
   Transfer(): void {
     if (this.isTransferring) {
       return;
@@ -378,8 +383,14 @@ export class TransferModalComponent implements OnInit {
     try {
       // Validate required fields for each row efficiently
       const rowsToValidate = this.rows.length > 1 ? this.rows.slice(0, -1) : this.rows;
+
       const isValid = rowsToValidate.every((row) => {
-        const isRowValid = row.selectedUser && row.selectedPurposeId && row.selectedPriorityId;
+        let isRowValid = row.selectedUser && row.selectedPurposeId && row.selectedPriorityId;
+      
+        if (row.isFollowUp) {
+          isRowValid = isRowValid && Boolean(row.txtInstruction); // Include txtInstruction if isFollowUp is true
+        }
+      
         row.showValidationError = !isRowValid; // Mark row as invalid if required fields are missing
         return isRowValid;
       });
@@ -422,6 +433,7 @@ export class TransferModalComponent implements OnInit {
       const isStructure = selectedUser?.isStructure ?? false;
       const userId = selectedUser?.id ?? null;
 
+      this.cdRef.detectChanges(); 
       return {
         purposeId: selectedPurposeId ?? null,
         priorityId: selectedPriorityId ?? null,
@@ -493,5 +505,19 @@ export class TransferModalComponent implements OnInit {
     event.preventDefault();
   }
 
+  onFollowUpChange(row: any): void {
+    // Optional: You can add additional logic here if needed when Follow Up is toggled
+    // For example, clear instruction if Follow Up is unchecked
+    if (!row.isFollowUp) {
+      row.showValidationError = false; // Reset validation error when unchecked
+    }
+    this.updateHeaderState();
+  }
+
+  updateHeaderState(): void {
+    // Show the asterisk in the header if any row has Follow Up checked
+    this.isFollowUpRequired = this.rows.some(row => row.isFollowUp);
+  }
+  
 
 }

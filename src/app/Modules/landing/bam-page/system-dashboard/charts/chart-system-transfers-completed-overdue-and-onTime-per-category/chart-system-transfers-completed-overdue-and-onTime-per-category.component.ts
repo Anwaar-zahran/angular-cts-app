@@ -40,7 +40,7 @@ export class ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent i
   ngOnInit() {
 
     this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.info = this.translateService.instant("BAM.CHARTS.TRANSFERS_COMPLETED_INFO")
+      this.info = this.translateService.instant("BAM.CHARTS.TRANSFERS_COMPLETED_INFO_V2")
       this.loadChartData();
     });
     // Only load chart data when categories are available
@@ -57,7 +57,7 @@ export class ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent i
   }
 
   private loadChartData() {
-    this.info = this.translateService.instant("BAM.CHARTS.TRANSFERS_COMPLETED_INFO")
+    this.info = this.translateService.instant("BAM.CHARTS.TRANSFERS_COMPLETED_INFO_V2")
     this.chartsService
       .GetTransfersCompletedOverdueAndOnTimePerCategory({
         fromDate: this.fromDate,
@@ -90,6 +90,7 @@ export class ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent i
   }
 
   private drawChart(categories: string[], overdueData: number[], onTimeData: number[]) {
+    const isRTL = document.dir === 'rtl';
     this.chartOptions = {
       chart: {
         type: 'column'
@@ -110,10 +111,13 @@ export class ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent i
         ],
         title: {
           text: this.translateService.instant('BAM.DASHBOARD.CHARTS.LABELS.CATEGORIES')
-        }
+        },
+        reversed: isRTL,
       },
       yAxis: {
         min: 0,
+        reversed: false,
+        opposite: isRTL,
         title: {
           text: this.translateService.instant('BAM.DASHBOARD.CHARTS.LABELS.DOCUMENT_COUNT')
         }
@@ -121,9 +125,15 @@ export class ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent i
       tooltip: {
         shared: true,
         pointFormat: '<b>{series.name}</b>: {point.y} ' +
-          this.translateService.instant('BAM.DASHBOARD.CHARTS.LABELS.TRANSFERS') + '<br/>'
+          this.translateService.instant('BAM.DASHBOARD.CHARTS.LABELS.TRANSFERS') + '<br/>',
+        style: {
+          textAlign: isRTL ? 'right' : 'left'
+        }
       },
       plotOptions: {
+        series: {
+          stacking: undefined
+        },
         column: {
           borderRadius: 4,
           dataLabels: {
@@ -144,7 +154,10 @@ export class ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent i
           data: onTimeData,
           color: '#00695E'
         }
-      ]
+      ],
+      legend: {
+        rtl: isRTL
+      },
     };
   }
 

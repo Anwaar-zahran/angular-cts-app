@@ -41,9 +41,9 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
 
   ngOnInit() {
 
-    this.translateService.get("BAM.CHARTS.DUE_DATE_IN_PROGRESS_INFO").subscribe((translatedText: string) => {
-      this.info = translatedText;
-    });
+    // this.translateService.get("BAM.CHARTS.DUE_DATE_IN_PROGRESS_INFO_V2").subscribe((translatedText: string) => {
+    //   this.info = translatedText;
+    // });
   
 
     // Only load chart data when categories are available
@@ -64,7 +64,7 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
   }
 
   private loadChartData() {
-    this.info = this.translateService.instant('"BAM.CHARTS.DUE_DATE_IN_PROGRESS_INFO"');
+    this.info = this.translateService.instant("BAM.CHARTS.DUE_DATE_IN_PROGRESS_INFO_V2");
     this.chartsService
       .GetDocumentsInProgressOverdueAndOnTimePerCategory({
         fromDate: this.fromDate,
@@ -95,6 +95,7 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
   }
 
   private drawChart(categories: string[], overdueData: number[], onTimeData: number[]) {
+    const isRTL = document.dir === 'rtl';
     this.chartOptions = {
       chart: {
         type: 'column'
@@ -114,10 +115,13 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
         ],
         title: {
           text: this.translateService.instant('BAM.CHARTS.LABELS.CATEGORIES')
-        }
+        },
+        reversed: isRTL,
       },
       yAxis: {
         min: 0,
+        reversed: false,
+        opposite: isRTL,
         title: {
           text: this.translateService.instant('BAM.CHARTS.LABELS.COUNT')
         }
@@ -125,9 +129,15 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
       tooltip: {
         shared: true,
         pointFormat: '<b>{series.name}</b>: {point.y} ' +
-          this.translateService.instant('BAM.CHARTS.LABELS.DOCUMENTS') + '<br/>'
+          this.translateService.instant('BAM.CHARTS.LABELS.DOCUMENTS') + '<br/>',
+          style: {
+            textAlign: isRTL ? 'right' : 'left'
+          }
       },
       plotOptions: {
+        series: {
+          stacking: undefined
+        },
         column: {
           borderRadius: 4,
           dataLabels: {
@@ -148,7 +158,10 @@ export class ChartSystemDocumentsInProgressOverdueAndOnTimePerCategoryComponent 
           data: onTimeData,
           color: '#00695E'
         }
-      ]
+      ],
+      legend: {
+        rtl: isRTL
+      },
     };
   }
 
