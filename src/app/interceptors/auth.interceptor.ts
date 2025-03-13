@@ -63,7 +63,7 @@ export class AuthInterceptor implements HttpInterceptor {
     //  this.router.navigate(['/login']);
 
     console.log('Unauthorized: Triggering toaster notification');
-    //this.toaster.showToaster("You are not authorized to view this page");
+    this.toaster.showToaster("You are not authorized to view this page");
     this.translate.get('LOGIN.UNATHOURIZED').subscribe((msg: string) => {
       this.toaster.showToaster(msg);
     });

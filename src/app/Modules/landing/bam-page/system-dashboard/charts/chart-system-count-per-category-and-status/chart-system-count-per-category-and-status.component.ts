@@ -8,13 +8,16 @@ import { LookupsService } from '../../../../../../services/lookups.service';
 import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDatepickerModule, MatDatepicker, MatDatepickerInput } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 @Component({
   selector: 'app-chart-system-count-per-category-and-status',
   templateUrl: './chart-system-count-per-category-and-status.component.html',
   styleUrls: ['./chart-system-count-per-category-and-status.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule, MatTooltipModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule, MatTooltipModule, MatDatepicker, MatDatepickerInput]
 })
 export class ChartSystemCountPerCategoryAndStatusComponent implements OnInit {
 

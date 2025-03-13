@@ -237,7 +237,6 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   lookupPromiseResults: any;
   async loadLookupData(): Promise<void> {
     try {
-      // Create an array of promises for all data fetching operations
       const promises = [
         this.toPromise(this.lookupsService.getEntities(), (structures: any) => {
           this.structures = structures || [];
@@ -251,18 +250,18 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.toPromise(this.lookupsService.getPurposes(this.accessToken!), (response: any) => {
           this.purposes = response || [];
         }),
-        this.toPromise(this.lookupsService.getClassficationEn(this.accessToken!), (response: any) => {
-          this.classification = response || [];
-        }),
+        //this.toPromise(this.lookupsService.getClassficationEn(this.accessToken!), (response: any) => {
+        //  this.classification = response || [];
+        //}),
         this.toPromise(this.lookupsService.getPrioritiesEn(this.accessToken!), (response: any) => {
           this.priority = response || [];
         }),
         this.toPromise(this.lookupsService.getPrivacyEn(this.accessToken!), (response: any) => {
           this.privacy = response || [];
         }),
-        this.toPromise(this.lookupsService.getDocumentTypes(this.accessToken!), (response: any) => {
-          this.docTypes = response.data || [];
-        }),
+        //this.toPromise(this.lookupsService.getDocumentTypes(this.accessToken!), (response: any) => {
+        //  this.docTypes = response.data || [];
+        //}),
         this.toPromise(this.lookupsService.getCarbonUsers(this.accessToken!), (response: any) => {
           this.carbonUsers = response;
         }),
@@ -561,7 +560,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.linkedDocs = results[2] ?.data;
       //this.activityLogs = this.data.fromSearch ? results[3] : results[3] ?.data;
       this.activityLogs = results[3];
-      this.notes = results[4].data;
+      this.notes = results[4]?.data;
       this.transHistory = results[5] ?.data;
       this.attachments = results[6];
       this.visualTracking = results[7];
@@ -699,13 +698,16 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
               this.selectedImportanceText = this.getItemName(this.importanceId, this.importance, true);
             }
             if (this.classId) {
-              this.selectedClassText = this.getItemName(this.classId, this.classification, true);
+              //this.selectedClassText = this.getItemName(this.classId, this.classification, true);
+              this.selectedClassText = this.attributes ?.classification ?.text;
+
             }
             if (this.attributes.carbonCopy ?.length > 0)
               this.selectedCarbonText = this.attributes.carbonCopies.map((carbon: any) => carbon.text).join(', ');
             debugger;
             if (this.docTypeId) {
-              this.selectedDocTypeText = this.getItemName(this.docTypeId, this.docTypes, true);
+              //this.selectedDocTypeText = this.getItemName(this.docTypeId, this.docTypes, true);
+              this.selectedDocTypeText = this.attributes ?.documentType ?.text;
             }
           }
           this.getFormDataValue();
@@ -789,7 +791,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           if (error.status === 401) {
             this.showNotes = false;
             this.tabs = this.tabs.filter(tab => tab !== 'NOTES');
-
+            resolve(null as any)
           }
           else {
             console.error(error);
@@ -813,6 +815,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           if (error.status === 401) {
             this.showLogs = false;
             this.tabs = this.tabs.filter(tab => tab !== 'ACTIVITY_LOG');
+            resolve(null as any)
 
           } else {
             console.error(error);
@@ -835,6 +838,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           if (error.status === 401) {
             this.showLogs = false;
             this.tabs = this.tabs.filter(tab => tab !== 'ACTIVITY_LOG');
+            resolve(null as any)
 
           } else {
             console.error(error);
@@ -858,6 +862,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           if (error.status === 401) {
             this.showLinkedDoc = false;
             this.tabs = this.tabs.filter(tab => tab !== 'LINKED_CORRESPONDENCE');
+            resolve(null as any)
 
           } else {
             console.error(error);
@@ -881,6 +886,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           if (error.status === 401) {
             this.showNonArch = false;
             this.tabs = this.tabs.filter(tab => tab !== 'NON_ARCHIVED_ATTACHMENT');
+            resolve(null as any)
 
           } else {
             console.error(error);
@@ -904,6 +910,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           if (error.status === 401) {
             this.showHistory = false;
             this.tabs = this.tabs.filter(tab => tab !== 'TRANSACTION_HISTORY');
+            resolve(null as any)
 
           } else {
 
@@ -937,6 +944,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           if (error.status === 401) {
             this.showAttachment = false;
             this.tabs = this.tabs.filter(tab => tab !== 'ATTACHMENTS');
+            resolve(null as any)
 
           } else {
             console.error(error);
@@ -991,6 +999,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           if (error.status === 401) {
             this.showVisualTrace = false;
             this.tabs = this.tabs.filter(tab => tab !== 'VISUAL_TRACKING');
+            resolve(null as any)
 
           } else {
             console.error(error);

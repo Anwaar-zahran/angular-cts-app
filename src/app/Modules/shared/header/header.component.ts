@@ -55,7 +55,16 @@ export class HeaderComponent implements OnInit {
 
   ) {
     this.currentLang = this.translateService.currentLang || 'en';
-    this.structure =  this.translateService.instant("BAM.DASHBOARD.CHARTS.LABELS.STRUCTURES")
+    this.structure = this.translateService.instant("BAM.DASHBOARD.CHARTS.LABELS.STRUCTURES");
+    this.translateService.onLangChange.subscribe((event) => {
+      console.log('Language changed to: ', event.lang);
+      debugger;
+     // this.switchLanguage(event.lang);
+      this.translateService.setDefaultLang(event.lang);
+      this.translateService.use(event.lang); // Set initial language to English
+    });
+    this.translateService.setDefaultLang('en');
+
   }
 
   ngOnInit(): void {
@@ -67,6 +76,7 @@ export class HeaderComponent implements OnInit {
       this.showMenu = this.route.url !== '/landing';
     });
 
+  
     this.loadStructures();
   }
 

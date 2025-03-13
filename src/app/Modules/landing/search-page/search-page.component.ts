@@ -258,6 +258,8 @@ export class SearchPageComponent {
     if (this.isDataLoaded_FromUser && !searchText)
       return;
 
+    //this.fromUserSubject.next(searchText);
+
     this.isLoadingFromUsers = true;
     this.lookupservice.getSearchUsers(this.accessToken!, searchText).subscribe({
       next: (response) => {
@@ -634,13 +636,17 @@ export class SearchPageComponent {
   onSearchUsers(event: { term: string; items: any[] }, fromUsersFilter: boolean): void {
     const query = event.term;
     if (query.length >= 1) {
-      this.loading = true;
-      if (fromUsersFilter)
+      //this.loading = true;
+      this.isDataLoaded_FromUser = false;
+      this.isDataLoaded_ToUser = false;
+      if (fromUsersFilter) {
+
         this.getFromUsers(query);
+      }
       else
         this.getToUsers(query);
     } else {
-      this.loading = true;
+      //this.loading = true;
       this.getFromUsers('');
       this.getToUsers('');
     }

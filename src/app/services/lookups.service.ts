@@ -28,8 +28,10 @@ export class LookupsService {
   private listYears = `${environment.apiBaseUrl}/Dashboard/GetAvailableYears`;
   private listPurposes = `${environment.apiBaseUrl}/CTS/Purpose/ListUserPurposes`;
   private listClassificationEN = `${environment.apiBaseUrl}/Classification/List`;
-  private listClassification = `${environment.apiBaseUrl}/Classification/List?Name=`;
+ // private listClassification = `${environment.apiBaseUrl}/Classification/List?Name=`;
+  private listClassification = `${environment.apiBaseUrl}/Classification/ListClassifications`;
   private listDocumentType = `${environment.apiBaseUrl}/DocumentType/List`;
+  //private listDocumentType = `${environment.apiBaseUrl}/DocumentType/GetDocumentType`;
   //private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List`;
   private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List?Name=`;
 
