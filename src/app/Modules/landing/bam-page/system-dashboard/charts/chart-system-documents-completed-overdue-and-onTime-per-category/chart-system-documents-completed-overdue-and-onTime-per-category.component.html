@@ -101,7 +101,7 @@
     class="form-control"
     required
     (ngModelChange)="onFromDateChange()"
-  />-->rana
+  />-->
             <input class="form-control date-picker"
                    matInput
                    [matDatepicker]="picker2"
@@ -130,7 +130,7 @@
                    placeholder="mm-dd-yyyy"
                    [(ngModel)]="tempToDate"
                    required
-                   name="dp2"
+                   name="dp"
                    [min]="minToDate"
                    (click)="picker1.open()" />
             <mat-datepicker #picker1></mat-datepicker>
