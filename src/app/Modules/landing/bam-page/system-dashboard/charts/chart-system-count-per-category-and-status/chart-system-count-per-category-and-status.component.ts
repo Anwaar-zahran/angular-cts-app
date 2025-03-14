@@ -9,8 +9,6 @@ import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-transla
 import { Subscription } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatepickerModule, MatDatepicker, MatDatepickerInput } from '@angular/material/datepicker';
-import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule } from '@angular/material/core';
 
 
 @Component({

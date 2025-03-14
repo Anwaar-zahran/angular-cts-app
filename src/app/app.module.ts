@@ -30,6 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoaderInterceptor } from './interceptors/loader.interceptor';
 import { LoaderComponent } from './Modules/shared/loader/loader.component';
 //import { AddressBookComponent } from './Modules/landing/address-book/address-book.component';
+import { CookieService } from 'ngx-cookie-service';
 
 declare var $: any;
 if (typeof $ !== 'undefined') {
@@ -91,6 +92,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     LoaderComponent,
   ],
   providers: [
+    CookieService,
     LanguageService,
     {
       provide: LOCALE_ID,

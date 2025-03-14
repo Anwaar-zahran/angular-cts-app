@@ -8,13 +8,14 @@ import { LookupsService } from '../../../../../../services/lookups.service';
 import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDatepickerModule, MatDatepicker, MatDatepickerInput } from '@angular/material/datepicker';
 
 
 @Component({
   selector: 'app-chart-system-documents-completed-overdue-and-onTime-per-category',
   templateUrl: './chart-system-documents-completed-overdue-and-onTime-per-category.component.html',
   styleUrls: ['./chart-system-documents-completed-overdue-and-onTime-per-category.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule,MatTooltipModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule, MatTooltipModule, MatDatepicker, MatDatepickerInput]
 })
 export class ChartSystemDocumentsCompletedOverdueAndOnTimePerCategoryComponent implements OnInit {
 
