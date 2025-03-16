@@ -154,7 +154,8 @@ export class SearchPageComponent {
   isLoadingSendEntity = false;
   getSendingEntites(searchText: string = '') {
 
-    if (this.isDataLoaded_SendEntity && !searchText)
+    //if (this.isDataLoaded_SendEntity && !searchText)
+    if (this.isDataLoaded_SendEntity)
       return;
 
     this.isLoadingSendEntity = true;
@@ -254,8 +255,8 @@ export class SearchPageComponent {
 
   isLoadingFromUsers = false;
   getFromUsers(searchText: string = '') {
-
-    if (this.isDataLoaded_FromUser && !searchText)
+    debugger;
+    if (this.isDataLoaded_FromUser)
       return;
 
     //this.fromUserSubject.next(searchText);
@@ -283,7 +284,7 @@ export class SearchPageComponent {
   isLoadingToUsers = false;
   getToUsers(searchText: string = '') {
 
-    if (this.isDataLoaded_ToUser && !searchText)
+    if (this.isDataLoaded_ToUser)
       return;
 
     this.isLoadingToUsers = true;
@@ -634,6 +635,7 @@ export class SearchPageComponent {
   }
 
   onSearchUsers(event: { term: string; items: any[] }, fromUsersFilter: boolean): void {
+    debugger;
     const query = event.term;
     if (query.length >= 1) {
       //this.loading = true;
