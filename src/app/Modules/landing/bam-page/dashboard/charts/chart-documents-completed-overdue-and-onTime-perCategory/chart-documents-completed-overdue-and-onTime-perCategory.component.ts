@@ -8,13 +8,14 @@ import { LookupsService } from '../../../../../../services/lookups.service';
 import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDatepicker, MatDatepickerInput } from '@angular/material/datepicker';
 
 
 @Component({
   selector: 'app-chart-documents-completed-overdue-and-onTime-perCategory',
   templateUrl: './chart-documents-completed-overdue-and-onTime-perCategory.component.html',
   styleUrls: ['./chart-documents-completed-overdue-and-onTime-perCategory.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule,MatTooltipModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule, MatTooltipModule, MatDatepicker, MatDatepickerInput]
 })
 export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent implements OnInit, OnChanges {
 
@@ -188,6 +189,18 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
   }
 
   applyFilter() {
+    const dateFrom = new Date(this.tempFromDate);
+    const dateTo = new Date(this.tempToDate);
+
+    // Format to yyyy-mm-dd
+    this.tempFromDate = dateFrom.getFullYear() + '-'
+      + String(dateFrom.getMonth() + 1).padStart(2, '0') + '-'
+      + String(dateFrom.getDate()).padStart(2, '0');
+
+    this.tempToDate = dateTo.getFullYear() + '-'
+      + String(dateTo.getMonth() + 1).padStart(2, '0') + '-'
+      + String(dateTo.getDate()).padStart(2, '0');
+
     this.fromDate = this.tempFromDate;
     this.toDate = this.tempToDate;
     this.loadChartData();
@@ -198,9 +211,13 @@ export class ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent impleme
     console.log(this.tempFromDate);
     if (this.tempFromDate) {
       let fromDate = new Date(this.tempFromDate);
-      fromDate.setDate(fromDate.getDate());
-      
-      this.minToDate = fromDate.toISOString().split('T')[0];
+      //fromDate.setDate(fromDate.getDate());
+
+      this.tempFromDate = fromDate.getFullYear() + '-'
+        + String(fromDate.getMonth() + 1).padStart(2, '0') + '-'
+        + String(fromDate.getDate()).padStart(2, '0');
+
+      this.minToDate = this.tempFromDate;
     } else {
       this.minToDate = null;
     }
