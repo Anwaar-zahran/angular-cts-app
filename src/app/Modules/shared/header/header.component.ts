@@ -9,6 +9,7 @@ import { CurrentUserStructures } from '../../../models/current-user-structures';
 import { DisplayStructure } from '../../../models/display-structure';
 import { ConfirmationmodalComponent } from '../confirmationmodal/confirmationmodal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+//import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-header',
@@ -52,17 +53,11 @@ export class HeaderComponent implements OnInit {
     private translateService: TranslateService,
     private modalService: NgbModal,
     private structuresService: StructuresService
-
+    //private cookieService: CookieService
   ) {
     this.currentLang = this.translateService.currentLang || 'en';
     this.structure = this.translateService.instant("BAM.DASHBOARD.CHARTS.LABELS.STRUCTURES");
-    this.translateService.onLangChange.subscribe((event) => {
-      console.log('Language changed to: ', event.lang);
-      debugger;
-     // this.switchLanguage(event.lang);
-      this.translateService.setDefaultLang(event.lang);
-      this.translateService.use(event.lang); // Set initial language to English
-    });
+  
     this.translateService.setDefaultLang('en');
 
   }
@@ -95,6 +90,13 @@ export class HeaderComponent implements OnInit {
     this.currentLang = lang;
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
+
+    // Set the cookie for the language
+    //if(lang=='ar')
+    //  this.cookieService.set('AspNetCore.Culture', 'AspNetCore.Culture=c=en-GB|uic=ar');
+    //else
+    //  this.cookieService.set('AspNetCore.Culture', 'AspNetCore.Culture=c=en-GB|uic=en-GB');
+
     window.location.reload();
   }
 

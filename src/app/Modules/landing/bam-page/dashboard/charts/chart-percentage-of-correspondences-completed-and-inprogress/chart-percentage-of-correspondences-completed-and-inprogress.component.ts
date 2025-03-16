@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDatepicker, MatDatepickerInput } from '@angular/material/datepicker';
 
 
 
@@ -14,7 +15,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   selector: 'app-chart-percentage-of-correspondences-completed-and-inprogress',
   templateUrl: './chart-percentage-of-correspondences-completed-and-inprogress.component.html',
   styleUrls: ['./chart-percentage-of-correspondences-completed-and-inprogress.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule, MatTooltipModule]
+  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule, MatTooltipModule, MatDatepicker, MatDatepickerInput]
 })
 export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -154,6 +155,17 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
 
   applyFilter() {
     // Update the actual date variables only when the form is submitted
+    const dateFrom = new Date(this.tempFromDate);
+    const dateTo = new Date(this.tempToDate);
+
+    // Format to yyyy-mm-dd
+    this.tempFromDate = dateFrom.getFullYear() + '-'
+      + String(dateFrom.getMonth() + 1).padStart(2, '0') + '-'
+      + String(dateFrom.getDate()).padStart(2, '0');
+
+    this.tempToDate = dateTo.getFullYear() + '-'
+      + String(dateTo.getMonth() + 1).padStart(2, '0') + '-'
+      + String(dateTo.getDate()).padStart(2, '0');
     this.fromDate = this.tempFromDate;
     this.toDate = this.tempToDate;
     this.loadChartData(); // Reload chart data with new dates
@@ -164,9 +176,13 @@ export class ChartPercentageOfCorrespondencesCompletedAndInprogressComponent imp
     console.log(this.tempFromDate);
     if (this.tempFromDate) {
       let fromDate = new Date(this.tempFromDate);
-      fromDate.setDate(fromDate.getDate());
+      //fromDate.setDate(fromDate.getDate());
 
-      this.minToDate = fromDate.toISOString().split('T')[0];
+      this.tempFromDate = fromDate.getFullYear() + '-'
+        + String(fromDate.getMonth() + 1).padStart(2, '0') + '-'
+        + String(fromDate.getDate()).padStart(2, '0');
+
+      this.minToDate = this.tempFromDate;
     } else {
       this.minToDate = null;
     }

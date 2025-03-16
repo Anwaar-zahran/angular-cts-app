@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Priority } from '../models/priority.model';
+// import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -132,12 +133,14 @@ export class LookupsService {
       );
   }
   getPrivacyEn(accessToken: string): Observable<any> {
-
+    debugger;
+    //let culture = this.cookieService.get('AspNetCore.Culture');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json'
     });
-    return this.http.get(this.listPrivaciesEN, { headers })
+    return this.http.get(this.listPrivaciesEN, {
+      headers })
       .pipe(
         catchError((error) => {
           console.error('Error while fetching privacies data', error.message);
