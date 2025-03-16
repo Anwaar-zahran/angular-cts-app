@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Priority } from '../models/priority.model';
-import { CookieService } from 'ngx-cookie-service';
+// import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +36,7 @@ export class LookupsService {
   //private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List`;
   private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List?Name=`;
 
-  constructor(private http: HttpClient, private cookieService: CookieService) { }
+  constructor(private http: HttpClient) { }
 
   getPrivacyOptions(): Observable<any[]> {
     // Replace with actual API call

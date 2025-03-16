@@ -154,7 +154,6 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
           },
           yAxis: {
             min: 0,
-            max:110,
             reversed: false,
             opposite: isRTL,
             title: {

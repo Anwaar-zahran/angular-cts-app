@@ -7,16 +7,20 @@ import { Injector } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeEn from '@angular/common/locales/en';
 import localeAr from '@angular/common/locales/ar';
+import { environment } from '../../environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
 })
 export class LanguageService {
 
+  private apiUrl = `${environment.apiBaseUrl}/Home/ChangeLanguage`;
     private currentLang = new BehaviorSubject<string>('en');
     currentLang$ = this.currentLang.asObservable();
+   
 
-    constructor(private translate: TranslateService, private injector: Injector,) {
+    constructor(private httpClient: HttpClient,private translate: TranslateService, private injector: Injector,) {
         // Get language from localStorage or default to 'en'
         const savedLang = localStorage.getItem('language') || 'en';
         //const savedLang ='ar';
@@ -24,7 +28,7 @@ export class LanguageService {
     }
 
   private initializeLanguage(lang: string) {
-    
+    debugger
         this.translate.setDefaultLang(lang);
         this.translate.use(lang);
         this.currentLang.next(lang);
@@ -32,11 +36,13 @@ export class LanguageService {
         document.documentElement.lang = lang;
         document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
         this.changeLocale(lang);
+        this.changeLanguage(lang);
     }
 
     setLanguage(lang: string) {
         this.initializeLanguage(lang);
     }
+
 
     getCurrentLang(): string {
         return localStorage.getItem('language') || 'en';
@@ -49,4 +55,8 @@ export class LanguageService {
             registerLocaleData(localeEn);
         }
     }
+    changeLanguage(lang: string) {
+        debugger
+        return this.httpClient.post(`${this.apiUrl}?lang=${lang}`, {});
+      }
 } 
