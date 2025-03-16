@@ -67,10 +67,8 @@ export class LoginPageComponent implements OnInit {
     }
 
    
-debugger
     this.authService.login( environment.VIPClientId, environment.VIPClientSecret, this.username, this.password).pipe(
         switchMap((response1) => {
-          debugger
             if (response1 && response1.access_token) {
                 // First token received, now call the second API
                 return this.authService.login(environment.clientId, environment.clientSecret, this.username, this.password);
