@@ -1954,3 +1954,9 @@ mat-month-view .mat-calendar-table-header span.cdk-visually-hidden:lang(ar) {
 mat-month-view .mat-calendar-table-header span.cdk-visually-hidden + span:lang(ar) {
     display: none
 }
+ngb-modal-backdrop {
+	z-index: 1000 !important;
+}
+.modal {
+    --bs-modal-zindex: 1000 !important;
+}
