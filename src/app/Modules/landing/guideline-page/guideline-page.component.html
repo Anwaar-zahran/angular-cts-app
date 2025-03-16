@@ -87,7 +87,7 @@
                         <th>{{ 'GUIDELINES.TABLE.HEADERS.TRANSFER_DATE' | translate }}</th>
                         <th>{{ 'GUIDELINES.TABLE.HEADERS.REFERENCE_NB' | translate }}</th>
                         <th>{{ 'GUIDELINES.TABLE.HEADERS.ACTIONS' | translate }}</th>
-                        <th>{{ 'TABLE.HEADERS.STATUS' | translate }}</th>
+                        <!-- <th>{{ 'TABLE.HEADERS.STATUS' | translate }}</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -103,7 +103,7 @@
                                 {{ 'COMMON.VISUAL_TRACKING' | translate }}
                             </button>
                         </td>
-                        <td>
+                        <!-- <td>
                             <span>
                                 <img alt=""
                                     [src]="item.isRead ? 'assets/images/icons/open-message.svg' : 'assets/images/icons/red-email.svg'" />
@@ -111,7 +111,7 @@
                             <span *ngIf="item.isOverDue">
                                 <img alt="" src="assets/images/icons/clock.svg" />
                             </span>
-                        </td>
+                        </td> -->
                     </tr>
                 </tbody>
             </table>
@@ -129,7 +129,7 @@
                         <th>{{ 'GUIDELINES.TABLE.HEADERS.TRANSFER_DATE' | translate }}</th>
                         <th>{{ 'GUIDELINES.TABLE.HEADERS.REFERENCE_NB' | translate }}</th>
                         <th>{{ 'GUIDELINES.TABLE.HEADERS.ACTIONS' | translate }}</th>
-                        <th>{{ 'TABLE.HEADERS.STATUS' | translate }}</th>
+                        <!-- <th>{{ 'TABLE.HEADERS.STATUS' | translate }}</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -145,18 +145,15 @@
                                 {{ 'COMMON.VISUAL_TRACKING' | translate }}
                             </button>
                         </td>
-                        <td>
+                        <!-- <td>
                             <span>
                                 <img src='assets/images/icons/open-message.svg'/>
                             </span>
-                            <!-- <span>
-                                <img alt=""
-                                    [src]="item.isRead ? 'assets/images/icons/open-message.svg' : 'assets/images/icons/red-email.svg'" />
-                            </span> -->
+                         
                             <span *ngIf="item.isOverDue">
                                 <img alt="" src="assets/images/icons/clock.svg" />
                             </span>
-                        </td>
+                        </td> -->
                     </tr>
                 </tbody>
             </table>
