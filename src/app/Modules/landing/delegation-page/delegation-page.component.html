@@ -29,7 +29,9 @@
                        [placeholder]="'DELEGATION.PLACEHOLDERS.SELECT_NAME' | translate"
                        class="form-control"
                        (search)="onSearchUsers($event)"
-                       (focus)="getFromUsers('')">
+                       (focus)="getFromUsers('')"
+                       (ngModelChange)="resetData($event)">
+>
             </ng-select>
             <div *ngIf="
                 delegationForm.controls['userId'].invalid &&

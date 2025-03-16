@@ -63,7 +63,7 @@ export class DelegationPageComponent implements OnInit {
   selectedRowId: number | null | undefined = undefined;
   note: string = '';
 
-  selectedCategoryName:string[] = [];
+  selectedCategoryName: string[] = [];
   selectedCategories: any[] = [];
   isAllCategoriesSelecte: boolean = false;
   isCtrlPressed = false;
@@ -101,7 +101,7 @@ export class DelegationPageComponent implements OnInit {
       distinctUntilChanged()
     ).subscribe(searchText => {
       this.getFromUsers(searchText);
-      });
+    });
   }
 
   ngOnInit(): void {
@@ -133,10 +133,10 @@ export class DelegationPageComponent implements OnInit {
     this.getPrivacyData();
     //this.getUsers();
     this.getFromUsers();
-   
+
     this.getListData();
 
-    this.delegationForm.get('fromDate')?.valueChanges.subscribe(() => {
+    this.delegationForm.get('fromDate') ?.valueChanges.subscribe(() => {
       this.updateMinDate();
     });
   }
@@ -145,7 +145,7 @@ export class DelegationPageComponent implements OnInit {
     this.delegationForm = this.fb.group({
       userId: [null, Validators.required],
       privacyId: [null, Validators.required],
-      categoryId: [[], [Validators.required, this.categoryValidator]], 
+      categoryId: [[], [Validators.required, this.categoryValidator]],
       fromDate: [null, Validators.required],
       toDate: [{ value: null, disabled: true }, Validators.required],
       allowSign: [false],
@@ -154,10 +154,10 @@ export class DelegationPageComponent implements OnInit {
       note: [''],
       startDate: [null],
     }, {
-      validators: this.dateRangeValidator
-    });
+        validators: this.dateRangeValidator
+      });
   }
-  
+
 
   initDtOptions(): void {
     this.dtOptions = {
@@ -221,41 +221,41 @@ export class DelegationPageComponent implements OnInit {
       this.isCtrlPressed = true;
     }
   }
-  
+
   @HostListener('window:keyup', ['$event'])
   onKeyUp(event: KeyboardEvent) {
     this.isCtrlPressed = false;
   }
-  
+
   onCategorySelect(event: any) {
     if (!this.isCtrlPressed) {
       this.selectedCategories = event ? [event] : [];
     }
     this.cdr.detectChanges();
   }
-  
+
   removeCategory(item: any, event: Event) {
-    event.stopPropagation(); 
-  
+    event.stopPropagation();
+
     const categoryControl = this.delegationForm.get('categoryId');
     if (!categoryControl) return;
-  
+
     let currentSelection = categoryControl.value || [];
-  
-   
+
+
     const updatedSelection = currentSelection.filter(
-      (selectedId:number) => selectedId !== item.id 
+      (selectedId: number) => selectedId !== item.id
     );
-    
+
     categoryControl.setValue(updatedSelection);
     categoryControl.markAsTouched();
     categoryControl.markAsDirty();
     this.cdr.detectChanges();
   }
-    
+
   dateRangeValidator(group: FormControl): { [key: string]: boolean } | null {
-    const fromDate = group.get('fromDate')?.value;
-    const toDate = group.get('toDate')?.value;
+    const fromDate = group.get('fromDate') ?.value;
+    const toDate = group.get('toDate') ?.value;
 
     if (fromDate && toDate && toDate < fromDate) {
       return { toDateInvalid: true };
@@ -264,17 +264,17 @@ export class DelegationPageComponent implements OnInit {
   }
 
   updateMinDate(): void {
-    const fromDate = this.delegationForm.get('fromDate')?.value;
+    const fromDate = this.delegationForm.get('fromDate') ?.value;
 
     if (!fromDate) {
       this.minToDate = null;
-      this.delegationForm.get('toDate')?.setValue(null);
-      this.delegationForm.get('toDate')?.disable();
+      this.delegationForm.get('toDate') ?.setValue(null);
+      this.delegationForm.get('toDate') ?.disable();
     } else {
       let validDate = new Date(fromDate);
       let newDate = new Date(validDate.setDate(validDate.getDate()));
       this.minToDate = fromDate ? newDate : null;
-      this.delegationForm.get('toDate')?.enable();
+      this.delegationForm.get('toDate') ?.enable();
     }
   }
 
@@ -449,7 +449,7 @@ export class DelegationPageComponent implements OnInit {
         //privacyId: this.selectedPrivacyId,
         allowSign: formValues.allowSign || false,
         showOldCorrespondecne: formValues.showOldCorrespondence || false,
-        draftInbox:  false, //formValues.draftInbox || false,
+        draftInbox: false, //formValues.draftInbox || false,
         note: formValues.note || '',
         startDate: this.formatDate(formValues.startDate),
         toUser: formValues.userId,
@@ -492,12 +492,14 @@ export class DelegationPageComponent implements OnInit {
             this.isEdit = false;
             this.clear();
             this.getListData();
-            if (response.message && response.id==0)
+            if (response.message && response.id == 0)
               this.translate.get('DELEGATION.Duplicate_Error').subscribe((msg: string) => {
-                this.toaster.showToaster(msg); });
+                this.toaster.showToaster(msg);
+              });
             else
-            this.translate.get('DELEGATION.SAVE_SUCCESS').subscribe((msg: string) => {
-              this.toaster.showToaster(msg);   });
+              this.translate.get('DELEGATION.SAVE_SUCCESS').subscribe((msg: string) => {
+                this.toaster.showToaster(msg);
+              });
           },
           (error: any) => {
             console.error('Error adding:', error);
@@ -544,7 +546,7 @@ export class DelegationPageComponent implements OnInit {
             (error: any) => {
               console.error('Error deleting item:', error);
               this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
-                this.toaster.showToaster(error?.message || msg, 'danger');
+                this.toaster.showToaster(error ?.message || msg, 'danger');
               });
             }
           );
@@ -575,7 +577,7 @@ export class DelegationPageComponent implements OnInit {
       (error: any) => {
         console.error('Error updating:', error);
         this.translate.get('ERRORS.SOMETHING_WRONG').subscribe((msg: string) => {
-          this.toaster.showToaster(error?.message || msg);
+          this.toaster.showToaster(error ?.message || msg);
         });
       }
     );
@@ -590,9 +592,9 @@ export class DelegationPageComponent implements OnInit {
 
   resetDropDowns() {
     this.delegationForm.patchValue({
-      userId: this.contacts.length > 0 ? this.contacts[0]?.id : null,
+      userId: this.contacts.length > 0 ? this.contacts[0] ?.id : null,
       categoryId: this.categories.length > 0 ? [] : [],
-      privacyId: this.privacy.length > 0 ? this.privacy[0]?.id : null,
+      privacyId: this.privacy.length > 0 ? this.privacy[0] ?.id : null,
     });
   }
 
@@ -646,11 +648,11 @@ export class DelegationPageComponent implements OnInit {
     const currentLang = this.translate.currentLang;
     switch (currentLang) {
       case 'ar':
-        return item?.nameAr || item?.name;
+        return item ?.nameAr || item ?.name;
       case 'fr':
-        return item?.nameFr || item?.name;
+        return item ?.nameFr || item ?.name;
       default:
-        return item?.name;
+        return item ?.name;
     }
   }
 
@@ -662,10 +664,10 @@ export class DelegationPageComponent implements OnInit {
     const query = event.term;
     this.isLoadingUsers = true;
 
-    if (query.length >=1) {
+    if (query.length >= 1) {
       //this.loading = true;
       this.getFromUsers(query);
-    }else {
+    } else {
       //this.loading = true;
       this.getFromUsers('');
     }
@@ -674,7 +676,7 @@ export class DelegationPageComponent implements OnInit {
   isDataLoaded = false;
 
   getFromUsers(searchText: string = '') {
-    if (this.isDataLoaded && !searchText) {
+    if (this.isDataLoaded) {
       return;
     }
     this.isLoadingUsers = true;
@@ -709,6 +711,13 @@ export class DelegationPageComponent implements OnInit {
     });
   }
 
+  resetData(event: any) {
+    if (event == null) {
+      this.isDataLoaded = false;
+      this.getFromUsers('');
+    }
+  }
+
   selectAllCategories(): void {
     if (this.categories && this.categories.length > 0) {
       this.delegationForm.controls['categoryId'].setValue(
@@ -720,5 +729,5 @@ export class DelegationPageComponent implements OnInit {
       console.log(this.selectedCategories)
     }
   }
-  
+
 }
