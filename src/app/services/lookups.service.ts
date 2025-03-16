@@ -134,11 +134,10 @@ export class LookupsService {
   }
   getPrivacyEn(accessToken: string): Observable<any> {
     debugger;
-    let culture = this.cookieService.get('AspNetCore.Culture');
+    //let culture = this.cookieService.get('AspNetCore.Culture');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-      'X-Culture': culture 
+      'Content-Type': 'application/json'
     });
     return this.http.get(this.listPrivaciesEN, {
       headers })

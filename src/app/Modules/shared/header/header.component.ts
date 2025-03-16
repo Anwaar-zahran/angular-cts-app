@@ -9,7 +9,7 @@ import { CurrentUserStructures } from '../../../models/current-user-structures';
 import { DisplayStructure } from '../../../models/display-structure';
 import { ConfirmationmodalComponent } from '../confirmationmodal/confirmationmodal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CookieService } from 'ngx-cookie-service';
+//import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-header',
@@ -52,8 +52,8 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     private translateService: TranslateService,
     private modalService: NgbModal,
-    private structuresService: StructuresService,
-    private cookieService: CookieService
+    private structuresService: StructuresService
+    //private cookieService: CookieService
   ) {
     this.currentLang = this.translateService.currentLang || 'en';
     this.structure = this.translateService.instant("BAM.DASHBOARD.CHARTS.LABELS.STRUCTURES");
@@ -92,10 +92,10 @@ export class HeaderComponent implements OnInit {
     document.documentElement.lang = lang;
 
     // Set the cookie for the language
-    if(lang=='ar')
-      this.cookieService.set('AspNetCore.Culture', 'AspNetCore.Culture=c=en-GB|uic=ar');
-    else
-      this.cookieService.set('AspNetCore.Culture', 'AspNetCore.Culture=c=en-GB|uic=en-GB');
+    //if(lang=='ar')
+    //  this.cookieService.set('AspNetCore.Culture', 'AspNetCore.Culture=c=en-GB|uic=ar');
+    //else
+    //  this.cookieService.set('AspNetCore.Culture', 'AspNetCore.Culture=c=en-GB|uic=en-GB');
 
     window.location.reload();
   }
