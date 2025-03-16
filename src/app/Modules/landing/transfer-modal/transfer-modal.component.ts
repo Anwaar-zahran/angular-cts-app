@@ -114,9 +114,9 @@ export class TransferModalComponent implements OnInit {
 
     this.updateHeaderState();
 
-    this.rows.forEach(row => {
-      if (row.selectedDueDate === null) {
-        row.selectedDueDate = this.selectedDueDate;
+    this.rows.forEach((row, index) => {
+      if (row.selectedPriorityId) {
+        this.updateDueDate(index);
       }
     });
 
@@ -131,7 +131,7 @@ export class TransferModalComponent implements OnInit {
   getRowDueDate(index: number): Date {
     return this.rows[index].selectedDueDate || this.selectedDueDate;
   }
-  
+
   setRowDueDate(index: number, value: Date): void {
     this.rows[index].selectedDueDate = value;
   }
@@ -231,10 +231,13 @@ export class TransferModalComponent implements OnInit {
     this.lookupsService.getPrioritiesWithDays(this.accessToken!).subscribe(
       (reponse) => {
 
-        console.log('priority')
-        console.log(reponse)
+        console.log('Priorities loaded:', reponse);
         this.priorities = reponse || [];
         this.selectedPriorityId = this.priorities[0].id;
+
+        this.priorities.forEach(p => {
+          console.log(`Priority ${p.id} (${p.name}) has numberOfDueDays: ${p.numberOfDueDays}`);
+        });
 
         let defaultDueDate: Date | null = null;
 
@@ -253,7 +256,8 @@ export class TransferModalComponent implements OnInit {
 
         this.rows = this.rows.map(row => ({
           ...row,
-          selectedPriorityId: row.selectedPriorityId || defaultPriorityId
+          selectedPriorityId: row.selectedPriorityId || defaultPriorityId,
+          selectedDueDate: row.selectedDueDate || defaultDueDate
         }));
       },
       (error) => {
@@ -276,18 +280,24 @@ export class TransferModalComponent implements OnInit {
   }
 
   updateDueDate(index: number) {
+    console.log('Updating due date for row', index);
     let selectedRow = this.rows[index];
-    if (!selectedRow.selectedPriorityId) return; // Ensure priority is selected
+    console.log('Selected priority ID:', selectedRow.selectedPriorityId);
+
+    if (!selectedRow.selectedPriorityId) return;
 
     let selectedPriority = this.priorities.find(p => p.id === selectedRow.selectedPriorityId);
+    console.log('Found priority:', selectedPriority);
+
     if (selectedPriority && selectedPriority.numberOfDueDays !== undefined) {
       let daysToAdd = selectedPriority.numberOfDueDays;
       let currentDate = new Date();
       currentDate.setDate(currentDate.getDate() + (daysToAdd - 1));
+      console.log('New due date:', currentDate);
 
       this.selectedDueDate = currentDate;
-
       this.rows[index] = { ...selectedRow, selectedDueDate: currentDate };
+      console.log('Updated row:', this.rows[index]);
     } else {
       console.error("Priority not found or daysToAdd is undefined");
     }
