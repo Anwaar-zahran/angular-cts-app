@@ -363,6 +363,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         if (isLocked) {
           this.toaster.showToaster("There is a file checked out, please make sure to check in or discard checkout.");
         } else {
+          console.log('this .data')
+          console.log(this.data)
           // Perform actions if the document is not locked
           const dialogRef = this.dialog.open(TransferModalComponent, {
             disableClose: true,

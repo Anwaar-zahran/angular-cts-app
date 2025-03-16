@@ -90,17 +90,17 @@ export class TransferModalComponent implements OnInit {
   isCCed: any;
   isPrivate: any;
   isFollowUp: boolean = false;
-  isFollowUpRequired : boolean = false;
+  isFollowUpRequired: boolean = false;
   isTransferring: boolean = false;
 
-  currentLanguage!:string;
+  currentLanguage!: string;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService, private toaster: ToasterService,
     private router: Router, private lookupsService: LookupsService, private dialog: MatDialog, private cdr: ChangeDetectorRef,
     private dialogRef: MatDialogRef<TransferModalComponent>, private mailService: MailsService, private translate: TranslateService,
-    private languageService:LanguageService,private cdRef: ChangeDetectorRef) {
+    private languageService: LanguageService, private cdRef: ChangeDetectorRef) {
 
-    this.receivedData = data; 
+    this.receivedData = data;
     this.documentId = this.data.documentId;
     this.documentPrivacyId = this.data.row.privacyId;
     this.parentTransferId = this.data.row.id;
@@ -113,13 +113,27 @@ export class TransferModalComponent implements OnInit {
     //    console.log('Dialog opened with ID:', this.data.id, 'and Reference Number:', this.data.referenceNumber);
 
     this.updateHeaderState();
-    
+
+    this.rows.forEach(row => {
+      if (row.selectedDueDate === null) {
+        row.selectedDueDate = this.selectedDueDate;
+      }
+    });
+
     this.accessToken = this.authService.getToken();
     if (!this.accessToken) {
       this.router.navigate(['/login']);
       return;
     }
     this.loadUserStructures();
+  }
+
+  getRowDueDate(index: number): Date {
+    return this.rows[index].selectedDueDate || this.selectedDueDate;
+  }
+  
+  setRowDueDate(index: number, value: Date): void {
+    this.rows[index].selectedDueDate = value;
   }
 
   transformDataWithotSort(data: Array<{ name: string; userStructure?: Array<{ user?: { firstname?: string; lastname?: string } }> }>): string[] {
@@ -220,7 +234,23 @@ export class TransferModalComponent implements OnInit {
         console.log('priority')
         console.log(reponse)
         this.priorities = reponse || [];
+        this.selectedPriorityId = this.priorities[0].id;
+
+        let defaultDueDate: Date | null = null;
+
         const defaultPriorityId = this.priorities.length > 0 ? this.priorities[0].id : null;
+        // Find the selected priority object based on the ID
+        if (defaultPriorityId !== null) {
+          const selectedPriority = this.priorities.find(p => p.id === defaultPriorityId);
+
+          if (selectedPriority && selectedPriority.numberOfDueDays !== undefined) {
+            let currentDate = new Date();
+            currentDate.setDate(currentDate.getDate() + (selectedPriority.numberOfDueDays - 1));
+            defaultDueDate = currentDate;
+            this.selectedDueDate = currentDate;
+          }
+        }
+
         this.rows = this.rows.map(row => ({
           ...row,
           selectedPriorityId: row.selectedPriorityId || defaultPriorityId
@@ -245,22 +275,25 @@ export class TransferModalComponent implements OnInit {
     );
   }
 
-  updateDueDate(index: number) {//: Date
-    let selectedRow = this.rows[index]; // Assuming 'rows' is your data array
+  updateDueDate(index: number) {
+    let selectedRow = this.rows[index];
+    if (!selectedRow.selectedPriorityId) return; // Ensure priority is selected
+
     let selectedPriority = this.priorities.find(p => p.id === selectedRow.selectedPriorityId);
     if (selectedPriority && selectedPriority.numberOfDueDays !== undefined) {
-      let daysToAdd = selectedPriority.numberOfDueDays; // Get dynamic days
+      let daysToAdd = selectedPriority.numberOfDueDays;
       let currentDate = new Date();
-      currentDate.setDate(currentDate.getDate() + (daysToAdd - 1)); // Add dynamic days
-      this.rows = this.rows.map((row, i) =>
-        i === index ? { ...row, selectedDueDate: currentDate } : row
-      );
+      currentDate.setDate(currentDate.getDate() + (daysToAdd - 1));
 
+      this.selectedDueDate = currentDate;
+
+      this.rows[index] = { ...selectedRow, selectedDueDate: currentDate };
     } else {
       console.error("Priority not found or daysToAdd is undefined");
     }
-
   }
+
+
   convertToNgbDateStruct(dateStr: string): NgbDateStruct | undefined {
     if (!dateStr) return undefined;
     const [day, month, year] = dateStr.split('/');
@@ -325,20 +358,35 @@ export class TransferModalComponent implements OnInit {
   }
 
   createEmptyRow() {
+    let defaultPriorityId = this.priorities.length > 0 ? this.priorities[0].id : null;
+    let defaultDueDate: Date | null = null;
+
+    // Find the selected priority object based on the ID
+    if (defaultPriorityId !== null) {
+      const selectedPriority = this.priorities.find(p => p.id === defaultPriorityId);
+
+      if (selectedPriority && selectedPriority.numberOfDueDays !== undefined) {
+        let currentDate = new Date();
+        currentDate.setDate(currentDate.getDate() + (selectedPriority.numberOfDueDays - 1));
+        defaultDueDate = currentDate;
+      }
+    }
+
     return {
       selectedUserId: null,
       selectedPurposeId: null as number | null,
-      selectedPriorityId: this.priorities.length > 0 ? this.priorities[0].id : null,
-      selectedDueDate: null as Date | null,
+      selectedPriorityId: defaultPriorityId,
+      selectedDueDate: defaultDueDate,
       txtInstruction: '',
       isPrivate: false,
       isCCed: false,
       isFollowUp: false,
-      isStructure: false, // Default value
+      isStructure: false,
       selectedUser: null as { id: number, name: string, structureId: number, isStructure: boolean } | null,
       showValidationError: false
     };
   }
+
 
   onUserOrPurposeChange(index: number) {
     // Add a new row when user is selected, only if it's the last row
@@ -386,11 +434,11 @@ export class TransferModalComponent implements OnInit {
 
       const isValid = rowsToValidate.every((row) => {
         let isRowValid = row.selectedUser && row.selectedPurposeId && row.selectedPriorityId;
-      
+
         if (row.isFollowUp) {
           isRowValid = isRowValid && Boolean(row.txtInstruction); // Include txtInstruction if isFollowUp is true
         }
-      
+
         row.showValidationError = !isRowValid; // Mark row as invalid if required fields are missing
         return isRowValid;
       });
@@ -433,7 +481,7 @@ export class TransferModalComponent implements OnInit {
       const isStructure = selectedUser?.isStructure ?? false;
       const userId = selectedUser?.id ?? null;
 
-      this.cdRef.detectChanges(); 
+      this.cdRef.detectChanges();
       return {
         purposeId: selectedPurposeId ?? null,
         priorityId: selectedPriorityId ?? null,
@@ -518,6 +566,14 @@ export class TransferModalComponent implements OnInit {
     // Show the asterisk in the header if any row has Follow Up checked
     this.isFollowUpRequired = this.rows.some(row => row.isFollowUp);
   }
-  
+
+  initializeDueDates() {
+    this.rows.forEach((row, index) => {
+      console.log('rooooooooooooo', row.selectedPriorityId)
+      if (row.selectedPriorityId) {
+        this.updateDueDate(index);
+      }
+    });
+  }
 
 }
