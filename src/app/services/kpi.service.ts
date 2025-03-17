@@ -133,7 +133,7 @@ export class KpiService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.get<any>(`https://iam-qatar.d-intalio.com/api/GetStructure?id=${structureId}`, { headers })
+    return this.http.get<any>(`${this.baseUrl}/api/GetStructure?id=${structureId}`, { headers })
       .pipe(
         catchError(error => {
           console.error('Error fetching structure:', error);
@@ -155,7 +155,7 @@ export class KpiService {
       'Authorization': `Bearer ${accessToken}`,
     });
 
-    return this.http.get(`https://iam-qatar.d-intalio.com/api/GetUser?id=${userId}`, { headers }).pipe(
+    return this.http.get(`${this.baseUrl}/api/GetUser?id=${userId}`, { headers }).pipe(
       catchError(error => {
         console.error('Error fetching user:', error);
         return throwError(() => error);

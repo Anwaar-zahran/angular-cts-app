@@ -1,5 +1,4 @@
-
-// // Development environment
+// Development environment
 //export const environment = {
 //    production: false,
 //    apiBaseUrl: 'https://cts-qatar.d-intalio.com',
