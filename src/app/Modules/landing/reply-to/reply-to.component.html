@@ -28,14 +28,23 @@
           <label for="ddlPurpose" class="form-label required">
             {{ "REPLY_DIALOG.PURPOSE" | translate }}</label
           >
-          <ng-select
+          <!-- <ng-select
             id="ddlPurpose"
             formControlName="purpose"
             [items]="purposes || []"
             bindValue="id"
             placeholder=""
             class="form-control"
-          >
+          > -->
+          <ng-select
+          id="ddlPurpose"
+          formControlName="purpose"
+          [items]="purposes || []"
+          bindValue="id"
+          placeholder=""
+          class="form-control"
+          (change)="onPurposeSelect($event)"
+        >
             <ng-template ng-option-tmp let-item="item">
               {{ getName(item) }}
             </ng-template>
@@ -78,6 +87,40 @@
       </div>
     </div>
     <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+            <label for="ddlUserWStructure" class="form-label required">
+            {{ "REPLY_DIALOG.TO" | translate }}</label
+          >
+          <ng-select
+          id="ddlUserWStructure"
+          formControlName="structure"
+          [items]="users || []"
+          bindLabel="name"
+          bindValue="id"
+          placeholder=""
+          class="form-control"
+          (change)="onUserSelect($event)"
+        >
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.name }}
+          </ng-template>
+          </ng-select>
+          
+        </div>
+      </div>
+      <div class="col-md-6">
+        <button 
+        class="btn btn-primary mt-4" 
+        (click)="addUserToTextarea()" 
+        [disabled]="!selectedUserName || !selectedPurposeName"
+        >
+     
+        {{ "REPLY_DIALOG.BUTTONS.ADD" | translate }}
+      </button>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-xs-12">
         <div class="form-group">
           <label class="control-label">
@@ -85,13 +128,23 @@
             "REPLY_DIALOG.INSTRUCTIONS" | translate
             }}
           </label>
-          <textarea class="form-control"
+          <!-- <textarea class="form-control"
                     tabindex="52"
                     rows="5"
                     maxlength="220"
                     formControlName="txtArea"
-                    id="txtAreaInstruction">
-          </textarea>
+                    id="txtAreaInstruction"
+                    [(ngModel)]="textareaValue">
+          </textarea> -->
+          <textarea 
+          class="form-control"
+          tabindex="52"
+          rows="5"
+          maxlength="220"
+          formControlName="txtArea"
+          id="txtAreaInstruction"
+          [(ngModel)]="textareaValue">
+        </textarea>
           <div class="error-msg text-muted">{{"REPLY_DIALOG.MAXLENGTH"|translate}}</div>
         </div>
       </div>

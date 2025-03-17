@@ -228,7 +228,8 @@
     "FILEINUSEERROR": "There is a file checked out, please make sure to check in or discard checkout",
     "BUTTONS": {
       "SEND": "Send",
-      "CLOSE": "Close"
+      "CLOSE": "Close",
+      "ADD":"Add"
     }
 
   },

@@ -245,6 +245,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   lookupPromiseResults: any;
   async loadLookupData(): Promise<void> {
     try {
+      debugger;
       const promises = [
         this.toPromise(this.lookupsService.getEntities(), (structures: any) => {
           this.structures = structures || [];

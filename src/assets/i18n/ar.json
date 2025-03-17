@@ -222,7 +222,8 @@
     "PURPOSE": "الهدف",
     "BUTTONS": {
       "SEND": "إرسال",
-      "CLOSE": "إغلاق"
+      "CLOSE": "إغلاق",
+      "ADD":"إضافة"
     }
   },
     "TRANSFER_DIALOG": {
