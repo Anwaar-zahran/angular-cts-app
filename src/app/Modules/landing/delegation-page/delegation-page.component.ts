@@ -84,6 +84,7 @@ export class DelegationPageComponent implements OnInit {
   //  imports: [FormsModule]
   //})
 
+  currentLang:string = 'en';
   constructor(
     private fb: FormBuilder,
     private delegationService: DelegationPageService,
@@ -95,6 +96,7 @@ export class DelegationPageComponent implements OnInit {
     private translate: TranslateService,
     private cdr: ChangeDetectorRef
   ) {
+    this.currentLang = this.translate.currentLang;
     // Setup user search debounce
     this.userSearchSubject.pipe(
       debounceTime(300),
