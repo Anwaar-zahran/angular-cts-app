@@ -167,6 +167,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   users: any[] = [];
   mappedArray: any;
 
+  currentLang: string = 'en';
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { row: any, id: string, documentId: string, referenceNumber: string, fromSearch: boolean, showActionButtons: boolean },
     private authService: AuthService,
@@ -185,6 +187,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     private httpclient: HttpClient
   ) {
 
+    this.currentLang = this.translate.currentLang;
     this.current_Tab = localStorage.getItem('current_Tab') ?? '';
     // Initialize Angular Material tree for attachments
     this.treeFlattener = new MatTreeFlattener(
@@ -418,7 +421,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   // Update the transformAttachmentsToTree method
   private transformAttachmentsToTree(mailAttachments: any[]): TreeNode[] {
     const nodes = mailAttachments.map(attachment => this.createTreeNode(attachment));
-    
+
     // Function to recursively move the "Original Document" or "older_originalMail" node to the top
     const moveOriginalDocumentToTop = (nodes: TreeNode[]): TreeNode[] => {
       const originalDocumentNodeIndex = nodes.findIndex(
@@ -440,7 +443,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
     // Apply the function to the root nodes
     return moveOriginalDocumentToTop(nodes);
-  
+
   }
 
   // Update the createTreeNode method to set expanded by default
@@ -453,7 +456,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     };
 
     if ((attachment.children && attachment.children.length > 0) ||
-    (attachment.childAttachments && attachment.childAttachments.length > 0)) {
+      (attachment.childAttachments && attachment.childAttachments.length > 0)) {
       const childrenData = attachment.children || attachment.childAttachments;
       node.children = childrenData.map((child: any) => this.createTreeNode(child));
     }
@@ -550,10 +553,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     try {
       // Create an array of promises for all data fetching operations
       const promises = [
-        this.data.fromSearch ? this.getSearchAttributes(docID): this.getAttributes(this.data.row.id),
+        this.data.fromSearch ? this.getSearchAttributes(docID) : this.getAttributes(this.data.row.id),
         this.getNonArchAttachments(docID),
         this.getLinkedDocuments(docID),
-      //this.data.fromSearch ? this.getActivityLogs(docID) : this.getActivityLogsByDocId(docID),
+        //this.data.fromSearch ? this.getActivityLogs(docID) : this.getActivityLogsByDocId(docID),
         this.getActivityLogs(docID),
         this.getNotes(docID),
         this.getHistory(docID),
@@ -561,19 +564,19 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         this.getVisualTracking(docID)
       ];
 
-      if (this.showMyTransferTab && this.data ?.row ?.id) {
+      if (this.showMyTransferTab && this.data?.row?.id) {
         promises.push(this.getTransfer(this.data.row.id));
       }
 
       const results = await Promise.all(promises);
 
       this.attributes = results[0];
-      this.nonArchAttachments = results[1] ?.data;
-      this.linkedDocs = results[2] ?.data;
+      this.nonArchAttachments = results[1]?.data;
+      this.linkedDocs = results[2]?.data;
       //this.activityLogs = this.data.fromSearch ? results[3] : results[3] ?.data;
       this.activityLogs = results[3];
       this.notes = results[4]?.data;
-      this.transHistory = results[5] ?.data;
+      this.transHistory = results[5]?.data;
       this.attachments = results[6];
       this.visualTracking = results[7];
 
@@ -609,9 +612,12 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       //  }
       //}
 
-      if (this.linkedDocs && this.linkedDocs.length > 0) {
+      if (this.linkedDocs?.length > 0) {
+
+   //   if (this.linkedDocs && this.linkedDocs.length > 0) {
+
         this.mappedArray = this.linkedDocs.map((doc: any) => {
-         // const foundItem = this.categories ?.data.find((cat: any) => cat.id === doc.categoryId);
+          // const foundItem = this.categories ?.data.find((cat: any) => cat.id === doc.categoryId);
           const foundItem = this.categories?.find((cat: any) => cat.id === doc.categoryId);
           return {
             id: doc.id,
@@ -624,16 +630,36 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           };
         });
       }
-       
       if (this.showMyTransferTab) {
 
-        if (this.transfers ?.purpose && !this.selectedTransPurposeText)
+        console.log('transfer Taaaaaaaaaaaaaaaaaaaaaaaab')
+        console.log('check true',this.transfers?.purpose && !this.selectedTransPurposeText)
+        if (this.transfers?.purpose && !this.selectedTransPurposeText) {
           this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.lookupPromiseResults[3], false);
-        //this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.purposes, false);
+          console.log('purpose', this.selectedTransPurposeText)
+         
+        }
 
-        if (this.transfers ?.priorityId && !this.selectedTransPriorityText)
-          this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.lookupPromiseResults[5], true);
-        // // this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.priority, true);
+        if (this.transfers?.priorityId && !this.selectedTransPriorityText) {
+          // this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.lookupPromiseResults[5], true);
+          // // this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.priority, true);
+
+          this.mailService.getPriorities().subscribe({
+            next: (response) => {
+              const selectedPriority = response.find((priority: any) => priority.id === this.transfers?.priorityId);
+              if (selectedPriority && this.currentLang === 'ar') {
+                this.selectedTransPriorityText = selectedPriority.nameAr;
+              } else if (selectedPriority) {
+                this.selectedTransPriorityText = selectedPriority.name;
+              }
+              console.log('priority', this.selectedTransPriorityText)
+              console.log(this.selectedTransPriorityText)
+            },
+            error: (error) => {
+              console.log(error)
+            },
+          })
+        }
       }
 
       // Build attachments tree if available
@@ -649,7 +675,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   }
 
   getItemName(filterText: string, source: any, byId: boolean) {
-    const item = byId ? source ?.find((i: any) => i.id == filterText) : source ?.find((i: any) => i.name == filterText);
+    const item = byId ? source?.find((i: any) => i.id == filterText) : source?.find((i: any) => i.name == filterText);
     return this.getName(item);
   }
 
@@ -661,13 +687,41 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           this.transfers = response || [];
 
 
-          if (this.transfers ?.purpose)
-            this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.lookupPromiseResults[3], false);
-          //this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.purposes, false);
+          if (this.transfers?.purpose) {
+            // this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.lookupPromiseResults[3], false);
+            //this.selectedTransPurposeText = this.getItemName(this.transfers.purpose, this.purposes, false);
 
-          if (this.transfers ?.priorityId)
-            this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.lookupPromiseResults[5], true);
-          resolve(response);
+            this.mailService.getPurpose(this.currentLang).subscribe({
+              next: (response) => {
+                const selectedPurpose = response.find((purpose: any) => purpose.id === this.transfers.purpose);
+                if (selectedPurpose) {
+                  this.selectedTransPurposeText = selectedPurpose.text;
+                }
+              },
+              error: (error) => {
+                console.log(error)
+              }
+
+            });
+          }
+
+          if (this.transfers?.priorityId) {
+            // this.selectedTransPriorityText = this.getItemName(this.transfers.priorityId, this.lookupPromiseResults[5], true);
+            this.mailService.getPriorities().subscribe({
+              next: (response) => {
+                const selectedPriority = response.find((priority: any) => priority.id === this.transfers?.priorityId);
+                if (selectedPriority && this.currentLang === 'ar') {
+                  this.selectedTransPriorityText = selectedPriority.nameAr;
+                } else if (selectedPriority) {
+                  this.selectedTransPriorityText = selectedPriority.name;
+                }
+                console.log(this.selectedTransPriorityText)
+              },
+              error: (error) => {
+                console.log(error)
+              },
+            })
+          } resolve(response);
           console.log("Transfer:", response)
         },
         (error: any) => {
@@ -688,10 +742,10 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.searchService.getDocAttributes(this.accessToken!, docID).subscribe(
         (response: any) => {
           this.attributes = response || [];
-          this.basicAttributes = JSON.parse(response ?.basicAttributes);
+          this.basicAttributes = JSON.parse(response?.basicAttributes);
           //this.customAttribute = JSON.parse(response?.customAttributes);
-          this.customAttributes = JSON.parse(response ?.customAttributes);
-          this.customFormData = JSON.parse(response ?.formData);
+          this.customAttributes = JSON.parse(response?.customAttributes);
+          this.customFormData = JSON.parse(response?.formData);
 
           if (this.attributes) {
             this.classId = this.attributes.classificationId ?? '';
@@ -701,25 +755,91 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             this.docTypeId = this.attributes.documentTypeId ?? '';
 
             if (this.priorityId) {
-              this.selectedPriorityText = this.getItemName(this.priorityId, this.priority, true);
+              // this.selectedPriorityText = this.getItemName(this.priorityId, this.priority, true);
+              this.mailService.getPriorities().subscribe({
+                next: (response) => {
+                  const selectedPriority = response.find((priority: any) => priority.id === this.priorityId);
+                  if (selectedPriority && this.currentLang === 'ar') {
+                    this.selectedPriorityText = selectedPriority.nameAr;
+                  } else if (selectedPriority) {
+                    this.selectedPriorityText = selectedPriority.name;
+                  }
+                  console.log(this.selectedPriorityText)
+                },
+                error: (error) => {
+                  console.log(error)
+                },
+              })
             }
+
             if (this.privacyId) {
-              this.selectedPrivacyText = this.getItemName(this.privacyId, this.privacy, true);
+              // this.selectedPrivacyText = this.getItemName(this.privacyId, this.privacy, true);
+              this.mailService.getPrivacy(this.currentLang).subscribe({
+                next: (response) => {
+                  console.log(response)
+                  const selectedPriority = response.find((privacy: any) => privacy.id === this.privacyId);
+                  if (selectedPriority) {
+                    this.selectedPrivacyText = selectedPriority.text;
+                    console.log(this.selectedPrivacyText)
+                  }
+                },
+                error: (error) => {
+                  console.log(error)
+                },
+              })
             }
+
             if (this.importanceId) {
-              this.selectedImportanceText = this.getItemName(this.importanceId, this.importance, true);
+              this.mailService.getImportance(this.currentLang).subscribe({
+                next: (response) => {
+                  console.log(response)
+                  const selectedImportance = response.find((importance: any) => importance.id === this.importanceId);
+                  if (selectedImportance) {
+                    this.selectedImportanceText = selectedImportance.text;
+                    console.log(this.selectedImportanceText)
+                  }
+                },
+                error: (error) => {
+                  console.log(error)
+                },
+              })
             }
             if (this.classId) {
               //this.selectedClassText = this.getItemName(this.classId, this.classification, true);
-              this.selectedClassText = this.attributes ?.classification ?.text;
+              // this.selectedClassText = this.attributes?.classification?.text;
+
+              this.mailService.getClassifications(this.currentLang).subscribe({
+                next: (response) => {
+                  console.log(response)
+                  const selectedClassification = response.find((classification: any) => classification.id === this.classId);
+                  if (selectedClassification) {
+                    this.selectedClassText = selectedClassification.text;
+                    console.log(this.selectedClassText)
+                  }
+                },
+                error: (error) => {
+                  console.log(error)
+                },
+              })
 
             }
-            if (this.attributes.carbonCopy ?.length > 0)
+            if (this.attributes.carbonCopy?.length > 0)
               this.selectedCarbonText = this.attributes.carbonCopies.map((carbon: any) => carbon.text).join(', ');
              
             if (this.docTypeId) {
-              //this.selectedDocTypeText = this.getItemName(this.docTypeId, this.docTypes, true);
-              this.selectedDocTypeText = this.attributes ?.documentType ?.text;
+              this.mailService.getDocumentType(this.currentLang).subscribe({
+                next: (response) => {
+                  console.log(response)
+                  const selectedDocType = response.find((Doc: any) => Doc.id === this.docTypeId);
+                  if (selectedDocType) {
+                    this.selectedDocTypeText = selectedDocType.text;
+                    console.log(this.selectedDocTypeText)
+                  }
+                },
+                error: (error) => {
+                  console.log(error)
+                },
+              })
             }
           }
           this.getFormDataValue();
@@ -737,15 +857,15 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       );
     });
   }
-  
+
   getSearchAttributes(docID: string): Promise<DocAttributesApiResponse> {
     return new Promise((resolve, reject) => {
       this.searchService.getSearchDocAttributes(this.accessToken!, docID).subscribe(
         (response: any) => {
           this.attributes = response || [];
-          this.basicAttributes = JSON.parse(response ?.basicAttributes);
-          this.customAttributes = JSON.parse(response ?.customAttributes);
-          this.customFormData = JSON.parse(response ?.formData);
+          this.basicAttributes = JSON.parse(response?.basicAttributes);
+          this.customAttributes = JSON.parse(response?.customAttributes);
+          this.customFormData = JSON.parse(response?.formData);
 
           if (this.attributes) {
             this.classId = this.attributes.classificationId ?? '';
@@ -755,22 +875,91 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             this.docTypeId = this.attributes.documentTypeId ?? '';
 
             if (this.priorityId) {
-              this.selectedPriorityText = this.getItemName(this.priorityId, this.priority, true);
+              // this.selectedPriorityText = this.getItemName(this.priorityId, this.priority, true);
+              this.mailService.getPriorities().subscribe({
+                next: (response) => {
+                  const selectedPriority = response.find((priority: any) => priority.id === this.priorityId);
+                  if (selectedPriority && this.currentLang === 'ar') {
+                    this.selectedPriorityText = selectedPriority.nameAr;
+                  } else if (selectedPriority) {
+                    this.selectedPriorityText = selectedPriority.name;
+                  }
+                  console.log(this.selectedPriorityText)
+                },
+                error: (error) => {
+                  console.log(error)
+                },
+              })
             }
+
             if (this.privacyId) {
-              this.selectedPrivacyText = this.getItemName(this.privacyId, this.privacy, true);
+              // this.selectedPrivacyText = this.getItemName(this.privacyId, this.privacy, true);
+              this.mailService.getPrivacy(this.currentLang).subscribe({
+                next: (response) => {
+                  console.log(response)
+                  const selectedPriority = response.find((privacy: any) => privacy.id === this.privacyId);
+                  if (selectedPriority) {
+                    this.selectedPrivacyText = selectedPriority.text;
+                    console.log(this.selectedPrivacyText)
+                  }
+                },
+                error: (error) => {
+                  console.log(error)
+                },
+              })
             }
+
             if (this.importanceId) {
-              this.selectedImportanceText = this.getItemName(this.importanceId, this.importance, true);
+              this.mailService.getImportance(this.currentLang).subscribe({
+                next: (response) => {
+                  console.log(response)
+                  const selectedImportance = response.find((importance: any) => importance.id === this.importanceId);
+                  if (selectedImportance) {
+                    this.selectedImportanceText = selectedImportance.text;
+                    console.log(this.selectedImportanceText)
+                  }
+                },
+                error: (error) => {
+                  console.log(error)
+                },
+              })
             }
             if (this.classId) {
-              this.selectedClassText = this.getItemName(this.classId, this.classification, true);
-            }
-            if (this.attributes.carbonCopy ?.length > 0)
-              this.selectedCarbonText = this.attributes.carbonCopies.map((carbon: any) => carbon.text).join(', ');
+              //this.selectedClassText = this.getItemName(this.classId, this.classification, true);
+              // this.selectedClassText = this.attributes?.classification?.text;
 
+              this.mailService.getClassifications(this.currentLang).subscribe({
+                next: (response) => {
+                  console.log(response)
+                  const selectedClassification = response.find((classification: any) => classification.id === this.classId);
+                  if (selectedClassification) {
+                    this.selectedClassText = selectedClassification.text;
+                    console.log(this.selectedClassText)
+                  }
+                },
+                error: (error) => {
+                  console.log(error)
+                },
+              })
+
+            }
+            if (this.attributes.carbonCopy?.length > 0)
+              this.selectedCarbonText = this.attributes.carbonCopies.map((carbon: any) => carbon.text).join(', ');
+            debugger;
             if (this.docTypeId) {
-              this.selectedDocTypeText = this.getItemName(this.docTypeId, this.docTypes, true);
+              this.mailService.getDocumentType(this.currentLang).subscribe({
+                next: (response) => {
+                  console.log(response)
+                  const selectedDocType = response.find((Doc: any) => Doc.id === this.docTypeId);
+                  if (selectedDocType) {
+                    this.selectedDocTypeText = selectedDocType.text;
+                    console.log(this.selectedDocTypeText)
+                  }
+                },
+                error: (error) => {
+                  console.log(error)
+                },
+              })
             }
           }
           this.getFormDataValue();
@@ -951,7 +1140,6 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
           this.TREE_DATA = this.transformAttachmentsToTree(this.attachments);
           this.dataSource.data = this.TREE_DATA;
           this.tryFetchOriginalDocument();
-          // Expand all tree nodes by default after a short delay
           setTimeout(() => {
             this.expandAllNodes();
           }, 100);
@@ -993,7 +1181,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     // Search recursively starting from root
     const originalMailFolder = findOriginalMailFolder(this.TREE_DATA);
 
-    if (originalMailFolder ?.children ?.[0] ?.id) {
+    if (originalMailFolder?.children?.[0]?.id) {
       const firstChild = originalMailFolder.children[0];
       const idParts = firstChild.id.split('_');
       if (idParts.length > 1) {
@@ -1118,17 +1306,17 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         // Trim text to fit
         const trimmedCategory = categoryTranslation;
         const trimmedTitle =
-          (isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`);
+          (isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user?.fullName || ''}`);
 
         const trimmedCreatedBy =
-          (isFirstNode ? (item.createdBy || '') : user ?.fullName || '');
+          (isFirstNode ? (item.createdBy || '') : user?.fullName || '');
 
         return {
           id: String(item.id || Math.random()),
           pid: item.parentId ? String(item.parentId) : null,
           category: isFirstNode ? categoryTranslation : categoryTranslation,                                 //(item.category || '') : (item.category || ''),
-          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user ?.fullName || ''}`,
-          createdBy: isFirstNode ? (item.createdBy || '') : user ?.fullName || '',
+          title: isFirstNode ? (item.referenceNumber || '') : `${structure.name || ''} / ${user?.fullName || ''}`,
+          createdBy: isFirstNode ? (item.createdBy || '') : user?.fullName || '',
           date: isFirstNode ? (item.createdDate || '') : (item.transferDate || ''),
 
 
@@ -1251,7 +1439,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
 
   isEnabled(name: string): boolean {
-    const attribute = this.basicAttributes ?.find((attr: BasicAttribute) => attr.Name === name);
+    const attribute = this.basicAttributes?.find((attr: BasicAttribute) => attr.Name === name);
     return attribute ? attribute.Enabled : false;
   }
 
@@ -1259,7 +1447,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   getFormDataValue() {
 
-    this.customAttributes ?.components ?.forEach((component: CustomAttributeComponent) => {
+    this.customAttributes?.components?.forEach((component: CustomAttributeComponent) => {
       const key = component.key;
       if (this.customFormData) {
         const value = this.customFormData[key];
@@ -1286,18 +1474,17 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       }
     }
   }
-  currentLang = this.translate.currentLang;
 
   // To get lookup names based on language
   getName(item: any): string {
 
     switch (this.currentLang) {
       case 'ar':
-        return item ?.nameAr || item ?.name||item?.text;
+        return item?.nameAr || item?.name || item?.text;
       case 'fr':
-        return item ?.nameFr || item ?.name||item?.text;
+        return item?.nameFr || item?.name || item?.text;
       default:
-        return item ?.name||item?.text;
+        return item?.name || item?.text;
     }
   }
 
@@ -1310,17 +1497,17 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       .sort((a, b) => {
         // First sort by type
         const typeComparison = Number(a.type) - Number(b.type);
-        
+
         // If types are the same, then sort by id
         if (typeComparison === 0) {
           // Special handling for "Original document" to always appear first
           if (a.text === "Original document") return -1;
           if (b.text === "Original document") return 1;
-          
+
           // For other items, compare by id
           return a.id.localeCompare(b.id);
         }
-        
+
         return typeComparison;
       });
   }

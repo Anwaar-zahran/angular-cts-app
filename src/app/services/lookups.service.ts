@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Priority } from '../models/priority.model';
-// import { CookieService } from 'ngx-cookie-service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +36,12 @@ export class LookupsService {
   //private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List`;
   private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List?Name=`;
 
-  constructor(private http: HttpClient) { }
+  currentLang: string = 'en';
+
+  constructor(private http: HttpClient, private translate: TranslateService) {
+
+    this.currentLang = this.translate.currentLang;
+  }
 
   getPrivacyOptions(): Observable<any[]> {
     // Replace with actual API call
@@ -47,7 +52,6 @@ export class LookupsService {
     ];
     return of(privacyOptions);
   }
-
 
   getCarbonUsers(accessToken: string): Observable<any> {
 
@@ -72,7 +76,7 @@ export class LookupsService {
   }
 
   getPriorityOptions(): Observable<Priority[]> {
-    return this.http.get<Priority[]>(`${environment.apiBaseUrl}/Priority/List?Name=`);
+    return this.http.get<Priority[]>(`${environment.apiBaseUrl}/Priority/ListPriorities`);
   }
 
   getUsers(accessToken: string): Observable<any> {
@@ -96,10 +100,12 @@ export class LookupsService {
         })
       );
   }
-  getUsersWithSearch(accessToken: string,textToSearch:string): Observable<any> {
+  getUsersWithSearch(accessToken: string, textToSearch: string): Observable<any> {
 
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${accessToken}`
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'accept-language': this.currentLang
     });
 
     const formData = new FormData();
@@ -118,20 +124,21 @@ export class LookupsService {
       );
   }
 
-  getPrivacy(accessToken: string): Observable<any> {
-
+  getImportanceEn(accessToken: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json'
     });
-    return this.http.get(this.listPrivacies, { headers })
+
+    return this.http.get(this.listImportanceEN, { headers })
       .pipe(
         catchError((error) => {
-          console.error('Error while fetching privacies data', error.message);
+          console.error('Error while fetching Importance data', error.message);
           throw error;
         })
       );
   }
+
   getPrivacyEn(accessToken: string): Observable<any> {
     debugger;
     //let culture = this.cookieService.get('AspNetCore.Culture');
@@ -149,11 +156,59 @@ export class LookupsService {
       );
   }
 
+  getClassficationEn(accessToken: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get(this.listClassificationEN, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching classification data', error.message);
+          throw error;
+        })
+      );
+  }
+
+  getPrioritiesEn(accessToken: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get(this.listPrioritiesEN, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching priorities data', error.message);
+          throw error;
+        })
+      );
+  }
+
+  getPrivacy(accessToken: string): Observable<any> {
+
+    console.log('currentLang', this.currentLang);
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'accept-language': this.currentLang
+    });
+    return this.http.get(this.listPrivacies, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching privacies data', error.message);
+          throw error;
+        })
+      );
+  }
+
   getPurposes(accessToken: string): Observable<any> {
 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'accept-language': this.currentLang
     });
     return this.http.get(this.listPurposes, { headers })
       .pipe(
@@ -195,7 +250,7 @@ export class LookupsService {
     params.set('Name', '');
 
     const url = `${this.listDocumentType}?${params.toString()}`;
-   // const url = `${this.listDocumentType}`;
+    // const url = `${this.listDocumentType}`;
 
     return this.http.get(url, { headers })
       .pipe(
@@ -221,6 +276,22 @@ export class LookupsService {
       );
   }
 
+  getEntities(): Observable<any> {
+
+
+    const formData = new FormData();
+    formData.append('attributes[]', JSON.stringify("NameAr"));
+    formData.append('attributes[]', JSON.stringify("NameFr"));
+
+    return this.http.post(this.listEntities, formData)
+      .pipe(
+        catchError((error) => {
+          console.error('Error while entities data', error.message);
+          throw error;
+        })
+      );
+  }
+
   getCategoriesByName(delegationId: string | undefined): Observable<{ id: number, text: string }[]> {
     let params = new HttpParams();
     if (delegationId !== undefined) {
@@ -231,20 +302,6 @@ export class LookupsService {
       .pipe(
         catchError((error) => {
           console.error('Error while fetching categories data', error.message);
-          throw error;
-        })
-      );
-  }
-
-  getEntities(): Observable<any> {
-    const formData = new FormData();
-    formData.append('attributes[]', JSON.stringify("NameAr"));
-    formData.append('attributes[]', JSON.stringify("NameFr"));
-
-    return this.http.post(this.listEntities, formData)
-      .pipe(
-        catchError((error) => {
-          console.error('Error while entities data', error.message);
           throw error;
         })
       );
@@ -265,7 +322,7 @@ export class LookupsService {
       );
   }
 
-  getSearchUsers(accessToken: string, text:string): Observable<any> {
+  getSearchUsers(accessToken: string, text: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json'
@@ -274,7 +331,7 @@ export class LookupsService {
     let params = new HttpParams();
 
     params = params.set('text', text);
-    const lang = localStorage.getItem("language")||'en';
+    const lang = localStorage.getItem("language") || 'en';
     params = params.set('language', lang);
 
     return this.http.get(this.listSearchUsers, { headers, params })
@@ -331,36 +388,6 @@ export class LookupsService {
       );
   }
 
-  getImportanceEn(accessToken: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.get(this.listImportanceEN, { headers })
-      .pipe(
-        catchError((error) => {
-          console.error('Error while fetching Importance data', error.message);
-          throw error;
-        })
-      );
-  }
-
-  getClassficationEn(accessToken: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.get(this.listClassificationEN, { headers })
-      .pipe(
-        catchError((error) => {
-          console.error('Error while fetching classification data', error.message);
-          throw error;
-        })
-      );
-  }
-
   getStatus(): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -373,7 +400,7 @@ export class LookupsService {
           throw error;
         })
       );
-  } 
+  }
   getStatusByName(): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -386,7 +413,7 @@ export class LookupsService {
           throw error;
         })
       );
-  } 
+  }
   getPriorities(accessToken: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
@@ -402,20 +429,6 @@ export class LookupsService {
       );
   }
 
-  getPrioritiesEn(accessToken: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.get(this.listPrioritiesEN, { headers })
-      .pipe(
-        catchError((error) => {
-          console.error('Error while fetching priorities data', error.message);
-          throw error;
-        })
-      );
-  }
   getPrioritiesWithDays(accessToken: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
@@ -430,7 +443,7 @@ export class LookupsService {
         })
       );
   }
-  
+
   getYears(): Observable<any> {
     return this.http.get(this.listYears)
       .pipe(

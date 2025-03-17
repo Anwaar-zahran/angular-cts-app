@@ -112,9 +112,9 @@ export class MailsService {
       );
   }
   fetchData(url: string, structureId: string,
-     page: number, pageSize: number, accessToken: string,
-     purposeId?: string // Optional parameter
-    ): Observable<any> {
+    page: number, pageSize: number, accessToken: string,
+    purposeId?: string // Optional parameter
+  ): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${accessToken}`,
     });
@@ -124,10 +124,59 @@ export class MailsService {
     formData.append('start', ((page - 1) * pageSize).toString());
     formData.append('length', pageSize.toString());
     formData.append('structureId', structureId);
-  // Only append PurposeId if it's provided
+    // Only append PurposeId if it's provided
     if (purposeId) {
       formData.append('PurposeId', purposeId);
     }
     return this.httpClient.post<any>(`${environment.apiBaseUrl}${url}`, formData, { headers });
   }
+
+  getPriorities(): Observable<any> {
+    return this.httpClient.get(`${environment.apiBaseUrl}/Priority/List`);
+  }
+
+  getClassifications(language: string): Observable<any> {
+    const headers = new HttpHeaders().set('Accept-Language', language);
+    return this.httpClient.get(`${environment.apiBaseUrl}/Classification/ListClassifications`, { headers });
+  }
+
+  getPrivacy(language: string): Observable<any> {
+    const headers = new HttpHeaders().set('Accept-Language', language);
+    return this.httpClient.get(`${environment.apiBaseUrl}/Privacy/ListPrivacies`, { headers });
+  }
+
+  getImportance(language: string): Observable<any> {
+    const headers = new HttpHeaders().set('Accept-Language', language);
+    return this.httpClient.get(`${environment.apiBaseUrl}/Importance/ListImportances`, { headers });
+  }
+
+  getDocumentType(language: string): Observable<any> {
+    const headers = new HttpHeaders().set('Accept-Language', language);
+    return this.httpClient.get(`${environment.apiBaseUrl}/DocumentType/GetDocumentType`, { headers });
+  }
+
+  getPurpose(language: string): Observable<any> {
+    const headers = new HttpHeaders().set('Accept-Language', language);
+    return this.httpClient.get(`${environment.apiBaseUrl}/Purpose/ListPurposes`, { headers });
+  }
+
+  getCCopy(language: string, attributes: string[]): Observable<any> {
+    const token = localStorage.getItem('access_token'); // Retrieve token from local storage
+
+    const headers = new HttpHeaders({
+      'Accept-Language': language,
+      'Authorization': `Bearer ${token}`, 
+      'Content-Type': 'application/json' 
+    });
+    const body = {
+      text: '',
+      language: language,
+      attributes: attributes
+    };
+
+    return this.httpClient.post(`${environment.apiBaseUrl}/api/SearchStructuresWithSearchAttributes`, body, { headers });
+  }
+
+
+
 }

@@ -90,6 +90,8 @@ export class SearchPageComponent {
   private sendingEntitySubject = new Subject<string>();
   private recEntitySubject = new Subject<string>();
 
+  currentLang: string = 'en';
+
   constructor(
     private searchService: SearchPageService,
     private router: Router,
@@ -99,23 +101,24 @@ export class SearchPageComponent {
     private dialog: MatDialog,
     private translate: TranslateService
   ) {
+    this.currentLang = this.translate.currentLang;
     this.sendingEntitySubject.pipe(debounceTime(300), distinctUntilChanged()).subscribe(searchText => {
       this.getSendingEntites(searchText);
     });
 
-    this.recEntitySubject.pipe(debounceTime(300),distinctUntilChanged()).subscribe(searchText => {
+    this.recEntitySubject.pipe(debounceTime(300), distinctUntilChanged()).subscribe(searchText => {
       this.getReceivingEntites(searchText);
-      });
+    });
 
     this.fromUserSubject.pipe(debounceTime(300), distinctUntilChanged()).subscribe(searchText => {
       this.getFromUsers(searchText);
     });
-    
-    this.toUserSubject.pipe(debounceTime(300),distinctUntilChanged()).subscribe(searchText => {
+
+    this.toUserSubject.pipe(debounceTime(300), distinctUntilChanged()).subscribe(searchText => {
       this.getToUsers(searchText);
     });
 
-    this.fromStrSubject.pipe(debounceTime(300),distinctUntilChanged()).subscribe(searchText => {
+    this.fromStrSubject.pipe(debounceTime(300), distinctUntilChanged()).subscribe(searchText => {
       this.getTransferFromEntites(searchText);
     });
 
@@ -170,7 +173,7 @@ export class SearchPageComponent {
         this.searchModel.documentSender = "0";
 
       },
-      error:(error: any) => {
+      error: (error: any) => {
         console.error(error);
         this.isLoadingSendEntity = false;
         this.isDataLoaded_SendEntity = false;
@@ -290,7 +293,7 @@ export class SearchPageComponent {
 
     this.isLoadingToUsers = true;
     this.lookupservice.getSearchUsers(this.accessToken!, searchText).subscribe({
-     next: (response) => {
+      next: (response) => {
         this.isLoadingToUsers = false;
         this.isDataLoaded_ToUser = true;
 
@@ -299,7 +302,7 @@ export class SearchPageComponent {
         this.searchModel.delegationId = "0";
         this.searchModel.toUser = "0";
       },
-      error:(error: any) => {
+      error: (error: any) => {
         console.error(error);
         this.isDataLoaded_ToUser = false;
         this.isLoadingToUsers = false;
@@ -323,7 +326,7 @@ export class SearchPageComponent {
   getCategories(): void {
     this.lookupservice.getCategoriesByName(undefined).subscribe(
       (response: any) => {
-        this.categories = response ?.data || [];
+        this.categories = response?.data || [];
 
       },
       (error: any) => {
@@ -348,7 +351,7 @@ export class SearchPageComponent {
     this.lookupservice.getPrivacy(this.accessToken!).subscribe(
       (response) => {
         this.privacies = response || [];
-
+        console.log('privacyyyy',this.privacies);
       },
       (error: any) => {
         console.error(error);
@@ -492,7 +495,7 @@ export class SearchPageComponent {
       },
         (error: any) => {
           console.error('Error getting search result:', error);
-          this.toaster.showToaster(error ?.message || 'Something went wrong');
+          this.toaster.showToaster(error?.message || 'Something went wrong');
         });
     });
 
@@ -575,11 +578,11 @@ export class SearchPageComponent {
     const currentLang = this.translate.currentLang;
     switch (currentLang) {
       case 'ar':
-        return item ?.nameAr || item ?.name;
+        return item?.nameAr || item?.name;
       case 'fr':
-        return item ?.nameFr || item ?.name;
+        return item?.nameFr || item?.name;
       default:
-        return item ?.name;
+        return item?.name;
     }
   }
 
