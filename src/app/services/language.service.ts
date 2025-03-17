@@ -56,6 +56,7 @@ export class LanguageService {
         }
     }
     changeLanguage(lang: string) {
+        debugger
         return this.httpClient.post(`${this.apiUrl}?lang=${lang}`, {});
       }
 } 

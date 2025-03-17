@@ -105,18 +105,30 @@
             />
           </div>
           <div class="form-group">
-            <label for="toDate">{{
+            <label for="toDate">
+              {{
               "BAM.CHARTS.FILTER.TO_DATE" | translate
-            }}</label>
-            <input
-              type="date"
-              id="toDate"
-              [(ngModel)]="tempToDate"
-              name="tempToDate"
-              class="form-control"
-              required
-              [min]="minToDate"
-            />
+              }}
+            </label>
+            <!--<input
+    type="date"
+    id="toDate"
+    [(ngModel)]="tempToDate"
+    name="tempToDate"
+    class="form-control"
+    required
+    [min]="minToDate"
+  />-->
+            <input class="form-control date-picker"
+                   matInput
+                   [matDatepicker]="picker1"
+                   placeholder="mm-dd-yyyy"
+                   [(ngModel)]="tempToDate"
+                   required
+                   name="dp"
+                   [min]="minToDate"
+                   (click)="picker1.open()" />
+            <mat-datepicker #picker1></mat-datepicker>
           </div>
           <button type="submit" class="btn btn-primary">
             {{ "BAM.CHARTS.FILTER.APPLY" | translate }}

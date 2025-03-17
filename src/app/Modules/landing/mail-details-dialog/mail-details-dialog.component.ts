@@ -590,7 +590,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       //  this.priorityId = this.attributes.priorityId ?? '';
       //  this.docTypeId = this.attributes.documentTypeId ?? '';
 
-      //  debugger;
+      //   
       //  if (this.priorityId) {
       //    this.selectedPriorityText = this.getItemName(this.priorityId, this.priority, true);
       //  }
@@ -679,7 +679,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     return new Promise((resolve, reject) => {
       this.mailService.getMyTransfer(this.accessToken!, docID).subscribe(
         (response) => {
-          debugger;
+           
           this.transfers = response || [];
 
 
@@ -821,7 +821,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             }
             if (this.attributes.carbonCopy?.length > 0)
               this.selectedCarbonText = this.attributes.carbonCopies.map((carbon: any) => carbon.text).join(', ');
-            debugger;
+             
             if (this.docTypeId) {
               this.mailService.getDocumentType(this.currentLang).subscribe({
                 next: (response) => {
@@ -1357,7 +1357,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         mouseScrool: OrgChart.action.zoom,
         nodeMouseClick: OrgChart.action.details,
         //nodeMouseClick: (event: Event, data: any) => {
-        //  debugger;
+        //   
         //  // When a node is clicked, hide the trimmedcategory field in the details popup
         //  const trimmedCategoryField = document.querySelector('[data-binding="category"]');
         //  const fullCategoryField = document.querySelector('[data-binding="Category"]');
