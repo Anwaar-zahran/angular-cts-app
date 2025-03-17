@@ -91,18 +91,30 @@
       <div class="modal-body">
         <form (ngSubmit)="applyFilter()">
           <div class="form-group">
-            <label for="fromDate">{{
+            <label for="fromDate">
+              {{
               "BAM.CHARTS.FILTER.FROM_DATE" | translate
-            }}</label>
-            <input
-              type="date"
-              id="fromDate"
-              [(ngModel)]="tempFromDate"
-              name="tempFromDate"
-              class="form-control"
-              required
-              (ngModelChange)="onFromDateChange()"
-            />
+              }}
+            </label>
+            <!--<input
+    type="date"
+    id="fromDate"
+    [(ngModel)]="tempFromDate"
+    name="tempFromDate"
+    class="form-control"
+    required
+    (ngModelChange)="onFromDateChange()"
+  />-->
+            <input class="form-control date-picker"
+                   matInput
+                   [matDatepicker]="picker2"
+                   placeholder="mm-dd-yyyy"
+                   [(ngModel)]="tempFromDate"
+                   required
+                   name="dp2"
+                   (click)="picker2.open()"
+                   (ngModelChange)="onFromDateChange()" />
+            <mat-datepicker #picker2></mat-datepicker>
           </div>
           <div class="form-group">
             <label for="toDate">

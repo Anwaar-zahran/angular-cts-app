@@ -125,7 +125,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   // Data fetched from API
   attributes: any;
   nonArchAttachments: any;
-  linkedDocs: any;
+  linkedDocs: any[] =[] ;
   activityLogs: any;
   importance: any;
   privacy: any;
@@ -221,7 +221,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
     }
 
     this.loadLookupData();
-
+    this.linkedDocs = [];
   }
 
   ngOnInit(): void {
@@ -248,6 +248,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   lookupPromiseResults: any;
   async loadLookupData(): Promise<void> {
     try {
+      debugger;
       const promises = [
         this.toPromise(this.lookupsService.getEntities(), (structures: any) => {
           this.structures = structures || [];
@@ -612,6 +613,9 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       //}
 
       if (this.linkedDocs?.length > 0) {
+
+   //   if (this.linkedDocs && this.linkedDocs.length > 0) {
+
         this.mappedArray = this.linkedDocs.map((doc: any) => {
           // const foundItem = this.categories ?.data.find((cat: any) => cat.id === doc.categoryId);
           const foundItem = this.categories?.find((cat: any) => cat.id === doc.categoryId);
@@ -1052,7 +1056,8 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
       this.searchService.getLinkedCorrespondence(this.accessToken!, docID).subscribe(
         (response) => {
 
-          this.linkedDocs = response.data || [];
+          let temp = response.data || [];
+         // this.linkedDocs = response.data || [];
           resolve(response);
         },
         (error: any) => {

@@ -13,6 +13,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { AuthService } from '../../auth/auth.service';
 import { ToasterComponent } from '../../shared/toaster/toaster.component';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { ChangeDetectorRef } from '@angular/core';
 
 
 @Component({
@@ -32,13 +33,18 @@ export class ReplyToComponent {
   accessToken: string | null = null;
   to: string | null = null;
   minDate: Date = new Date();
+  users: any[] = [];
+  selectedUserName: string = '';
+  textareaValue: string = '';
+  selectedPurposeName: string='';
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private router: Router, private fb: FormBuilder,
     private lookupsService: LookupsService,
     private authService: AuthService, private toaster: ToasterService,
     private dialogRef: MatDialogRef<ReplyToComponent>, private mailService: MailsService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private cdRef: ChangeDetectorRef
 
   ) { }
 
@@ -50,18 +56,17 @@ export class ReplyToComponent {
     //}
     this.setupForm();
     this.loadLookupData();
+    this.loadUserStructures();
     this.to = this.data.data.fromUser
   }
-
-
   setupForm(): void {
     this.replyForm = this.fb.group({
       purpose: [null, Validators.required],
       dueDate: [null],
       txtArea: [null],
-
     });
   }
+
 
   loadLookupData(): void {
 
@@ -77,6 +82,55 @@ export class ReplyToComponent {
     );
   }
 
+  loadUserStructures(): void {
+    this.lookupsService.getStructuredUsers(this.accessToken!).subscribe(
+      (users) => {
+
+        var data = users || [];
+        this.users = this.transformData(data);
+
+      },
+      (error) => {
+        console.error('Error loading users:', error);
+      }
+    );
+  }
+  transformData(data: Array<{
+    id: number;
+    name: string;
+    userStructure?: Array<{
+      user?: {
+        id: number;
+        firstname?: string;
+        lastname?: string;
+        structureId?: number; // Include structureId
+      }
+    }>
+  }>): Array<{ id: number, name: string, isStructure: boolean, structureId?: number | undefined }> {
+
+    let result: Array<{ id: number, name: string, isStructure: boolean, structureId?: number }> = [];
+
+    data.forEach((structure) => {
+      if (structure.name) {
+        // Push the structure itself (isStructure: true, no structureId)
+        result.push({ id: structure.id, name: structure.name, isStructure: true });
+
+        structure.userStructure?.forEach((userStruct) => {
+          if (userStruct?.user?.firstname && userStruct?.user?.lastname) {
+            ;
+            result.push({
+              id: userStruct.user.id,
+              name: `${structure.name} / ${userStruct.user.firstname} ${userStruct.user.lastname}`,
+              isStructure: false,
+              structureId: structure.id ?? undefined, // Use undefined instead of null
+            });
+          }
+        });
+      }
+    });
+
+    return result;
+  }
   // To get lookup names based on language
   getName(item: any): string {
 
@@ -143,5 +197,27 @@ export class ReplyToComponent {
   preventInput(event: KeyboardEvent): void {
     event.preventDefault();
   }
+  addUserToTextarea() {
+    if (this.selectedUserName && this.selectedPurposeName) {
+      const textToAdd = `${this.selectedUserName} for ${this.selectedPurposeName}`;
+      // this.textareaValue += this.textareaValue ? `, ${textToAdd}` : textToAdd;
+      this.textareaValue += this.textareaValue ? `\n${String(textToAdd)}` : String(textToAdd);
 
+    }
+  }
+  onUserSelect(event: any) {
+    debugger
+    const selectedUser = this.users.find(user => user.id === event.id);
+    if (selectedUser) {
+      this.selectedUserName = selectedUser.name;
+    }
+  }
+  onPurposeSelect(event: any) {
+    debugger
+    const selectedPurpose = this.purposes.find(purpose => purpose.id === event.id);
+    if (selectedPurpose) {
+      this.selectedPurposeName = selectedPurpose.name;
+    }
+  }
+  
 }

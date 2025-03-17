@@ -673,7 +673,7 @@
                   class="table"
                   datatable
                   [dtOptions]="dtOptions"
-                  *ngIf="linkedDocs?.length>0"
+                  *ngIf="linkedDocs!.length>0"
                 >
                   <thead>
                     <tr>
@@ -694,7 +694,7 @@
                     </tr>
                   </tbody>
                 </table>
-                <div *ngIf="linkedDocs?.length === 0" class="text-center mt-3">
+                <div *ngIf="linkedDocs!.length === 0" class="text-center mt-3">
                   <p>{{ "COMMON.NO_DATA" | translate }}</p>
                 </div>
               </div>

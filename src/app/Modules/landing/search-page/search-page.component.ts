@@ -19,7 +19,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslateService } from '@ngx-translate/core';
 import { Category } from '../../../models/category.model';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-page',
@@ -157,7 +157,8 @@ export class SearchPageComponent {
   isLoadingSendEntity = false;
   getSendingEntites(searchText: string = '') {
 
-    if (this.isDataLoaded_SendEntity && !searchText)
+    //if (this.isDataLoaded_SendEntity && !searchText)
+    if (this.isDataLoaded_SendEntity)
       return;
 
     this.isLoadingSendEntity = true;
@@ -256,9 +257,10 @@ export class SearchPageComponent {
   }
 
   isLoadingFromUsers = false;
+ 
   getFromUsers(searchText: string = '') {
-
-    if (this.isDataLoaded_FromUser && !searchText)
+    debugger;
+    if (this.isDataLoaded_FromUser)
       return;
 
     //this.fromUserSubject.next(searchText);
@@ -286,7 +288,7 @@ export class SearchPageComponent {
   isLoadingToUsers = false;
   getToUsers(searchText: string = '') {
 
-    if (this.isDataLoaded_ToUser && !searchText)
+    if (this.isDataLoaded_ToUser)
       return;
 
     this.isLoadingToUsers = true;
@@ -637,6 +639,7 @@ export class SearchPageComponent {
   }
 
   onSearchUsers(event: { term: string; items: any[] }, fromUsersFilter: boolean): void {
+    debugger;
     const query = event.term;
     if (query.length >= 1) {
       //this.loading = true;
@@ -655,6 +658,44 @@ export class SearchPageComponent {
     }
   }
 
+  resetData(event: any,fromUser:boolean) {
+    if (event == null) {
+      if (fromUser) {
+        this.isDataLoaded_FromUser = false;
+        //this.fromUserSubject.next('');
+        this.getToUsers('');
+      }
+      else {
+        this.isDataLoaded_ToUser = false;
+        this.getToUsers('');
+      }
+    }
+  }
+
+  resetStructureData(event: any, fromStr: boolean) {
+    if (event == null) {
+      if (fromStr) {
+        this.isDataLoaded_FromStr = false;
+        this.getTransferFromEntites('');
+      }
+      else {
+        this.isDataLoaded_ToStr = false;
+        this.getTransferToEntities('');
+      }
+    }
+  }
+  resetEntityData(event: any, fromEntity: boolean) {
+    if (event == null) {
+      if (fromEntity) {
+        this.isDataLoaded_SendEntity = false;
+        this.getSendingEntites('');
+      }
+      else {
+        this.isDataLoaded_RecEntity = false;
+        this.getReceivingEntites('');
+      }
+    }
+  }
 
   toggleSearchForm() {
     this.formVisible = !this.formVisible;
