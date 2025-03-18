@@ -50,48 +50,51 @@ export class LoginPageComponent implements OnInit {
         this.route.navigate(["/landing"]);
       },
       (error) => {
+        console.log(error);
         this.translate.get('LOGIN.ERRORS.INVALID_CREDENTIALS').subscribe((res: string) => {
           this.errorMsg = res;
         });
       }
     );
   }
+
+
   onLogin(event: Event) {
     event.preventDefault();
 
     if (!this.username || !this.password) {
-        this.translate.get('LOGIN.ERRORS.REQUIRED_FIELDS').subscribe((res: string) => {
-            this.errorMsg = res;
-        });
-        return;
+      this.translate.get('LOGIN.ERRORS.REQUIRED_FIELDS').subscribe((res: string) => {
+        this.errorMsg = res;
+      });
+      return;
     }
 
-   
-    this.authService.login( environment.VIPClientId, environment.VIPClientSecret, this.username, this.password).pipe(
-        switchMap((response1) => {
-            if (response1 && response1.access_token) {
-                // First token received, now call the second API
-                return this.authService.login(environment.clientId, environment.clientSecret, this.username, this.password);
-            } else {
-                return throwError(() => new Error('INVALID_CREDENTIALS'));
-            }
-        }),
-        delay(500)
+
+    this.authService.login(environment.VIPClientId, environment.VIPClientSecret, this.username, this.password).pipe(
+      switchMap((response1) => {
+        if (response1 && response1.access_token) {
+          // First token received, now call the second API
+          return this.authService.login(environment.clientId, environment.clientSecret, this.username, this.password);
+        } else {
+          return throwError(() => new Error('INVALID_CREDENTIALS'));
+        }
+      }),
+      delay(500)
     ).subscribe(
-        (response2) => {
-            this.authService.storeToken(response2);
-            this.errorMsg = "";
-            this.route.navigate(["/landing"]);
-        },
-        (error) => {
-          debugger
-          var errorKey=error.error.error==='unauthorized_client'?'LOGIN.UNATHOURIZED':'LOGIN.ERRORS.INVALID_CREDENTIALS';
-          this.translate.get(errorKey).subscribe((res: string) => {
-              this.errorMsg = res;
-          });
+      (response2) => {
+        this.authService.storeToken(response2);
+        this.errorMsg = "";
+        this.route.navigate(["/landing"]);
+      },
+      (error) => {
+        console.log('Errrorrs',error);
+        var errorKey = error.error.error_description === 'Invalid Credentials' ? 'LOGIN.ERRORS.INVALID_CREDENTIALS' : 'LOGIN.UNATHOURIZED';
+        this.translate.get(errorKey).subscribe((res: string) => {
+          this.errorMsg = res;
+        });
       }
     );
-}
+  }
 
   togglePassword() {
     this.showPassword = !this.showPassword;

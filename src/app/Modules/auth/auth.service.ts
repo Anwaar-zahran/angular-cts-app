@@ -44,6 +44,7 @@ export class AuthService {
         })
       );
   }
+
   login(clientId: string, clientSecret: string, username: string, password: string): Observable<any> {
     const body = new URLSearchParams();
     body.set("client_id", clientId);
@@ -57,7 +58,7 @@ export class AuthService {
 
     return this.http.post(this.iAMURL, body.toString(), { headers }).pipe(
         catchError((error) => {
-            console.error('Error during login', error.message);
+            console.error('Error during login', error);
             return throwError(() => error);
         })
     );

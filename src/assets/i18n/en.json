@@ -177,6 +177,7 @@
     "REMEMBER_ME": "Remember me",
     "FORGOT_PASSWORD": "Forgot password?",
     "UNATHOURIZED": "Unathorized for this page",
+    "INVALID_CREDENTIALS":"Incorrect username or password. Please try again.",
     "ERRORS": {
       "REQUIRED_FIELDS": "Username and password are required",
       "REQUIRED_USERNAME": "Username is required",
