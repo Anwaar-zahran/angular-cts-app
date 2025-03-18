@@ -35,6 +35,7 @@ export class LookupsService {
   //private listDocumentType = `${environment.apiBaseUrl}/DocumentType/GetDocumentType`;
   //private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List`;
   private listPrioritiesWithDays = `${environment.apiBaseUrl}/Priority/List?Name=`;
+  private listActions = `${environment.apiBaseUrl}/Lookup/GetLookupItemsByName?name=VIPActions`;
 
   currentLang: string = 'en';
 
@@ -453,6 +454,19 @@ export class LookupsService {
         })
       );
   }
-
+  getActions(accessToken: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'accept-language': this.currentLang
+    });
+    return this.http.get(this.listActions, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching Actions data', error.message);
+          throw error;
+        })
+      );
+  }
 
 }

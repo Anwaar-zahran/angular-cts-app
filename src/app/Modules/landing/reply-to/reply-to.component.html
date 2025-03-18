@@ -28,23 +28,15 @@
           <label for="ddlPurpose" class="form-label required">
             {{ "REPLY_DIALOG.PURPOSE" | translate }}</label
           >
-          <!-- <ng-select
+          <ng-select
             id="ddlPurpose"
             formControlName="purpose"
             [items]="purposes || []"
             bindValue="id"
             placeholder=""
             class="form-control"
-          > -->
-          <ng-select
-          id="ddlPurpose"
-          formControlName="purpose"
-          [items]="purposes || []"
-          bindValue="id"
-          placeholder=""
-          class="form-control"
-          (change)="onPurposeSelect($event)"
-        >
+          >
+        
             <ng-template ng-option-tmp let-item="item">
               {{ getName(item) }}
             </ng-template>
@@ -87,7 +79,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <div class="form-group">
             <label for="ddlUserWStructure" class="form-label required">
             {{ "REPLY_DIALOG.TO" | translate }}</label
@@ -109,11 +101,35 @@
           
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
+        <div class="form-group">
+          
+          <label for="ddlActions" class="form-label required">
+            {{ "REPLY_DIALOG.ACTION" | translate }}</label
+          >
+          <ng-select
+          id="ddlActions"
+          formControlName="action"
+          [items]="actions || []"
+          bindLabel="text"
+          bindValue="id"
+          placeholder=""
+          class="form-control"
+          (change)="onActionSelect($event)"
+        >
+            <ng-template ng-option-tmp let-item="item">
+              {{ item.text }}
+            </ng-template>
+           
+          </ng-select>
+        
+        </div>
+      </div>
+      <div class="col-md-4">
         <button 
         class="btn btn-primary mt-4" 
         (click)="addUserToTextarea()" 
-        [disabled]="!selectedUserName || !selectedPurposeName"
+        [disabled]="!selectedUserName || !selectedActionName"
         >
      
         {{ "REPLY_DIALOG.BUTTONS.ADD" | translate }}
