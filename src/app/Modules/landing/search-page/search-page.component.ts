@@ -241,7 +241,16 @@ export class SearchPageComponent {
         this.isLoadingFromStr = false;
         this.isDataLoaded_FromStr = true;
 
-        this.transferFromEntities = response || [];
+        this.transferFromEntities =  (response || []).map((item: any) => {
+          // Extract StructureNameAr from attributes
+          const structureNameAr = item.attributes?.find((attr: any) => attr.text === 'StructureNameAr')?.value || item.name;
+    
+          return {
+            id: item.id,
+            name: this.isArabic ? structureNameAr : item.name // Use StructureNameAr for Arabic, otherwise default to name
+          };
+        });
+        //response || [];
         this.transferFromEntities.unshift({ id: 0, name: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE'), });
 
         this.searchModel.fromStructure = "0";
@@ -266,7 +275,15 @@ export class SearchPageComponent {
 
         this.isDataLoaded_ToStr = true;
         this.isLoadingToStr = false;
-        this.transferToEntities = response || [];
+        this.transferToEntities =  (response || []).map((item: any) => {
+          // Extract StructureNameAr from attributes
+          const structureNameAr = item.attributes?.find((attr: any) => attr.text === 'StructureNameAr')?.value || item.name;
+    
+          return {
+            id: item.id,
+            name: this.isArabic ? structureNameAr : item.name // Use StructureNameAr for Arabic, otherwise default to name
+          };
+        });//response || [];
         this.transferToEntities.unshift({ id: 0, name: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE') });
         this.searchModel.toStructure = "0";
       },
