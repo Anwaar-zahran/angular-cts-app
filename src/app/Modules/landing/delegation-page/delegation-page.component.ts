@@ -327,21 +327,21 @@ export class DelegationPageComponent implements OnInit {
     let categoriesName = categoriesId
       .map((id: number) => {
         const category = this.categories.find(cat => cat.id === id);
-        return category ? this.getName(category) : '';
+        return category ? category.text : '';
       }).join(' - ');
 
     return categoriesName;
   }
 
-  getPrivacyName(privacyID: number): string {
+  getPrivacyName(privacyID: number): string | undefined {
     const privacy = this.privacy.find(p => p.id === privacyID);
-    return privacy ? this.getName(privacy) : '';
+    return privacy ? privacy.text : '';
   }
 
   getCategories(): void {
-    this.lookupservice.getCategoriesByName(undefined).subscribe(
+    this.lookupservice.getCategoriesByNameV2(undefined).subscribe(
       (response: any) => {
-        this.categories = response.data || [];
+        this.categories = response || [];
         console.log('Categories:', this.categories);
       },
       (error: any) => {
@@ -351,14 +351,15 @@ export class DelegationPageComponent implements OnInit {
   }
 
   getPrivacyData(): void {
-    this.lookupservice.getPrivacy(this.accessToken!).subscribe(
+    this.lookupservice.getPrivacyV2(this.accessToken!).subscribe(
       (response) => {
         const placeholder = {
           id: 0,
-          name: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_PRIVACY')
+          text: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_PRIVACY')
           //text: "tesssst"
         };
         this.privacy = response || [];
+        console.log('Privacy:', this.privacy);
 
         // this.placeholder = placeholder;
         this.privacy.unshift(placeholder);
@@ -681,19 +682,19 @@ export class DelegationPageComponent implements OnInit {
     }
     this.isLoadingUsers = true;
 
-    this.lookupservice.getUsersWithSearch(this.accessToken!, searchText).subscribe({
+    this.lookupservice.getUsersWithSearchV2(this.accessToken!, searchText).subscribe({
       next: (response) => {
 
         this.contacts = response || [];
         this.isLoadingUsers = false;
         let currentExistUser = this.authService.getCurrentUserFullName();
         console.log('currentUser:', currentExistUser);
-        this.contacts = this.contacts.filter(contact => contact.fullName !== currentExistUser);
+        this.contacts = this.contacts.filter(contact => contact.text !== currentExistUser);
         this.isDataLoaded = true;
 
-        // console.log('Contacts', this.contacts);
+        console.log('Contacts', this.contacts);
 
-        this.contacts.unshift({ id: 0, fullName: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_NAME') });
+        this.contacts.unshift({ value: '0', text: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_NAME') });
 
 
         //  this.selectedUserId = null;

@@ -10,6 +10,8 @@ export interface User {
     middleName: string | null;
     lastName: string;
     fullName: string;
+    text: string;
+    value: string;
     username: string;
     email: string;
     applicationRole: string;

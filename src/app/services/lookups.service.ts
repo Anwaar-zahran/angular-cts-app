@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class LookupsService {
   private listUsersUrl = `${environment.iAMUrl}/api/SearchUsersByStructureIds`;
+  private listUsersUrlV2 = `${environment.apiBaseUrl}/CTS/Delegation/SearchUsersByStructureIds`;
   private listPrivaciesEN = `${environment.apiBaseUrl}/Privacy/ListPrivacies`;
   private listPrivacies = `${environment.apiBaseUrl}/Privacy/List?Name=`;
   private listCategories = `${environment.apiBaseUrl}/Category/ListCategories`;
@@ -101,6 +102,7 @@ export class LookupsService {
         })
       );
   }
+
   getUsersWithSearch(accessToken: string, textToSearch: string): Observable<any> {
 
     const headers = new HttpHeaders({
@@ -117,6 +119,25 @@ export class LookupsService {
 
 
     return this.http.post(this.listUsersUrl, formData, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching users', error.message);
+          throw error;
+        })
+      );
+  }
+
+
+  getUsersWithSearchV2(accessToken: string, textToSearch: string): Observable<any> {
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'accept-language': this.currentLang
+    });
+
+
+    return this.http.get(`${this.listUsersUrlV2}?currentStructureId=1&showAllUsers=true&searchText=${textToSearch}`, { headers })
       .pipe(
         catchError((error) => {
           console.error('Error while fetching users', error.message);
@@ -189,13 +210,28 @@ export class LookupsService {
 
   getPrivacy(accessToken: string): Observable<any> {
 
-    console.log('currentLang', this.currentLang);
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
       'accept-language': this.currentLang
     });
     return this.http.get(this.listPrivacies, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching privacies data', error.message);
+          throw error;
+        })
+      );
+  }
+
+  getPrivacyV2(accessToken: string): Observable<any> {
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'accept-language': this.currentLang
+    });
+    return this.http.get(`${environment.apiBaseUrl}/Privacy/ListPrivacies`, { headers })
       .pipe(
         catchError((error) => {
           console.error('Error while fetching privacies data', error.message);
@@ -312,6 +348,26 @@ debugger
       );
   }
 
+  getCategoriesByNameV2(delegationId: string | undefined): Observable<{ id: number, text: string }[]> {
+    let params = new HttpParams();
+    if (delegationId) {
+      params = params.set('delegationId', delegationId);
+    }
+  
+    const headers = new HttpHeaders({
+      'Accept-Language': this.currentLang
+    });
+  
+    return this.http.get<{ id: number, text: string }[]>(`${environment.apiBaseUrl}/Category/ListCategories`, { params, headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching categories data:', error);
+          return of([]); // Return an empty array instead of throwing an error
+        })
+      );
+  }
+  
+
   getSearchableEntities(text: string): Observable<any> {
     debugger
     const headers = new HttpHeaders({
@@ -369,6 +425,22 @@ debugger
       );
   }
 
+  getDelegationToUsersV2(accessToken: string, language:string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'Accept-Language': language
+    });
+
+    return this.http.get(`${environment.apiBaseUrl}/CTS/Delegation/ListDelegationToUser`, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching delegation To users data', error.message);
+          throw error;
+        })
+      );
+  }
+
   getImportance(accessToken: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
@@ -376,6 +448,22 @@ debugger
     });
 
     return this.http.get(this.listImportance, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching Importance data', error.message);
+          throw error;
+        })
+      );
+  }
+
+  getImportanceV2(accessToken: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'Accept-Language': this.currentLang
+    });
+
+    return this.http.get(`${environment.apiBaseUrl}/Importance/ListImportances`, { headers })
       .pipe(
         catchError((error) => {
           console.error('Error while fetching Importance data', error.message);
@@ -414,7 +502,8 @@ debugger
   }
   getStatusByName(): Observable<any> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Accept-Language': this.currentLang
     });
 
     return this.http.get(this.listStatusByName, { headers })
@@ -425,6 +514,22 @@ debugger
         })
       );
   }
+
+  getStatusByNameV2(): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept-Language': this.currentLang
+    });
+
+    return this.http.get(`${environment.apiBaseUrl}/Status/ListStatuses`, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching Status data', error.message);
+          throw error;
+        })
+      );
+  }
+
   getPriorities(accessToken: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
@@ -432,6 +537,22 @@ debugger
     });
 
     return this.http.get(this.listPriorities, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error while fetching priorities data', error.message);
+          throw error;
+        })
+      );
+  }
+
+  getPrioritiesV2(accessToken: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'Accept-Language': this.currentLang
+    });
+
+    return this.http.get(`${environment.apiBaseUrl}/Priority/ListPriorities`, { headers })
       .pipe(
         catchError((error) => {
           console.error('Error while fetching priorities data', error.message);

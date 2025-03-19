@@ -57,12 +57,12 @@ export class AuthService {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this.http.post(this.iAMURL, body.toString(), { headers }).pipe(
-        catchError((error) => {
-            console.error('Error during login', error);
-            return throwError(() => error);
-        })
+      catchError((error) => {
+        console.error('Error during login', error);
+        return throwError(() => error);
+      })
     );
-}
+  }
 
   storeToken(response: any): void {
     localStorage.setItem('access_token', response.access_token);
