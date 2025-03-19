@@ -40,6 +40,9 @@ export class MymailPageComponent implements OnInit,OnDestroy {
     sent: 1,
     completed: 1
   };
+  nodeIdInbox='2';
+  nodeIdSent='6';
+  nodeIdComplete='3';
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
 
@@ -230,7 +233,7 @@ export class MymailPageComponent implements OnInit,OnDestroy {
     console.log(this.activeTab)
     localStorage.setItem('current_Tab',this.activeTab)
 
-    this.mailService.fetchData('/Transfer/ListInbox', this.structureId, page, this.itemsPerPage, this.accessToken!)
+    this.mailService.fetchData('/Transfer/ListInbox', this.structureId, page, this.itemsPerPage, this.accessToken!,this.nodeIdInbox)
       .subscribe(
         (response) => {
           this.newItems = response.data.map(this.mapApiResponse.bind(this)) || [];
@@ -255,7 +258,7 @@ export class MymailPageComponent implements OnInit,OnDestroy {
     console.log(this.activeTab)
     localStorage.setItem('current_Tab',this.activeTab)
 
-    this.mailService.fetchData('/Transfer/ListSent', this.structureId, page, this.itemsPerPage, this.accessToken!)
+    this.mailService.fetchData('/Transfer/ListSent', this.structureId, page, this.itemsPerPage, this.accessToken!,this.nodeIdSent)
       .subscribe(
         (response) => {
           this.sentItems = response.data.map(this.mapApiResponse.bind(this)) || [];
@@ -277,7 +280,7 @@ export class MymailPageComponent implements OnInit,OnDestroy {
     console.log(this.activeTab)
     localStorage.setItem('current_Tab',this.activeTab)
 
-    this.mailService.fetchData('/Transfer/ListCompleted', this.structureId, page, this.itemsPerPage, this.accessToken!)
+    this.mailService.fetchData('/Transfer/ListCompleted', this.structureId, page, this.itemsPerPage, this.accessToken!,this.nodeIdComplete)
       .subscribe(
         (response) => {
           this.completedItems = response.data.map(this.mapApiResponse.bind(this)) || [];

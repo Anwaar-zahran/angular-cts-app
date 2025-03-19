@@ -278,13 +278,17 @@ export class LookupsService {
   }
 
   getEntities(): Observable<any> {
-
-
+debugger
+    const headers = new HttpHeaders({
+      //'Authorization': `Bearer ${accessToken}`,
+      //'Content-Type': 'application/json',
+      'accept-language': this.currentLang
+    });
     const formData = new FormData();
     formData.append('attributes[]', JSON.stringify("NameAr"));
     formData.append('attributes[]', JSON.stringify("NameFr"));
-
-    return this.http.post(this.listEntities, formData)
+   
+    return this.http.post(this.listEntities, formData,{headers})
       .pipe(
         catchError((error) => {
           console.error('Error while entities data', error.message);
@@ -309,12 +313,18 @@ export class LookupsService {
   }
 
   getSearchableEntities(text: string): Observable<any> {
+    debugger
+    const headers = new HttpHeaders({
+      // 'Authorization': `Bearer ${accessToken}`,
+      // 'Content-Type': 'application/json',
+      'accept-language': this.currentLang
+    });
     const formData = new FormData();
     formData.append('text', text);
     formData.append('attributes[]', JSON.stringify("NameAr"));
     formData.append('attributes[]', JSON.stringify("NameFr"));
 
-    return this.http.post(this.listEntities, formData)
+    return this.http.post(this.listEntities, formData,{headers})
       .pipe(
         catchError((error) => {
           console.error('Error while entities data', error.message);
@@ -460,7 +470,8 @@ export class LookupsService {
       'Content-Type': 'application/json',
       'accept-language': this.currentLang
     });
-    return this.http.get(this.listActions, { headers })
+    const url = `${this.listActions}&language=${this.currentLang}`;
+    return this.http.get(url, { headers })
       .pipe(
         catchError((error) => {
           console.error('Error while fetching Actions data', error.message);

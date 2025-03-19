@@ -79,9 +79,9 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-6">
         <div class="form-group">
-            <label for="ddlUserWStructure" class="form-label required">
+            <label for="ddlUserWStructure" class="form-label">
             {{ "REPLY_DIALOG.TO" | translate }}</label
           >
           <ng-select
@@ -101,10 +101,10 @@
           
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-5">
         <div class="form-group">
           
-          <label for="ddlActions" class="form-label required">
+          <label for="ddlActions" class="form-label">
             {{ "REPLY_DIALOG.ACTION" | translate }}</label
           >
           <ng-select
@@ -125,14 +125,14 @@
         
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-1">
         <button 
-        class="btn btn-primary mt-4" 
+        class="btn btn-primary mt-4 fa fa-plus" 
         (click)="addUserToTextarea()" 
         [disabled]="!selectedUserName || !selectedActionName"
         >
      
-        {{ "REPLY_DIALOG.BUTTONS.ADD" | translate }}
+        <!-- {{ "REPLY_DIALOG.BUTTONS.ADD" | translate }} -->
       </button>
       </div>
     </div>
@@ -159,7 +159,8 @@
           maxlength="220"
           formControlName="txtArea"
           id="txtAreaInstruction"
-          [(ngModel)]="textareaValue">
+          [(ngModel)]="textareaValue"
+         >
         </textarea>
           <div class="error-msg text-muted">{{"REPLY_DIALOG.MAXLENGTH"|translate}}</div>
         </div>

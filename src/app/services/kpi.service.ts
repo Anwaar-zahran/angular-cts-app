@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 })
 export class KpiService {
   private baseUrl = environment.apiBaseUrl;
+  private iamUrl=environment.iAMUrl;
   constructor(private http: HttpClient) { }
 
   GetAverageDurationForCorrespondenceCompletion(year: number): Observable<any> {
@@ -155,7 +156,7 @@ export class KpiService {
       'Authorization': `Bearer ${accessToken}`,
     });
 
-    return this.http.get(`${this.baseUrl}/api/GetUser?id=${userId}`, { headers }).pipe(
+    return this.http.get(`${this.iamUrl}/api/GetUser?id=${userId}`, { headers }).pipe(
       catchError(error => {
         console.error('Error fetching user:', error);
         return throwError(() => error);

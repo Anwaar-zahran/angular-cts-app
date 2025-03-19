@@ -113,6 +113,7 @@ export class MailsService {
   }
   fetchData(url: string, structureId: string,
     page: number, pageSize: number, accessToken: string,
+    nodeId:string,
     purposeId?: string // Optional parameter
   ): Observable<any> {
     const headers = new HttpHeaders({
@@ -124,6 +125,7 @@ export class MailsService {
     formData.append('start', ((page - 1) * pageSize).toString());
     formData.append('length', pageSize.toString());
     formData.append('structureId', structureId);
+    formData.append('NodeId', nodeId);
     // Only append PurposeId if it's provided
     if (purposeId) {
       formData.append('PurposeId', purposeId);

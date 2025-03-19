@@ -231,5 +231,9 @@ export class ReplyToComponent {
       this.selectedActionName = selectedAction.text;
     }
   }
+  isArabic(text: string): boolean {
+    const arabicRegex = /[\u0600-\u06FF]/; // Arabic Unicode range
+    return arabicRegex.test(text);
+  }
   
 }
