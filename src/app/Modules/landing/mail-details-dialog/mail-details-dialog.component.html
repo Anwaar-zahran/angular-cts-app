@@ -176,10 +176,12 @@
                       <label class="form-label"
                         >{{ "MAIL_DETAILS.INSTRUCTIONS" | translate }} :</label
                       >
-                      <span
+                      <!-- <span
                         class="form-label"
                         [innerHTML]="transfers?.instruction"
-                      ></span>
+                      ></span> -->
+                      <span class="form-label" [innerHTML]="formatInstructions(transfers?.instruction)"></span>
+
                     </div>
                   </div>
                   <div class="col-sm-12">

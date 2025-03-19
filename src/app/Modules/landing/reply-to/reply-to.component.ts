@@ -212,11 +212,20 @@ export class ReplyToComponent {
   addUserToTextarea() {
     if (this.selectedUserName && this.selectedActionName) {
       const textToAdd = `${this.selectedUserName} for ${this.selectedActionName}`;
-      // this.textareaValue += this.textareaValue ? `, ${textToAdd}` : textToAdd;
-      this.textareaValue += this.textareaValue ? `\n${String(textToAdd)}` : String(textToAdd);
-
+      const newText = this.textareaValue ? `${this.textareaValue}\n${textToAdd}` : textToAdd;
+  
+      // Check if the new text exceeds 220 characters
+      if (newText.length > 220) {
+        this.translate.get('REPLY_DIALOG.MAXLENGTHWARNINGMESSAGE').subscribe((msg: string) => {
+          this.toaster.showToaster(msg);
+        });
+        return; // Stop further execution
+      }
+  
+      this.textareaValue = newText;
     }
   }
+  
   onUserSelect(event: any) {
     debugger
     const selectedUser = this.users.find(user => user.id === event.id && user.isStructure === event.isStructure);
