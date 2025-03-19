@@ -99,7 +99,7 @@
                 {{ "REPORTS.PLACEHOLDERS.SELECT_PRIORITY" | translate }}
               </option>
               <option *ngFor="let item of priorityOptions" [ngValue]="item.id">
-                {{ getName(item) }}
+                {{ item.text }}
               </option>
             </select>
           </div>
@@ -234,7 +234,7 @@
           <tr *ngIf="isRowExpanded(item)" class="expandable-row">
             <td colspan="8" class="p-0">
               <div class="transfers-container">
-                <h6 class="transfers-title">Transfers</h6>
+                <h6 class="transfers-title">{{'BAM.DASHBOARD.CHARTS.LABELS.TRANSFERS' | translate}}</h6>
                 <table class="table table-sm mb-0 transfers-table">
                   <thead>
                     <tr>
