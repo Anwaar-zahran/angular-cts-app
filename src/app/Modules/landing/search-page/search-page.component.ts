@@ -312,7 +312,7 @@ export class SearchPageComponent {
   }
 
   getDelegationUsers(): void {
-    this.lookupservice.getDelegationToUsers(this.accessToken!).subscribe(
+    this.lookupservice.getDelegationToUsersV2(this.accessToken!,this.currentLang).subscribe(
       (response) => {
         this.delegationUsers = response || [];
         this.delegationUsers.unshift({ id: 0, fromUser: 'My Inbox' });
@@ -324,10 +324,9 @@ export class SearchPageComponent {
   }
 
   getCategories(): void {
-    this.lookupservice.getCategoriesByName(undefined).subscribe(
+    this.lookupservice.getCategoriesByNameV2(undefined).subscribe(
       (response: any) => {
-        this.categories = response?.data || [];
-
+        this.categories = response || [];
       },
       (error: any) => {
         console.error(error);
@@ -336,7 +335,7 @@ export class SearchPageComponent {
   }
 
   getStatuses(): void {
-    this.lookupservice.getStatusByName().subscribe(
+    this.lookupservice.getStatusByNameV2().subscribe(
       (response) => {
         this.statuses = response || [];
 
@@ -348,7 +347,7 @@ export class SearchPageComponent {
   }
 
   getPrivacies(): void {
-    this.lookupservice.getPrivacy(this.accessToken!).subscribe(
+    this.lookupservice.getPrivacyV2(this.accessToken!).subscribe(
       (response) => {
         this.privacies = response || [];
         console.log('privacyyyy',this.privacies);
@@ -360,7 +359,7 @@ export class SearchPageComponent {
   }
 
   getImportance(): void {
-    this.lookupservice.getImportance(this.accessToken!).subscribe(
+    this.lookupservice.getImportanceV2(this.accessToken!).subscribe(
       (response) => {
         this.importances = response || [];
 
@@ -372,7 +371,7 @@ export class SearchPageComponent {
   }
 
   getPriorities(): void {
-    this.lookupservice.getPriorities(this.accessToken!).subscribe(
+    this.lookupservice.getPrioritiesV2(this.accessToken!).subscribe(
       (response) => {
         this.priorities = response || [];
 
@@ -462,6 +461,7 @@ export class SearchPageComponent {
 
   onSearch() {
     console.log(this.searchModel);
+    console.log(this.categories);
     const formattedSearchModel = { ...this.searchModel };
 
     // Change IDs sent by zero to empty & format dates
@@ -544,13 +544,14 @@ export class SearchPageComponent {
 
   getCategoryName(catId: any): string {
     const cat = this.categories.find(p => p.id === catId);
-    return cat ? this.getName(cat) : '';
+    console.log('categoryy',cat)
+    return cat ? cat.text : '';
   }
 
   getStatusName(id: any): string {
     debugger;
     const status = this.statuses.find(p => p.id === id);
-    return status ? this.getName(status) : '';
+    return status ? status.text : '';
   }
 
   async showDetails(row: any) {
