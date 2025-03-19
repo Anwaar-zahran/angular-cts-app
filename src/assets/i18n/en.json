@@ -226,6 +226,7 @@
     "ERROR": "Something went wrong",
     "MAXLENGTH": "Maximum length 220 characters",
     "PURPOSE": "Purpose",
+    "ACTION":"Action",
     "FILEINUSEERROR": "There is a file checked out, please make sure to check in or discard checkout",
     "BUTTONS": {
       "SEND": "Send",

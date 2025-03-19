@@ -34,9 +34,10 @@ export class ReplyToComponent {
   to: string | null = null;
   minDate: Date = new Date();
   users: any[] = [];
+  actions:any[]=[];
   selectedUserName: string = '';
   textareaValue: string = '';
-  selectedPurposeName: string='';
+  selectedActionName: string='';
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private router: Router, private fb: FormBuilder,
@@ -70,14 +71,21 @@ export class ReplyToComponent {
 
   loadLookupData(): void {
 
-
-
     this.lookupsService.getPurposes(this.accessToken!).subscribe(
       (response) => {
         this.purposes = response || [];
       },
       (error) => {
         console.error('Error loading priorities:', error);
+      }
+    );
+    this.lookupsService.getActions(this.accessToken!).subscribe(
+      (response) => {
+        debugger
+        this.actions = response || [];
+      },
+      (error) => {
+        console.error('Error loading actions:', error);
       }
     );
   }
@@ -144,6 +152,10 @@ export class ReplyToComponent {
         return item ?.name;
     }
   }
+  getActionText(item: any): string {
+        return item ?.text;
+    }
+  
   onSubmit(): void {
     if (this.replyForm.valid) {
       const formValues = this.replyForm.value;
@@ -198,8 +210,8 @@ export class ReplyToComponent {
     event.preventDefault();
   }
   addUserToTextarea() {
-    if (this.selectedUserName && this.selectedPurposeName) {
-      const textToAdd = `${this.selectedUserName} for ${this.selectedPurposeName}`;
+    if (this.selectedUserName && this.selectedActionName) {
+      const textToAdd = `${this.selectedUserName} for ${this.selectedActionName}`;
       // this.textareaValue += this.textareaValue ? `, ${textToAdd}` : textToAdd;
       this.textareaValue += this.textareaValue ? `\n${String(textToAdd)}` : String(textToAdd);
 
@@ -207,17 +219,21 @@ export class ReplyToComponent {
   }
   onUserSelect(event: any) {
     debugger
-    const selectedUser = this.users.find(user => user.id === event.id);
+    const selectedUser = this.users.find(user => user.id === event.id && user.isStructure === event.isStructure);
     if (selectedUser) {
       this.selectedUserName = selectedUser.name;
     }
   }
-  onPurposeSelect(event: any) {
+  onActionSelect(event: any) {
     debugger
-    const selectedPurpose = this.purposes.find(purpose => purpose.id === event.id);
-    if (selectedPurpose) {
-      this.selectedPurposeName = selectedPurpose.name;
+    const selectedAction = this.actions.find(action => action.id === event.id);
+    if (selectedAction) {
+      this.selectedActionName = selectedAction.text;
     }
+  }
+  isArabic(text: string): boolean {
+    const arabicRegex = /[\u0600-\u06FF]/; // Arabic Unicode range
+    return arabicRegex.test(text);
   }
   
 }

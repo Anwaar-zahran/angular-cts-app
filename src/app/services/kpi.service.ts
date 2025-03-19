@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class KpiService {
   private baseUrl = environment.apiBaseUrl;
+
   private iamUrl = environment.iAMUrl;
   currentLang = 'en'
   constructor(private http: HttpClient, private translate: TranslateService) { 
