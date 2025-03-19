@@ -2,13 +2,19 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class KpiService {
   private baseUrl = environment.apiBaseUrl;
-  constructor(private http: HttpClient) { }
+  private iamUrl = environment.iAMUrl;
+  currentLang = 'en'
+  constructor(private http: HttpClient, private translate: TranslateService) { 
+
+    this.currentLang = this.translate.currentLang
+  }
 
   GetAverageDurationForCorrespondenceCompletion(year: number): Observable<any> {
     const formData = new FormData();
@@ -133,7 +139,7 @@ export class KpiService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.get<any>(`${this.baseUrl}/api/GetStructure?id=${structureId}`, { headers })
+    return this.http.get<any>(`${this.iamUrl}/api/GetStructure?id=${structureId}&language=${this.currentLang}`, { headers })
       .pipe(
         catchError(error => {
           console.error('Error fetching structure:', error);
@@ -155,7 +161,7 @@ export class KpiService {
       'Authorization': `Bearer ${accessToken}`,
     });
 
-    return this.http.get(`${this.baseUrl}/api/GetUser?id=${userId}`, { headers }).pipe(
+    return this.http.get(`${this.iamUrl}/api/GetUser?id=${userId}`, { headers }).pipe(
       catchError(error => {
         console.error('Error fetching user:', error);
         return throwError(() => error);

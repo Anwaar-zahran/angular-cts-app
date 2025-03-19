@@ -1,90 +1,133 @@
 <header class="header">
-    <div class="d-flex align-items-center gap-3">
-        <a class="text-secondary toggle-menu hide" data-bs-toggle="offcanvas" href="#menu" role="button"
-            aria-controls="menu">
-            <i class="fa fa-bars"></i>
-        </a>
-        <!--logo-->
-        <div class="logo">
-            <a [routerLink]="['/landing']"><img alt="" src="assets/images/logo2.svg" /></a>
-        </div>
+  <div class="d-flex align-items-center gap-3">
+    <a
+      class="text-secondary toggle-menu hide"
+      data-bs-toggle="offcanvas"
+      href="#menu"
+      role="button"
+      aria-controls="menu"
+    >
+      <i class="fa fa-bars"></i>
+    </a>
+    <!--logo-->
+    <div class="logo">
+      <a [routerLink]="['/landing']"
+        ><img alt="" src="assets/images/logo2.svg"
+      /></a>
     </div>
-    <!--navigation-->
-    <nav class="header-nav" *ngIf="showMenu">
-        <ul>
-            <li *ngFor="let item of MainnavItems" class="nav-item" routerLinkActive="active">
-                <a [routerLink]="item.link" [title]="item.title | translate">
-                    <img [src]="item.icon" [alt]="item.title | translate">
-                </a>
-            </li>
+  </div>
+  <!--navigation-->
+  <nav class="header-nav" *ngIf="showMenu">
+    <ul>
+      <li
+        *ngFor="let item of MainnavItems"
+        class="nav-item"
+        routerLinkActive="active"
+      >
+        <a [routerLink]="item.link" [title]="item.title | translate">
+          <img [src]="item.icon" [alt]="item.title | translate" />
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div class="d-flex align-items-center gap-3">
+    <!-- Language Switcher -->
+    <div class="dropdown language-switcher">
+      <button
+        class="btn btn-link dropdown-toggle"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        {{ getCurrentLangName() }}
+      </button>
+      <ul class="dropdown-menu">
+        <li *ngFor="let lang of languages">
+          <a
+            class="dropdown-item"
+            href="#"
+            (click)="$event.preventDefault(); switchLanguage(lang.code)"
+            [class.active]="currentLang === lang.code"
+          >
+            {{ lang.name }}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="dropdown">
+      <!--user info-->
+      <div class="user" data-bs-toggle="dropdown" aria-expanded="false">
+        <img alt="" />
+        <!-- [src]="userInfo.image || 'assets/images/any-user.png'" -->
+        <div>
+          <span class="bold">{{ userName }}</span
+          ><br />
+          <!--<span>{{userInfo.Job}}</span>-->
+        </div>
+      </div>
+      <!--user menu-->
+      <ul class="dropdown-menu" aria-labelledby="">
+        <!-- Strucutres menu -->
+        <h6 class="title p-3 py-2 pb-0 mb-0">
+          {{ "BAM.DASHBOARD.CHARTS.LABELS.STRUCTURE" | translate }}
+        </h6>
+        <hr />
+        <ul class="menu sidebar p-0" aria-labelledby="">
+          <li
+            *ngFor="let item of structuresItems; let i = index"
+            [class.active]="item.active"
+            (click)="!item.active && onStructureChange(item.StructureId)"
+          >
+            {{ item.name | translate }}
+          </li>
         </ul>
 
-    </nav>
-    <div class="d-flex align-items-center gap-3">
-        <!-- Language Switcher -->
-        <div class="dropdown language-switcher">
-            <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {{ getCurrentLangName() }}
-            </button>
-            <ul class="dropdown-menu">
-                <li *ngFor="let lang of languages">
-                    <a class="dropdown-item" href="#" (click)="$event.preventDefault(); switchLanguage(lang.code)"
-                        [class.active]="currentLang === lang.code">
-                        {{ lang.name }}
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="dropdown">
-            <!--user info-->
-            <div class="user" data-bs-toggle="dropdown" aria-expanded="false">
-                <img alt=""> <!-- [src]="userInfo.image || 'assets/images/any-user.png'" -->
-                <div>
-                    <span class="bold">{{userName}}</span><br />
-                    <!--<span>{{userInfo.Job}}</span>-->
-                </div>
-            </div>
-            <!--user menu-->
-            <ul class="dropdown-menu" aria-labelledby="">
-                <!-- Strucutres menu --> 
-                    <h6 class="title p-3 py-2 pb-0 mb-0">Structure</h6>
-                    <hr/>
-                    <ul class="menu sidebar p-0"  aria-labelledby="">
-                      <li *ngFor="let item of structuresItems;let i = index" 
-                          [class.active]="item.active"
-                          (click)="onStructureChange(item.StructureId)">
-                        {{ item.name | translate }}
-                      </li>
-                    </ul> 
-
-                    <hr class="mt-4" />
-                <li *ngFor="let item of userNav">
-                    <a [href]="item.link" [title]="item.title | translate" (click)="onLogout($event)"
-                        class="dropdown-item pt-0">
-                        <i class="fa fa-sign-out"></i> {{ item.title | translate }}
-                    </a>
-                </li>             
-            </ul>
-        </div>
+        <hr class="mt-4" />
+        <li *ngFor="let item of userNav">
+          <a
+            [href]="item.link"
+            [title]="item.title | translate"
+            (click)="onLogout($event)"
+            class="dropdown-item pt-0"
+          >
+            <i class="fa fa-sign-out"></i> {{ item.title | translate }}
+          </a>
+        </li>
+      </ul>
     </div>
+  </div>
 </header>
 
-<div class="offcanvas offcanvas-start" tabindex="-1" id="menu" aria-labelledby="menu">
-    <div class="offcanvas-header">
-        <div class="logo">
-            <a href=""><img alt="" src="assets/images/logo2.svg" /></a>
-        </div>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="menu"
+  aria-labelledby="menu"
+>
+  <div class="offcanvas-header">
+    <div class="logo">
+      <a href=""><img alt="" src="assets/images/logo2.svg" /></a>
     </div>
-    <div class="offcanvas-body p-0">
-        <ul>
-            <li *ngFor="let item of MainnavItems" class="nav-item" routerLinkActive="active">
-                <a [routerLink]="item.link" [title]="item.title | translate">
-                    <img [src]="item.icon" [alt]="item.title | translate">
-                    {{ item.title | translate }}
-                </a>
-            </li>
-        </ul>
-    </div>
+    <button
+      type="button"
+      class="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <ul>
+      <li
+        *ngFor="let item of MainnavItems"
+        class="nav-item"
+        routerLinkActive="active"
+      >
+        <a [routerLink]="item.link" [title]="item.title | translate">
+          <img [src]="item.icon" [alt]="item.title | translate" />
+          {{ item.title | translate }}
+        </a>
+      </li>
+    </ul>
+  </div>
 </div>
