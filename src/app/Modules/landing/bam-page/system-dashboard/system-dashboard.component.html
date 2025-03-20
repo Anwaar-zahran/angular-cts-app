@@ -82,6 +82,7 @@
     </div>
   </div>
 
+
   <div
     *ngIf="isModalOpen"
     class="modal fade show"
@@ -110,30 +111,41 @@
               <label for="fromDate">{{
                 "BAM.CHARTS.FILTER.FROM_DATE" | translate
               }}</label>
-              <input
-                type="date"
-                id="fromDate"
-                [(ngModel)]="tempFromDate"
-                name="tempFromDate"
-                class="form-control"
-                required
-                (ngModelChange)="onFromDateChange()"
-              />
+             
+                <input
+                  class="form-control date-picker"
+                  matInput
+                  [matDatepicker]="fromPicker"
+                  id="fromDate"
+                  [(ngModel)]="tempFromDate"
+                  name="tempFromDate"
+                  required
+                  (click)="fromPicker.open()"
+                  (ngModelChange)="onFromDateChange()"
+                />
+                <mat-datepicker #fromPicker></mat-datepicker>
             </div>
+
             <div class="form-group">
               <label for="toDate">{{
                 "BAM.CHARTS.FILTER.TO_DATE" | translate
               }}</label>
-              <input
-                type="date"
-                id="toDate"
-                [(ngModel)]="tempToDate"
-                name="tempToDate"
-                class="form-control"
-                required
-                [min]="minToDate"
-              />
+              
+                <input
+                class="form-control date-picker"
+                  matInput
+                  [matDatepicker]="toPicker"
+                  id="toDate"
+                  [(ngModel)]="tempToDate"
+                  name="tempToDate"
+                  required
+                  [min]="minToDate"
+                  (click)="toPicker.open()"
+                  class="form-control date-picker"
+                />
+                <mat-datepicker #toPicker></mat-datepicker>
             </div>
+
             <button type="submit" class="btn btn-primary">
               {{ "BAM.CHARTS.FILTER.APPLY" | translate }}
             </button>

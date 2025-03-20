@@ -13,6 +13,10 @@ import { BackButtonComponent } from '../../../shared/back-button/back-button.com
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 //import { MatDatepickerModule, MatDatepicker } from '@angular/material/datepicker';
 //import { MatInputModule } from '@angular/material/input';
 //import { MatNativeDateModule } from '@angular/material/core';
@@ -29,7 +33,11 @@ import { FormsModule } from '@angular/forms';
     ChartSystemTransfersInProgressOverdueAndOnTimePerCategoryComponent,
     ChartSystemTransfersCompletedOverdueAndOnTimePerCategoryComponent,
     TranslateModule,
-    BackButtonComponent
+    BackButtonComponent,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   templateUrl: './system-dashboard.component.html',
   styleUrl: './system-dashboard.component.scss'
@@ -62,26 +70,39 @@ export class SystemDashboardComponent {
       this.tempToDate = this.toDate;
     }
   }
- 
 
- openModal(content: any) {
-  console.log('open modal');
-  this.isModalOpen = true;
-  this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
-    (result) => {
-      this.applyFilter();
-    },
-    (reason) => {
-      this.isModalOpen = false; // Ensure state updates when dismissed
-    }
-  );
-}
+
+  openModal(content: any) {
+    console.log('open modal');
+    this.isModalOpen = true;
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+      (result) => {
+        this.applyFilter();
+      },
+      (reason) => {
+        this.isModalOpen = false; // Ensure state updates when dismissed
+      }
+    );
+  }
 
 
   applyFilter() {
+    // Update the actual date variables only when the form is submitted
+    const dateFrom = new Date(this.tempFromDate);
+    const dateTo = new Date(this.tempToDate);
+
+    // Format to yyyy-mm-dd
+    this.tempFromDate = dateFrom.getFullYear() + '-'
+      + String(dateFrom.getMonth() + 1).padStart(2, '0') + '-'
+      + String(dateFrom.getDate()).padStart(2, '0');
+
+    this.tempToDate = dateTo.getFullYear() + '-'
+      + String(dateTo.getMonth() + 1).padStart(2, '0') + '-'
+      + String(dateTo.getDate()).padStart(2, '0');
+
     this.fromDate = this.tempFromDate;
     this.toDate = this.tempToDate;
-    this.toggleModal();
+    this.toggleModal(); // Close the modal after applying the filter
   }
 
   getCategories() {
@@ -89,14 +110,17 @@ export class SystemDashboardComponent {
       this.categories = res;
     });
   }
-
   onFromDateChange() {
     console.log(this.tempFromDate);
     if (this.tempFromDate) {
       let fromDate = new Date(this.tempFromDate);
-      fromDate.setDate(fromDate.getDate());
-      
-      this.minToDate = fromDate.toISOString().split('T')[0];
+      //fromDate.setDate(fromDate.getDate());
+
+      this.tempFromDate = fromDate.getFullYear() + '-'
+        + String(fromDate.getMonth() + 1).padStart(2, '0') + '-'
+        + String(fromDate.getDate()).padStart(2, '0');
+
+      this.minToDate = this.tempFromDate;
     } else {
       this.minToDate = null;
     }

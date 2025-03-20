@@ -14,6 +14,10 @@ import { FormsModule } from '@angular/forms';
 import { Helpers } from '../../../shared/helpers';
 import { LookupsService } from '../../../../services/lookups.service';
 import { BackButtonComponent } from '../../../shared/back-button/back-button.component';
+import { MatDatepicker, MatDatepickerInput, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,7 +32,11 @@ import { BackButtonComponent } from '../../../shared/back-button/back-button.com
     ChartDocumentsCompletedOverdueAndOnTimePerCategoryComponent,
     ChartCountPerCategoryAndStatusComponent,
     TranslateModule,
-    BackButtonComponent
+    BackButtonComponent,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -41,6 +49,7 @@ export class DashboardComponent implements OnInit {
   fromDate: string = Helpers.formatDateToYYYYMMDD(new Date(new Date().setMonth(new Date().getMonth() - 1)));
   toDate: string = Helpers.formatDateToYYYYMMDD(new Date());
   minToDate: string | null = null;
+  currentLang: string = 'en';
   
 
   tempFromDate: string = this.fromDate;
@@ -56,7 +65,12 @@ export class DashboardComponent implements OnInit {
     private lookupsService: LookupsService,
     private modalService: NgbModal,
     private translate: TranslateService
-  ) { }
+  ) { 
+    this.currentLang = this.translate.currentLang;
+    this.translate.onLangChange.subscribe((lang) => {
+      this.currentLang = lang.lang;
+    });
+  }
 
   ngOnInit() {
     this.getCategories();
@@ -86,19 +100,35 @@ export class DashboardComponent implements OnInit {
   }
 
   applyFilter() {
+    // Update the actual date variables only when the form is submitted
+    const dateFrom = new Date(this.tempFromDate);
+    const dateTo = new Date(this.tempToDate);
+
+    // Format to yyyy-mm-dd
+    this.tempFromDate = dateFrom.getFullYear() + '-'
+      + String(dateFrom.getMonth() + 1).padStart(2, '0') + '-'
+      + String(dateFrom.getDate()).padStart(2, '0');
+
+    this.tempToDate = dateTo.getFullYear() + '-'
+      + String(dateTo.getMonth() + 1).padStart(2, '0') + '-'
+      + String(dateTo.getDate()).padStart(2, '0');
+
     this.fromDate = this.tempFromDate;
     this.toDate = this.tempToDate;
-    this.toggleModal();
+    this.toggleModal(); // Close the modal after applying the filter
   }
-
 
   onFromDateChange() {
     console.log(this.tempFromDate);
     if (this.tempFromDate) {
       let fromDate = new Date(this.tempFromDate);
-      fromDate.setDate(fromDate.getDate());
-      
-      this.minToDate = fromDate.toISOString().split('T')[0];
+      //fromDate.setDate(fromDate.getDate());
+
+      this.tempFromDate = fromDate.getFullYear() + '-'
+        + String(fromDate.getMonth() + 1).padStart(2, '0') + '-'
+        + String(fromDate.getDate()).padStart(2, '0');
+
+      this.minToDate = this.tempFromDate;
     } else {
       this.minToDate = null;
     }
