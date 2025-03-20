@@ -318,6 +318,7 @@
           type="button"
           class="btn btn-primary btn-lg"
           (click)="onSearch()"
+          *ngIf="!isEdit"
         >
           <i class="fa fa-search"></i>
           {{ "REPORTS.SEARCH" | translate }}

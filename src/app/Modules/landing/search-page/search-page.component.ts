@@ -181,7 +181,7 @@ export class SearchPageComponent {
         });
     
        // this.sendingEntities = response || [];
-        this.sendingEntities.unshift({ id: 0, name: this.translate.instant('SEARCH.FORM.SELECT_ENTITY') });
+        // this.sendingEntities.unshift({ id: 0, name: this.translate.instant('SEARCH.FORM.SELECT_ENTITY') });
         this.searchModel.documentSender = "0";
 
       },
@@ -216,7 +216,7 @@ export class SearchPageComponent {
           };
         });
     
-        this.recEntities.unshift({ id: 0, name: this.translate.instant('SEARCH.FORM.SELECT_ENTITY') });
+        // this.recEntities.unshift({ id: 0, name: this.translate.instant('SEARCH.FORM.SELECT_ENTITY') });
         this.searchModel.documentReceiver = "0";
 
       },
@@ -251,7 +251,7 @@ export class SearchPageComponent {
           };
         });
         //response || [];
-        this.transferFromEntities.unshift({ id: 0, name: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE'), });
+        // this.transferFromEntities.unshift({ id: 0, name: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE'), });
 
         this.searchModel.fromStructure = "0";
       },
@@ -284,7 +284,7 @@ export class SearchPageComponent {
             name: this.isArabic ? structureNameAr : item.name // Use StructureNameAr for Arabic, otherwise default to name
           };
         });//response || [];
-        this.transferToEntities.unshift({ id: 0, name: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE') });
+        // this.transferToEntities.unshift({ id: 0, name: this.translate.instant('DELEGATION.PLACEHOLDERS.SELECT_STRUCTURE') });
         this.searchModel.toStructure = "0";
       },
       error: (error: any) => {
@@ -311,7 +311,7 @@ export class SearchPageComponent {
         this.isLoadingFromUsers = false;
         this.isDataLoaded_FromUser = true;
 
-        this.searchFromUsers.unshift({ id: 0, fullName: this.translate.instant('SEARCH.FORM.SELECT_USER') });
+        // this.searchFromUsers.unshift({ id: 0, fullName: this.translate.instant('SEARCH.FORM.SELECT_USER') });
         this.searchModel.delegationId = "0";
         //this.searchModel.toUser = "0";
         this.searchModel.fromUser = "0";
@@ -337,7 +337,7 @@ export class SearchPageComponent {
         this.isDataLoaded_ToUser = true;
 
         this.searchToUsers = response || [];
-        this.searchToUsers.unshift({ id: 0, fullName: this.translate.instant('SEARCH.FORM.SELECT_USER') });
+        // this.searchToUsers.unshift({ id: 0, fullName: this.translate.instant('SEARCH.FORM.SELECT_USER') });
         this.searchModel.delegationId = "0";
         this.searchModel.toUser = "0";
       },
