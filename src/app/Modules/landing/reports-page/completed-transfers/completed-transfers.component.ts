@@ -338,6 +338,9 @@ export class CompletedTransfersComponent implements OnInit {
   }
 
   goToPage(page: number) {
+    if ((page === 1 && this.currentPage === 1) || (page === this.totalPages && this.currentPage === this.totalPages)) {
+      return;
+    }
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
       this.loadReports();

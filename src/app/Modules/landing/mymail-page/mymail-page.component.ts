@@ -17,7 +17,7 @@ import { ApiResponseItem } from '../../../models/ApiResponseItem.model';
   styleUrls: ['./mymail-page.component.scss'],
   standalone: false
 })
-export class MymailPageComponent implements OnInit,OnDestroy {
+export class MymailPageComponent implements OnInit, OnDestroy {
   accessToken: string | null;
   structureId: any; // Declare at class level
   //
@@ -40,9 +40,9 @@ export class MymailPageComponent implements OnInit,OnDestroy {
     sent: 1,
     completed: 1
   };
-  nodeIdInbox='2';
-  nodeIdSent='6';
-  nodeIdComplete='3';
+  nodeIdInbox = '2';
+  nodeIdSent = '6';
+  nodeIdComplete = '3';
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
 
@@ -91,6 +91,9 @@ export class MymailPageComponent implements OnInit,OnDestroy {
     this.endIndex = Math.min(this.startIndex + this.dtOptions.pageLength - 1, this.totalItems);
 
     this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+
+    console.log('Total pages:', this.totalPages);
+    console.log('Current Page:', this.currentPage);
   }
   initDtOptions() {
     this.translate.get('COMMON').subscribe(translations => {
@@ -156,6 +159,9 @@ export class MymailPageComponent implements OnInit,OnDestroy {
   }
 
   goToPage(page: number) {
+    if ((page === 1 && this.currentPage === 1) || (page === this.totalPages && this.currentPage === this.totalPages)) {
+      return;
+    }
     if (page >= 1 && page <= this.totalPages) {
       this.currentPageMap[this.activeTab] = page;
       this.setActiveTab(this.activeTab);
@@ -231,9 +237,9 @@ export class MymailPageComponent implements OnInit,OnDestroy {
     this.currentPage = page
     this.structureId = this.getStructureId();
     console.log(this.activeTab)
-    localStorage.setItem('current_Tab',this.activeTab)
+    localStorage.setItem('current_Tab', this.activeTab)
 
-    this.mailService.fetchData('/Transfer/ListInbox', this.structureId, page, this.itemsPerPage, this.accessToken!,this.nodeIdInbox)
+    this.mailService.fetchData('/Transfer/ListInbox', this.structureId, page, this.itemsPerPage, this.accessToken!, this.nodeIdInbox)
       .subscribe(
         (response) => {
           this.newItems = response.data.map(this.mapApiResponse.bind(this)) || [];
@@ -256,9 +262,9 @@ export class MymailPageComponent implements OnInit,OnDestroy {
     this.loading = true;
     this.structureId = this.getStructureId();
     console.log(this.activeTab)
-    localStorage.setItem('current_Tab',this.activeTab)
+    localStorage.setItem('current_Tab', this.activeTab)
 
-    this.mailService.fetchData('/Transfer/ListSent', this.structureId, page, this.itemsPerPage, this.accessToken!,this.nodeIdSent)
+    this.mailService.fetchData('/Transfer/ListSent', this.structureId, page, this.itemsPerPage, this.accessToken!, this.nodeIdSent)
       .subscribe(
         (response) => {
           this.sentItems = response.data.map(this.mapApiResponse.bind(this)) || [];
@@ -278,9 +284,9 @@ export class MymailPageComponent implements OnInit,OnDestroy {
     this.fromCompleted = true;
     this.structureId = this.getStructureId();
     console.log(this.activeTab)
-    localStorage.setItem('current_Tab',this.activeTab)
+    localStorage.setItem('current_Tab', this.activeTab)
 
-    this.mailService.fetchData('/Transfer/ListCompleted', this.structureId, page, this.itemsPerPage, this.accessToken!,this.nodeIdComplete)
+    this.mailService.fetchData('/Transfer/ListCompleted', this.structureId, page, this.itemsPerPage, this.accessToken!, this.nodeIdComplete)
       .subscribe(
         (response) => {
           this.completedItems = response.data.map(this.mapApiResponse.bind(this)) || [];

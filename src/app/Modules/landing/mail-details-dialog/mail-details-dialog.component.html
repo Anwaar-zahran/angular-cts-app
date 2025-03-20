@@ -172,16 +172,14 @@
                     </div>
                   </div>
                   <div class="col-sm-12">
-                    <div class="form-group mb-1">
-                      <label class="form-label"
-                        >{{ "MAIL_DETAILS.INSTRUCTIONS" | translate }} :</label
-                      >
-                      <span
-                        class="form-label"
-                        [innerHTML]="transfers?.instruction"
-                      ></span>
+                    <div class="form-group mb-1 instructions-container">
+                      <div class="form-label">
+                        {{ "MAIL_DETAILS.INSTRUCTIONS" | translate }} :
+                      </div>
+                      <span class="form-label" [innerHTML]="transfers?.instruction"></span>
                     </div>
                   </div>
+
                   <div class="col-sm-12">
                     <div class="form-group mb-1">
                       <label class="form-label"
@@ -561,7 +559,7 @@
 
           <!-- Attachments Tab -->
           <div
-               *ngIf="showAttachment"
+            *ngIf="showAttachment"
             [ngClass]="{
               'tab-pane': true,
               fade: true,
@@ -614,7 +612,7 @@
           </div>
           <!-- Notes Tab -->
           <div
-               *ngIf="showNotes"
+            *ngIf="showNotes"
             [ngClass]="{
               'tab-pane': true,
               fade: true,
@@ -659,7 +657,7 @@
 
           <!-- Linked Documents Tab -->
           <div
-                *ngIf="showLinkedDoc"
+            *ngIf="showLinkedDoc"
             [ngClass]="{
               'tab-pane': true,
               fade: true,
@@ -673,7 +671,7 @@
                   class="table"
                   datatable
                   [dtOptions]="dtOptions"
-                  *ngIf="linkedDocs!.length>0"
+                  *ngIf="linkedDocs!.length > 0"
                 >
                   <thead>
                     <tr>
@@ -703,7 +701,7 @@
 
           <!-- Non-archived Attachments Tab -->
           <div
-                *ngIf="showNonArch"
+            *ngIf="showNonArch"
             [ngClass]="{
               'tab-pane': true,
               fade: true,
@@ -750,7 +748,7 @@
 
           <!-- Visual Tracking Tab -->
           <div
-               *ngIf="showVisualTrace"
+            *ngIf="showVisualTrace"
             [ngClass]="{
               'tab-pane': true,
               fade: true,
@@ -764,7 +762,7 @@
 
           <!-- Transaction History Tab -->
           <div
-                *ngIf="showHistory"
+            *ngIf="showHistory"
             [ngClass]="{
               'tab-pane': true,
               fade: true,
@@ -822,7 +820,7 @@
 
           <!-- Activity Logs Tab -->
           <div
-                *ngIf="showLogs"
+            *ngIf="showLogs"
             [ngClass]="{
               'tab-pane': true,
               fade: true,

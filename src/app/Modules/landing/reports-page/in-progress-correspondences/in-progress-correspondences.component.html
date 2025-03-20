@@ -267,6 +267,7 @@
         class="paginate_button first"
         [class.disabled]="currentPage === 1"
         (click)="goToPage(1)"
+        [style.cursor]="currentPage === 1 ? 'not-allowed' : 'pointer'"
         ><i class="text-secondary fa fa-angle-double-left"></i
       ></a>
 
@@ -274,6 +275,7 @@
         class="paginate_button previous"
         [class.disabled]="currentPage === 1"
         (click)="previousPage()"
+        [style.cursor]="currentPage === 1 ? 'not-allowed' : 'pointer'"
         ><i class="text-secondary fa fa-angle-left"></i
       ></a>
 
@@ -294,6 +296,7 @@
         class="paginate_button next"
         [class.disabled]="currentPage === totalPages"
         (click)="nextPage()"
+        [style.cursor]="currentPage === totalPages ? 'not-allowed' : 'pointer'"
         ><i class="text-secondary fa fa-angle-right"></i
       ></a>
 
@@ -301,6 +304,7 @@
         class="paginate_button last"
         [class.disabled]="currentPage === totalPages"
         (click)="goToPage(totalPages)"
+        [style.cursor]="currentPage === totalPages ? 'not-allowed' : 'pointer'"
         ><i class="text-secondary fa fa-angle-double-right"></i
       ></a>
     </div>
