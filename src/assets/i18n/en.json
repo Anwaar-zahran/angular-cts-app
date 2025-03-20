@@ -225,6 +225,7 @@
     "INSTRUCTIONS": "Instructions",
     "ERROR": "Something went wrong",
     "MAXLENGTH": "Maximum length 220 characters",
+    "MAXLENGTHWARNINGMESSAGE":"Character limit exceeded! Maximum allowed is 220 characters",
     "PURPOSE": "Purpose",
     "ACTION":"Action",
     "FILEINUSEERROR": "There is a file checked out, please make sure to check in or discard checkout",

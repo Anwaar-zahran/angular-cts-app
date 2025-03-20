@@ -221,7 +221,16 @@ export class CompleteCorrespondencesComponent implements OnInit {
     this.isLoadingStructures = true;
     this.structuresService.searchStructures('').subscribe({
       next: (structures) => {
-        this.structures = structures;
+        const  isArabic = this.translate.currentLang === 'ar';
+        this.structures = (structures || []).map((item: any) => {
+          // Extract StructureNameAr from attributes
+          const structureNameAr = item.attributes?.find((attr: any) => attr.text === 'StructureNameAr')?.value || item.name;
+    
+          return {
+            id: item.id,
+            name: isArabic ? structureNameAr : item.name // Use StructureNameAr for Arabic, otherwise default to name
+          };
+        });
         this.filteredStructures = [...this.structures];
         this.isLoadingStructures = false;
       },

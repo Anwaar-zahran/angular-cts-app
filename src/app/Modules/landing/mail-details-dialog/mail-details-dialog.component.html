@@ -176,7 +176,11 @@
                       <div class="form-label">
                         {{ "MAIL_DETAILS.INSTRUCTIONS" | translate }} :
                       </div>
-                      <span class="form-label" [innerHTML]="transfers?.instruction"></span>
+               
+                
+                      <span class="form-label" [innerHTML]="formatInstructions(transfers?.instruction)"></span>
+
+
                     </div>
                   </div>
 

@@ -1511,4 +1511,9 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         return typeComparison;
       });
   }
+  formatInstructions(instruction: string | undefined): string {
+    if (!instruction) return ''; 
+    return instruction.split('\\n').join('<br>').replace(/"/g, '');
+  }
+  
 }
