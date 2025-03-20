@@ -273,7 +273,9 @@ export class MailPageComponent implements OnInit,OnDestroy {
   }
 
   goToPage(page: number) {
-    debugger;
+    if ((page === 1 && this.currentPage === 1) || (page === this.totalPages && this.currentPage === this.totalPages)) {
+      return;
+    }
     if (page >= 1 && page <= this.totalPages) {
       this.currentPageMap[this.activeTab] = page;
       this.setActiveTab(this.activeTab);

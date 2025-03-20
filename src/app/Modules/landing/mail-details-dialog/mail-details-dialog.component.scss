@@ -96,7 +96,6 @@ mat-dialog-content .tab-content strong {
 
 
 
-
 .timeline {
     display: grid;
     grid-template-columns: 0.25rem 1fr;
@@ -298,3 +297,19 @@ span.form-label {
 }
 
 
+.col-sm-12 .form-group.mb-1:has(div.form-label) {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+  .col-sm-12 .form-group.mb-1:has(div.form-label) div.form-label {
+    width: 50%;
+    align-self: flex-start;
+  }
+  
+  .col-sm-12 .form-group.mb-1:has(div.form-label) span.form-label {
+    width: 50%;
+    align-self: flex-start;
+    vertical-align: top;
+  }
