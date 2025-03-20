@@ -438,13 +438,17 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
         if (node.children && node.children.length > 0) {
           node.children = moveOriginalDocumentToTop(node.children); // Recurse on children
         }
-      }); return nodes;
+      }); 
+      return nodes;
     };
 
-    // Apply the function to the root nodes
-    return moveOriginalDocumentToTop(nodes);
+    const updatedNodes = moveOriginalDocumentToTop(nodes);
 
-  }
+    setTimeout(() => this.expandAllNodes(), 0);
+
+    return updatedNodes;
+}
+
 
   // Update the createTreeNode method to set expanded by default
   private createTreeNode(attachment: any): TreeNode {
