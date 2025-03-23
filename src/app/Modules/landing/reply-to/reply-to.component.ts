@@ -103,7 +103,7 @@ export class ReplyToComponent {
       }
     );
   }
-  transformData(data: Array<{
+  transformDatatest(data: Array<{
     id: number;
     name: string;
     userStructure?: Array<{
@@ -117,9 +117,10 @@ export class ReplyToComponent {
   }>): Array<{ id: number, name: string, isStructure: boolean, structureId?: number | undefined }> {
 
     let result: Array<{ id: number, name: string, isStructure: boolean, structureId?: number }> = [];
-
+    const isArabic = this.translate.currentLang === 'ar';
     data.forEach((structure) => {
       if (structure.name) {
+
         // Push the structure itself (isStructure: true, no structureId)
         result.push({ id: structure.id, name: structure.name, isStructure: true });
 
@@ -139,6 +140,58 @@ export class ReplyToComponent {
 
     return result;
   }
+  transformData(
+    data: Array<{
+      id: number;
+      name: string;
+      nameAr?: string; // Added Arabic name
+      userStructure?: Array<{
+        user?: {
+          id: number;
+          firstname?: string;
+          lastname?: string;
+          firstnameAr?: string; // Added Arabic firstname
+          lastnameAr?: string; // Added Arabic lastname
+          structureId?: number;
+        };
+      }>;
+    }>
+  ): Array<{ id: number; name: string; isStructure: boolean; structureId?: number | undefined }> {
+    
+    let result: Array<{ id: number; name: string; isStructure: boolean; structureId?: number }> = [];
+    const isArabic = this.translate.currentLang === 'ar'; // Check language
+  
+    data.forEach((structure) => {
+      if (structure.name) {
+        const structureName = isArabic ? structure.nameAr || structure.name : structure.name;
+  
+        // Push the structure itself (isStructure: true, no structureId)
+        result.push({ id: structure.id, name: structureName, isStructure: true });
+  
+        structure.userStructure?.forEach((userStruct) => {
+          if (userStruct?.user) {
+            const user = userStruct.user;
+  
+            // Select user first & last name based on language
+            const firstname = isArabic ? user.firstnameAr || user.firstname : user.firstname;
+            const lastname = isArabic ? user.lastnameAr || user.lastname : user.lastname;
+  
+            if (firstname && lastname) {
+              result.push({
+                id: user.id,
+                name: `${structureName} / ${firstname} ${lastname}`,
+                isStructure: false,
+                structureId: structure.id ?? undefined, // Use undefined instead of null
+              });
+            }
+          }
+        });
+      }
+    });
+  
+    return result;
+  }
+  
   // To get lookup names based on language
   getName(item: any): string {
 
@@ -225,6 +278,7 @@ export class ReplyToComponent {
       this.textareaValue = newText;
     }
   }
+ 
   
   onUserSelect(event: any) {
     debugger
