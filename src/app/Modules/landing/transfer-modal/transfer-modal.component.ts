@@ -6,7 +6,7 @@ import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker
 import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LookupsService } from '../../../services/lookups.service';
@@ -16,6 +16,8 @@ import { AuthService } from '../../auth/auth.service';
 import { ToasterComponent } from '../../shared/toaster/toaster.component';
 import { AddressBookComponent } from '../address-book/address-book.component';
 import { LanguageService } from '../../../services/language.service';
+import { ConfirmationmodalComponent } from '../../shared/confirmationmodal/confirmationmodal.component';
+import { SharedModule } from '../../shared/shared.module';
 
 interface User {
   id: number;
@@ -52,9 +54,13 @@ interface TransferRow {
     CommonModule, MatDialogModule, NgSelectModule,
     MatDatepickerModule,
     MatInputModule,
-    MatNativeDateModule, FormsModule, ToasterComponent, TranslateModule],
+    MatNativeDateModule,
+    FormsModule,
+    ToasterComponent,
+    TranslateModule,
+    SharedModule],
   templateUrl: './transfer-modal.component.html',
-  styleUrl: './transfer-modal.component.scss'
+  styleUrl: './transfer-modal.component.scss',
 })
 export class TransferModalComponent implements OnInit {
   receivedData: any; // This will hold the received data
@@ -92,13 +98,16 @@ export class TransferModalComponent implements OnInit {
   isFollowUp: boolean = false;
   isFollowUpRequired: boolean = false;
   isTransferring: boolean = false;
+  isCCedClicked: any;
+
 
   currentLanguage!: string;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService, private toaster: ToasterService,
     private router: Router, private lookupsService: LookupsService, private dialog: MatDialog, private cdr: ChangeDetectorRef,
     private dialogRef: MatDialogRef<TransferModalComponent>, private mailService: MailsService, private translate: TranslateService,
-    private languageService: LanguageService, private cdRef: ChangeDetectorRef) {
+    private languageService: LanguageService, private cdRef: ChangeDetectorRef,private modalService: NgbModal,
+    ) {
 
     this.receivedData = data;
     this.documentId = this.data.documentId;
@@ -400,7 +409,6 @@ export class TransferModalComponent implements OnInit {
 
   onUserOrPurposeChange(index: number) {
     // Add a new row when user is selected, only if it's the last row
-    debugger;
     if (this.rows[index].selectedPurposeId == 10) {
       this.rows = this.rows.map((row, i) =>
         i === index ? { ...row, isCCed: true } : row
@@ -422,6 +430,7 @@ export class TransferModalComponent implements OnInit {
     const isChecked = (event.target as HTMLInputElement).checked;
     const row = this.rows[index];
     row.isCCed = isChecked;
+    this.isCCedClicked = isChecked;
     if (isChecked) {
       this.rows[index].selectedPurposeId = 10;
 
@@ -459,26 +468,29 @@ export class TransferModalComponent implements OnInit {
         return;
       }
 
-      const rowData = this.collectRowData();
+      if (this.isCCedClicked) {
+        const confirmed = this.modalService.open(ConfirmationmodalComponent);
+        this.translate.get('TRANSFER_DIALOG.CCED_CONFIRMATION').subscribe((msg: string) => {
+          confirmed.componentInstance.message = msg;
+          this.translate.get("TRANSFER_DIALOG.BUTTONS.CLOSE").subscribe((cancelLabel)=>{
+            confirmed.componentInstance.cancelLabel = cancelLabel;
+            this.isTransferring = false;
+            console.log('transfering trune into true ',this.isTransferring);
+          });
+          this.translate.get("TRANSFER_DIALOG.BUTTONS.TRANSFER_CLOSE").subscribe((confirmLabel)=>{
+            confirmed.componentInstance.confirmLabel = confirmLabel;
+          })
+        });
 
-      this.mailService.transferMail(this.accessToken!, rowData).subscribe(
-        (result) => {
-          if (result.length > 0) {
-            const message = result[0].updated ? "Sent successfully" : result[0].message;
-            this.toaster.showToaster(message);
-            this.onClose(true);
-          }
-          this.isTransferring = false;
-        },
-        (error) => {
-          this.toaster.showToaster(error.error.text ?? "Something went wrong");
-          this.isTransferring = false;
-        }
-      );
-    } catch (error) {
+        confirmed.componentInstance.confirmed.subscribe(()=>{
+          this.executeTransfer();
+        })
+      }
+    }catch(error){
       this.isTransferring = false;
       this.toaster.showToaster("An error occurred while transferring the mail.");
     }
+
   }
 
   collectRowData(): TransferRow[] {
@@ -586,4 +598,22 @@ export class TransferModalComponent implements OnInit {
     });
   }
 
-}
+  private executeTransfer():void{
+    const rowData = this.collectRowData();
+
+      this.mailService.transferMail(this.accessToken!, rowData).subscribe(
+        (result) => {
+          if (result.length > 0) {
+            const message = result[0].updated ? "Sent successfully" : result[0].message;
+            this.toaster.showToaster(message);
+            this.onClose(true);
+          }
+          this.isTransferring = false;
+        },
+        (error) => {
+          this.toaster.showToaster(error.error.text ?? "Something went wrong");
+          this.isTransferring = false;
+        }
+      );
+    }
+  }
