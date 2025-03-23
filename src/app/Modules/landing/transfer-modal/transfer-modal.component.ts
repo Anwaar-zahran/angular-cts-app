@@ -536,6 +536,9 @@ export class TransferModalComponent implements OnInit {
           this.executeTransfer();
         })
       }
+
+      this.executeTransfer();
+      
     }catch(error){
       this.isTransferring = false;
       this.toaster.showToaster("An error occurred while transferring the mail.");
