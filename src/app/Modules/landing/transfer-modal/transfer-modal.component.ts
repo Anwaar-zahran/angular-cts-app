@@ -491,6 +491,7 @@ export class TransferModalComponent implements OnInit {
 
 
   Transfer(): void {
+    debugger
     if (this.isTransferring) {
       return;
     }
