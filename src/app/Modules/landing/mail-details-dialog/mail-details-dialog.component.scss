@@ -301,15 +301,33 @@ span.form-label {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+}
+  
+.col-sm-12 .form-group.mb-1:has(div.form-label) div.form-label {
+    width: 50%;
+    align-self: flex-start;
+}
+  
+.col-sm-12 .form-group.mb-1:has(div.form-label) span.form-label {
+    width: 50%;
+    align-self: flex-start;
+    vertical-align: top;
+}
+
+.col-sm-12 .form-group.mb-1:has(label.form-label) {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
   }
   
-  .col-sm-12 .form-group.mb-1:has(div.form-label) div.form-label {
+  .col-sm-12 .form-group.mb-1:has(label.form-label) label.form-label {
     width: 50%;
     align-self: flex-start;
   }
   
-  .col-sm-12 .form-group.mb-1:has(div.form-label) span.form-label {
+  .col-sm-12 .form-group.mb-1:has(label.form-label) span.form-label {
     width: 50%;
     align-self: flex-start;
     vertical-align: top;
   }
+  
