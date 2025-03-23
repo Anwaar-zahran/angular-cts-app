@@ -241,9 +241,11 @@
         "FOLLOWUP":"المتابعة",
         "BUTTONS": {
             "CLOSE":"إغلاق",
-            "TRANSFER": "تحويل"
+            "TRANSFER": "تحويل",
+            "TRANSFER_CLOSE":"إرسال وإغلاق"
             
-        }
+        },
+        "CCED_CONFIRMATION":"جميع عمليات النقل المحددة هي نسخة كربونية. هل انت متأكد أنك تريد المتابعة؟"
     },
     "TABLE": {
         "HEADERS": {

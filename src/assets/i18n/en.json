@@ -249,9 +249,11 @@
     "FOLLOWUP": "Follow Up",
     "BUTTONS": {
       "CLOSE": "Close",
-      "TRANSFER": "Transfer"
+      "TRANSFER": "Transfer",
+      "TRANSFER_CLOSE":"Transfer and Close"
 
-    }
+    },
+    "CCED_CONFIRMATION":"All selected transfers are carbon copies. Are you sure you want to proceed?"
   },
   "TABLE": {
     "HEADERS": {
