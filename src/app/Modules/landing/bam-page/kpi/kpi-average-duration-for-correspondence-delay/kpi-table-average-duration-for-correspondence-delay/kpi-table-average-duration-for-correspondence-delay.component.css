@@ -22,3 +22,7 @@ a.paginate_button {
 .pointer {
     cursor: pointer; /* This ensures the cursor changes to a pointer */
 }
+
+.text-success {
+    color:  var(--success) !important;
+}

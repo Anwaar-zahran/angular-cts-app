@@ -36,6 +36,10 @@ export class ConfirmationmodalComponent {
 
   confirm() {
     this.confirmed.emit(); 
-    this.activeModal.close();
+    this.activeModal.close('confirmed');
+  }
+  
+  cancel() {
+    this.activeModal.dismiss();
   }
 }

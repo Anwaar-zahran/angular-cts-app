@@ -18,7 +18,7 @@ export class KpiChartAverageDurationForTransferDelayComponent implements OnInit 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
   isModalOpen: boolean = false;
-  private languageSubscription!: Subscription;
+  languageSubscription!: Subscription;
 
   constructor(
     private kpiService: KpiService,
@@ -27,8 +27,8 @@ export class KpiChartAverageDurationForTransferDelayComponent implements OnInit 
 
   ngOnInit() {
     this.languageSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-              this.loadChartData();
-            });
+      this.loadChartData();
+    });
     this.loadChartData();
   }
 
@@ -56,12 +56,16 @@ export class KpiChartAverageDurationForTransferDelayComponent implements OnInit 
         ];
 
         const dataPoints = Array(12).fill(0);
+
         res.documentAverageDurationList.forEach((item: any) => {
           const monthIndex = parseInt(item.month, 10) - 1;
           if (monthIndex >= 0 && monthIndex < 12) {
             dataPoints[monthIndex] = item.average;
           }
         });
+        
+        console.log('dataPoints:', dataPoints.map(num => num.toFixed(2)).join(', '));
+        
 
         const isRTL = document.dir === 'rtl';
         this.chartOptions = {
@@ -129,7 +133,7 @@ export class KpiChartAverageDurationForTransferDelayComponent implements OnInit 
           series: [{
             name: this.translateService.instant('BAM.KPI.TRANSFER_DELAY.CHART.ALL_CATEGORIES'),
             type: 'line',
-            data: dataPoints
+            data: dataPoints.map(num => parseFloat(num.toFixed(2)))
           }]
         };
       });

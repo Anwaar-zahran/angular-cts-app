@@ -14,3 +14,29 @@
 strong {
     font-size: 1.25rem;
 }
+
+a.paginate_button {
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: .5em 1em;
+    margin-left: 2px;
+    text-align: center;
+    text-decoration: none !important;
+    cursor: pointer;
+    color: inherit !important;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    background: transparent;
+}
+
+.paginate_button.active {
+    background: var(--light-blue-color);
+    border: 0;
+    border-radius: 9px;
+    color: var(--secondary-color) !important;
+}
+
+.pointer {
+    cursor: pointer; /* This ensures the cursor changes to a pointer */
+}
