@@ -12,7 +12,7 @@ export class KpiService {
 
   private iamUrl = environment.iAMUrl;
   currentLang = 'en'
-  constructor(private http: HttpClient, private translate: TranslateService) { 
+  constructor(private http: HttpClient, private translate: TranslateService) {
 
     this.currentLang = this.translate.currentLang
   }
@@ -28,6 +28,15 @@ export class KpiService {
     const formData = new FormData();
     formData.append('year', year.toString());
     formData.append('structureId', structureId.toString());
+
+    return this.http.post(`${this.baseUrl}/Dashboard/GetAverageDurationForCorrespondenceCompletion`, formData);
+  }
+
+  GetAverageDurationForCorrespondenceCompletionV3(structureId: number, year: number, userId: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('year', year.toString());
+    formData.append('structureId', structureId.toString());
+    formData.append('userId', userId.toString());
 
     return this.http.post(`${this.baseUrl}/Dashboard/GetAverageDurationForCorrespondenceCompletion`, formData);
   }
@@ -60,6 +69,15 @@ export class KpiService {
     return this.http.post(`${this.baseUrl}/Dashboard/GetAverageDurationForCorrespondenceDelay`, formData);
   }
 
+  GetAverageDurationForCorrespondenceDelayV3(structureId: number, year: number, userId: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('year', year.toString());
+    formData.append('structureId', structureId.toString());
+    formData.append('userId', userId.toString());
+
+    return this.http.post(`${this.baseUrl}/Dashboard/GetAverageDurationForCorrespondenceDelay`, formData);
+  }
+
   ListStructureAverageDurationForCorrespondenceDelay(year: number): Observable<any> {
     const formData = new FormData();
     formData.append('year', year.toString());
@@ -84,6 +102,15 @@ export class KpiService {
     const formData = new FormData();
     formData.append('year', year.toString());
     formData.append('structureId', structureId.toString());
+    return this.http.post(`${this.baseUrl}/Dashboard/GetAverageDurationForTransferCompletion`, formData);
+  }
+
+  GetAverageDurationForTransferCompletionV3(structureId: number, year: number, userId: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('year', year.toString());
+    formData.append('structureId', structureId.toString());
+    formData.append('userId', userId.toString());
+
     return this.http.post(`${this.baseUrl}/Dashboard/GetAverageDurationForTransferCompletion`, formData);
   }
 
@@ -113,6 +140,15 @@ export class KpiService {
     formData.append('structureId', structureId.toString());
     return this.http.post(`${this.baseUrl}/Dashboard/GetAverageDurationForTransferDelay`, formData);
   }
+
+  GetAverageDurationForTransferDelayV3(structureId: number, year: number, userId: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('year', year.toString());
+    formData.append('structureId', structureId.toString());
+    formData.append('userId', userId.toString());
+    return this.http.post(`${this.baseUrl}/Dashboard/GetAverageDurationForTransferDelay`, formData);
+  }
+
 
   ListStructureAverageDurationForTransferDelay(year: number): Observable<any> {
     const formData = new FormData();

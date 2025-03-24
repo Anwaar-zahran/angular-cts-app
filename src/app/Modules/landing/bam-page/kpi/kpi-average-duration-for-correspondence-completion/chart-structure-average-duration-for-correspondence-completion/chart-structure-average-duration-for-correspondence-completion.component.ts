@@ -92,7 +92,7 @@ export class ChartStructureAverageDurationForCorrespondenceCompletionComponent i
           },
           colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
           subtitle: {
-            text: `${this.structureName}: ${averageDuration.totalAverage.toFixed(2)} day(s)`
+            text: `${this.structureName}: ${averageDuration.totalAverage.toFixed(2)} ${this.translateService.instant('BAM.COMMON.DAYS')}`
           },
           xAxis: {
             categories: monthLabels,
@@ -146,7 +146,7 @@ export class ChartStructureAverageDurationForCorrespondenceCompletionComponent i
           series: [{
             name: this.translateService.instant('BAM.KPI.AVERAGE_DURATION.ALL_CATEGORIES'),
             type: 'line',
-            data: dataPoints
+            data: dataPoints.map(num => parseFloat(num.toFixed(2)))
           }]
         };
       },

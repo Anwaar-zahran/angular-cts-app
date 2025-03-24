@@ -495,57 +495,67 @@ export class TransferModalComponent implements OnInit {
     if (this.isTransferring) {
       return;
     }
-
+  
     this.isTransferring = true;
-
+  
     try {
       // Validate required fields for each row efficiently
       const rowsToValidate = this.rows.length > 1 ? this.rows.slice(0, -1) : this.rows;
-
+  
       const isValid = rowsToValidate.every((row) => {
         let isRowValid = row.selectedUser && row.selectedPurposeId && row.selectedPriorityId;
-
+  
         if (row.isFollowUp) {
           isRowValid = isRowValid && Boolean(row.txtInstruction); // Include txtInstruction if isFollowUp is true
         }
-
+  
         row.showValidationError = !isRowValid; // Mark row as invalid if required fields are missing
         return isRowValid;
       });
-
+  
       if (!isValid) {
         this.toaster.showToaster("Please fill all required fields before transferring.");
         this.isTransferring = false;
         return;
       }
-
+  
       if (this.isCCedClicked) {
         const confirmed = this.modalService.open(ConfirmationmodalComponent);
+        
         this.translate.get('TRANSFER_DIALOG.CCED_CONFIRMATION').subscribe((msg: string) => {
           confirmed.componentInstance.message = msg;
-          this.translate.get("TRANSFER_DIALOG.BUTTONS.CLOSE").subscribe((cancelLabel)=>{
+  
+          this.translate.get("TRANSFER_DIALOG.BUTTONS.CLOSE").subscribe((cancelLabel) => {
             confirmed.componentInstance.cancelLabel = cancelLabel;
-            this.isTransferring = false;
-            console.log('transfering trune into true ',this.isTransferring);
           });
-          this.translate.get("TRANSFER_DIALOG.BUTTONS.TRANSFER_CLOSE").subscribe((confirmLabel)=>{
+  
+          this.translate.get("TRANSFER_DIALOG.BUTTONS.TRANSFER_CLOSE").subscribe((confirmLabel) => {
             confirmed.componentInstance.confirmLabel = confirmLabel;
-          })
+          });
         });
-
-        confirmed.componentInstance.confirmed.subscribe(()=>{
-          this.executeTransfer();
-        })
+  
+        confirmed.result.then((result) => {
+          if (result === 'confirmed') {
+            console.log('Confirmed!');
+            this.executeTransfer();
+          } else {
+            this.isTransferring = false; 
+          }
+        }).catch(() => {
+          this.isTransferring = false; 
+        });
+  
+        return; 
       }
-
+  
       this.executeTransfer();
-      
-    }catch(error){
+  
+    } catch (error) {
       this.isTransferring = false;
       this.toaster.showToaster("An error occurred while transferring the mail.");
     }
-
   }
+  
 
   collectRowData(): TransferRow[] {
     const formattedDate = (date: Date | null) => date ? date.toLocaleDateString('en-GB') : null;

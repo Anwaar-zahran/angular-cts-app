@@ -5,6 +5,9 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CardsVisibility } from '../../../../../../models/cards-visibility';
 import { UserPerStructure } from '../../../../../../models/user-per-structure';
+import { ChartAverageDurationForCorrespondenceCompletionComponent } from '../chart-average-duration-for-correspondence-completion/chart-average-duration-for-correspondence-completion.component';
+import { FormsModule } from '@angular/forms';
+import { KpiChartUserAverageDurationForCorrespondenceCompletionComponent } from "../kpi-chart-user-average-duration-for-correspondence-completion/kpi-chart-user-average-duration-for-correspondence-completion.component";
 
 
 
@@ -12,8 +15,10 @@ import { UserPerStructure } from '../../../../../../models/user-per-structure';
   selector: 'app-table-user-average-duration-for-correspondence-completion',
   imports: [
     CommonModule,
-    TranslateModule
-  ],
+    TranslateModule,
+    FormsModule,
+    KpiChartUserAverageDurationForCorrespondenceCompletionComponent
+],
   templateUrl: './table-user-average-duration-for-correspondence-completion.component.html',
   styleUrl: './table-user-average-duration-for-correspondence-completion.component.scss'
 })
@@ -39,29 +44,44 @@ export class TableUserAverageDurationForCorrespondenceCompletionComponent implem
 
   cardsVisibility: CardsVisibility = { isAverageDurationCardVisible: true, isPerformanceCardVisible: true };
 
+   // Pagination
+   currentPage: number = 1;
+   totalPages: number = 1;
+   totalItems: number = 0;
+   startIndex: number = 0;
+   endIndex: number = 0;
+   pages: number[] = [];
+
+   
   // isAverageDurationCardVisible: boolean = true;
   // isPerformanceCardVisible: boolean = true;
+
+  selectedUserId!: number;
+  selectedChartStrutureId: number | null = null
+  selectedChartYear: number | null = null;
+  isChartVisible: boolean = true;
 
   dtOptions: any = {};
 
 
   public userPerStructure: UserPerStructure[] = [];
-  compareStructureTotalAverage:number[] = []
-  compareTotalAverage:number[] = []
+  compareStructureTotalAverage: number[] = []
+  compareTotalAverage: number[] = []
 
   constructor(
     private kpiService: KpiService,
     private cdr: ChangeDetectorRef,
     private translate: TranslateService
-  ) { 
+  ) {
     console.log(this.compareStructureTotalAverage)
     console.log(this.compareTotalAverage)
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['structureId'] || changes['year'] || changes['key'] || changes['isAverageDurationCardVisible'] || changes['isPerformanceCardVisible']) {
-      this.compareStructureTotalAverage =[]
-      this.compareTotalAverage =[]
+      this.compareStructureTotalAverage = []
+      this.compareTotalAverage = []
+      this.isChartVisible= false;
       this.initDtOptions();
       this.loadData();
 
@@ -149,7 +169,8 @@ export class TableUserAverageDurationForCorrespondenceCompletionComponent implem
             this.kpiService.GetUserById(user.userId).pipe(
               map(resp => ({
                 userName: resp.fullName,
-                average: user.average
+                average: user.average,
+                userId: user.userId
               }))
             )
           );
@@ -223,26 +244,72 @@ export class TableUserAverageDurationForCorrespondenceCompletionComponent implem
   getTotalAveragePerStructure(itemaverage: number, totalAverage: number) {
     this.comparasion = Number((itemaverage - totalAverage).toFixed(2));
     this.compareStructureTotalAverage.push(this.comparasion);
-  
+
     // Find the maximum value in the array
     const maxValue = Math.max(...this.compareStructureTotalAverage);
-  
+
     return {
       value: this.comparasion > 0 ? `+${this.comparasion}` : `${this.comparasion}`,
       class: this.comparasion === maxValue ? 'text-danger' : 'text-success'
     };
   }
-  
+
   getTotalAverage(itemaverage: number, totalAverage: number) {
     this.comparasion = Number((itemaverage - totalAverage).toFixed(2));
     this.compareTotalAverage.push(this.comparasion);
-  
+
     // Find the maximum value in the array
     const maxValue = Math.max(...this.compareTotalAverage);
-  
+
     return {
       value: this.comparasion > 0 ? `+${this.comparasion}` : `${this.comparasion}`,
       class: this.comparasion === maxValue ? 'text-danger' : 'text-success'
     };
   }
+
+  calculatePagination() {
+    this.totalPages = Math.ceil(this.totalItems / this.dtOptions.pageLength);
+    this.startIndex = (this.currentPage - 1) * this.dtOptions.pageLength + 1;
+    this.endIndex = Math.min(this.startIndex + this.dtOptions.pageLength - 1, this.totalItems);
+
+    this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.goToPage(this.currentPage - 1);
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.goToPage(this.currentPage + 1);
+    }
+  }
+
+  goToPage(page: number) {
+    if ((page === 1 && this.currentPage === 1) || (page === this.totalPages && this.currentPage === this.totalPages)) {
+      return;
+    }
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadData();
+    }
+  }
+
+  openUserChart(type: string, average: number, year: number, userId: number, structureId: number) {
+    // Implement the logic to open the structure chart
+    console.log(`Opening chart for ${type} with average ${average}, year ${year}, userId ${userId}, structureId ${structureId}`);
+
+    this.selectedChartStrutureId = structureId;
+    this.selectedChartYear = year;
+    this.selectedUserId = userId;
+    this.isChartVisible = true;
+  }
+
+  onChartVisibilityChanged(isVisible: boolean) {
+    this.isChartVisible = isVisible;
+    console.log("Chart visibility changed:", isVisible);
+  }
+
 }
