@@ -63,9 +63,10 @@
               <td
                 class="min-max-width-50-250"
                 title="{{ (item.average - totalAverage).toFixed(2) }}"
+                [ngClass]="getDifferenceFormatted(item.average,totalAverage).isPositive ? 'text-danger' : 'text-success' "
               >
-                {{ (item.average - totalAverage).toFixed(2) }}
-              </td>
+              {{ getDifferenceFormatted(item.average, totalAverage).text }}
+            </td>
 
               <td class="min-max-width-50-250 pointer">
                 <span

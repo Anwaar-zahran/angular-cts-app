@@ -1,25 +1,36 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter, input } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { KpiService } from '../../../../../../services/kpi.service';
 import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-chart-average-duration-for-correspondence-completion',
-  templateUrl: './chart-average-duration-for-correspondence-completion.component.html',
-  styleUrls: ['./chart-average-duration-for-correspondence-completion.component.css'],
-  imports: [CommonModule, HighchartsChartModule, FormsModule, TranslateModule]
+  selector: 'app-kpi-chart-user-average-duration-for-transfer-completion',
+  imports: [
+    CommonModule,
+    TranslateModule,
+    HighchartsChartModule,
+    FormsModule
+  ],
+  templateUrl: './kpi-chart-user-average-duration-for-transfer-completion.component.html',
+  styleUrl: './kpi-chart-user-average-duration-for-transfer-completion.component.scss'
 })
-export class ChartAverageDurationForCorrespondenceCompletionComponent implements OnInit, OnChanges {
-
+export class KpiChartUserAverageDurationForTransferCompletionComponent implements OnChanges, OnInit {
   @Input() year!: number;
+  @Input() structureId!: number;
+  @Input() userId!: number;
+  @Input() isChartCardVisible: boolean = true;
+  @Output() chartVisibilityChanged = new EventEmitter<boolean>();  // Emit event to parent
+
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
   isModalOpen: boolean = false;
-  private langChangeSubscription!: Subscription;
+  userName: string | null = null;
+
+  langChangeSubscription!: Subscription;
 
   constructor(
     private kpiService: KpiService,
@@ -29,18 +40,24 @@ export class ChartAverageDurationForCorrespondenceCompletionComponent implements
   ngOnInit() {
     this.loadChartData();
 
-    this.langChangeSubscription = this.translateService.onLangChange.subscribe((event:LangChangeEvent) => {
+    this.langChangeSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
       this.loadChartData();
-    });}
+    });
+  }
 
   ngOnChanges() {
     this.loadChartData();
   }
 
-  private loadChartData() {
-    this.kpiService
-      .GetAverageDurationForCorrespondenceCompletion(this.year)
-      .subscribe((res: any) => {
+  loadChartData() {
+    forkJoin({
+      averageDuration: this.kpiService.GetAverageDurationForTransferCompletionV3(this.structureId, this.year, this.userId),
+      user: this.kpiService.GetUserById(this.userId)
+    }).subscribe({
+      next: ({ averageDuration, user }) => {
+        console.log('user', user)
+        this.userName = user.fullName;
+        console.log(this.userId)
         const monthLabels = [
           this.translateService.instant('BAM.MONTHS.JAN'),
           this.translateService.instant('BAM.MONTHS.FEB'),
@@ -56,18 +73,16 @@ export class ChartAverageDurationForCorrespondenceCompletionComponent implements
           this.translateService.instant('BAM.MONTHS.DEC')
         ];
 
-
-        console.log(this.translateService.instant('BAM.MONTHS.NOV'));
-
-
+        // Prepare data points for the chart
         const dataPoints = Array(12).fill(0);
-        res.documentAverageDurationList.forEach((item: any) => {
+        averageDuration.documentAverageDurationList.forEach((item: any) => {
           const monthIndex = parseInt(item.month, 10) - 1;
           if (monthIndex >= 0 && monthIndex < 12) {
             dataPoints[monthIndex] = item.average;
           }
         });
 
+        // Now, userName is available before setting chart options
         const isRTL = document.dir === 'rtl';
         this.chartOptions = {
           chart: {
@@ -78,9 +93,7 @@ export class ChartAverageDurationForCorrespondenceCompletionComponent implements
           },
           colors: ['#003B82', '#00695E', '#DEF5FF', '#8D0034', '#0095DA', '#3ABB9D'],
           subtitle: {
-            text: this.translateService.instant('BAM.KPI.AVERAGE_DURATION.TOTAL_AVERAGE', {
-              days: res.totalAverage.toFixed(2)
-            }),
+            text: `${this.userName}: ${averageDuration.totalAverage.toFixed(2)} ${this.translateService.instant('BAM.COMMON.DAYS')}`
           },
           xAxis: {
             categories: monthLabels,
@@ -137,10 +150,20 @@ export class ChartAverageDurationForCorrespondenceCompletionComponent implements
             data: dataPoints.map(num => parseFloat(num.toFixed(2)))
           }]
         };
-      });
+      },
+      error: (err) => {
+        console.error("Error loading chart data:", err);
+      }
+    });
   }
+
 
   toggleModal() {
     this.isModalOpen = !this.isModalOpen;
+  }
+
+  hideChartCard() {
+    this.isChartCardVisible = false;
+    this.chartVisibilityChanged.emit(this.isChartCardVisible);
   }
 }

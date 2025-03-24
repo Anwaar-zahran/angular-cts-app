@@ -4,9 +4,13 @@ import { KpiService } from '../../../../../../services/kpi.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { forkJoin, map } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { FormsModule, NgModel } from '@angular/forms';
+import { KpiChartUserAverageDurationForTransferDelayComponent } from '../kpi-chart-user-average-duration-for-transfer-delay/kpi-chart-user-average-duration-for-transfer-delay.component';
+
 
 
 interface userPerStructure {
+  userId: number,
   userName: string,
   average: number,
   compareToStructureAverage?: number; // Added for comparison
@@ -17,7 +21,9 @@ interface userPerStructure {
   selector: 'app-kpi-table-user-average-duration-for-transfer-delay',
   imports: [
     CommonModule,
-    TranslateModule
+    TranslateModule,
+    FormsModule,
+    KpiChartUserAverageDurationForTransferDelayComponent
   ],
   templateUrl: './kpi-table-user-average-duration-for-transfer-delay.component.html',
   styleUrl: './kpi-table-user-average-duration-for-transfer-delay.component.scss'
@@ -34,7 +40,21 @@ export class KpiTableUserAverageDurationForTransferDelayComponent implements OnC
   @Output() CardVisibilityChanged = new EventEmitter<boolean>();
   @Output() CardVisibilityCheck = new EventEmitter<CardsVisibility>();
 
+
+  // Pagination
+  currentPage: number = 1;
+  totalPages: number = 1;
+  totalItems: number = 0;
+  startIndex: number = 0;
+  endIndex: number = 0;
+  pages: number[] = [];
+
   public structureName!: string;
+
+  selectedUserId!: number;
+  selectedChartStrutureId: number | null = null
+  selectedChartYear: number | null = null;
+  isChartVisible: boolean = true;
 
   bestPerformanceUSer: userPerStructure | null = null;
   worstPerformanceUser: userPerStructure | null = null;
@@ -69,6 +89,7 @@ export class KpiTableUserAverageDurationForTransferDelayComponent implements OnC
     if (changes['structureId'] || changes['year'] || changes['key'] || changes['isAverageDurationCardVisible'] || changes['isPerformanceCardVisible']) {
       this.compareStructureTotalAverage = []
       this.compareTotalAverage = []
+      this.isChartVisible= false;
       this.initDtOptions();
       this.loadData();
 
@@ -154,7 +175,8 @@ export class KpiTableUserAverageDurationForTransferDelayComponent implements OnC
             this.kpiService.GetUserById(user.userId).pipe(
               map(resp => ({
                 userName: resp.fullName,
-                average: user.average
+                average: user.average,
+                userId: user.userId
               }))
             )
           );
@@ -239,7 +261,6 @@ export class KpiTableUserAverageDurationForTransferDelayComponent implements OnC
   }
 
   getTotalAverage(itemaverage: number, totalAverage: number) {
-    console.log(itemaverage,totalAverage)
     this.comparasion = Number((itemaverage - totalAverage).toFixed(2));
     this.compareTotalAverage.push(this.comparasion);
 
@@ -252,4 +273,48 @@ export class KpiTableUserAverageDurationForTransferDelayComponent implements OnC
     };
   }
 
+  calculatePagination() {
+    this.totalPages = Math.ceil(this.totalItems / this.dtOptions.pageLength);
+    this.startIndex = (this.currentPage - 1) * this.dtOptions.pageLength + 1;
+    this.endIndex = Math.min(this.startIndex + this.dtOptions.pageLength - 1, this.totalItems);
+
+    this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.goToPage(this.currentPage - 1);
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.goToPage(this.currentPage + 1);
+    }
+  }
+
+  goToPage(page: number) {
+    if ((page === 1 && this.currentPage === 1) || (page === this.totalPages && this.currentPage === this.totalPages)) {
+      return;
+    }
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadData();
+    }
+  }
+
+  openUserChart(type: string, average: number, year: number, userId: number, structureId: number) {
+    // Implement the logic to open the structure chart
+    console.log(`Opening chart for ${type} with average ${average}, year ${year}, userId ${userId}, structureId ${structureId}`);
+
+    this.selectedChartStrutureId = structureId;
+    this.selectedChartYear = year;
+    this.selectedUserId = userId;
+    this.isChartVisible = true;
+  }
+
+  onChartVisibilityChanged(isVisible: boolean) {
+    this.isChartVisible = isVisible;
+    console.log("Chart visibility changed:", isVisible);
+  }
 }

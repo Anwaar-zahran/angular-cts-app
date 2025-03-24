@@ -4,7 +4,7 @@ import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import { KpiService } from '../../../../../../services/kpi.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
-import { catchError, of, Subject } from 'rxjs';
+import { catchError, forkJoin, of, Subject } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { KpiTableUserAverageDurationForTransferDelayComponent } from '../kpi-table-user-average-duration-for-transfer-delay/kpi-table-user-average-duration-for-transfer-delay.component';
 import { KpiChartStructureAverageDurationForTransferDelayComponent } from '../kpi-chart-structure-average-duration-for-transfer-delay/kpi-chart-structure-average-duration-for-transfer-delay.component';
@@ -100,42 +100,47 @@ export class KpiTableAverageDurationForTransferDelayComponent implements OnInit 
       console.warn('Year is not defined.');
       return;
     }
-  
+
     this.kpiService.ListStructureAverageDurationForTransferDelay(this.year).pipe(
       catchError(error => {
         console.error('Error fetching data:', error);
-        return of({ data: [], recordsTotal: 0 }); // Return default response to prevent breakage
+        return of({ data: [], recordsTotal: 0 });
       })
     ).subscribe(response => {
+      console.log('response', response);
       this.processResponse(response);
     });
   }
-  
+
   private processResponse(response: any): void {
     if (!response || !Array.isArray(response.data)) {
       console.warn('Invalid response structure:', response);
       return;
     }
-  
-    const entityMap = new Map(this.entities?.map(e => [e.id, e.name]));
-  
-    this.data = response.data.map((item:any) => ({
-      ...item,
-      structureName: entityMap.get(item.structureId) || this.translateService.instant('BAM.COMMON.UNKNOWN_STRUCTURE'),
-      structureId: item.structureId
-    }));
-  
+
+    const structureIds = response.data.map((item: any) => item.structureId);
+    const structuresRequests = structureIds.map((id: number) => this.kpiService.GetStructureById(id));
+
+    forkJoin<any[]>(structuresRequests).subscribe((structures: any) => {
+      this.data = response.data.map((item: any, index: number) => ({
+        ...item,
+        structureName: structures[index]?.name,
+        structureId: item.structureId
+      }));
+    });
+
     this.totalItems = response.recordsTotal;
     this.calculatePagination();
     this.dtTrigger.next(null);
   }
-  
+
 
   getTotalAverage() {
     this.kpiService
-      .GetAverageDurationForCorrespondenceDelay(this.year)
+      .GetAverageDurationForTransferDelay(this.year)
       .subscribe((res: any) => {
-        this.totalAverage = res.totalAverage;
+        this.totalAverage = res.totalAverage.toFixed(2);
+        console.log('Total Average:', this.totalAverage);
       });
   }
 
@@ -187,27 +192,35 @@ export class KpiTableAverageDurationForTransferDelayComponent implements OnInit 
       this.loadData();
     }
   }
+
+  
   showUserPerStructure(structureId: number, year: number, average: number) {
-      this.selectedStrutureId = structureId;
-      this.selectedYear = year;
-      this.selectedAverage = average;
-      this.componentKey++;
-  
-      this.isAveragePerUserVisible = true;
-      this.isPerformanceCardVisible = true;
-  
+    this.selectedStrutureId = structureId;
+    this.selectedYear = year;
+    this.selectedAverage = average;
+    this.componentKey++;
+
+    this.isAveragePerUserVisible = true;
+    this.isPerformanceCardVisible = true;
+
+  }
+
+  onChartVisibilityChanged(isVisible: boolean) {
+    this.isChartVisible = isVisible;
+  }
+
+  onCardsVisibilityChanged(isCardsVisible: CardsVisibility) {
+    this.isPerformanceCardVisible = isCardsVisible.isPerformanceCardVisible
+    this.isAveragePerUserVisible = isCardsVisible.isAverageDurationCardVisible
+  }
+
+  getDifferenceFormatted(value: number, total: number): { text: string, isPositive: boolean } {
+    const diff = (value - total).toFixed(2);
+    return {
+      text: parseFloat(diff) > 0 ? `+${diff}` : `${diff}`,
+      isPositive: parseFloat(diff) > 0
     }
-  
-    onChartVisibilityChanged(isVisible: boolean) {
-      this.isChartVisible = isVisible;
-      console.log("Chart visibility changed:", isVisible);
-    }
-  
-    onCardsVisibilityChanged(isCardsVisible: CardsVisibility) {
-      this.isPerformanceCardVisible = isCardsVisible.isPerformanceCardVisible
-      this.isAveragePerUserVisible = isCardsVisible.isAverageDurationCardVisible
-      console.log('chnagggggggggggggggggggggggggggggessssssssssss')
-      console.log(this.isAveragePerUserVisible)
-      console.log(this.isPerformanceCardVisible)
-    }
+
+  }
+
 }

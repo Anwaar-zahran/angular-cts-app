@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { KpiService } from '../../../../../../services/kpi.service';
-import { Subject } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -98,23 +98,33 @@ export class KpiTableAverageDurationForCorrespondenceDelayComponent implements O
     };
   }
 
+
   private loadData() {
-    debugger;
     this.kpiService.ListStructureAverageDurationForCorrespondenceDelay(this.year).subscribe((response: any) => {
-      // Map the data to include both structureId and structureName
-      this.data = response.data.map((item: any) => {
-        const entity = this.entities.find(e => e.id === item.structureId);
-        return {
+      console.log('response', response);
+      
+      // Extract structureIds properly
+      const structureIds = response.data.map((item: any) => item.structureId);
+      
+      // Create an array of observables for API calls
+      const structureRequests = structureIds.map((id:number) => this.kpiService.GetStructureById(id));
+  
+      console.log('structureRequests', structureRequests);
+  
+      forkJoin<any[]>(structureRequests).subscribe((structures: any[]) => {
+        this.data = response.data.map((item: any, index: number) => ({
           ...item,
-          structureName: entity ? entity.name : this.translateService.instant('BAM.COMMON.UNKNOWN_STRUCTURE'),
+          structureName: structures[index]?.name ,
           structureId: item.structureId
-        };
+        }));
+  
+        this.totalItems = response.recordsTotal;
+        this.calculatePagination();
+        this.dtTrigger.next(null);
       });
-      this.totalItems = response.recordsTotal;
-      this.calculatePagination();
-      this.dtTrigger.next(null);
     });
   }
+  
 
   getTotalAverage() {
     this.kpiService
@@ -193,8 +203,14 @@ export class KpiTableAverageDurationForCorrespondenceDelayComponent implements O
   onCardsVisibilityChanged(isCardsVisible: CardsVisibility) {
     this.isPerformanceCardVisible = isCardsVisible.isPerformanceCardVisible
     this.isAveragePerUserVisible = isCardsVisible.isAverageDurationCardVisible
-    console.log('chnagggggggggggggggggggggggggggggessssssssssss')
-    console.log(this.isAveragePerUserVisible)
-    console.log(this.isPerformanceCardVisible)
+  }
+
+  getDifferenceFormatted(value: number, total: number): { text: string, isPositive: boolean } {
+    const diff = (value - total).toFixed(2);
+    return {
+      text: parseFloat(diff) > 0 ? `+${diff}` : `${diff}`,
+      isPositive: parseFloat(diff) > 0
+    }
+
   }
 }

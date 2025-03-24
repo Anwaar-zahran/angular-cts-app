@@ -58,9 +58,7 @@
             <ng-container *ngIf="userPerStructure.length > 0; else noData">
               <tr *ngFor="let item of userPerStructure" role="row">
                 <td class="min-max-width-50-250" title="{{ item.userName }}">
-                  <span
-                    class="drawuserstructure"
-                  >
+                  <span class="drawuserstructure">
                     {{ item.userName }}
                   </span>
                 </td>
@@ -86,8 +84,21 @@
                 >
                   {{ getTotalAverage(item.average, totalAverage).value }}
                 </td>
+
+
                 <td class="min-max-width-50-250">
-                  <span class="yearlygraph pointer">
+                  <span
+                    class="yearlygraph pointer"
+                    (click)="
+                      openUserChart(
+                        'AverageDurationForTransferDelay',
+                        item.average,
+                        year,
+                        item.userId,
+                        structureId
+                      )
+                    "
+                  >
                     <em class="fa fa-line-chart"></em>
                   </span>
                 </td>
@@ -95,6 +106,73 @@
             </ng-container>
           </tbody>
         </table>
+
+        <div
+          class="d-flex justify-content-center align-items-center mt-3"
+          *ngIf="userPerStructure && userPerStructure.length > 0"
+        >
+          <!--<div>
+      Showing {{startIndex}} to {{endIndex}} of {{totalItems}} entries
+    </div>-->
+          <div class="dataTables_paginate paging_full_numbers">
+            <a
+              class="paginate_button first"
+              [class.disabled]="currentPage === 1"
+              (click)="goToPage(1)"
+              [style.cursor]="currentPage === 1 ? 'not-allowed' : 'pointer'"
+              [attr.aria-label]="'BAM.COMMON.PAGINATION.FIRST' | translate"
+            >
+              <i class="text-secondary fa fa-angle-double-left"></i>
+            </a>
+
+            <a
+              class="paginate_button previous"
+              [class.disabled]="currentPage === 1"
+              (click)="previousPage()"
+              [style.cursor]="currentPage === 1 ? 'not-allowed' : 'pointer'"
+              [attr.aria-label]="'BAM.COMMON.PAGINATION.PREVIOUS' | translate"
+            >
+              <i class="text-secondary fa fa-angle-left"></i>
+            </a>
+
+            <span class="d-inline-flex align-items-center mx-2"
+              >{{ "COMMON.PAGE" | translate }}
+              <input
+                type="number"
+                class="paginate-input form-control form-control-sm mx-2"
+                [(ngModel)]="currentPage"
+                (ngModelChange)="goToPage(currentPage)"
+                [min]="1"
+                [max]="totalPages"
+              />
+              {{ "COMMON.OF" | translate }} {{ totalPages }}</span
+            >
+
+            <a
+              class="paginate_button next"
+              [class.disabled]="currentPage === totalPages"
+              (click)="nextPage()"
+              [style.cursor]="
+                currentPage === totalPages ? 'not-allowed' : 'pointer'
+              "
+              [attr.aria-label]="'BAM.COMMON.PAGINATION.NEXT' | translate"
+            >
+              <i class="text-secondary fa fa-angle-right"></i>
+            </a>
+
+            <a
+              class="paginate_button last"
+              [class.disabled]="currentPage === totalPages"
+              (click)="goToPage(totalPages)"
+              [style.cursor]="
+                currentPage === totalPages ? 'not-allowed' : 'pointer'
+              "
+              [attr.aria-label]="'BAM.COMMON.PAGINATION.LAST' | translate"
+            >
+              <i class="text-secondary fa fa-angle-double-right"></i>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -167,3 +245,17 @@
     </div>
   </div>
 </div>
+
+<app-kpi-chart-user-average-duration-for-transfer-delay
+  *ngIf="
+    this.selectedChartStrutureId &&
+    this.selectedChartYear &&
+    this.isChartVisible
+  "
+  [structureId]="this.selectedChartStrutureId"
+  [year]="this.selectedChartYear"
+  (chartVisibilityChanged)="onChartVisibilityChanged($event)"
+  [isChartCardVisible]="this.isChartVisible"
+  [userId]="this.selectedUserId"
+>
+</app-kpi-chart-user-average-duration-for-transfer-delay>

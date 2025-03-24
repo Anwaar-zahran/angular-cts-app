@@ -59,14 +59,22 @@
                   {{ item.structureName }}
                 </span>
               </td>
-              <td class="min-max-width-50-250" title="{{ item.average.toFixed(2) }}">
+              <td
+                class="min-max-width-50-250"
+                title="{{ item.average.toFixed(2) }}"
+              >
                 {{ item.average.toFixed(2) }}
               </td>
               <td
                 class="min-max-width-50-250"
                 title="{{ (item.average - totalAverage).toFixed(2) }}"
+                [ngClass]="
+                  getDifferenceFormatted(item.average, totalAverage).isPositive
+                    ? 'text-danger'
+                    : 'text-success'
+                "
               >
-                {{ (item.average - totalAverage).toFixed(2) }}
+                {{ getDifferenceFormatted(item.average, totalAverage).text }}
               </td>
 
               <td class="min-max-width-50-250">
@@ -103,7 +111,6 @@
               [class.disabled]="currentPage === 1"
               (click)="goToPage(1)"
               [style.cursor]="currentPage === 1 ? 'not-allowed' : 'pointer'"
-
               [attr.aria-label]="'BAM.COMMON.PAGINATION.FIRST' | translate"
             >
               <i class="text-secondary fa fa-angle-double-left"></i>
@@ -113,7 +120,6 @@
               [class.disabled]="currentPage === 1"
               (click)="previousPage()"
               [style.cursor]="currentPage === 1 ? 'not-allowed' : 'pointer'"
-
               [attr.aria-label]="'BAM.COMMON.PAGINATION.PREVIOUS' | translate"
             >
               <i class="text-secondary fa fa-angle-left"></i>
@@ -136,8 +142,9 @@
               class="paginate_button next"
               [class.disabled]="currentPage === totalPages"
               (click)="nextPage()"
-              [style.cursor]="currentPage === totalPages ? 'not-allowed' : 'pointer'"
-
+              [style.cursor]="
+                currentPage === totalPages ? 'not-allowed' : 'pointer'
+              "
               [attr.aria-label]="'BAM.COMMON.PAGINATION.NEXT' | translate"
             >
               <i class="text-secondary fa fa-angle-right"></i>
@@ -146,8 +153,9 @@
               class="paginate_button last"
               [class.disabled]="currentPage === totalPages"
               (click)="goToPage(totalPages)"
-              [style.cursor]="currentPage === totalPages ? 'not-allowed' : 'pointer'"
-
+              [style.cursor]="
+                currentPage === totalPages ? 'not-allowed' : 'pointer'
+              "
               [attr.aria-label]="'BAM.COMMON.PAGINATION.LAST' | translate"
             >
               <i class="text-secondary fa fa-angle-double-right"></i>
@@ -179,7 +187,6 @@
   [average]="this.selectedAverage"
   [key]="this.componentKey"
   [totalAverage]="this.totalAverage"
-
 >
 </app-kpi-table-user-average-duration-for-correspondence-delay>
 

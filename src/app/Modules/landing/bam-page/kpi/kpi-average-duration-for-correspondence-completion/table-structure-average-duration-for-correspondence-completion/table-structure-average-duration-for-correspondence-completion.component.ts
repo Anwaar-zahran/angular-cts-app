@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { KpiService } from '../../../../../../services/kpi.service';
-import { Subject } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -24,7 +24,7 @@ import { CardsVisibility } from '../../../../../../models/cards-visibility';
     TranslateModule,
     TableUserAverageDurationForCorrespondenceCompletionComponent,
     ChartStructureAverageDurationForCorrespondenceCompletionComponent
-]
+  ]
 })
 export class TableStructureAverageDurationForCorrespondenceCompletionComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })
@@ -47,7 +47,7 @@ export class TableStructureAverageDurationForCorrespondenceCompletionComponent i
   dtTrigger: Subject<any> = new Subject<any>();
 
   selectedUser: any = null;
-  totalAveragePerStructure!:number;
+  totalAveragePerStructure!: number;
 
   // i use this variable in the showUserPerStructure to update the function 'because in the another component i detect the chnages only'
   // in case i hide the table and click again on the structure name will change the value of the componentLey and the changes will updated on the another component
@@ -106,15 +106,17 @@ export class TableStructureAverageDurationForCorrespondenceCompletionComponent i
 
   private loadData() {
     this.kpiService.ListStructureAverageDurationForCorrespondenceCompletion(this.year).subscribe((response: any) => {
-      // Map the data to include both structureId and structureName
-      this.data = response.data.map((item: any) => {
-        const entity = this.entities.find(e => e.id === item.structureId);
-        return {
+
+      const structureIds = response.data.map((item: any) => item.structureId);
+      const structuresRequests = structureIds.map((id: number) => this.kpiService.GetStructureById(id));
+
+      forkJoin<any[]>(structuresRequests).subscribe((structures: any) => {
+        this.data = response.data.map((item: any, index: number) => ({
           ...item,
-          structureName: entity ? entity.name : this.translateService.instant('BAM.COMMON.UNKNOWN_STRUCTURE'),
+          structureName: structures[index]?.name,
           structureId: item.structureId
-        };
-      });
+        }));
+      })
       this.totalItems = response.recordsTotal;
       this.calculatePagination();
       this.dtTrigger.next(null);
@@ -129,15 +131,15 @@ export class TableStructureAverageDurationForCorrespondenceCompletionComponent i
       });
   }
 
-drawStructureUserTable(type: string, average: number, year: number, userId: number | null, structureId: number) {
-   // Implement the logic to draw the structure user table
-   console.log(`Drawing table for ${type} with average ${average}, year ${year}, userId ${userId}, structureId ${structureId}`);
-   
-   const selectedUser = this.data.find(item => item.structureId === structureId && item.userId === userId);
+  drawStructureUserTable(type: string, average: number, year: number, userId: number | null, structureId: number) {
+    // Implement the logic to draw the structure user table
+    console.log(`Drawing table for ${type} with average ${average}, year ${year}, userId ${userId}, structureId ${structureId}`);
+
+    const selectedUser = this.data.find(item => item.structureId === structureId && item.userId === userId);
     if (selectedUser) {
       this.selectedUser = selectedUser;
     }
-}
+  }
 
   openStructureChart(type: string, average: number, year: number, userId: number | null, structureId: number) {
     // Implement the logic to open the structure chart
@@ -180,27 +182,31 @@ drawStructureUserTable(type: string, average: number, year: number, userId: numb
     }
   }
 
-  showUserPerStructure(structureId: number, year: number, average:number){
+  showUserPerStructure(structureId: number, year: number, average: number) {
     this.selectedStrutureId = structureId;
     this.selectedYear = year;
     this.selectedAverage = average;
     this.componentKey++;
     this.totalAveragePerStructure = average;
-    console.log('------------------------------')
-    console.log(this.totalAveragePerStructure)
     this.isAveragePerUserVisible = true;
     this.isPerformanceCardVisible = true;
   }
 
   onChartVisibilityChanged(isVisible: boolean) {
     this.isChartVisible = isVisible;
-    console.log("Chart visibility changed:", isVisible);
   }
 
   onCardsVisibilityChanged(isCardsVisible: CardsVisibility) {
     this.isPerformanceCardVisible = isCardsVisible.isPerformanceCardVisible
     this.isAveragePerUserVisible = isCardsVisible.isAverageDurationCardVisible
-    console.log(this.isAveragePerUserVisible)
-    console.log(this.isPerformanceCardVisible)
+  }
+
+  getDifferenceFormatted(value: number, total: number): { text: string, isPositive: boolean } {
+    const diff = (value - total).toFixed(2);
+    return {
+      text: parseFloat(diff) > 0 ? `+${diff}` : `${diff}`,
+      isPositive: parseFloat(diff) > 0
+    }
+
   }
 }

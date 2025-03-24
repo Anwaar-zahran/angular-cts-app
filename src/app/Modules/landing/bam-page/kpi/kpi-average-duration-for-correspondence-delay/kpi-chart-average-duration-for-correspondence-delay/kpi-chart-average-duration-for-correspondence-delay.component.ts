@@ -131,7 +131,7 @@ export class KpiChartAverageDurationForCorrespondenceDelayComponent implements O
           series: [{
             name: this.translateService.instant('BAM.KPI.DELAY_DURATION.CHART.ALL_CATEGORIES'),
             type: 'line',
-            data: dataPoints
+            data: dataPoints.map(num => parseFloat(num.toFixed(2)))
           }]
         };
       });

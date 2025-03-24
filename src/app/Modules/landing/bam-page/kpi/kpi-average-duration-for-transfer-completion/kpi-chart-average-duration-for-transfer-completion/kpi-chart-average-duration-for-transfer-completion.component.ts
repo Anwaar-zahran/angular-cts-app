@@ -25,7 +25,7 @@ export class KpiChartAverageDurationForTransferCompletionComponent implements On
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options | undefined;
   isModalOpen: boolean = false;
-  private languageSubscription!: Subscription;
+  languageSubscription!: Subscription;
 
   constructor(
     private kpiService: KpiService,
@@ -137,7 +137,7 @@ export class KpiChartAverageDurationForTransferCompletionComponent implements On
           series: [{
             name: this.translateService.instant('BAM.KPI.TRANSFER_DURATION.CHART.ALL_CATEGORIES'),
             type: 'line',
-            data: dataPoints
+            data: dataPoints.map(num => parseFloat(num.toFixed(2)))
           }]
         };
       });
