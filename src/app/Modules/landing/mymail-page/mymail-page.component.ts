@@ -190,7 +190,7 @@ export class MymailPageComponent implements OnInit, OnDestroy {
   showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
     debugger;
     const currentName = this.authService.getDisplayName();
-
+    if(this.activeTab.toLocaleLowerCase() =="new"){
     // Mark correspondence as read
     this.mailService.markCorrespondanceAsRead(this.accessToken!, item.id).subscribe({
       next: () => {
@@ -199,6 +199,7 @@ export class MymailPageComponent implements OnInit, OnDestroy {
       },
       error: (err) => console.error('Error marking as read:', err)
     });
+  }
 
     // Open the dialog
     const dialogRef = this.dialog.open(MailDetailsDialogComponent, {
