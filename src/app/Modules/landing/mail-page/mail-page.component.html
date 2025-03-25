@@ -84,6 +84,7 @@
             <th>{{ "MAIL.TABLE.SUBJECT" | translate }}</th>
             <th>{{ "MAIL.TABLE.TRANSFER_DATE" | translate }}</th>
             <th>{{ "MAIL.TABLE.REFERENCE" | translate }}</th>
+            <th>{{ "COMMON.INSTRUCTIONS" | translate }}</th>
             <th>{{ "MAIL.TABLE.ACTIONS" | translate }}</th>
             <th>{{ "MAIL.TABLE.STATUS" | translate }}</th>
           </tr>
@@ -103,6 +104,23 @@
             </td>
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
+            <td class="instructions-column">
+              <div class="instruction-content">
+                {{ item.row.instruction | slice : 0 : 40 }}
+                
+                <ng-container *ngIf="item.row.instruction?.length > 40">
+                  <span class="ellipsis">... </span>
+                  
+                  <a 
+                    href="javascript:void(0)" 
+                    class="see-more-link"
+                    (click)="openInstructionPopup(item.row.instruction, $event)"
+                  >
+                    {{ "COMMON.SEE_MORE" | translate }}
+                  </a>
+                </ng-container>
+              </div>
+            </td>
             <td>
               <button
                 class="btn btn-primary"
@@ -155,6 +173,7 @@
             <th>{{ "MAIL.TABLE.SUBJECT" | translate }}</th>
             <th>{{ "MAIL.TABLE.TRANSFER_DATE" | translate }}</th>
             <th>{{ "MAIL.TABLE.REFERENCE" | translate }}</th>
+            <th>{{ "COMMON.INSTRUCTIONS" | translate }}</th>
             <th>{{ "MAIL.TABLE.ACTIONS" | translate }}</th>
             <!-- <th>{{ 'MAIL.TABLE.STATUS' | translate }}</th> -->
           </tr>
@@ -174,6 +193,23 @@
             </td>
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
+            <td class="instructions-column">
+              <div class="instruction-content">
+                {{ item.row.instruction | slice : 0 : 40 }}
+                
+                <ng-container *ngIf="item.row.instruction?.length > 40">
+                  <span class="ellipsis">... </span>
+                  
+                  <a 
+                    href="javascript:void(0)" 
+                    class="see-more-link"
+                    (click)="openInstructionPopup(item.row.instruction, $event)"
+                  >
+                    {{ "COMMON.SEE_MORE" | translate }}
+                  </a>
+                </ng-container>
+              </div>
+            </td>
             <td>
               <button
                 class="btn btn-primary"
@@ -220,6 +256,7 @@
             <th>{{ "MAIL.TABLE.SUBJECT" | translate }}</th>
             <th>{{ "MAIL.TABLE.TRANSFER_DATE" | translate }}</th>
             <th>{{ "MAIL.TABLE.REFERENCE" | translate }}</th>
+            <th>{{ "COMMON.INSTRUCTIONS" | translate }}</th>
             <th>{{ "MAIL.TABLE.ACTIONS" | translate }}</th>
             <!-- <th>{{ 'MAIL.TABLE.STATUS' | translate }}</th> -->
           </tr>
@@ -239,6 +276,23 @@
             </td>
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
+            <td class="instructions-column">
+              <div class="instruction-content">
+                {{ item.row.instruction | slice : 0 : 40 }}
+                
+                <ng-container *ngIf="item.row.instruction?.length > 40">
+                  <span class="ellipsis">... </span>
+                  
+                  <a 
+                    href="javascript:void(0)" 
+                    class="see-more-link"
+                    (click)="openInstructionPopup(item.row.instruction, $event)"
+                  >
+                    {{ "COMMON.SEE_MORE" | translate }}
+                  </a>
+                </ng-container>
+              </div>
+            </td>
             <td>
               <button
                 class="btn btn-primary"

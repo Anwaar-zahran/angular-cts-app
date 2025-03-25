@@ -3,8 +3,11 @@
         "SORT_BY": "ترتيب حسب",
         "TRANSFER_DATE": "تاريخ التحويل",
         "REFERENCE_NB": "رقم المرجع",
+        "INSTRUCTIONS": "التعليمات",
+        "FULL_INSTRUCTION": "التعليمات كاملة",
         "SUBJECT": "الموضوع",
         "NO_DATA": "لا توجد بيانات متاحة في الجدول",
+        "SEE_MORE": "عرض المزيد",
         "VISUAL_TRACKING": "التتبع المرئي",
         "TABS": {
             "NEW": "جديد",

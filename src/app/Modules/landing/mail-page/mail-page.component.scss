@@ -1,3 +1,30 @@
 .table-text .text-primary, .table-text .text-secondary {
     cursor: pointer;
 }
+
+.instructions-column {
+    max-width: 250px;
+    
+    .instruction-content {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      
+      .ellipsis {
+        color: #666;
+        margin-left: 4px;
+      }
+      
+      .see-more-link {
+        color: #1a73e8;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease;
+        
+        &:hover {
+          color: #0d47a1;
+          text-decoration: underline;
+        }
+      }
+    }
+  }

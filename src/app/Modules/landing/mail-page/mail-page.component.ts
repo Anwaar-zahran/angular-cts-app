@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { VisualTrackingComponent } from '../../shared/visual-tracking/visual-tracking.component';
@@ -10,6 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MailsService } from '../../../services/mail.service';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiResponseItem } from '../../../models/ApiResponseItem.model';
+import { PopUpComponent } from '../../shared/pop-up/pop-up.component';
 @Component({
   selector: 'app-mail-page',
   templateUrl: './mail-page.component.html',
@@ -365,6 +366,25 @@ export class MailPageComponent implements OnInit,OnDestroy {
       );
   }
 
+  openInstructionPopup(instruction: string, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+    }
 
+    try {
+      const dialogConfig: MatDialogConfig = {
+        data: { 
+          message: instruction,
+          title: 'Full Instructions', 
+          type: 'info' 
+        },
+        width: '400px',
+      };
+
+      this.dialog.open(PopUpComponent, dialogConfig);
+    } catch (error) {
+      console.error('Error opening popup:', error);
+    }
+  }
 }
 

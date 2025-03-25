@@ -3,8 +3,11 @@
     "SORT_BY": "Sort By",
     "TRANSFER_DATE": "Transfer Date",
     "REFERENCE_NB": "Reference No.",
+    "INSTRUCTIONS": "Instructions",
+    "FULL_INSTRUCTION": "Full Instruction",
     "SUBJECT": "Subject",
     "NO_DATA": "No data available",
+    "SEE_MORE": "See More",
     "VISUAL_TRACKING": "Visual Tracking",
     "TABS": {
       "NEW": "New",
