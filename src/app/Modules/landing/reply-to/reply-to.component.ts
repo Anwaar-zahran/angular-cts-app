@@ -81,7 +81,7 @@ export class ReplyToComponent {
     );
     this.lookupsService.getActions(this.accessToken!).subscribe(
       (response) => {
-        debugger
+         
         this.actions = response || [];
       },
       (error) => {
@@ -227,14 +227,14 @@ export class ReplyToComponent {
   }
   
   onUserSelect(event: any) {
-    debugger
+     
     const selectedUser = this.users.find(user => user.id === event.id && user.isStructure === event.isStructure);
     if (selectedUser) {
       this.selectedUserName = selectedUser.name;
     }
   }
   onActionSelect(event: any) {
-    debugger
+     
     const selectedAction = this.actions.find(action => action.id === event.id);
     if (selectedAction) {
       this.selectedActionName = selectedAction.text;

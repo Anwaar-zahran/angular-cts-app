@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { MailsService } from '../../../services/mail.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -8,6 +9,10 @@ import { TranslateService } from '@ngx-translate/core';
   standalone: false
 })
 export class LandingPageComponent {
+
+  newMailCount: number = 0;
+  newGuidelineCount: number = 0;
+  newSignatureCount: number = 0;
 
   Homecards = [
     {
@@ -54,5 +59,46 @@ export class LandingPageComponent {
     },
   ];
 
-  constructor(private translateService: TranslateService) { }
+  constructor(private translateService: TranslateService, private mailService: MailsService) {
+
+    this.mailService.fetchData('/Transfer/ListInbox', localStorage.getItem('structureId') ?? " ", 1, 1, localStorage.getItem('access_token') ?? "", '2')
+      .subscribe(
+        (response) => {
+          this.newMailCount = response.recordsTotal;
+          console.log('MyMail:', this.newMailCount);
+        },
+        (error) => console.error('Error fetching inbox:', error)
+      );
+
+    this.mailService.fetchData('/Transfer/ListInbox', localStorage.getItem('structureId') ?? " ", 1, 1, localStorage.getItem('access_token') ?? "", '2', '9')
+      .subscribe(
+        (response) => {
+          this.newSignatureCount = response.recordsTotal;
+          console.log('Mail:', this.newSignatureCount);
+        },
+        (error) => console.error('Error fetching inbox:', error)
+      );
+
+    this.mailService.fetchData('/Transfer/ListInbox', localStorage.getItem('structureId') ?? " ", 1, 1, localStorage.getItem('access_token') ?? "", '2', '8')
+      .subscribe(
+        (response) => {
+          this.newGuidelineCount = response.recordsTotal;
+          console.log('newGuidelineCount:', this.newGuidelineCount);
+        },
+        (error) => console.error('Error fetching inbox:', error)
+      );
+
+
+  }
+
+
+  getNotificationCount(link: string): number {
+    switch (link) {
+      case 'MyMail': return this.newMailCount;
+      case 'Guidelines': return this.newGuidelineCount;
+      case 'mail': return this.newSignatureCount;
+      default: return 0;
+    }
+  }
+
 }

@@ -362,7 +362,7 @@ export class InprogressTransfersComponent implements OnInit, OnDestroy {
       }
 
     getUserDisplayName(user: User): string {
-        debugger
+         
         return user.fullName || `${user.firstName} ${user.lastName}`.trim();
     }
 

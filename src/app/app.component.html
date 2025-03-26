@@ -1,3 +1,5 @@
 <router-outlet></router-outlet>
-<app-loader [isLoading]="(loaderService.isLoading$ | async) ?? false"
-    [message]="(loaderService.message$ | async) ?? ''"></app-loader>
+<app-loader
+  [isLoading]="isLoading"
+  [message]="message"
+></app-loader>

@@ -44,6 +44,8 @@ export class MymailPageComponent implements OnInit, OnDestroy {
   nodeIdInbox = '2';
   nodeIdSent = '6';
   nodeIdComplete = '3';
+
+  newMailCount!: number
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
 
@@ -189,7 +191,7 @@ export class MymailPageComponent implements OnInit, OnDestroy {
   fromCompleted: boolean = false;
 
   showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
-    debugger;
+     
     const currentName = this.authService.getDisplayName();
 
     // Mark correspondence as read
@@ -232,6 +234,7 @@ export class MymailPageComponent implements OnInit, OnDestroy {
     const parsedPayload = JSON.parse(decodedPayload);
     return localStorage.getItem('structureId') || parsedPayload.StructureId;
   }
+
   loadInboxData(page: number = 1) {
     this.activeTab = "new";
     this.loading = true;
@@ -247,6 +250,10 @@ export class MymailPageComponent implements OnInit, OnDestroy {
           // this.totalPages = Math.ceil(response.recordsTotal / this.itemsPerPage);
           console.log('mailss')
           console.log(this.newItems);
+          this.newMailCount = response.recordsTotal;
+          console.log(this.newMailCount)
+          localStorage.setItem('newMailCount', this.newMailCount.toString());
+          this.mailService.updateNewMailCount(this.newMailCount);
           
           this.totalItems = response.recordsTotal;
           this.calculatePagination()

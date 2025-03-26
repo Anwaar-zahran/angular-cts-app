@@ -304,6 +304,7 @@ export class MailPageComponent implements OnInit,OnDestroy {
     const parsedPayload = JSON.parse(decodedPayload);
     return localStorage.getItem('structureId') || parsedPayload.StructureId;
   }
+  
   loadInboxData(page: number = 1) {
     this.activeTab = "new";
     this.loading = true;
@@ -318,6 +319,7 @@ export class MailPageComponent implements OnInit,OnDestroy {
           this.newItems = response.data.map(this.mapApiResponse.bind(this)) || [];
           // this.totalPages = Math.ceil(response.recordsTotal / this.itemsPerPage);
           this.totalItems = response.recordsTotal;
+          this.mailService.updateNewSignatureCount(this.totalItems);
           this.calculatePagination()
         },
         (error) => console.error('Error fetching inbox:', error),

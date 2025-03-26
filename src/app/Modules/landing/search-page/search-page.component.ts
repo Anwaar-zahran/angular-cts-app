@@ -298,7 +298,7 @@ export class SearchPageComponent {
   isLoadingFromUsers = false;
  
   getFromUsers(searchText: string = '') {
-    debugger;
+     
     if (this.isDataLoaded_FromUser)
       return;
 
@@ -621,7 +621,7 @@ export class SearchPageComponent {
   }
 
   getStatusName(id: any): string {
-    debugger;
+     
     const status = this.statuses.find(p => p.id === id);
     return status ? status.text : '';
   }
@@ -712,7 +712,7 @@ export class SearchPageComponent {
   }
 
   onSearchUsers(event: { term: string; items: any[] }, fromUsersFilter: boolean): void {
-    debugger;
+     
     const query = event.term;
     if (query.length >= 1) {
       //this.loading = true;

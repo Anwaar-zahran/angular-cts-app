@@ -162,7 +162,7 @@ export class LookupsService {
   }
 
   getPrivacyEn(accessToken: string): Observable<any> {
-    debugger;
+     
     //let culture = this.cookieService.get('AspNetCore.Culture');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
@@ -314,7 +314,7 @@ export class LookupsService {
   }
 
   getEntities(): Observable<any> {
-debugger
+ 
     const headers = new HttpHeaders({
       //'Authorization': `Bearer ${accessToken}`,
       //'Content-Type': 'application/json',
@@ -369,7 +369,7 @@ debugger
   
 
   getSearchableEntities(text: string): Observable<any> {
-    debugger
+     
     const headers = new HttpHeaders({
       // 'Authorization': `Bearer ${accessToken}`,
       // 'Content-Type': 'application/json',

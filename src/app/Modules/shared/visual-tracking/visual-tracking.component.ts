@@ -97,7 +97,7 @@ export class VisualTrackingComponent implements OnInit, OnDestroy {
   }
 
   initOrgChart(): void {
-    debugger
+     
     if (!this.chartContainer || !this.visualTracking || !Array.isArray(this.visualTracking)) {
       console.error('Missing required data for OrgChart initialization');
       return;

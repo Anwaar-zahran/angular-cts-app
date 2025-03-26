@@ -290,7 +290,7 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
   }
 
   search() {
-    debugger
+     
     const params: any = {
       page: this.currentPage || 1,
       pageSize: this.dtOptions.pageLength || 10,
@@ -326,7 +326,7 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
   }
 
   clear() {
-    debugger
+     
     this.selectedStructures = [];
     this.selectedUsers = [];
     this.selectedPrivacyId = null;
@@ -468,13 +468,12 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
     });
   }
   loadPrivacyOptions() {
-    debugger;
+     
     this.lookupsService.getPrivacy('').subscribe({
       next: (options) => {
         this.privacyOptions = options;
         //this.privacyOptions = options.map(option => {
         //const formattedKey = option.name.trim().toLowerCase().replace(/\s+/g, ' '); // Remove extra spaces
-        //debugger
         // return {
         //   ...option,
         //   translatedName: this.translate.instant(`PrivacyOptions.${formattedKey}`) || option.name // Translate option name

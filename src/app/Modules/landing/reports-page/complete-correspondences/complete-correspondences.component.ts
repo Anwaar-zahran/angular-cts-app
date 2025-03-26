@@ -479,7 +479,7 @@ export class CompleteCorrespondencesComponent implements OnInit {
   loadPrivacyOptions() {
     this.lookupsService.getPrivacy('').subscribe({
       next: (options) => {
-        debugger;
+         
         this.privacyOptions = options;
       },
       error: (error) => {

@@ -49,6 +49,9 @@ export class GuidelinePageComponent implements OnInit,OnDestroy {
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
 
+  newGuidelineCount!: number
+
+
   isDtInitialized: boolean = false;
   constructor(
     private http: HttpClient,
@@ -116,7 +119,7 @@ export class GuidelinePageComponent implements OnInit,OnDestroy {
   }
   active = 1;
   showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
-    debugger;
+     
     const currentName = this.authService.getDisplayName();
 
     // Mark correspondence as read
@@ -279,7 +282,6 @@ export class GuidelinePageComponent implements OnInit,OnDestroy {
   }
 
   setActiveTab(tab: 'new' | 'sent' | 'completed',) {
-    debugger
     if (this.activeTab !== tab) {
       // Reset pagination ONLY when switching tabs
       this.currentPageMap[tab] = 1;
@@ -301,7 +303,7 @@ export class GuidelinePageComponent implements OnInit,OnDestroy {
     return localStorage.getItem('structureId') || parsedPayload.StructureId;
   }
   loadInboxData(page: number = 1) {
-    debugger;
+     
     this.activeTab = "new";
     this.loading = true;
     this.currentPage = page
@@ -315,6 +317,8 @@ export class GuidelinePageComponent implements OnInit,OnDestroy {
           this.newItems = response.data.map(this.mapApiResponse.bind(this)) || [];
           // this.totalPages = Math.ceil(response.recordsTotal / this.itemsPerPage);
           this.totalItems = response.recordsTotal;
+          console.log(this.totalItems)
+          this.mailService.updateNewGuidelineCount(this.totalItems);
           this.calculatePagination()
         },
         (error) => console.error('Error fetching inbox:', error),

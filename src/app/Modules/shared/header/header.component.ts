@@ -9,6 +9,7 @@ import { CurrentUserStructures } from '../../../models/current-user-structures';
 import { DisplayStructure } from '../../../models/display-structure';
 import { ConfirmationmodalComponent } from '../confirmationmodal/confirmationmodal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MailsService } from '../../../services/mail.service';
 //import { CookieService } from 'ngx-cookie-service';
 
 @Component({
@@ -35,10 +36,13 @@ export class HeaderComponent implements OnInit {
     { link: '#', title: 'HEADER.USER_NAV.LOGOUT' }
   ];
 
+  newMailCount!:number;
+  newGuidlineCount!:number;
+  newSignatureCount!:number;
 
   structuresItems2: CurrentUserStructures[] = [];
   structuresItems: DisplayStructure[] = [];
-  structure!:string;
+  structure!: string;
 
   languages = [
     { code: 'en', name: 'English', dir: 'ltr' },
@@ -52,17 +56,46 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     private translateService: TranslateService,
     private modalService: NgbModal,
-    private structuresService: StructuresService
+    private structuresService: StructuresService,
+    private mailService: MailsService
     //private cookieService: CookieService
   ) {
     this.currentLang = this.translateService.currentLang || 'en';
     this.structure = this.translateService.instant("BAM.DASHBOARD.CHARTS.LABELS.STRUCTURES");
-  
+
     this.translateService.setDefaultLang('en');
 
   }
 
   ngOnInit(): void {
+
+    this.mailService.fetchData('/Transfer/ListInbox' ,localStorage.getItem('structureId')??" ",1 ,1 ,localStorage.getItem('access_token')?? "", '2')
+    .subscribe(
+      (response) => {
+        this.newMailCount = response.recordsTotal;
+        console.log('MyMail:', this.newMailCount);
+      },
+      (error) => console.error('Error fetching inbox:', error)
+    );
+
+    this.mailService.fetchData('/Transfer/ListInbox' ,localStorage.getItem('structureId')??" ",1 ,1 ,localStorage.getItem('access_token')?? "", '2','9')
+    .subscribe(
+      (response) => {
+        this.newSignatureCount = response.recordsTotal;
+        console.log('Mail:', this.newSignatureCount);
+      },
+      (error) => console.error('Error fetching inbox:', error)
+    );
+
+    this.mailService.fetchData('/Transfer/ListInbox' ,localStorage.getItem('structureId')??" ",1 ,1 ,localStorage.getItem('access_token')?? "", '2','8')
+    .subscribe(
+      (response) => {
+        this.newGuidlineCount = response.recordsTotal;
+        console.log('newGuidelineCount:', this.newGuidlineCount);
+      },
+      (error) => console.error('Error fetching inbox:', error)
+    );
+    
     console.log('HeaderComponent ngOnInit');
     this.authService.CurrentUser.subscribe(user => {
       this.userName = user;
@@ -71,7 +104,7 @@ export class HeaderComponent implements OnInit {
       this.showMenu = this.route.url !== '/landing';
     });
 
-  
+
     this.loadStructures();
   }
 
@@ -84,7 +117,7 @@ export class HeaderComponent implements OnInit {
   }
 
   switchLanguage(lang: string) {
-    debugger;
+     
     this.translateService.use(lang);
     localStorage.setItem('language', lang);
     this.currentLang = lang;
@@ -154,7 +187,7 @@ export class HeaderComponent implements OnInit {
 
   onStructureChange(structureId: number) {
     if (structureId) {
-      debugger;
+       
       const modalRef = this.modalService.open(ConfirmationmodalComponent);
 
       this.translateService.get('HEADER.CONFIRMMODAL.MESSAGE').subscribe((msg: string) => {
@@ -174,7 +207,7 @@ export class HeaderComponent implements OnInit {
   }
 
   private updateStructure(structureId: number, shouldRedirectToLanding: boolean) {
-    debugger
+     
     let CurrentUserStructures = this.structuresItems.find(structure => structure.active == true);
     let newUserStructures = this.structuresItems.find(structure => structure.StructureId === structureId);
 
@@ -203,5 +236,16 @@ export class HeaderComponent implements OnInit {
         error: (error) => console.error('Error updating structure:', error)
       });
   }
+
+  getNotificationCount(link: string): number {
+    switch (link) {
+      case 'MyMail': return this.newMailCount;
+      case 'Guidelines': return this.newGuidlineCount;
+      case 'mail': return this.newSignatureCount;
+      default: return 0;
+    }
+  }
+  
+
 
 }
