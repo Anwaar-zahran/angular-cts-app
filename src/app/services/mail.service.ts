@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { forkJoin } from 'rxjs';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,31 +14,37 @@ export class MailsService {
   private CorrsondanceViewURL = `${environment.apiBaseUrl}/Transfer/View`;
   private myTransferURL = `${environment.apiBaseUrl}/Transfer/GetTransferInfoById`;
 
-  private newMailCount = new BehaviorSubject<number>(0);
-  newMailCount$ = this.newMailCount.asObservable();
+  private mailCount = new BehaviorSubject<number>(0);
+  private signatureCount = new BehaviorSubject<number>(0);
+  private guidelineCount = new BehaviorSubject<number>(0);
 
-  private newGuidelineCount = new BehaviorSubject<number>(0);
-  newGuidelineCount$ = this.newGuidelineCount.asObservable();
-
-  private newSignatureCount = new BehaviorSubject<number>(0);
-  newSignatureCount$ = this.newSignatureCount.asObservable();
-
+  mailCount$ = this.mailCount.asObservable();
+  signatureCount$ = this.signatureCount.asObservable();
+  guidelineCount$ = this.guidelineCount.asObservable();
   constructor(private httpClient: HttpClient,) { }
 
-  updateNewMailCount(count: number) {
-    console.log('updateNewMailCount', count);
-    this.newMailCount.next(count);
-  }
 
-  updateNewGuidelineCount(count: number) {
-    console.log('updateNewGuidelineCount', count);
-    this.newGuidelineCount.next(count);
+  fetchNotificationCounts() {
+    const structureId = localStorage.getItem('structureId') ?? " ";
+    const token = localStorage.getItem('access_token') ?? "";
+  
+    const page = 1;
+    const length = 1000;
+    const fixedParam = '2';
+  
+    forkJoin({
+      mail: this.fetchData('/Transfer/ListInbox', structureId, page, length, token, fixedParam),
+      guideline: this.fetchData('/Transfer/ListInbox', structureId, page, length, token, fixedParam, '9'),
+      signature: this.fetchData('/Transfer/ListInbox', structureId, page, length, token, fixedParam, '8')
+    }).subscribe(({ mail, signature, guideline }) => {
+      this.mailCount.next(mail.data.filter((x: any) => !x.isRead).length);
+      this.signatureCount.next(signature.data.filter((x: any) => !x.isRead).length);
+      this.guidelineCount.next(guideline.data.filter((x: any) => !x.isRead).length);
+    });
   }
+  
 
-  updateNewSignatureCount(count: number) {
-    console.log('updateNewSignatureCount', count);
-    this.newSignatureCount.next(count);
-  }
+  
   transferMail(accessToken: string, model: any[]): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,

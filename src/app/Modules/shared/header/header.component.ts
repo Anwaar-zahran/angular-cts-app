@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -18,7 +18,7 @@ import { MailsService } from '../../../services/mail.service';
   styleUrl: './header.component.scss',
   standalone: false
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   currentLang: string;
   userInfo = { name: "Fatima AliAhmad", Job: "Frontend Developer", ID: 1234, image: null }
   showMenu: boolean = true;
@@ -36,9 +36,9 @@ export class HeaderComponent implements OnInit {
     { link: '#', title: 'HEADER.USER_NAV.LOGOUT' }
   ];
 
-  newMailCount!:number;
-  newGuidlineCount!:number;
-  newSignatureCount!:number;
+  newMailCount!: number;
+  newGuidlineCount!: number;
+  newSignatureCount!: number;
 
   structuresItems2: CurrentUserStructures[] = [];
   structuresItems: DisplayStructure[] = [];
@@ -66,36 +66,20 @@ export class HeaderComponent implements OnInit {
     this.translateService.setDefaultLang('en');
 
   }
+  ngOnDestroy(): void {
+    localStorage.removeItem('GuidelinesCount');
+    localStorage.removeItem('MyMailCount');
+    localStorage.removeItem('SignatureCount');
+  }
 
   ngOnInit(): void {
 
-    this.mailService.fetchData('/Transfer/ListInbox' ,localStorage.getItem('structureId')??" ",1 ,1 ,localStorage.getItem('access_token')?? "", '2')
-    .subscribe(
-      (response) => {
-        this.newMailCount = response.recordsTotal;
-        console.log('MyMail:', this.newMailCount);
-      },
-      (error) => console.error('Error fetching inbox:', error)
-    );
+    this.mailService.fetchNotificationCounts();
 
-    this.mailService.fetchData('/Transfer/ListInbox' ,localStorage.getItem('structureId')??" ",1 ,1 ,localStorage.getItem('access_token')?? "", '2','9')
-    .subscribe(
-      (response) => {
-        this.newSignatureCount = response.recordsTotal;
-        console.log('Mail:', this.newSignatureCount);
-      },
-      (error) => console.error('Error fetching inbox:', error)
-    );
+    this.mailService.mailCount$.subscribe(count => this.newMailCount = count);
+    this.mailService.signatureCount$.subscribe(count => this.newSignatureCount = count);
+    this.mailService.guidelineCount$.subscribe(count => this.newGuidlineCount = count);
 
-    this.mailService.fetchData('/Transfer/ListInbox' ,localStorage.getItem('structureId')??" ",1 ,1 ,localStorage.getItem('access_token')?? "", '2','8')
-    .subscribe(
-      (response) => {
-        this.newGuidlineCount = response.recordsTotal;
-        console.log('newGuidelineCount:', this.newGuidlineCount);
-      },
-      (error) => console.error('Error fetching inbox:', error)
-    );
-    
     console.log('HeaderComponent ngOnInit');
     this.authService.CurrentUser.subscribe(user => {
       this.userName = user;
@@ -117,7 +101,7 @@ export class HeaderComponent implements OnInit {
   }
 
   switchLanguage(lang: string) {
-     
+
     this.translateService.use(lang);
     localStorage.setItem('language', lang);
     this.currentLang = lang;
@@ -187,7 +171,7 @@ export class HeaderComponent implements OnInit {
 
   onStructureChange(structureId: number) {
     if (structureId) {
-       
+
       const modalRef = this.modalService.open(ConfirmationmodalComponent);
 
       this.translateService.get('HEADER.CONFIRMMODAL.MESSAGE').subscribe((msg: string) => {
@@ -207,7 +191,7 @@ export class HeaderComponent implements OnInit {
   }
 
   private updateStructure(structureId: number, shouldRedirectToLanding: boolean) {
-     
+
     let CurrentUserStructures = this.structuresItems.find(structure => structure.active == true);
     let newUserStructures = this.structuresItems.find(structure => structure.StructureId === structureId);
 
@@ -229,6 +213,7 @@ export class HeaderComponent implements OnInit {
       .subscribe({
         next: (response) => {
           localStorage.setItem('structureId', structureId.toString());
+          this.mailService.fetchNotificationCounts();
           if (shouldRedirectToLanding) {
             this.route.navigate(['/landing']);
           }
@@ -245,7 +230,7 @@ export class HeaderComponent implements OnInit {
       default: return 0;
     }
   }
-  
+
 
 
 }
