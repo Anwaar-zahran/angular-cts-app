@@ -77,8 +77,14 @@ export class LookupsService {
       );
   }
 
-  getPriorityOptions(): Observable<Priority[]> {
-    return this.http.get<Priority[]>(`${environment.apiBaseUrl}/Priority/ListPriorities`);
+  getPriorityOptions(accessToken: string): Observable<Priority[]> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'accept-language': this.currentLang
+    });
+
+    return this.http.get<Priority[]>(`${environment.apiBaseUrl}/Priority/ListPriorities`,{headers});
   }
 
   getUsers(accessToken: string): Observable<any> {

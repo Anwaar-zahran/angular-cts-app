@@ -502,7 +502,7 @@ export class CompleteCorrespondencesComponent implements OnInit {
   }
 
   loadPriorityOptions() {
-    this.lookupsService.getPriorityOptions().subscribe({
+    this.lookupsService.getPriorityOptions('').subscribe({
       next: (options) => {
         this.priorityOptions = options;
       },

@@ -73,7 +73,8 @@ export class ReplyToComponent {
 
     this.lookupsService.getPurposes(this.accessToken!).subscribe(
       (response) => {
-        this.purposes = response || [];
+        this.purposes = (response || []).filter((item: { name: string }) => item.name !== 'CCed');
+
       },
       (error) => {
         console.error('Error loading priorities:', error);
