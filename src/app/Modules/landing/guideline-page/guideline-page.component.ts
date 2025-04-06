@@ -126,8 +126,11 @@ export class GuidelinePageComponent implements OnInit,OnDestroy {
     // Mark correspondence as read
     this.mailService.markCorrespondanceAsRead(this.accessToken!, item.id).subscribe({
       next: () => {
-        console.log('Marked as read');
-        item.row.isRead = true; // Update item locally to reflect the change
+        if(!item.row.isRead){
+          console.log('Marked as read');
+          item.row.isRead = true;
+          this.mailService.fetchNotificationCounts();
+        }
       },
       error: (err) => console.error('Error marking as read:', err)
     });
@@ -319,7 +322,6 @@ export class GuidelinePageComponent implements OnInit,OnDestroy {
           // this.totalPages = Math.ceil(response.recordsTotal / this.itemsPerPage);
           this.totalItems = response.recordsTotal;
           console.log(this.totalItems)
-          this.mailService.updateNewGuidelineCount(this.totalItems);
           this.calculatePagination()
         },
         (error) => console.error('Error fetching inbox:', error),

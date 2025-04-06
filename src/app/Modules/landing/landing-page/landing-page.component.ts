@@ -61,34 +61,12 @@ export class LandingPageComponent {
 
   constructor(private translateService: TranslateService, private mailService: MailsService) {
 
-    this.mailService.fetchData('/Transfer/ListInbox', localStorage.getItem('structureId') ?? " ", 1, 1, localStorage.getItem('access_token') ?? "", '2')
-      .subscribe(
-        (response) => {
-          this.newMailCount = response.recordsTotal;
-          console.log('MyMail:', this.newMailCount);
-        },
-        (error) => console.error('Error fetching inbox:', error)
-      );
 
-    this.mailService.fetchData('/Transfer/ListInbox', localStorage.getItem('structureId') ?? " ", 1, 1, localStorage.getItem('access_token') ?? "", '2', '9')
-      .subscribe(
-        (response) => {
-          this.newSignatureCount = response.recordsTotal;
-          console.log('Mail:', this.newSignatureCount);
-        },
-        (error) => console.error('Error fetching inbox:', error)
-      );
+    this.mailService.fetchNotificationCounts();
 
-    this.mailService.fetchData('/Transfer/ListInbox', localStorage.getItem('structureId') ?? " ", 1, 1, localStorage.getItem('access_token') ?? "", '2', '8')
-      .subscribe(
-        (response) => {
-          this.newGuidelineCount = response.recordsTotal;
-          console.log('newGuidelineCount:', this.newGuidelineCount);
-        },
-        (error) => console.error('Error fetching inbox:', error)
-      );
-
-
+    this.mailService.mailCount$.subscribe(count => this.newMailCount = count);
+    this.mailService.signatureCount$.subscribe(count => this.newSignatureCount = count);
+    this.mailService.guidelineCount$.subscribe(count => this.newGuidelineCount = count);
   }
 
 

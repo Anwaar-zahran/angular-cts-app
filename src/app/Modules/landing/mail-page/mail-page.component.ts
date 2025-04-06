@@ -124,8 +124,11 @@ export class MailPageComponent implements OnInit,OnDestroy {
     if(this.activeTab.toLocaleLowerCase() =="new"){
     this.mailService.markCorrespondanceAsRead(this.accessToken!, item.id).subscribe({
       next: () => {
-        console.log('Marked as read');
-        item.row.isRead = true; // Update item locally to reflect the change
+        if(!item.row.isRead){
+          console.log('Marked as read');
+          item.row.isRead = true;
+          this.mailService.fetchNotificationCounts();
+        }
       },
       error: (err) => console.error('Error marking as read:', err)
     });
@@ -321,7 +324,6 @@ export class MailPageComponent implements OnInit,OnDestroy {
           this.newItems = response.data.map(this.mapApiResponse.bind(this)) || [];
           // this.totalPages = Math.ceil(response.recordsTotal / this.itemsPerPage);
           this.totalItems = response.recordsTotal;
-          this.mailService.updateNewSignatureCount(this.totalItems);
           this.calculatePagination()
         },
         (error) => console.error('Error fetching inbox:', error),
