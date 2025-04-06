@@ -248,7 +248,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
   lookupPromiseResults: any;
   async loadLookupData(): Promise<void> {
     try {
-      debugger;
+       
       const promises = [
         this.toPromise(this.lookupsService.getEntities(), (structures: any) => {
           this.structures = structures || [];
@@ -949,7 +949,7 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
             }
             if (this.attributes.carbonCopy?.length > 0)
               this.selectedCarbonText = this.attributes.carbonCopies.map((carbon: any) => carbon.text).join(', ');
-            debugger;
+             
             if (this.docTypeId) {
               this.mailService.getDocumentType(this.currentLang).subscribe({
                 next: (response) => {
@@ -1130,13 +1130,13 @@ export class MailDetailsDialogComponent implements AfterViewChecked, OnInit, OnD
 
   showAttachment: boolean = true;
   getAttachments(docID: string): Promise<AttachmentsApiResponce> {
-    debugger
+     
     // this.ctsDocumentId = Number(docID);
     console.log('from attachement service' + this.ctsDocumentId)
     return new Promise((resolve, reject) => {
       this.searchService.getAttachments(this.accessToken!, docID).subscribe(
         (response: any) => {
-          debugger
+           
           this.attachments = response || [];
           console.log('55522222')
           this.attachments = this.sortAttachments(response || []);

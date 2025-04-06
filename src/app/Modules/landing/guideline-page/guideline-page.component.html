@@ -87,6 +87,7 @@
             <th>{{ "GUIDELINES.TABLE.HEADERS.SUBJECT" | translate }}</th>
             <th>{{ "GUIDELINES.TABLE.HEADERS.TRANSFER_DATE" | translate }}</th>
             <th>{{ "GUIDELINES.TABLE.HEADERS.REFERENCE_NB" | translate }}</th>
+            <th>{{ "COMMON.INSTRUCTIONS" | translate }}</th>
             <th>{{ "GUIDELINES.TABLE.HEADERS.ACTIONS" | translate }}</th>
             <th>{{ "TABLE.HEADERS.STATUS" | translate }}</th>
           </tr>
@@ -106,6 +107,23 @@
             </td>
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
+            <td class="instructions-column">
+              <div class="instruction-content">
+                {{ item.row.instruction | slice : 0 : 40 }}
+                
+                <ng-container *ngIf="item.row.instruction?.length > 40">
+                  <span class="ellipsis">... </span>
+                  
+                  <a 
+                    href="javascript:void(0)" 
+                    class="see-more-link"
+                    (click)="openInstructionPopup(item.row.instruction, $event)"
+                  >
+                    {{ "COMMON.SEE_MORE" | translate }}
+                  </a>
+                </ng-container>
+              </div>
+            </td>
             <td>
               <button
                 class="btn btn-primary"
@@ -158,6 +176,7 @@
             <th>{{ "GUIDELINES.TABLE.HEADERS.SUBJECT" | translate }}</th>
             <th>{{ "GUIDELINES.TABLE.HEADERS.TRANSFER_DATE" | translate }}</th>
             <th>{{ "GUIDELINES.TABLE.HEADERS.REFERENCE_NB" | translate }}</th>
+            <th>{{ "COMMON.INSTRUCTIONS" | translate }}</th>
             <th>{{ "GUIDELINES.TABLE.HEADERS.ACTIONS" | translate }}</th>
             <!-- <th>{{ 'TABLE.HEADERS.STATUS' | translate }}</th> -->
           </tr>
@@ -177,6 +196,23 @@
             </td>
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
+            <td class="instructions-column">
+              <div class="instruction-content">
+                {{ item.row.instruction | slice : 0 : 40 }}
+                
+                <ng-container *ngIf="item.row.instruction?.length > 40">
+                  <span class="ellipsis">... </span>
+                  
+                  <a 
+                    href="javascript:void(0)" 
+                    class="see-more-link"
+                    (click)="openInstructionPopup(item.row.instruction, $event)"
+                  >
+                    {{ "COMMON.SEE_MORE" | translate }}
+                  </a>
+                </ng-container>
+              </div>
+            </td>
             <td>
               <button
                 class="btn btn-primary"
@@ -223,6 +259,7 @@
             <th>{{ "GUIDELINES.TABLE.HEADERS.SUBJECT" | translate }}</th>
             <th>{{ "GUIDELINES.TABLE.HEADERS.TRANSFER_DATE" | translate }}</th>
             <th>{{ "GUIDELINES.TABLE.HEADERS.REFERENCE_NB" | translate }}</th>
+            <th>{{ "COMMON.INSTRUCTIONS" | translate }}</th>
             <th>{{ "GUIDELINES.TABLE.HEADERS.ACTIONS" | translate }}</th>
             <!-- <th>{{ 'TABLE.HEADERS.STATUS' | translate }}</th> -->
           </tr>
@@ -242,6 +279,23 @@
             </td>
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
+            <td class="instructions-column">
+              <div class="instruction-content">
+                {{ item.row.instruction | slice : 0 : 40 }}
+                
+                <ng-container *ngIf="item.row.instruction?.length > 40">
+                  <span class="ellipsis">... </span>
+                  
+                  <a 
+                    href="javascript:void(0)" 
+                    class="see-more-link"
+                    (click)="openInstructionPopup(item.row.instruction, $event)"
+                  >
+                    {{ "COMMON.SEE_MORE" | translate }}
+                  </a>
+                </ng-container>
+              </div>
+            </td>
             <td>
               <button
                 class="btn btn-primary"
@@ -277,7 +331,6 @@
           [class.disabled]="currentPage === 1"
           (click)="goToPage(1)"
           [style.cursor]="currentPage === 1 ? 'not-allowed' : 'pointer'"
-
         >
           <i class="text-secondary fa fa-angle-double-left"></i>
         </a>
@@ -287,7 +340,6 @@
           [class.disabled]="currentPage === 1"
           (click)="previousPage()"
           [style.cursor]="currentPage === 1 ? 'not-allowed' : 'pointer'"
-
         >
           <i class="text-secondary fa fa-angle-left"></i>
         </a>
@@ -309,8 +361,9 @@
           class="paginate_button next"
           [class.disabled]="currentPage === totalPages"
           (click)="nextPage()"
-          [style.cursor]="currentPage === totalPages ? 'not-allowed' : 'pointer'"
-
+          [style.cursor]="
+            currentPage === totalPages ? 'not-allowed' : 'pointer'
+          "
         >
           <i class="text-secondary fa fa-angle-right"></i>
         </a>
@@ -319,8 +372,9 @@
           class="paginate_button last"
           [class.disabled]="currentPage === totalPages"
           (click)="goToPage(totalPages)"
-          [style.cursor]="currentPage === totalPages ? 'not-allowed' : 'pointer'"
-
+          [style.cursor]="
+            currentPage === totalPages ? 'not-allowed' : 'pointer'
+          "
         >
           <i class="text-secondary fa fa-angle-double-right"></i>
         </a>

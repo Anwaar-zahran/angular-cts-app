@@ -16,20 +16,27 @@
       /></a>
     </div>
   </div>
-  <!--navigation-->
+  <!--Navigation-->
   <nav class="header-nav" *ngIf="showMenu">
     <ul>
-      <li
-        *ngFor="let item of MainnavItems"
-        class="nav-item"
-        routerLinkActive="active"
-      >
-        <a [routerLink]="item.link" [title]="item.title | translate">
-          <img [src]="item.icon" [alt]="item.title | translate" />
-        </a>
+      <li *ngFor="let item of MainnavItems" class="nav-item" routerLinkActive="active">
+        <div class="notification-container">
+          <a [routerLink]="item.link" [title]="item.title | translate">
+            <img [src]="item.icon" [alt]="item.title" />
+          </a>
+  
+          <!-- Notification Badge Positioned on Top-Right Outside the Icon -->
+          <span *ngIf="getNotificationCount(item.link) > 0" class="notification-badge">
+            {{ getNotificationCount(item.link) }}
+          </span>
+        </div>
       </li>
     </ul>
   </nav>
+  
+  
+
+  
   <div class="d-flex align-items-center gap-3">
     <!-- Language Switcher -->
     <div class="dropdown language-switcher">

@@ -13,7 +13,7 @@ export class CategoriesService {
     constructor(private http: HttpClient) { }
 
     ListCategories(delegationId: string = ''): Observable<Category[]> {
-        debugger
+         
         const params = new HttpParams()
             .set('delegationId', delegationId)
 

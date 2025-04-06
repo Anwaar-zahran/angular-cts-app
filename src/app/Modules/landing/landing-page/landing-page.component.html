@@ -4,6 +4,9 @@
             [ngStyle]="{'background-color': card.backgroundColor}">
             <div class="icon">
                 <img [src]="card.imgSrc" alt="" />
+                <span *ngIf="getNotificationCount(card.link) > 0" class="notification-badge">
+                    {{ getNotificationCount(card.link) }}
+                </span>
             </div>
             <div class="title">
                 <h2>{{ card.titleKey | translate }}</h2>

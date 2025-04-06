@@ -87,6 +87,7 @@
             <th>{{ "COMMON.SUBJECT" | translate }}</th>
             <th>{{ "COMMON.TRANSFER_DATE" | translate }}</th>
             <th>{{ "COMMON.REFERENCE_NB" | translate }}</th>
+            <th>{{ "COMMON.INSTRUCTIONS" | translate }}</th>
             <th>{{ "TABLE.HEADERS.ACTIONS" | translate }}</th>
             <th>{{ "TABLE.HEADERS.STATUS" | translate }}</th>
           </tr>
@@ -106,6 +107,23 @@
             </td>
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
+            <td class="instructions-column">
+              <div class="instruction-content">
+                {{ item.row.instruction | slice : 0 : 40 }}
+                
+                <ng-container *ngIf="item.row.instruction?.length > 40">
+                  <span class="ellipsis">... </span>
+                  
+                  <a 
+                    href="javascript:void(0)" 
+                    class="see-more-link"
+                    (click)="openInstructionPopup(item.row.instruction, $event)"
+                  >
+                    {{ "COMMON.SEE_MORE" | translate }}
+                  </a>
+                </ng-container>
+              </div>
+            </td>
             <td>
               <button
                 class="btn btn-primary"
@@ -152,6 +170,7 @@
             <th>{{ "MYMAIL.TABLE.HEADERS.SUBJECT" | translate }}</th>
             <th>{{ "MYMAIL.TABLE.HEADERS.TRANSFER_DATE" | translate }}</th>
             <th>{{ "MYMAIL.TABLE.HEADERS.REFERENCE_NB" | translate }}</th>
+            <th>{{ "COMMON.INSTRUCTIONS" | translate }}</th>
             <th>{{ "MYMAIL.TABLE.HEADERS.ACTIONS" | translate }}</th>
             <!-- <th>{{ "MYMAIL.TABLE.HEADERS.STATUS" | translate }}</th> -->
           </tr>
@@ -171,6 +190,23 @@
             </td>
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
+            <td class="instructions-column">
+              <div class="instruction-content">
+                {{ item.row.instruction | slice : 0 : 40 }}
+                
+                <ng-container *ngIf="item.row.instruction?.length > 40">
+                  <span class="ellipsis">... </span>
+                  
+                  <a 
+                    href="javascript:void(0)" 
+                    class="see-more-link"
+                    (click)="openInstructionPopup(item.row.instruction, $event)"
+                  >
+                    {{ "COMMON.SEE_MORE" | translate }}
+                  </a>
+                </ng-container>
+              </div>
+            </td>
             <td>
               <button
                 class="btn btn-primary"
@@ -218,6 +254,7 @@
             <th>{{ "MYMAIL.TABLE.HEADERS.SUBJECT" | translate }}</th>
             <th>{{ "MYMAIL.TABLE.HEADERS.TRANSFER_DATE" | translate }}</th>
             <th>{{ "MYMAIL.TABLE.HEADERS.REFERENCE_NB" | translate }}</th>
+            <th>{{ "COMMON.INSTRUCTIONS" | translate }}</th>
             <th>{{ "MYMAIL.TABLE.HEADERS.ACTIONS" | translate }}</th>
             <!-- <th>{{ "MYMAIL.TABLE.HEADERS.STATUS" | translate }}</th> -->
           </tr>
@@ -237,6 +274,23 @@
             </td>
             <td>{{ item.date }}</td>
             <td>{{ item.ref }}</td>
+            <td class="instructions-column">
+              <div class="instruction-content">
+                {{ item.row.instruction | slice : 0 : 40 }}
+                
+                <ng-container *ngIf="item.row.instruction?.length > 40">
+                  <span class="ellipsis">... </span>
+                  
+                  <a 
+                    href="javascript:void(0)" 
+                    class="see-more-link"
+                    (click)="openInstructionPopup(item.row.instruction, $event)"
+                  >
+                    {{ "COMMON.SEE_MORE" | translate }}
+                  </a>
+                </ng-container>
+              </div>
+            </td>
             <td>
               <button
                 class="btn btn-primary"
@@ -302,7 +356,9 @@
           class="paginate_button next"
           [class.disabled]="currentPage === totalPages"
           (click)="nextPage()"
-          [style.cursor]="currentPage === totalPages ? 'not-allowed' : 'pointer'"
+          [style.cursor]="
+            currentPage === totalPages ? 'not-allowed' : 'pointer'
+          "
         >
           <i class="text-secondary fa fa-angle-right"></i>
         </a>
@@ -311,7 +367,9 @@
           class="paginate_button last"
           [class.disabled]="currentPage === totalPages"
           (click)="goToPage(totalPages)"
-          [style.cursor]="currentPage === totalPages ? 'not-allowed' : 'pointer'"
+          [style.cursor]="
+            currentPage === totalPages ? 'not-allowed' : 'pointer'
+          "
         >
           <i class="text-secondary fa fa-angle-double-right"></i>
         </a>

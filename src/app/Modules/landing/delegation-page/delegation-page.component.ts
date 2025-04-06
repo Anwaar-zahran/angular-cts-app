@@ -508,7 +508,7 @@ export class DelegationPageComponent implements OnInit {
 
         this.delegationService.updateDelegate(this.accessToken!, itemData).subscribe(
           (response: any) => {
-            debugger;
+             
             this.isEdit = false;
             this.clear();
             this.getListData();
@@ -527,7 +527,7 @@ export class DelegationPageComponent implements OnInit {
       } else {
         this.delegationService.updateDelegate(this.accessToken!, itemData).subscribe(
           (response: any) => {
-            debugger;
+             
             this.isEdit = false;
             this.clear();
             this.getListData();

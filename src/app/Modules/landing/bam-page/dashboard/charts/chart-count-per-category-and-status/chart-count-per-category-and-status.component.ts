@@ -252,7 +252,6 @@ export class ChartCountPerCategoryAndStatusComponent implements OnInit, OnDestro
   visibility: string = 'hidden';
 
   showInfo() {
-    debugger;
     this.opacity = '1';
     this.visibility = 'visible';
   }

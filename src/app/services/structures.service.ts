@@ -35,7 +35,7 @@ export class StructuresService {
         return this.http.get<CurrentUserStructures>(`${this.baseUrl}/GetUser?id=${id}`);
     }
     UpdateLoggedInStrucure(structureId: string | undefined, oldStrutureId: string | undefined, accessToken: string): Observable<string> {
-        debugger
+         
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${accessToken}`
         });

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { VisualTrackingComponent } from '../../shared/visual-tracking/visual-tracking.component';
@@ -10,6 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MailsService } from '../../../services/mail.service';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiResponseItem } from '../../../models/ApiResponseItem.model';
+import { PopUpComponent } from '../../shared/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-mymail-page',
@@ -43,6 +44,8 @@ export class MymailPageComponent implements OnInit, OnDestroy {
   nodeIdInbox = '2';
   nodeIdSent = '6';
   nodeIdComplete = '3';
+
+  newMailCount!: number
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
 
@@ -143,7 +146,7 @@ export class MymailPageComponent implements OnInit, OnDestroy {
       isOverDue: item.isOverDue,
       id: item.id,
       documentId: item.documentId,
-      row: item
+      row: item,
     };
   }
   previousPage() {
@@ -188,7 +191,7 @@ export class MymailPageComponent implements OnInit, OnDestroy {
   fromCompleted: boolean = false;
 
   showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
-    debugger;
+     
     const currentName = this.authService.getDisplayName();
     if(this.activeTab.toLocaleLowerCase() =="new"){
     // Mark correspondence as read
@@ -232,6 +235,7 @@ export class MymailPageComponent implements OnInit, OnDestroy {
     const parsedPayload = JSON.parse(decodedPayload);
     return localStorage.getItem('structureId') || parsedPayload.StructureId;
   }
+
   loadInboxData(page: number = 1) {
     this.activeTab = "new";
     this.loading = true;
@@ -247,6 +251,11 @@ export class MymailPageComponent implements OnInit, OnDestroy {
           // this.totalPages = Math.ceil(response.recordsTotal / this.itemsPerPage);
           console.log('mailss')
           console.log(this.newItems);
+          this.newMailCount = response.recordsTotal;
+          console.log(this.newMailCount)
+          localStorage.setItem('newMailCount', this.newMailCount.toString());
+          this.mailService.updateNewMailCount(this.newMailCount);
+          
           this.totalItems = response.recordsTotal;
           this.calculatePagination()
         },
@@ -254,6 +263,7 @@ export class MymailPageComponent implements OnInit, OnDestroy {
         () => (this.loading = false)
       );
   }
+
   loadSentData(page: number = 1) {
 
     this.activeTab = 'sent';
@@ -269,6 +279,8 @@ export class MymailPageComponent implements OnInit, OnDestroy {
       .subscribe(
         (response) => {
           this.sentItems = response.data.map(this.mapApiResponse.bind(this)) || [];
+          console.log('sent')
+          console.log(this.sentItems);
           this.totalItems = response.recordsTotal;
           this.calculatePagination();
         },
@@ -427,4 +439,24 @@ export class MymailPageComponent implements OnInit, OnDestroy {
     });
   }
 
+  openInstructionPopup(instruction: string, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+    }
+
+    try {
+      const dialogConfig: MatDialogConfig = {
+        data: { 
+          message: instruction,
+          title: 'Full Instructions', 
+          type: 'info' 
+        },
+        width: '400px',
+      };
+
+      this.dialog.open(PopUpComponent, dialogConfig);
+    } catch (error) {
+      console.error('Error opening popup:', error);
+    }
+  }
 }

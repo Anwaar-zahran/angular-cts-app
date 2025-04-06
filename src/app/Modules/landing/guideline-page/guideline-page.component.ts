@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { VisualTrackingComponent } from '../../shared/visual-tracking/visual-tracking.component';
@@ -10,6 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MailsService } from '../../../services/mail.service';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiResponseItem } from '../../../models/ApiResponseItem.model';
+import { PopUpComponent } from '../../shared/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-guideline-page',
@@ -47,6 +48,9 @@ export class GuidelinePageComponent implements OnInit,OnDestroy {
   nodeIdComplete='3';
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
+
+  newGuidelineCount!: number
+
 
   isDtInitialized: boolean = false;
   constructor(
@@ -115,7 +119,7 @@ export class GuidelinePageComponent implements OnInit,OnDestroy {
   }
   active = 1;
   showMailDetails(item: ApiResponseItem, showActionbtns: boolean) {
-    debugger;
+     
     const currentName = this.authService.getDisplayName();
 
     if(this.activeTab.toLocaleLowerCase() =="new"){
@@ -279,7 +283,6 @@ export class GuidelinePageComponent implements OnInit,OnDestroy {
   }
 
   setActiveTab(tab: 'new' | 'sent' | 'completed',) {
-    debugger
     if (this.activeTab !== tab) {
       // Reset pagination ONLY when switching tabs
       this.currentPageMap[tab] = 1;
@@ -301,7 +304,7 @@ export class GuidelinePageComponent implements OnInit,OnDestroy {
     return localStorage.getItem('structureId') || parsedPayload.StructureId;
   }
   loadInboxData(page: number = 1) {
-    debugger;
+     
     this.activeTab = "new";
     this.loading = true;
     this.currentPage = page
@@ -315,6 +318,8 @@ export class GuidelinePageComponent implements OnInit,OnDestroy {
           this.newItems = response.data.map(this.mapApiResponse.bind(this)) || [];
           // this.totalPages = Math.ceil(response.recordsTotal / this.itemsPerPage);
           this.totalItems = response.recordsTotal;
+          console.log(this.totalItems)
+          this.mailService.updateNewGuidelineCount(this.totalItems);
           this.calculatePagination()
         },
         (error) => console.error('Error fetching inbox:', error),
@@ -362,5 +367,26 @@ export class GuidelinePageComponent implements OnInit,OnDestroy {
         () => (this.loading = false)
       );
   }
+
+    openInstructionPopup(instruction: string, event?: Event): void {
+      if (event) {
+        event.preventDefault();
+      }
+  
+      try {
+        const dialogConfig: MatDialogConfig = {
+          data: { 
+            message: instruction,
+            title: 'Full Instructions', 
+            type: 'info' 
+          },
+          width: '400px',
+        };
+  
+        this.dialog.open(PopUpComponent, dialogConfig);
+      } catch (error) {
+        console.error('Error opening popup:', error);
+      }
+    }
 }
 

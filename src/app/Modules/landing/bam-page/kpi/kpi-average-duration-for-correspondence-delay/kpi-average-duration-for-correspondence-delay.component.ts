@@ -35,13 +35,11 @@ export class KpiAverageDurationForCorrespondenceDelayComponent implements OnInit
   entities: any[] = [];
   constructor(private lookupsService: LookupsService) { }
   ngOnInit() {
-    debugger
     this.lookupsService.getEntities().subscribe((entities: any[]) => {
       this.entities = entities;
     });
 
     this.lookupsService.getYears().subscribe((years: any[]) => {
-      debugger;
       this.availableYears = years;
       this.availableYears?.sort((a, b) => a - b);
       this.year = this.availableYears[this.availableYears?.length - 1];

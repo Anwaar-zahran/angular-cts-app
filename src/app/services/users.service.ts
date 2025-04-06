@@ -13,7 +13,7 @@ export class UsersService {
     constructor(private http: HttpClient) { }
 
     searchUsers(searchText: string = '', language: string = 'en'): Observable<User[]> {
-        debugger
+         
         const params = new HttpParams()
             .set('text', searchText)
             .set('language', language);

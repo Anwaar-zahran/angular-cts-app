@@ -11,4 +11,5 @@ export interface ApiResponseItem {
   isRead: boolean;
   isOverDue: boolean;
   row: any;
+  instructions: string;
 }

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 @Injectable({
@@ -12,8 +12,31 @@ export class MailsService {
   private CorrsondanceViewURL = `${environment.apiBaseUrl}/Transfer/View`;
   private myTransferURL = `${environment.apiBaseUrl}/Transfer/GetTransferInfoById`;
 
+  private newMailCount = new BehaviorSubject<number>(0);
+  newMailCount$ = this.newMailCount.asObservable();
+
+  private newGuidelineCount = new BehaviorSubject<number>(0);
+  newGuidelineCount$ = this.newGuidelineCount.asObservable();
+
+  private newSignatureCount = new BehaviorSubject<number>(0);
+  newSignatureCount$ = this.newSignatureCount.asObservable();
+
   constructor(private httpClient: HttpClient,) { }
 
+  updateNewMailCount(count: number) {
+    console.log('updateNewMailCount', count);
+    this.newMailCount.next(count);
+  }
+
+  updateNewGuidelineCount(count: number) {
+    console.log('updateNewGuidelineCount', count);
+    this.newGuidelineCount.next(count);
+  }
+
+  updateNewSignatureCount(count: number) {
+    console.log('updateNewSignatureCount', count);
+    this.newSignatureCount.next(count);
+  }
   transferMail(accessToken: string, model: any[]): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,

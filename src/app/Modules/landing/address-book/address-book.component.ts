@@ -209,7 +209,6 @@ export class AddressBookComponent implements OnInit {
       }
       return acc;
     }, [] as AddressUser[]);
-debugger
     this.selectedUserWithStructure = uniqueStructures;
 
     console.log(this.selectedUserWithStructure);

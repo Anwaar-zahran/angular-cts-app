@@ -60,9 +60,9 @@ export class ReportsService {
             formData
         ).pipe(
             switchMap((response: ApiResponse<InprogressReport[]>) => {
-                debugger
+                 
                 const transfers = (response as ApiResponse<InprogressReport[]>).data;
-                debugger
+                 
                 // Fetch categories
                 return this.CategoriesService.ListCategories().pipe(
                     map((categories: Category[]) => {
@@ -70,7 +70,7 @@ export class ReportsService {
                             map[category.id] = category.text;
                             return map;
                         }, {} as { [key: number]: string });
-                        debugger
+                         
                         const transformedTransfers = transfers.map(transfer => ({
                             ...transfer,
                             categoryName: categoryMap[transfer.categoryId] || 'Unknown'

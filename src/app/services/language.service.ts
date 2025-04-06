@@ -28,7 +28,7 @@ export class LanguageService {
     }
 
   private initializeLanguage(lang: string) {
-    debugger
+     
         this.translate.setDefaultLang(lang);
         this.translate.use(lang);
         this.currentLang.next(lang);
@@ -56,7 +56,7 @@ export class LanguageService {
         }
     }
     changeLanguage(lang: string) {
-        debugger
+         
         return this.httpClient.post(`${this.apiUrl}?lang=${lang}`, {});
       }
 } 
