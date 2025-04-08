@@ -33,18 +33,18 @@ export class MailsService {
     const NodeId = '2';
 
     forkJoin({
-      mailRead: this.customFetchData('/Transfer/ListInbox', structureId, false, token, NodeId),
+      // mailRead: this.customFetchData('/Transfer/ListInbox', structureId, false, token, NodeId),
       mailUnread: this.customFetchData('/Transfer/ListInbox', structureId, true, token, NodeId),
 
-      guidelineRead: this.customFetchData('/Transfer/ListInbox', structureId, false, token, NodeId, '9'),
+      // guidelineRead: this.customFetchData('/Transfer/ListInbox', structureId, false, token, NodeId, '9'),
       guidelineUnread: this.customFetchData('/Transfer/ListInbox', structureId, true, token, NodeId, '9'),
 
-      signatureRead: this.customFetchData('/Transfer/ListInbox', structureId, false, token, NodeId, '8'),
+      // signatureRead: this.customFetchData('/Transfer/ListInbox', structureId, false, token, NodeId, '8'),
       signatureUnread: this.customFetchData('/Transfer/ListInbox', structureId, true, token, NodeId, '8'),
     }).subscribe(response => {
-      this.mailUnreadCountSubject.next(response.mailRead.recordsTotal - response.mailUnread.recordsTotal);
-      this.guidelineUnreadCountSubject.next(response.guidelineRead.recordsTotal - response.guidelineUnread.recordsTotal);
-      this.signatureUnreadCountSubject.next(response.signatureRead.recordsTotal  - response.signatureUnread.recordsTotal);    
+      this.mailUnreadCountSubject.next(response.mailUnread.recordsTotal);
+      this.guidelineUnreadCountSubject.next(response.guidelineUnread.recordsTotal);
+      this.signatureUnreadCountSubject.next(response.signatureUnread.recordsTotal);    
     });
   }
 
@@ -60,9 +60,9 @@ export class MailsService {
     });
 
     const data = new FormData();
-    data.append('read', read.toString());
     data.append('structureId', structureId);
     data.append('NodeId', nodeId);
+    data.append('UnRead', true.toString());
     // Only append PurposeId if it's provided
     if (purposeId) {
       data.append('PurposeId', purposeId);
