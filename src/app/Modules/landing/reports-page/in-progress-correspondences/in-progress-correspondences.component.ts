@@ -489,6 +489,7 @@ export class InProgressCorrespondencesComponent implements OnInit, OnDestroy {
   loadPriorityOptions() {
     this.lookupsService.getPriorityOptions('').subscribe({
       next: (options) => {
+        debugger
         this.priorityOptions = options;
       },
       error: (error) => {
