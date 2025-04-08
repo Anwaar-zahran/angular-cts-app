@@ -64,9 +64,15 @@ export class LandingPageComponent {
 
     this.mailService.fetchNotificationCounts();
 
-    this.mailService.mailCount$.subscribe(count => this.newMailCount = count);
-    this.mailService.signatureCount$.subscribe(count => this.newSignatureCount = count);
-    this.mailService.guidelineCount$.subscribe(count => this.newGuidelineCount = count);
+    this.mailService.mailUnreadCount$.subscribe(count => {
+      this.newMailCount = count;
+    });
+    this.mailService.signatureUnreadCount$.subscribe(count => {
+      this.newSignatureCount = count;
+    });
+    this.mailService.guidelineUnreadCount$.subscribe(count => {
+      this.newGuidelineCount = count;
+    });
   }
 
 
