@@ -14,37 +14,64 @@ export class MailsService {
   private CorrsondanceViewURL = `${environment.apiBaseUrl}/Transfer/View`;
   private myTransferURL = `${environment.apiBaseUrl}/Transfer/GetTransferInfoById`;
 
-  private mailCount = new BehaviorSubject<number>(0);
-  private signatureCount = new BehaviorSubject<number>(0);
-  private guidelineCount = new BehaviorSubject<number>(0);
+  
+  private mailUnreadCountSubject = new BehaviorSubject<number>(0);
+  private guidelineUnreadCountSubject = new BehaviorSubject<number>(0);
+  private signatureUnreadCountSubject = new BehaviorSubject<number>(0);
 
-  mailCount$ = this.mailCount.asObservable();
-  signatureCount$ = this.signatureCount.asObservable();
-  guidelineCount$ = this.guidelineCount.asObservable();
+  mailUnreadCount$ = this.mailUnreadCountSubject.asObservable();
+  guidelineUnreadCount$ = this.guidelineUnreadCountSubject.asObservable();
+  signatureUnreadCount$ = this.signatureUnreadCountSubject.asObservable();
+
+
   constructor(private httpClient: HttpClient,) { }
 
 
-  fetchNotificationCounts() {
+  fetchNotificationCounts(): void {
     const structureId = localStorage.getItem('structureId') ?? " ";
     const token = localStorage.getItem('access_token') ?? "";
-  
-    const page = 1;
-    const length = 1000;
-    const fixedParam = '2';
-  
+    const NodeId = '2';
+
     forkJoin({
-      mail: this.fetchData('/Transfer/ListInbox', structureId, page, length, token, fixedParam),
-      guideline: this.fetchData('/Transfer/ListInbox', structureId, page, length, token, fixedParam, '9'),
-      signature: this.fetchData('/Transfer/ListInbox', structureId, page, length, token, fixedParam, '8')
-    }).subscribe(({ mail, signature, guideline }) => {
-      this.mailCount.next(mail.data.filter((x: any) => !x.isRead).length);
-      this.signatureCount.next(signature.data.filter((x: any) => !x.isRead).length);
-      this.guidelineCount.next(guideline.data.filter((x: any) => !x.isRead).length);
+      // mailRead: this.customFetchData('/Transfer/ListInbox', structureId, false, token, NodeId),
+      mailUnread: this.customFetchData('/Transfer/ListInbox', structureId, true, token, NodeId),
+
+      // guidelineRead: this.customFetchData('/Transfer/ListInbox', structureId, false, token, NodeId, '9'),
+      guidelineUnread: this.customFetchData('/Transfer/ListInbox', structureId, true, token, NodeId, '9'),
+
+      // signatureRead: this.customFetchData('/Transfer/ListInbox', structureId, false, token, NodeId, '8'),
+      signatureUnread: this.customFetchData('/Transfer/ListInbox', structureId, true, token, NodeId, '8'),
+    }).subscribe(response => {
+      this.mailUnreadCountSubject.next(response.mailUnread.recordsTotal);
+      this.guidelineUnreadCountSubject.next(response.guidelineUnread.recordsTotal);
+      this.signatureUnreadCountSubject.next(response.signatureUnread.recordsTotal);    
     });
   }
-  
 
-  
+
+
+  customFetchData(url: string, structureId: string,
+    read: boolean, accessToken: string, nodeId: string,
+    purposeId?: string): Observable<any> {
+
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${accessToken}`,
+    });
+
+    const data = new FormData();
+    data.append('structureId', structureId);
+    data.append('NodeId', nodeId);
+    data.append('UnRead', true.toString());
+    // Only append PurposeId if it's provided
+    if (purposeId) {
+      data.append('PurposeId', purposeId);
+    }
+    return this.httpClient.post<any>(`${environment.apiBaseUrl}${url}`, data, { headers });
+  }
+
+
+
   transferMail(accessToken: string, model: any[]): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
@@ -142,9 +169,10 @@ export class MailsService {
         })
       );
   }
+
   fetchData(url: string, structureId: string,
     page: number, pageSize: number, accessToken: string,
-    nodeId:string,
+    nodeId: string,
     purposeId?: string // Optional parameter
   ): Observable<any> {
     const headers = new HttpHeaders({
@@ -198,8 +226,8 @@ export class MailsService {
 
     const headers = new HttpHeaders({
       'Accept-Language': language,
-      'Authorization': `Bearer ${token}`, 
-      'Content-Type': 'application/json' 
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     });
     const body = {
       text: '',
