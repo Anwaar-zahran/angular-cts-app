@@ -1,0 +1,48 @@
+
+  
+  /* Pagination styling */
+  .dataTables_paginate {
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .paginate_button {
+    padding: 5px 10px;
+    margin: 0 3px;
+    cursor: pointer;
+    border-radius: 4px;
+    color: #007bff;
+  }
+  
+  .paginate_button.current {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .paginate_button.disabled {
+    color: #6c757d;
+    cursor: not-allowed;
+  }
+  
+  /* Hide empty rows */
+  tr.odd.empty-row,
+  tr.even.empty-row,
+  .dataTables_empty {
+    display: none !important;
+  }
+  
+  /* Style the total records text */
+  p {
+    color: #6c757d;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  /* No data message styling */
+  .noData {
+    padding: 30px;
+    color: #6c757d;
+    font-size: 16px;
+  }

@@ -722,8 +722,12 @@ export class DelegationPageComponent implements OnInit {
   isDataLoaded = false;
 
   getFromUsers(searchText: string = '') {
-    if (this.isDataLoaded && !searchText) {
-      return;
+    if (!this.isDataLoaded && !searchText) {
+      this.lookupservice.getUsersWithSearchV2(this.accessToken!,searchText).subscribe({
+        next:(response) => {
+          this.contacts = response;
+        }
+      });
     }
     this.isLoadingUsers = true;
 

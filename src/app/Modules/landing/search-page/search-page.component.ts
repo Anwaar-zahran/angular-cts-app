@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
@@ -17,9 +17,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MailDetailsDialogComponent } from '../mail-details-dialog/mail-details-dialog.component';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslateService } from '@ngx-translate/core';
-import { Category } from '../../../models/category.model';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { DataTableDirective } from 'angular-datatables';
 
 @Component({
   selector: 'app-search-page',
@@ -93,6 +93,8 @@ export class SearchPageComponent {
   currentLang: string = 'en';
  isArabic = this.translate.currentLang === 'ar';
 
+ @ViewChild(DataTableDirective, { static: false })
+  dtElement!: DataTableDirective;
   constructor(
     private searchService: SearchPageService,
     private router: Router,
@@ -443,6 +445,43 @@ export class SearchPageComponent {
       },
       dom: 'tp',
       ordering: false,
+      serverSide: true,
+      processing: true,
+      scrollCollapse: true,
+      ajax: (dataTablesParameters: any, callback) => {
+        this.searchService.searchInbox(
+          this.accessToken!, 
+          this.searchModel,
+          dataTablesParameters.start / dataTablesParameters.length, // pageIndex
+          dataTablesParameters.length // pageSize
+        ).subscribe((result: SearchResponse) => {
+          this.response = result;
+          
+          // Process the data
+          this.response.data.forEach(item => {
+            item.categoryText = item.categoryId != null ? this.categories[item.categoryId - 1].text : '';
+            item.statusText = item.statusId != null ? this.statuses[item.statusId - 1].text : '';
+            item.priorityText = item.priorityId != null ? this.priorities[item.priorityId - 1].text : '';
+            item.privacyText = item.privacyId != null ? this.privacies[item.privacyId - 1].text : '';
+            item.importanceText = item.importanceId != null ? this.importances[item.importanceId - 1].text : '';
+          });
+
+          // Call the DataTables callback with the data
+          callback({
+            recordsTotal: result.recordsTotal,
+            recordsFiltered: result.recordsFiltered,
+            data: result.data
+          });
+        }, error => {
+          console.error('Error getting search result:', error);
+          this.toaster.showToaster(error?.message || 'Something went wrong');
+          callback({
+            recordsTotal: 0,
+            recordsFiltered: 0,
+            data: []
+          });
+        });
+      },
       drawCallback: (settings: any) => {
         const api = settings.oInstance.api();
         const pageInfo = api.page.info();
@@ -504,10 +543,16 @@ export class SearchPageComponent {
           nextBtn.removeClass('disabled').css('cursor', 'pointer');
           lastBtn.removeClass('disabled').css('cursor', 'pointer');
         }
+
+
+      const api2 = settings.oInstance.api();
+      const tbody = $(api2.table().body());
+      tbody.find('tr:has(td:empty)').hide();
+      tbody.find('tr:has(td.dataTables_empty)').hide();
       }
     };
   }
-  
+
 
   formatDate(date: NgbDateStruct | Date | string): string {
     if (!date) return '';
@@ -570,6 +615,30 @@ export class SearchPageComponent {
           this.toaster.showToaster(error?.message || 'Something went wrong');
         });
     });
+
+    this.searchModel = formattedSearchModel;
+    if (this.dtElement) {
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.clear().draw();
+      });
+    } else {
+      // Initial search - call directly
+      this.searchService.searchInbox(this.accessToken!, formattedSearchModel, 0, 10).subscribe((result: SearchResponse) => {
+        this.response = result;
+        console.log(this.response.recordsTotal);
+        this.response.data.forEach(item => {
+          item.categoryText = item.categoryId != null ? this.categories[item.categoryId - 1].text : '';
+          item.statusText = item.statusId != null ? this.statuses[item.statusId - 1].text : '';
+          item.priorityText = item.priorityId != null ? this.priorities[item.priorityId - 1].text : '';
+          item.privacyText = item.privacyId != null ? this.privacies[item.privacyId - 1].text : '';
+          item.importanceText = item.importanceId != null ? this.importances[item.importanceId - 1].text : '';
+        });
+      }, (error: any) => {
+        console.error('Error getting search result:', error);
+        this.toaster.showToaster(error?.message || 'Something went wrong');
+      });
+    }
+  
 
 
 

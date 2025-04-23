@@ -240,7 +240,7 @@
 
       <!--actions-->
       <div class="d-flex justify-content-end gap-3 mt-2">
-        <button class="btn btn-secondary btn-lg" (click)="clearForm()">
+        <button class="btn clear btn-secondary btn-lg" (click)="clearForm()">
           {{ "SEARCH.BUTTONS.CLEAR" | translate }}
         </button>
         <button class="btn btn-primary btn-lg" (click)="onSearch()">
@@ -282,9 +282,6 @@
               <button type="button" class="btn" (click)="showDetails(row)">
                 <i class="fa fa-eye"></i>
               </button>
-              <!--<button type="button" class="btn" (click)="onDelete(row)">
-                <i class="fa fa-times-circle"></i>
-              </button>-->
             </td>
           </tr>
         </tbody>
