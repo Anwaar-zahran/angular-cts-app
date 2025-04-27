@@ -25,21 +25,20 @@ export class SearchPageService {
 
   constructor(private httpClient: HttpClient) { }
 
-  searchInbox(accessToken: string, searchModel: SearchFilter): Observable<any> {
+  searchInbox(accessToken: string, searchModel: SearchFilter, pageIndex: number = 0, pageSize: number = 10): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/x-www-form-urlencoded',
-      // 'Content-Type': 'application/json', 
     });
 
-    const payload = accessToken.split('.')[1]; // Get the payload (2nd part)
+    const payload = accessToken.split('.')[1];
     const decodedPayload = this.base64UrlDecode(payload);
     const parsedPayload = JSON.parse(decodedPayload);
-    //const structureId = parsedPayload.StructureId; // Adjust based on your token's payload
     const structureId = localStorage.getItem('structureId') || parsedPayload.StructureId;
-    const draw = 0;
-    const start = 0;
-    const length = 10000;
+    
+    const draw = 1;
+    const start = pageIndex * pageSize;
+    const length = pageSize;
 
     const body = new URLSearchParams();
     body.set('draw', draw.toString());
@@ -47,7 +46,6 @@ export class SearchPageService {
     body.set('length', length.toString());
 
     searchModel.structureId = structureId;
-
     body.set('Model', JSON.stringify(searchModel));
 
     return this.httpClient.post(this.searchApiUrl, body.toString(), { headers })
@@ -177,7 +175,7 @@ export class SearchPageService {
     });
 
     const draw = 0;
-    const length = 10000;
+    const length = 10;
     const start = 0;
 
     const params = new URLSearchParams();
